@@ -1,0 +1,67 @@
+.front-view {
+    font-size: .8em;
+    color: whitesmoke;
+    text-align: left;
+}
+
+a {
+    font-weight: lighter;
+    /* font-size: smaller; */
+    color: whitesmoke;
+}
+
+p {
+    font-weight: lighter;
+    font-size: xx-small;
+    max-width: 92%;
+    text-align: left;
+}
+
+.svg-elem {
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    max-width: 65vw;
+    /* max-height: 81vh; */
+}
+
+.login-elems {
+    position: absolute;
+    top: 6%;
+    left: 67%;
+    /* width: 22%; */
+}
+
+.login-options {
+    width: 65.62%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    /* margin: auto; */
+    /* border: solid .4vw silver; */
+    margin-bottom: 1.8vh;
+    border-radius: 6%;
+    background: white;
+    color: rgb(23, 23, 3);
+}
+
+.login-icons {
+    width: 1.1em;
+    height: 1.1em;
+    /* margin-left: 11%;  */
+}
+
+.with-email {
+    margin-top: 1em;
+}
+
+.with-email p {
+    font-size: .81em;
+    padding: 4%;
+    padding-right: 2%;
+    max-width: 60%;
+    /* height: 1.7em; */
+    background: whitesmoke;
+    color: black;
+    border-radius: 6%;
+}
