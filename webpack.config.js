@@ -4,7 +4,8 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.js'),
     output: {
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/'
     },
     mode: 'development',
     // watch: true,
@@ -29,6 +30,9 @@ module.exports = {
                 use: ["style-loader", "css-loader"],
             },
         ]
+    },
+    devServer: {
+        historyApiFallback: true
     },
     plugins: [
         new HtmlWebpackPlugin({

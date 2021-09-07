@@ -12,37 +12,43 @@ a {
 
 p {
     font-weight: lighter;
-    font-size: xx-small;
-    max-width: 92%;
+    font-size: smaller;
+    max-width: 85%;
     text-align: left;
 }
 
 .svg-elem {
     position: absolute;
-    left: 20%;
-    top: 20%;
+    left: 17%;
+    top: 27%;
     max-width: 65vw;
     /* max-height: 81vh; */
 }
 
 .login-elems {
     position: absolute;
-    top: 6%;
+    top: 20%;
     left: 67%;
     /* width: 22%; */
 }
 
 .login-options {
-    width: 65.62%;
+    max-width: 51%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     /* margin: auto; */
     /* border: solid .4vw silver; */
     margin-bottom: 1.8vh;
-    border-radius: 6%;
+    /* border-radius: 6%; */
+    border-radius: 20px;
     background: white;
+    font-size: larger;
     color: rgb(23, 23, 3);
+}
+
+.login-options p {
+    font-size: smaller;
 }
 
 .login-icons {
@@ -59,9 +65,16 @@ p {
     font-size: .81em;
     padding: 4%;
     padding-right: 2%;
-    max-width: 60%;
+    max-width: 45.4%;
     /* height: 1.7em; */
     background: whitesmoke;
     color: black;
-    border-radius: 6%;
+    /* border-radius: 6%; */
+    border-radius: 20px;
+    text-align: center;
+    font-size: small;
+}
+
+.sign-in {
+    font-size: medium;
 }

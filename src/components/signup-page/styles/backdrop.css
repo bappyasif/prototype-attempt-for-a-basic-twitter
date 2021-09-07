@@ -2,10 +2,11 @@
     display: flex;
     justify-content: space-evenly;
     position: relative;
+    min-height: 800px;
 }
 
 .imgs-div {
-    max-width: 65%;
+    max-width: 65vw;
     min-height: 100%;
 }
 

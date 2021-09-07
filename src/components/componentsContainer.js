@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import ContainerForLoginPage from './login-page/containerForLoginPage'
+import AllRoutes from './all-routes'
+import ContainerForSignupPage from './signup-page/containerForLoginPage'
 
 class ComponentsContainer extends Component {
     render() {
         return (
-            <div>
-                <ContainerForLoginPage />               
+            <div id='components-container'>
+                {/* <ContainerForSignupPage /> */}
+                <AllRoutes />
             </div>
         )
     }

@@ -1,0 +1,51 @@
+#login-container {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 308px;
+}
+
+input {
+
+    line-height: 3.1em;
+    margin: .8em;
+    outline: none;
+    border: .1em solid gray;
+}
+
+input[type='submit'] {
+    height: 4em;
+    border-radius: 9999px;
+    outline: none;
+    background-color: rgb(29, 155, 240);
+    opacity: .5;
+    color: white;
+    font-weight: bolder;
+}
+
+#additional-info {
+    margin: .8em;
+    color: rgb(29, 155, 240); 
+}
+
+#additional-info a {
+    color: rgb(29, 155, 240);
+    margin: .29em;
+}
+
+#twitter-info {
+    margin: unset;
+}
+
+/* svg {
+    position: absolute;
+    left: 80%;
+    top: 4%;
+} */
