@@ -1,0 +1,38 @@
+#verify-user-info-container{
+    max-width: 380px;
+    margin-top: 20px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#verify-user-info-container h2 {
+    margin-left: -230px;
+}
+
+#verify-user-info-container p {
+    margin-left: -105px;
+}
+
+#verify-user-info-container input {
+    margin-top: .2em;
+    width: 300px;
+    /* float: left; */
+    margin-left: -105px;
+}
+
+#verify-user-info-container input[type='email'] {
+    border-top: .1em solid gray;
+    border-radius: 20px;
+    padding: 6px 16px;
+}
+
+#verify-user-info-container input[type='submit'] {
+    max-width: 110px;
+    /* margin-top: 25px; */
+    border-radius: 100px;
+    text-align: center;
+    padding: 6px 16px;
+    height: 2.9em;
+    opacity: 1;
+}

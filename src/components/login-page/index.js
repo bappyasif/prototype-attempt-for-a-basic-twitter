@@ -1,24 +1,67 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./styles/index.css";
 
 function LoginPage() {
-  let UserIdentification = returnAnInputElement("email");
-  let UserPassword = returnAnInputElement("password");
+  let idRef = useRef(null);
+  let passRef = useRef(null);
+
+  let inputRef = useRef(null);
+
+  let onInputElementClicked = () => {
+    // idRef.current.focus()
+    // inputRef.current.id == 'email' ? setIdPlaceholder('email or mobile') : setPasswordPlaceholder('Password');
+    // setIdPlaceholder('email or mobile')
+    // console.log(inputRef.current.focus(), inputRef.current.id)
+    
+    // if(idRef.current.id == 'email') setIdPlaceholder('email or mobile')
+    // if(passRef.current.id == 'password') setPasswordPlaceholder('Password')
+  }
+
+  let onFocusInputElement = (evt) => {
+    console.log(evt.target.placeholder)
+    evt.target.placeholder = ''
+    if(evt.target.id == 'email') {
+      setPasswordPlaceholder('')
+      setIdPlaceholder('Mobile, email or username')
+    }
+    if(evt.target.id == 'password') {
+      setIdPlaceholder('')
+      setPasswordPlaceholder('Password')
+    }
+  }
+
+  let [idPlaceholder, setIdPlaceholder] = useState(null);
+  let [passwordPlaceholder, setPasswordPlaceholder] = useState(null);
+
+  // let UserIdentification = userIdInputElement("email", onInputElementClicked, idRef);
+  // let UserPassword = userPasswordInputElement("password", onInputElementClicked, passRef);
+  // let UserIdentification = returnAnInputElement("email", null , onInputElementClicked, idRef);
+  // let UserPassword = returnAnInputElement("password", null , onInputElementClicked, passRef);
+  // let UserIdentification = returnAnInputElement("email", null , onInputElementClicked, inputRef);
+  // let UserPassword = returnAnInputElement("password", null , onInputElementClicked, inputRef);
+  let UserIdentification = returnAnInputElement("email", null , onInputElementClicked, onFocusInputElement);
+  let UserPassword = returnAnInputElement("password", null , onInputElementClicked, onFocusInputElement);
   let LoginButton = returnAnInputElement('submit', 'Log In');
+
+  let userIDWithPlaceholder = <div className='user-login'><div className='placeholder-div'>{idPlaceholder}</div>{UserIdentification}</div>
+  let userPasswordWithPlaceholder = <div className='user-login'><div className='placeholder-div'>{passwordPlaceholder}</div>{UserPassword}</div>
+
   useEffect(() => {});
   return (
     <div id="login-container">
       <div id="twitter-info">
         <TwitterLogo />
-        <h2>Login To Twitter</h2>
+        <h2 style={{fontWeight : 'bolder'}}>Log in to Twitter</h2>
       </div>
       <div id="login-info">
-        {UserIdentification}
-        {UserPassword}
+        {/* {UserIdentification} */}
+        {userIDWithPlaceholder}
+        {/* {UserPassword} */}
+        {userPasswordWithPlaceholder}
         {LoginButton}
       </div>
       <div id='additional-info'>
-          <a>forgot password?</a>.<a>sign up for twitter</a>
+          <a href='/begin-password-reset' target='_blank'>forgot password?</a>.<a href='/' target='_blank'>sign up for twitter</a>
       </div>
     </div>
   );
@@ -32,8 +75,14 @@ let TwitterLogo = () => (
   </svg>
 );
 
-let returnAnInputElement = (type, value) => {
-  return <input type={type} placeholder={type} value={value ? value : null} />;
+// let returnAnInputElement = (type, value, clickEvent, inputRef) => {
+//   return <input id={type} type={type} placeholder={type} value={value ? value : null} onClick={clickEvent} ref={inputRef} />;
+// };
+let returnAnInputElement = (type, value, clickEvent, focusEvent) => {
+  return <input id={type} type={type} placeholder={type} value={value ? value : null} onClick={clickEvent} onFocus={focusEvent} />;
 };
+
+let userIdInputElement = (type, clickEvent, inputRef) => <input id={type} type={type} placeholder={type} onClick={clickEvent} ref={inputRef} />;
+let userPasswordInputElement = (type, clickEvent, inputRef) => <input id={type} type={type} placeholder={type} onClick={clickEvent} ref={inputRef} />;
 
 export default LoginPage;

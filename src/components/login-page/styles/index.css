@@ -13,12 +13,36 @@
 }
 
 input {
+    width: 100%;
+    line-height: 2em;
+    outline: none;
+    border: .1em solid gray;
+    border-top: none;
+    /* text-align: center; */
+}
+
+.placeholder-div {
+    text-align: left;
+    border: .1em solid gray;
+    width: 101.33%;
+    border-bottom: none;
+    height: 1.1em;
+    color: rgb(29, 155, 240);
+    font-size: smaller;
+}
+
+.user-login {
+    margin-bottom: 1.7em;
+    
+}
+
+/* input {
 
     line-height: 3.1em;
     margin: .8em;
     outline: none;
     border: .1em solid gray;
-}
+} */
 
 input[type='submit'] {
     height: 4em;
@@ -41,7 +65,7 @@ input[type='submit'] {
 }
 
 #twitter-info {
-    margin: unset;
+    margin-left: -126px;
 }
 
 /* svg {
