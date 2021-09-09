@@ -14,6 +14,14 @@
     margin-left: -105px;
 }
 
+#verify-user-info-container a {
+    margin-left: -370px;
+    margin-top: 20px;
+    font-size: smaller;
+    text-decoration: none;
+    color: rgb(29, 155, 240);
+}
+
 #verify-user-info-container input {
     margin-top: .2em;
     width: 300px;

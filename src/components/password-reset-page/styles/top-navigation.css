@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-span {
+#info span {
     margin-left: -29px;
     min-width: 200px;
     color: rgb(29, 155, 240);

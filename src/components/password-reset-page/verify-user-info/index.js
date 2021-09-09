@@ -11,7 +11,7 @@ function VerifyUserInfo() {
             <input type='email' value={userId} onChange={handleChange} placeholder='Email address' />
             <br />
             <input type='submit' value='Submit' />
-            <p>I dont have access to this informtion</p>
+            <a href='https://help.twitter.com/en/forms/account-access/regain-access' target='_blank'>I dont have access to this informtion</a>
         </div>
     )
 }

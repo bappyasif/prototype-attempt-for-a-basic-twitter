@@ -68,6 +68,25 @@ input[type='submit'] {
     margin-left: -126px;
 }
 
+.opaque {
+    opacity: 1;
+}
+
+#announcement-div {
+    width: 281px;
+    margin-left: 2.9px;
+    margin-bottom: .78em;
+    background-color: rgb(254, 222, 227);
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+    font-size: smaller;
+    text-align: left;
+    display: none;
+}
+
 /* svg {
     position: absolute;
     left: 80%;

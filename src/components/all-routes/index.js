@@ -1,5 +1,6 @@
 import React from 'react'
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+import HomePage from '../home-page';
 import LoginPage from '../login-page';
 import PasswordResetPage from '../password-reset-page';
 import BeginReset from '../password-reset-page/begin-reset';
@@ -23,6 +24,7 @@ function AllRoutes() {
                     <TopNavigation />
                     <VerifyUserInfo />
                 </Route>
+                <Route path='/home' component={HomePage} />
             </Switch>
         </Router>
     )
