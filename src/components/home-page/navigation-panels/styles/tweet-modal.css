@@ -1,0 +1,83 @@
+#tweet-modal {
+    position: absolute;
+    left: 360px;
+    top: 40px;
+    width: 560px;
+    height: 240px;
+    border-radius: 11px;
+    background-color: gray;
+}
+
+.left-opaque {
+    opacity: .9;
+    background-color: rgba(221, 216, 216, .6);
+}
+
+#delete-icon {
+   display: flex;
+   justify-content: left;
+   margin: 1.1em;
+}
+
+#middle-content #header-section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#profile-pic {
+    width: 42px;
+    height: 42px;
+    margin: 1.1em;
+    border-radius: 50%;
+}
+
+#tweet-input {
+    /* width: 330px; */
+    height: 99px;
+}
+
+#options-selected {
+    display: flex;
+    justify-content: left;
+    margin: 1.1em;
+    margin-left: 4.4em;
+    position: relative;
+}
+
+#tweet-options {
+    width: 240px;
+    background: gray;
+    text-align: left;
+    padding: 11px 11px;
+    margin-top: .9em;
+    border-radius: 17px;
+}
+
+#tweet-options p {
+    /* padding-top: -.41em; */
+    font-size: 11.9px;
+    color: white;
+}
+
+.options-div {
+    padding-top: .4em;
+    padding-bottom: 0.4em;
+    margin-bottom: 1.1em;
+}
+
+.options-div:hover {
+    background-color: teal;
+}
+
+.option-svg {
+    padding: .47em;
+    padding-top: .9em;
+    background: rgb(29, 155, 240);
+    border-radius: 50%;
+}
+
+.option-text {
+    margin-left: 11px;
+    font-size: smaller;
+}
