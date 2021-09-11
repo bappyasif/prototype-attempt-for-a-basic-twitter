@@ -3,7 +3,7 @@
     left: 360px;
     top: 40px;
     width: 560px;
-    height: 240px;
+    min-height: 240px;
     border-radius: 11px;
     background-color: gray;
 }
@@ -33,8 +33,19 @@
 }
 
 #tweet-input {
-    /* width: 330px; */
-    height: 99px;
+    width: 470px;
+    height: 100%;
+    /* height: 89px; */
+    font-size: 20px;
+    line-break: normal;
+    /* overflow-x: auto; */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    /* hyphens: auto; */
+    outline: none;
+    resize: none;
+    /* overflow: hidden; */
+    white-space: pre-line;
 }
 
 #options-selected {
@@ -46,10 +57,10 @@
 }
 
 #tweet-options {
-    width: 240px;
+    width: 229px;
     background: gray;
     text-align: left;
-    padding: 11px 11px;
+    padding: 6px 8px;
     margin-top: .9em;
     border-radius: 17px;
 }
@@ -61,8 +72,13 @@
 }
 
 .options-div {
+
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
     padding-top: .4em;
-    padding-bottom: 0.4em;
+    /* padding-bottom: 0.4em; */
     margin-bottom: 1.1em;
 }
 
@@ -71,8 +87,12 @@
 }
 
 .option-svg {
-    padding: .47em;
-    padding-top: .9em;
+    /* padding: .47em;
+    padding-top: .9em; */
+    padding-left: 6px;
+        padding-right: 6px;
+        padding-bottom: 2.1px;
+        padding-top: 6px;
     background: rgb(29, 155, 240);
     border-radius: 50%;
 }
@@ -80,4 +100,16 @@
 .option-text {
     margin-left: 11px;
     font-size: smaller;
+}
+
+.privacy-spans {
+    /* width: 191px; */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: rgb(29, 155, 240);
+}
+
+.privacy-svg {
+    margin-right: 4px;
 }
