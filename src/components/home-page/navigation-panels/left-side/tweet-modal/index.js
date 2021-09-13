@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { copyIcon, deleteIcon, everybodyIcon, gifIcon, imageIcon, mentionedIcon, peopleIcon, pollIcon, scheduleIcon } from '../svg-resources';
 import '../../styles/tweet-modal.css'
 import {GiphyFetch} from '@giphy/js-fetch-api';
-import {Grid} from '@giphy/react-components';
+import {Grid, Gif} from '@giphy/react-components';
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
 function TweetModal() {
@@ -12,6 +12,7 @@ function TweetModal() {
     let [tweetPrivacy, setTweetPrivacy] = useState('01');
     let [selectedFile, setSelectedFile] = useState();
     let [isFilePicked, setIsFilePicked] = useState(false);
+    let [gifFile, setGifFile] = useState('');
     let inputRef = useRef();
 
     useEffect(() => {
@@ -77,7 +78,9 @@ function TweetModal() {
     }
 
     // let tweetMedias = <div id='tweet-medias'>{imageIcon()} {gifIcon()} {pollIcon()} {copyIcon()} {scheduleIcon()}</div>
-    let tweetMedias = <div id='tweet-medias'><div id='image-icon'>{imageIcon()}</div> <div id='gif-icon'>{gifIcon()}</div> <div id='poll-icon'>{pollIcon()}</div> <div id='emoji-icon'>{copyIcon()}</div> <div id='schedule-icon'>{scheduleIcon()}</div></div>
+    // let tweetMedias = <div id='tweet-medias'><div id='image-icon'>{imageIcon()}</div> <div id='gif-icon' style={{pointerEvents: isFilePicked ? 'none' : 'auto'}}>{gifIcon()}</div> <div id='poll-icon'>{pollIcon()}</div> <div id='emoji-icon'>{copyIcon()}</div> <div id='schedule-icon'>{scheduleIcon()}</div></div>
+    // let tweetMedias = <div id='tweet-medias'><div id='image-icon'>{imageIcon()}</div> <div id='gif-icon' style={{pointerEvents: 'none'}}>{gifIcon()}</div> <div id='poll-icon'>{pollIcon()}</div> <div id='emoji-icon'>{copyIcon()}</div> <div id='schedule-icon'>{scheduleIcon()}</div></div>
+    let tweetMedias = <div id='tweet-medias'><div id='image-icon'>{imageIcon()}</div> <div id='gif-icon' style={{pointerEvents: selectedFile ? 'none' : 'auto'}}>{gifIcon()}</div> <div id='poll-icon'>{pollIcon()}</div> <div id='emoji-icon'>{copyIcon()}</div> <div id='schedule-icon'>{scheduleIcon()}</div></div>
 
     useEffect(() => {
         let tweetMedias = document.querySelector('#tweet-medias');
@@ -86,51 +89,35 @@ function TweetModal() {
             // console.log(isClickedNodeId, evt.target)
             if(isClickedNodeId == 'image-icon') {
                 inputRef.current.click();
+            } else if(isClickedNodeId == 'gif-icon') {
+                console.log('here!!')
             }
         })
     }, [])
 
+
+
     // let imageUploadOnClick = () => inputRef.current.click();
 
     let fileUploadChangeHandler = (evt) => {
+        console.log('here!!')
+        // inputRef.current.click();
+        // if()
         setSelectedFile(evt.target.files[0])
         setIsFilePicked(true);
+        if(!selectedFile) setIsFilePicked(false)
+        // setIsFilePicked(selectedFile ? true : false);
     }
 
-    let showImageOnTweet = () => {
-        // let fr = new FileReader();
-        // fr.readAsArrayBuffer(selectedFile);
-        // fr.readAsArrayBuffer(new Blob([selectedFile]));
-        // fr.readAsArrayBuffer(new Blob([selectedFile], {type: "image/png"}));
-        // fr.readAsArrayBuffer(new Blob([selectedFile], {type: "image"}));
-        // console.log(fr)
-        // // return fr
-        // console.log(selectedFile, "??")
-        let image = document.createElement('img');
-        image.srcObject = selectedFile;
+    let removeImageHandler = () => {
+        setSelectedFile('')
+    }
 
-        // image.src = URL.createObjectURL(selectedFile);
-        console.log(image, "<>?")   
-
-        //     image.srcObject = selectedFile;
-            
-        //     // return image
-        //     return image.srcObject
-        // for(let i=0; i < selectedFile.length; i++) {
-        //     let image = document.createElement('img');
-        //     // image.src = URL.createObjectURL(selectedFile[i]);
-        //     image.srcObject = selectedFile[i];
-        //     // console.log(image, '??')
-        //     return image
-        // }
-        // const ImageElem = document.createElement('img');
-        // image.src = URL.createObjectURL(selectedFile);
-        // ImageElem.srcObject = selectedFile
-        // return <ImageElem />
-        // console.log(image);
-        // let imageView = document.querySelector('#image-view')
-        // imageView.append(ImageElem);
-        // return ImageElem;
+    let onGifClick = (gif, evt) => {
+        console.log('gif here!!')
+        evt.preventDefault();
+        setGifFile(gif);
+        console.log('gif here!!')
     }
 
     return (
@@ -142,17 +129,11 @@ function TweetModal() {
             <div id='middle-content'>
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />
-                    {/* <input id='tweet-input' type='text' value={tweetText} onChange={handleTweetTextChanges} placeholder="What's happening?" /> */}
-                    {/* <textarea contentEditable rows='4' id='tweet-input' type='text' value={tweetText} onChange={handleTweetTextChanges} placeholder="What's happening?" /> */}
-                    {/* <textarea onKeyUp={adjustHeight} rows='4' id='tweet-input' type='text' value={tweetText} onChange={handleTweetTextChanges} placeholder="What's happening?" /> */}
+
                     <textarea rows='4' id='tweet-input' type='text' value={tweetText} onChange={handleTweetTextChanges} placeholder="What's happening?" />
-                    {/* <div id='image-view'>{isFilePicked ? selectedFile : ''}</div> */}
-                    {/* <div id='image-view'>{console.log(selectedFile)}</div> */}
-                    <div id='image-view'>{showImageOnTweet()}</div>
-                    {/* <div id='image-view'>{isFilePicked ? showImageOnTweet() : ''}</div> */}
-                    {/* <div id='image-view'>{isFilePicked ? <img src={showImageOnTweet()} /> : ''}</div> */}
-                    {/* <div id='image-view'>{<img src={showImageOnTweet()} />}</div> */}
                 </div>
+                {/* <div id='image-view'>{selectedFile && <img src={URL.createObjectURL(selectedFile)} />}</div> */}
+                {selectedFile && <div id='image-view'><span id='remove-image' onClick={removeImageHandler}>{deleteIcon()}</span> <img src={URL.createObjectURL(selectedFile)} /></div>}
                 <div id='footer-section'>
                     {/* <span>{everybodyIcon()}</span> <span>everybody can reply</span> */}
                     <span id='options-selected'>{tweetPrivacy == '01' ? tweetPrivacySelected01() : tweetPrivacy == '02' ? tweetPrivacySelected02() : tweetPrivacySelected03()}</span>
@@ -162,7 +143,9 @@ function TweetModal() {
                         <div id='tweet-now'>+ tweet</div>
                     </div>
                     <UploadFile chnageHandler={fileUploadChangeHandler} inputRef={inputRef} />
-                    <GridDemo />
+                    {/* {gifFile && gifFile} */}
+                    {gifFile && <div id='gif-view'><span id='remove-gif'>{deleteIcon()}</span><Gif gif={gifFile} /></div>}
+                    <GridDemo onGifClick={onGifClick} />
                     <div id='tweet-options' style={{display: tweetOptions ? 'block' : 'none'}}>
                         <h4>Who can reply?</h4>
                         <p>Choose who can reply to this Tweet. Anyone mentioned can always reply.</p>
@@ -195,7 +178,9 @@ let GridDemo = ({onGifClick}) => {
     const fetchGifs = (offset) =>
     giphyFetch.trending({ offset, limit: 10 });
     const [width, setWidth] = useState(window.innerWidth);
-    return <Grid fetchGifs={fetchGifs} width={width} columns={4} gutter={6} />
+    // return <Grid fetchGifs={fetchGifs} width={width} columns={4} gutter={6} />
+    // return <Grid fetchGifs={fetchGifs} width={width / 2.26} columns={2} />
+    return <div id='gif-container'><div id='gif-top'><span id='remove-icon'>{deleteIcon()}</span><input id='gif-search' /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} /></div>
 }
 
 let UploadFile = ({chnageHandler, inputRef}) => {
