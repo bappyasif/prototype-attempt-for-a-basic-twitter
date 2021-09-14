@@ -194,3 +194,66 @@
     background: silver;
     border-radius: 50%;
 }
+
+#gif-view {
+    padding: .2em;
+    /* max-height: 470px; */
+}
+
+#poll-container {
+    padding: .2em;
+    margin-left: 8%;
+}
+
+#top-layer {
+    max-width: 83%;
+    margin-bottom: .4em;
+    margin: auto;
+}
+
+#top-layer .div-text {
+    height: 1.1em;
+    text-align: left;
+    color: rgb(29, 155, 240);
+    font-size: medium;
+}
+
+#top-layer .choices-container {
+    font-size: small;
+    color: silver;
+    margin: .4em;
+}
+
+#mid-layer {
+    /* padding: .08em; */
+    margin: .18em;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.length-container {
+    display: flex;
+    justify-content: space-evenly;
+    border: solid silver .11em;
+    height: 3.8em;
+    width: 5.6em;
+    font-size: larger;
+}
+
+.length-container select {
+    /* text-align: right; */
+    width: 200px;
+}
+
+.length-container select option {
+    width: 150%;
+    font-size: x-large;
+}
+
+.length-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: .2em;
+}
