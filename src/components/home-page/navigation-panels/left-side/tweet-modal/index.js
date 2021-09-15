@@ -12,7 +12,8 @@ function TweetModal() {
     let [selectedFile, setSelectedFile] = useState();
     let [gifFile, setGifFile] = useState('');
     let [isGifIconClicked, setIsGifIconClicked] = useState(false);
-    let [isMediaIconsClicked, setIsMediaIconsClicked] = useState(true);
+    // let [isMediaIconsClicked, setIsMediaIconsClicked] = useState(false);
+    let [isPollIconClicked, setIsPollIconClicked] = useState(false);
     let inputRef = useRef();
 
     useEffect(() => {
@@ -50,7 +51,7 @@ function TweetModal() {
 
     let closeTweetModalHandler = () => setToggleModality(!toggleModality)
 
-    let handleMediaIconsClicked = () => setIsMediaIconsClicked(!isMediaIconsClicked);
+    let handlePollIconClicked = () => setIsPollIconClicked(!isPollIconClicked);
 
     let onGifClick = (gif, evt) => {
         evt.preventDefault();
@@ -69,18 +70,22 @@ function TweetModal() {
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />
 
-                    <TweetTextInput />
+                    {/* <TweetTextInput /> */}
+                    {/* <TweetTextInput height="81.6px" placeholderText="What's happening?" /> */}
+                    {isPollIconClicked ? <TweetTextInput height="42.6px" placeholderText="Ask a question" /> : <TweetTextInput height="81.6px" placeholderText="What's happening?" />}
                 </div>
                 
                 {selectedFile && <div id='image-view'><span id='remove-image' onClick={removeImageHandler}>{deleteIcon()}</span> <img src={URL.createObjectURL(selectedFile)} /></div>}
                 
                 {gifFile && <div id='gif-view'><span id='remove-gif' onClick={removeGifFileHandler}>{deleteIcon()}</span><Gif gif={gifFile} /></div>}
                 
+                <TweetPoll isPollIconClicked={isPollIconClicked} handleToggle={handlePollIconClicked} />
+
                 <div id='footer-section'>
                     <TweetPrivacySelected setTweetOptions={setTweetOptions} />
                     
                     <div id='tweet-additionals'>
-                        <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handleMediaIconsClicked} />
+                        <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} />
                         <div id='tweet-now'>+ tweet</div>
                     </div>
                     
@@ -90,22 +95,20 @@ function TweetModal() {
                     
                     <TweetOptionsDropDown tweetOptions={tweetOptions} />
                 </div>
-                <TweetPoll isIconCliked={isMediaIconsClicked} />
-                {/* <TweetPoll isIconCliked='true' /> */}
             </div>
         </div>
     )
 }
 
-let TweetMediaOptions = ({gifFile, selectedFile, inputRef, setIsGifIconClicked, isGifIconClicked, handleToggle}) => {
+let TweetMediaOptions = ({gifFile, selectedFile, inputRef, setIsGifIconClicked, isGifIconClicked, handleToggle, isPollIconClicked}) => {
 
-    // console.log(handleToggle, isIconCliked)
+    // console.log(handleToggle, isPollIconClicked)
     
     let onImageIconClicked = evt => inputRef.current.click();
 
     let onGifIconClicked = evt => setIsGifIconClicked(!isGifIconClicked);
 
-    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{pointerEvents: gifFile ? 'none' : 'auto'}}>{imageIcon()}</div> <div id='gif-icon' style={{pointerEvents: selectedFile ? 'none' : 'auto'}} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon'>{copyIcon()}</div> <div id='schedule-icon'>{scheduleIcon()}</div></div>
+    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto'}}>{imageIcon()}</div> <div id='gif-icon' style={{pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto'}} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto'}} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon'>{copyIcon()}</div> <div id='schedule-icon'>{scheduleIcon()}</div></div>
 }
 
 
@@ -152,7 +155,7 @@ let TweetPrivacySelected = ({setTweetOptions}) => {
     return <span id='options-selected'>{tweetPrivacy == '01' ? tweetPrivacySelected01() : tweetPrivacy == '02' ? tweetPrivacySelected02() : tweetPrivacySelected03()}</span>
 }
 
-let TweetTextInput = () => {
+let TweetTextInput = ({height, placeholderText}) => {
     let [tweetText, setTweetText] = useState('');
 
     let handleTweetTextChanges = evt => {
@@ -160,13 +163,22 @@ let TweetTextInput = () => {
         setTweetText(evt.target.value)
     }
 
+    useEffect(() => {
+        let tweetInput = document.querySelector('#tweet-input');
+        tweetInput.style.height = height;
+        setTweetText('')
+        // console.log(tweetInput.style.height, "here!!")
+    }, [])
+
     let adjustHeight = (evt) => {
         let element = evt.target;
-        element.style.height = "81.6px";
+        // element.style.height = "81.6px";
+        element.style.height = height;
         element.style.height = (1+element.scrollHeight)+"px";
     }
 
-    return <textarea rows='4' id='tweet-input' type='text' value={tweetText} onChange={handleTweetTextChanges} placeholder="What's happening?" />
+    // return <textarea rows='4' id='tweet-input' type='text' value={tweetText} onChange={handleTweetTextChanges} placeholder="What's happening?" />
+    return <textarea rows='4' id='tweet-input' type='text' value={tweetText} onChange={handleTweetTextChanges} placeholder={placeholderText} />
 }
 
 let tweetPrivacySelected01 = () => <span className='privacy-spans'><span className='privacy-svg'>{everybodyIcon('none')}</span> <span className='privacy-text'>Everybody can reply</span></span>

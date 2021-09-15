@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
 
-function TweetPoll({isIconClicked}) {
-    // style={{display: isIconClicked ? 'block' : 'none'}}
-    console.log(isIconClicked, "??")
+export default function TweetPoll({isPollIconClicked, handleToggle}) {
+    // style={{display: isMediaIconsClicked ? 'block' : 'none'}}
+    // console.log(isMediaIconsClicked, "??")
     return (
-        <div id='poll-container'>
+        <div id='poll-container' style={{display: isPollIconClicked ? 'flex' : 'none'}}>
             <div id='top-layer'>
                 <PollChoices />
             </div>
             <div id='mid-layer'>
                 <PollLengths />
             </div>
+            <div id='bottom-layer' onClick={handleToggle}>Remove poll</div>
         </div>
     )
 }
 
-let PollLengths = () => {
+export let PollLengths = () => {
     let [days, setDays] = useState(0);
     let [hours, setHours] = useState(0);
     let [minutes, setMinutes] = useState(0);
@@ -63,10 +64,10 @@ let PollLengths = () => {
     let hoursLength = returnLengthBox('hours', hours, hoursDropdown);
     let minutesLength = returnLengthBox('minutes', minutes, minutesDropdown);
 
-    return <> {daysLength} {hoursLength} {minutesLength} </>
+    return <div id='poll-lengths'> <div id='poll-length-text'>Poll length</div> <div id='all-lengths'>{daysLength} {hoursLength} {minutesLength}</div> </div>
 }
 
-let PollChoices = () => {
+export let PollChoices = () => {
     let [divTextChoice01, setDivTextChoice01] = useState('');
     let [divTextChoice02, setDivTextChoice02] = useState('');
     let [divTextChoice03, setDivTextChoice03] = useState('');
@@ -76,6 +77,14 @@ let PollChoices = () => {
     let [inputTextChoice02, setInputTextChoice02] = useState('');
     let [inputTextChoice03, setInputTextChoice03] = useState('');
     let [inputTextChoice04, setInputTextChoice04] = useState('');
+
+    let[pollChoices, setPollChoices] = useState([{ placeholderText: 'Choice01', id: '01' }, { placeholderText: 'Choice02', id: '02' }])
+    let [choicesFlag, setChoicesFlag] = useState(true);
+    
+    let [wordCountChoice01, setWordCountChoice01] = useState(0);
+    let [wordCountChoice02, setWordCountChoice02] = useState(0);
+    let [wordCountChoice03, setWordCountChoice03] = useState(0);
+    let [wordCountChoice04, setWordCountChoice04] = useState(0);
 
     let handleTextChangesForChoice01 = value => setInputTextChoice01(value)
 
@@ -88,19 +97,54 @@ let PollChoices = () => {
 
     let handleFocused = evt => {
         let choiceId = evt.target.id
-        evt.target.placeholder = '';
+        // evt.target.placeholder = '';
 
         switch (choiceId) {
             case '01':
+                inputTextChoice02 ? setDivTextChoice02(divTextChoice02) : setDivTextChoice02('')
+                inputTextChoice03 ? setDivTextChoice03(divTextChoice03) : setDivTextChoice03('')
+                inputTextChoice04 ? setDivTextChoice04(divTextChoice03) : setDivTextChoice04('')
+                // setWordCountChoice01(evt.target.value.length > 0 ? evt.target.value.length : '')
+                setWordCountChoice01(wordCountChoice01)
+                setWordCountChoice02('')
+                setWordCountChoice03('')
+                setWordCountChoice04('')
                 setDivTextChoice01('Choice01')
                 break;
             case '02':
+                inputTextChoice01 ? setDivTextChoice01(divTextChoice01) : setDivTextChoice01('')
+                inputTextChoice04 ? setDivTextChoice04(divTextChoice03) : setDivTextChoice04('')
+                inputTextChoice03 ? setDivTextChoice03(divTextChoice03) : setDivTextChoice03('')
+                // setWordCountChoice02(evt.target.value.length > 0 ? evt.target.value.length : '')
+                setWordCountChoice02(wordCountChoice02)
+                setWordCountChoice01('')
+                setWordCountChoice03('')
+                setWordCountChoice04('')
                 setDivTextChoice02('Choice02')
                 break;
             case '03':
+                // setDivTextChoice03('Choice03 (optional)')
+                // !inputTextChoice03 ? setDivTextChoice03('') : setDivTextChoice03('Choice03 (optional)')
+                inputTextChoice01 ? setDivTextChoice01(divTextChoice01) : setDivTextChoice01('')
+                inputTextChoice04 ? setDivTextChoice04(divTextChoice03) : setDivTextChoice04('')
+                inputTextChoice02 ? setDivTextChoice02(divTextChoice02) : setDivTextChoice02('')
+                // setWordCountChoice03(evt.target.value.length > 0 ? evt.target.value.length : '')
+                setWordCountChoice03(wordCountChoice03)
+                setWordCountChoice02('')
+                setWordCountChoice01('')
+                setWordCountChoice04('')
                 setDivTextChoice03('Choice03 (optional)')
+                // inputTextChoice03 ? setDivTextChoice03(divTextChoice03) : setDivTextChoice03('??')
                 break;
             case '04':
+                inputTextChoice01 ? setDivTextChoice01(divTextChoice01) : setDivTextChoice01('')
+                inputTextChoice02 ? setDivTextChoice02(divTextChoice02) : setDivTextChoice02('')
+                inputTextChoice03 ? setDivTextChoice03(divTextChoice03) : setDivTextChoice03('')
+                // setWordCountChoice04(evt.target.value.length > 0 ? evt.target.value.length : '')
+                setWordCountChoice04(wordCountChoice04)
+                setWordCountChoice02('')
+                setWordCountChoice03('')
+                setWordCountChoice01('')
                 setDivTextChoice04('Choice04 (optional)')
                 break;
             default: console.log('soimething wrong!!')
@@ -108,30 +152,76 @@ let PollChoices = () => {
         // console.log(divTextChoice01, divTextChoice02, choiceId, "??")
     }
 
+    useEffect(()=> {
+        setWordCountChoice01('')
+        setWordCountChoice02('')
+        setWordCountChoice03('')
+        setWordCountChoice04('')
+    }, [])
+
     let handleChanges = (evt) => {
         let choiceId = evt.target.id
+        // setWordCount(evt.target.value.length)
         switch (choiceId) {
             case '01':
                 handleTextChangesForChoice01(evt.target.value)
+                // setWordCountChoice01(evt.target.value.length)
+                setWordCountChoice01(evt.target.value.length+" / 25")
+                setWordCountChoice02('')
+                setWordCountChoice03('')
+                setWordCountChoice04('')
                 break;
             case '02':
                 handleTextChangesForChoice02(evt.target.value)
+                setWordCountChoice02(evt.target.value.length+" / 25")
+                setWordCountChoice01('')
+                setWordCountChoice03('')
+                setWordCountChoice04('')
+                break;
+            case '03':
+                handleTextChangesForChoice03(evt.target.value)
+                setWordCountChoice03(evt.target.value.length+" / 25")
+                setWordCountChoice02('')
+                setWordCountChoice01('')
+                setWordCountChoice04('')
+                break;
+            case '04':
+                handleTextChangesForChoice04(evt.target.value)
+                setWordCountChoice04(evt.target.value.length+" / 25")
+                setWordCountChoice03('')
+                setWordCountChoice02('')
+                setWordCountChoice01('')
                 break;
             default: console.log('soimething wrong!!')
         }
         // console.log(divTextChoice01, divTextChoice02, choiceId, "??")
     }
 
-    let pollChoices = [{ placeholderText: 'Choice01', id: '01' }, { placeholderText: 'Choice02', id: '02' }];
+    // let pollChoices = [{ placeholderText: 'Choice01', id: '01' }, { placeholderText: 'Choice02', id: '02' }];
+
+    // let availableChoices;
 
     let availableChoices = pollChoices.map(choice => {
         return <div key={choice.placeholderText} className='choices-container'>
-            <div className='div-text'>{choice.id == '01' ? divTextChoice01 : choice.id == '02' ? divTextChoice02 : choice.id == '03' ? divTextChoice03 : divTextChoice04}</div>
-            <input className='poll-choices' id={choice.id} type='text' onChange={handleChanges} onFocus={handleFocused} placeholder={choice.placeholderText} />
+            <div className='split-divs'>
+                <div className='div-text'>{choice.id == '01' ? divTextChoice01 : choice.id == '02' ? divTextChoice02 : choice.id == '03' ? divTextChoice03 : divTextChoice04}</div>
+                {/* <div className='word-count'>{choice.id == '01' ? wordCountChoice01 + "/25" : choice.id == '02' ? wordCountChoice02 + "/25" : choice.id == '03' ? wordCountChoice03 + "/25" : wordCountChoice04 + "/25"}</div> */}
+                <div className='word-count'>{choice.id == '01' ? wordCountChoice01 : choice.id == '02' ? wordCountChoice02 : choice.id == '03' ? wordCountChoice03 : wordCountChoice04}</div>
+            </div>
+            <input className='poll-choices' id={choice.id} type='text' maxLength='25' onChange={handleChanges} onFocus={handleFocused} placeholder={choice.placeholderText} />
         </div>
     })
 
-    return availableChoices
-}
+    let addAnotherChoice = (evt) => {
+        // console.log('before!!', pollChoices)
+        // pollChoices.push({placeholderText: 'Choice03', id: '03'})
+        // setPollChoices(pollChoices.push({placeholderText: 'Choice03', id: '03'}))
+        // setPollChoices([...pollChoices, {placeholderText: 'Choice03', id: '03'}])
+        pollChoices.length == 2 ? setPollChoices([...pollChoices, {placeholderText: 'Choice03', id: '03'}]) : setPollChoices([...pollChoices, {placeholderText: 'Choice04', id: '04'}])
+        if(pollChoices.length == 3) setChoicesFlag(false);
+        // console.log('after!!', pollChoices)
+    }
 
-export default TweetPoll
+    // return availableChoices
+    return <div id='choices-container'><div id='choices'>{availableChoices}</div><div id='add-choices' onClick={addAnotherChoice} style={{display: choicesFlag ? 'block' : 'none'}}>+</div></div>
+}
