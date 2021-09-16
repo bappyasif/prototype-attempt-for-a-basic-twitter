@@ -4,9 +4,11 @@ import '../../styles/tweet-modal.css'
 import {GiphyFetch} from '@giphy/js-fetch-api';
 import {Grid, Gif} from '@giphy/react-components';
 import TweetPoll from './tweet-poll';
+import EmojiPicker from './emoji-picker';
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
 function TweetModal() {
+    let [tweetText, setTweetText] = useState('');
     let [toggleModality, setToggleModality] = useState(false);
     let [tweetOptions, setTweetOptions] = useState(false);
     let [selectedFile, setSelectedFile] = useState();
@@ -14,6 +16,7 @@ function TweetModal() {
     let [isGifIconClicked, setIsGifIconClicked] = useState(false);
     // let [isMediaIconsClicked, setIsMediaIconsClicked] = useState(false);
     let [isPollIconClicked, setIsPollIconClicked] = useState(false);
+    let [isEmojiIconClicked, setIsEmojiIconClicked] = useState(false);
     let inputRef = useRef();
 
     useEffect(() => {
@@ -72,7 +75,7 @@ function TweetModal() {
 
                     {/* <TweetTextInput /> */}
                     {/* <TweetTextInput height="81.6px" placeholderText="What's happening?" /> */}
-                    {isPollIconClicked ? <TweetTextInput height="42.6px" placeholderText="Ask a question" /> : <TweetTextInput height="81.6px" placeholderText="What's happening?" />}
+                    {isPollIconClicked ? <TweetTextInput height="42.6px" placeholderText="Ask a question" tweetText={tweetText} setTweetText={setTweetText} /> : <TweetTextInput height="81.6px" placeholderText="What's happening?" tweetText={tweetText} setTweetText={setTweetText} />}
                 </div>
                 
                 {selectedFile && <div id='image-view'><span id='remove-image' onClick={removeImageHandler}>{deleteIcon()}</span> <img src={URL.createObjectURL(selectedFile)} /></div>}
@@ -81,11 +84,13 @@ function TweetModal() {
                 
                 <TweetPoll isPollIconClicked={isPollIconClicked} handleToggle={handlePollIconClicked} />
 
+                <EmojiPicker isIconClicked={isEmojiIconClicked} tweetText={tweetText} setTweetText={setTweetText} />
+
                 <div id='footer-section'>
                     <TweetPrivacySelected setTweetOptions={setTweetOptions} />
                     
                     <div id='tweet-additionals'>
-                        <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} />
+                        <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} />
                         <div id='tweet-now'>+ tweet</div>
                     </div>
                     
@@ -95,12 +100,13 @@ function TweetModal() {
                     
                     <TweetOptionsDropDown tweetOptions={tweetOptions} />
                 </div>
+                <EmojiPicker />
             </div>
         </div>
     )
 }
 
-let TweetMediaOptions = ({gifFile, selectedFile, inputRef, setIsGifIconClicked, isGifIconClicked, handleToggle, isPollIconClicked}) => {
+let TweetMediaOptions = ({gifFile, selectedFile, inputRef, setIsGifIconClicked, isGifIconClicked, handleToggle, isPollIconClicked, isEmojiIconClicked, showPicker}) => {
 
     // console.log(handleToggle, isPollIconClicked)
     
@@ -108,7 +114,9 @@ let TweetMediaOptions = ({gifFile, selectedFile, inputRef, setIsGifIconClicked, 
 
     let onGifIconClicked = evt => setIsGifIconClicked(!isGifIconClicked);
 
-    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto'}}>{imageIcon()}</div> <div id='gif-icon' style={{pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto'}} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto'}} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon'>{copyIcon()}</div> <div id='schedule-icon'>{scheduleIcon()}</div></div>
+    let emojiIconClicked = () => showPicker(!isEmojiIconClicked);
+
+    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto'}}>{imageIcon()}</div> <div id='gif-icon' style={{pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto'}} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto'}} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div> <div id='schedule-icon'>{scheduleIcon()}</div></div>
 }
 
 
@@ -155,8 +163,8 @@ let TweetPrivacySelected = ({setTweetOptions}) => {
     return <span id='options-selected'>{tweetPrivacy == '01' ? tweetPrivacySelected01() : tweetPrivacy == '02' ? tweetPrivacySelected02() : tweetPrivacySelected03()}</span>
 }
 
-let TweetTextInput = ({height, placeholderText}) => {
-    let [tweetText, setTweetText] = useState('');
+let TweetTextInput = ({height, placeholderText, tweetText, setTweetText}) => {
+    // let [tweetText, setTweetText] = useState('');
 
     let handleTweetTextChanges = evt => {
         adjustHeight(evt);
