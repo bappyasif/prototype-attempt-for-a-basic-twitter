@@ -23,14 +23,14 @@ function EmojiPicker({isIconClicked, tweetText, setTweetText}) {
     return (
         <div id='emoji-picker-container'>
 
-            <EmojiComponent emoji={pickerInput} />
+            {/* <EmojiComponent emoji={pickerInput} /> */}
 
             {/* {renderEmojis()} */}
 
             {isIconClicked && <div>
-                {/* <Picker onSelect={addEmojis} set="twitter" skin="1" /> */}
+                <Picker onSelect={addEmojis} set="twitter" skin={1} style={{width: '47%', float: 'left'}} />
                 {/* <Picker onSelect={addEmojis} set="twitter" defaultSkin={1} onClick={ (emoji, event) => setPickerInput(emoji)} /> */}
-                <Picker onSelect={addEmojis} set="twitter" onClick={ (emoji, event) => setPickerInput(emoji)} color={"#009688"} />
+                {/* <Picker onSelect={addEmojis} set="twitter" onClick={ (emoji, event) => setPickerInput(emoji)} color={"#009688"} /> */}
             </div>}
         </div>
     )

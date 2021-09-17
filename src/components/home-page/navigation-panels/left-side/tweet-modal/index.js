@@ -5,6 +5,7 @@ import {GiphyFetch} from '@giphy/js-fetch-api';
 import {Grid, Gif} from '@giphy/react-components';
 import TweetPoll from './tweet-poll';
 import EmojiPicker from './emoji-picker';
+import TweetScheduler from './schedule-tweet';
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
 function TweetModal() {
@@ -84,7 +85,9 @@ function TweetModal() {
                 
                 <TweetPoll isPollIconClicked={isPollIconClicked} handleToggle={handlePollIconClicked} />
 
-                <EmojiPicker isIconClicked={isEmojiIconClicked} tweetText={tweetText} setTweetText={setTweetText} />
+                {/* <EmojiPicker isIconClicked={isEmojiIconClicked} tweetText={tweetText} setTweetText={setTweetText} /> */}
+
+                <TweetScheduler />
 
                 <div id='footer-section'>
                     <TweetPrivacySelected setTweetOptions={setTweetOptions} />
@@ -99,8 +102,10 @@ function TweetModal() {
                     <GridDemo onGifClick={onGifClick} isGifIconClicked={isGifIconClicked} />
                     
                     <TweetOptionsDropDown tweetOptions={tweetOptions} />
+
+                    <EmojiPicker isIconClicked={isEmojiIconClicked} tweetText={tweetText} setTweetText={setTweetText} />
                 </div>
-                <EmojiPicker />
+                {/* <EmojiPicker isIconClicked={isEmojiIconClicked} tweetText={tweetText} setTweetText={setTweetText} /> */}
             </div>
         </div>
     )

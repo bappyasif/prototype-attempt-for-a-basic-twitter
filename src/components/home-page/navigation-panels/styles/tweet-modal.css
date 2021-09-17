@@ -387,6 +387,138 @@
 }
 
 .emojis {
-    color: yellow;
-    text-shadow: 0 0 0 blue;
+  color: yellow;
+  text-shadow: 0 0 0 blue;
 }
+
+#emoji-picker-container {
+  position: absolute;
+}
+
+/* tweet scheduler */
+#tweet-scheduler-container {
+  width: 560px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: whitesmoke;
+  z-index: 999999;
+  border-radius: 11px;
+}
+
+#mid-section {
+  display: flex;
+  flex-direction: column;
+  width: 97.2%;
+}
+
+#date-selection {
+  width: 100%;
+  padding: 8px;
+}
+
+#date-selection #header-text {
+  text-align: left;
+}
+
+#date-scrolls,
+.scroll-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.scroll-container {
+  /* margin-left: 0px; */
+  /* width: 33%; */
+  padding: 11px;
+  justify-content: space-between;
+  border: silver solid 0.11em;
+  /* height: 3.3em; */
+  align-items: center;
+  /* width: 33%; */
+  flex-direction: column;
+  max-height: 2em;
+  border-radius: 2px;
+}
+
+.scroll-container .top-side {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 6px;
+  position: relative;
+}
+
+#Month {
+  width: 42%;
+}
+
+.scroll-container select {
+  width: 110%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: "";
+  padding: 11px;
+  /* margin-top: -17px; */
+}
+
+.scroll-container svg {
+  position: absolute;
+  top: 50%;
+  left: 89%;
+}
+
+#Days {
+  width: 13%;
+  padding-right: 18px;
+}
+
+#Years {
+  width: 20%;
+  padding-right: 18px;
+}
+
+/* .left-side .title {
+  color: gray;
+}
+
+.scroll-container .right-side {
+  transform: rotate(180deg);
+  font-size: larger;
+}
+
+#Month {
+  width: 38%;
+  margin-right: 17px;
+}
+
+#Month .right-side {
+  
+}
+
+#Days {
+  width: 17%;
+  margin-right: 17px;
+}
+
+#Years {
+  width: 27%;
+} */
+
+/* #Month {
+  width: 200px;
+}
+
+#Month .right-side {
+  width: 110px;
+}
+
+#Days {
+  width: 101px;
+}
+
+#Years {
+  margin-right: 17px;
+} */
