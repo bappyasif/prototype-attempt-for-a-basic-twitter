@@ -125,7 +125,7 @@
 
 #tweet-additionals {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -135,11 +135,29 @@
 
 #tweet-medias {
   display: flex;
-  width: 200px;
-  justify-content: space-between;
+  width: 218px;
+  justify-content: space-around;
   /* align-content: center; */
   padding: 9px 9px;
-  margin-left: -56px;
+  margin-left: 56px;
+}
+
+#modal-tweet-div {
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#tweet-now {
+  background-color: rgb(29, 155, 240);
+  border-radius: 20px;
+  color: whitesmoke;
+  width: 90px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #image-icon,
@@ -406,15 +424,62 @@
   border-radius: 11px;
 }
 
+#tweet-scheduler-container #top-section,
+#tweet-scheduler-container #top-section .left-side {
+  /* width: 100%; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#tweet-scheduler-container #top-section {
+  height: 2em;
+  margin: 0.4em;
+}
+
+#tweet-scheduler-container #top-section .left-side {
+  width: 26%;
+  margin-left: -8px;
+}
+
+#tweet-scheduler-container #top-section .right-side {
+  margin: 8px;
+}
+
+#annnounce-schedule {
+  margin-left: 20px;
+  text-align: left;
+  font-size: smaller;
+  font-size: smaller;
+  align-items: center;
+  display: flex;
+}
+
+#annonunce-text {
+  color: silver;
+  margin-left: 20px;
+}
+
+#tweet-scheduler-container #top-section .right-side input {
+  border-top: gray 0.1em solid;
+  border-radius: 20px;
+  width: 11vw;
+  background-color: black;
+  color: whitesmoke;
+  font-weight: bolder;
+}
+
 #mid-section {
   display: flex;
   flex-direction: column;
-  width: 97.2%;
+  width: 93.6%;
 }
 
 #date-selection {
   width: 100%;
   padding: 8px;
+  /* margin-left: 17px; */
+  margin-left: 11px;
 }
 
 #date-selection #header-text {
@@ -438,7 +503,7 @@
   /* width: 33%; */
   flex-direction: column;
   max-height: 2em;
-  border-radius: 2px;
+  border-radius: 8px;
 }
 
 .scroll-container .top-side {
@@ -478,6 +543,53 @@
 #Years {
   width: 20%;
   padding-right: 18px;
+}
+
+#time-selection {
+  width: 103%;
+  /* margin-left: 17px; */
+  margin-left: 11px;
+}
+
+#time-selection #header-text {
+  margin-left: 9px;
+  text-align: left;
+}
+
+#time-selection #time-scrolls {
+  display: flex;
+  justify-content: space-between;
+  /* margin-left: 9px; */
+}
+
+#time-scrolls .scroll-container {
+  flex-grow: 1;
+  margin: 0.6em;
+}
+
+#twelve-hours {
+  /* margin-right: -9px; */
+}
+
+#bottom-section {
+  text-align: left;
+  margin-left: 20px;
+}
+
+#bottom-section .header-text {
+  margin-bottom: 0.2em;
+}
+
+#schedule-footer-section {
+  text-align: left;
+  margin: 11px;
+  margin-left: 38px;
+}
+
+#sceduled-tweets {
+  margin-top: 6px;
+  color: rgb(29, 155, 240);
+  text-decoration: none;
 }
 
 /* .left-side .title {

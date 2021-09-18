@@ -18,6 +18,7 @@ function TweetModal() {
     // let [isMediaIconsClicked, setIsMediaIconsClicked] = useState(false);
     let [isPollIconClicked, setIsPollIconClicked] = useState(false);
     let [isEmojiIconClicked, setIsEmojiIconClicked] = useState(false);
+    let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(false)
     let inputRef = useRef();
 
     useEffect(() => {
@@ -57,6 +58,13 @@ function TweetModal() {
 
     let handlePollIconClicked = () => setIsPollIconClicked(!isPollIconClicked);
 
+    let handleScheduleIconClicked = () => {
+        setIsScheduleIconClicked(!isScheduleIconClicked);
+        // closeTweetModalHandler();
+        // closeTweetModalHandler()
+        if(isPollIconClicked) handlePollIconClicked()
+    }
+
     let onGifClick = (gif, evt) => {
         evt.preventDefault();
         setGifFile(gif);
@@ -87,14 +95,14 @@ function TweetModal() {
 
                 {/* <EmojiPicker isIconClicked={isEmojiIconClicked} tweetText={tweetText} setTweetText={setTweetText} /> */}
 
-                <TweetScheduler />
+                <TweetScheduler isScheduleIconClicked={isScheduleIconClicked} handleToggle={handleScheduleIconClicked} />
 
                 <div id='footer-section'>
                     <TweetPrivacySelected setTweetOptions={setTweetOptions} />
                     
                     <div id='tweet-additionals'>
-                        <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} />
-                        <div id='tweet-now'>+ tweet</div>
+                        <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} scheduleToggler={handleScheduleIconClicked} />
+                        <div id='modal-tweet-div'> <span id='extra-tweet'>+</span> <span id='tweet-now'>tweet</span></div>
                     </div>
                     
                     <UploadFile chnageHandler={fileUploadChangeHandler} inputRef={inputRef} />
@@ -111,7 +119,7 @@ function TweetModal() {
     )
 }
 
-let TweetMediaOptions = ({gifFile, selectedFile, inputRef, setIsGifIconClicked, isGifIconClicked, handleToggle, isPollIconClicked, isEmojiIconClicked, showPicker}) => {
+let TweetMediaOptions = ({gifFile, selectedFile, inputRef, setIsGifIconClicked, isGifIconClicked, handleToggle, isPollIconClicked, isEmojiIconClicked, showPicker, scheduleToggler}) => {
 
     // console.log(handleToggle, isPollIconClicked)
     
@@ -121,7 +129,13 @@ let TweetMediaOptions = ({gifFile, selectedFile, inputRef, setIsGifIconClicked, 
 
     let emojiIconClicked = () => showPicker(!isEmojiIconClicked);
 
-    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto'}}>{imageIcon()}</div> <div id='gif-icon' style={{pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto'}} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto'}} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div> <div id='schedule-icon'>{scheduleIcon()}</div></div>
+    let handleScheduleToggler = () => {
+        // handleToggle(false);
+        scheduleToggler();
+
+    }
+
+    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto'}}>{imageIcon()}</div> <div id='gif-icon' style={{pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto'}} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto'}} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div> <div id='schedule-icon' onClick={handleScheduleToggler}>{scheduleIcon()}</div></div>
 }
 
 
