@@ -6,6 +6,7 @@ import {Grid, Gif} from '@giphy/react-components';
 import TweetPoll from './tweet-poll';
 import EmojiPicker from './emoji-picker';
 import TweetScheduler from './schedule-tweet';
+import TweetWordCount from './tweet-word-count';
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
 function TweetModal() {
@@ -102,7 +103,7 @@ function TweetModal() {
                     
                     <div id='tweet-additionals'>
                         <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} scheduleToggler={handleScheduleIconClicked} />
-                        <div id='modal-tweet-div'> <span id='extra-tweet'>+</span> <span id='tweet-now'>tweet</span></div>
+                        <div id='modal-tweet-div'> <span id='extra-tweet'>+</span> <span>{<TweetWordCount />}</span> <span id='tweet-now'>tweet</span></div>
                     </div>
                     
                     <UploadFile chnageHandler={fileUploadChangeHandler} inputRef={inputRef} />
