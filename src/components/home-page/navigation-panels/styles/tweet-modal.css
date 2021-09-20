@@ -62,7 +62,7 @@
   display: flex;
   justify-content: left;
   margin: 1.1em;
-  margin-left: 4.4em;
+  margin-left: 5.1em;
   position: relative;
 }
 
@@ -127,6 +127,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 11px;
 }
 
 /* #tweet-medias {
@@ -142,18 +143,42 @@
   margin-left: 56px;
 }
 
-#modal-tweet-div {
-  width: 150px;
+#modal-tweet-div, #extra-tweet-options {
+  /* width: 150px; */
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+
+#extra-tweet-view {
+  margin-left: 15%;
+  margin-top: 4px;
+}
+
+#extra-tweet-options .extra-tweet {
+  font-size: x-large;
+}
+
+#extra-tweet-options .extra-tweet:nth-child(1) {
+  border: .1em solid silver;
+  font-size: larger;
+  border-radius: 50%;
+}
+
+#extra-tweet-options .extra-tweet:nth-child(1):hover {
+  background-color: rgba(192, 192, 192, .4);
+}
+
+#extra-tweet-options .extra-tweet:nth-child(2) {
+  margin-left: 13%;
+  color: silver;
 }
 
 #tweet-now {
   background-color: rgb(29, 155, 240);
   border-radius: 20px;
   color: whitesmoke;
-  width: 90px;
+  width: 92px;
   height: 36px;
   display: flex;
   align-items: center;
@@ -593,6 +618,21 @@
 }
 
 /* tweet word count */
+.progress-ring-circle {
+  /* stroke-dasharray: 2 5; */
+  /* With those values, our ring will have px dashes separated by 5px. */
+  /* stroke-dashoffset: 100; */
+
+  /* By transitioning the property, we will get the animation feel */
+  transition: stroke-dashoffset 0.22s;
+
+  /* One particular thing about stroke-dashoffset, its starting point is vertically centered and horizontally tilted to the right. It’s necessary to negatively rotate the circle to get the desired effect. */
+  transform: rotate(-90deg);
+  transform-origin: 50% 40%;
+}
+
+
+
 /* .circular{
   height:100px;
   width: 100px;
