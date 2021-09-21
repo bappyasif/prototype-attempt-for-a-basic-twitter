@@ -19,14 +19,16 @@
   margin: 1.1em;
 }
 
-#middle-content #header-section {
+#middle-content #header-section, #extra-tweet-view {
   display: flex;
-  justify-content: space-around;
+  /* justify-content: space-around; */
+  justify-content: space-evenly;
   align-items: center;
 }
 
 #middle-content {
-  width: 551px;
+  /* width: 551px; */
+  width: 546px;
 }
 
 #profile-pic {
@@ -143,7 +145,8 @@
   margin-left: 56px;
 }
 
-#modal-tweet-div, #extra-tweet-options {
+#modal-tweet-div,
+#extra-tweet-options {
   /* width: 150px; */
   display: flex;
   align-items: center;
@@ -151,7 +154,9 @@
 }
 
 #extra-tweet-view {
-  margin-left: 15%;
+  /* margin-left: 15%; */
+  /* display: flex; */
+  /* justify-content: space-evenly; */
   margin-top: 4px;
 }
 
@@ -160,13 +165,13 @@
 }
 
 #extra-tweet-options .extra-tweet:nth-child(1) {
-  border: .1em solid silver;
+  border: 0.1em solid silver;
   font-size: larger;
   border-radius: 50%;
 }
 
 #extra-tweet-options .extra-tweet:nth-child(1):hover {
-  background-color: rgba(192, 192, 192, .4);
+  background-color: rgba(192, 192, 192, 0.4);
 }
 
 #extra-tweet-options .extra-tweet:nth-child(2) {
@@ -183,6 +188,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.extended-modal-view {
+  height: 400px;
+}
+
+.extra-tweet-bottom-view {
+  position: absolute;
+  /* left: 8px; */
+  left: 4px;
+  top: 288px;
+}
+
+#line-extension, .line-extension-extended {
+  position: absolute;
+  height: 60.02px;
+  width: 2px;
+  left: 7.2%;
+  background-color: silver;
+  top: 31.4%;
+}
+
+.line-extension-extended {
+  min-height: 181.6px;
 }
 
 #image-icon,
@@ -631,8 +660,6 @@
   transform-origin: 50% 40%;
 }
 
-
-
 /* .circular{
   height:100px;
   width: 100px;
@@ -858,31 +885,31 @@ div[data-anim~=wrapper] {
 } */
 
 /* #tweet-word-count-container { */
-  /* display: flex;
+/* display: flex;
   align-items: center;
   height: 2em;
   width: 100%;
   background-color: black; */
-  /* width: 22px;
+/* width: 22px;
     height: 15px;
     background: red;
     border-radius: 100%; */
-    /* clip: rect(0px, 50px, 100px, 0px); */
+/* clip: rect(0px, 50px, 100px, 0px); */
 /* } */
 
 /* #tweet-word-count-container #word-count { */
-  /* width: 0%;
+/* width: 0%;
   height: 100%;
   border-radius: 50%;
   color: red;
   animation-name: progress-bar;
   animation-duration: 2s;
   animation-iteration-count: infinite; */
-  /* width: 0px;
+/* width: 0px;
   height: 15px;
   border-radius: 100%;
   background: green; */
-  /* clip: rect(0px, 50px, 100px, 0px); */
+/* clip: rect(0px, 50px, 100px, 0px); */
 /* } */
 
 /* @keyframes progress-bar {
