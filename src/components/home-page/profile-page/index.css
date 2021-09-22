@@ -1,5 +1,202 @@
 #profile-page-container {
-    position: absolute;
-    top: 20px;
-    left: 290px;
+  position: absolute;
+  top: 20px;
+  left: 290px;
+  /* width: 492px; */
+}
+
+#profile-page-container #tweet-container {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  align-items: flex-end;
+  /* flex-direction: column; */
+  border: solid silver 0.1em;
+  border-bottom: none;
+}
+
+#profile-page-container #tweet-container:hover {
+    background-color: rgba(128,128,128, .1);
+}
+
+#profile-page-container #tweet-container .right-portion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 13px;
+  width: 503px;
+}
+
+#profile-page-container #tweet-container .right-portion span:nth-child(1),
+#profile-page-container #tweet-container .right-portion span:nth-child(2),
+#profile-page-container #tweet-container .right-portion span:nth-child(3) {
+  color: silver;
+  font-size: smaller;
+}
+
+#profile-page-container #tweet-container .left-portion {
+  transform: translate(-4px, -35px);
+}
+
+#profile-page-container #tweet-container .left-portion img {
+  width: 56px;
+  height: 68px;
+}
+
+.profile-details-on-tweet,
+.tweet-text-on-profile,
+.tweet-privacy-on-profile {
+  margin-bottom: 0.1em;
+}
+
+.tweet-text-on-profile {
+    transform: translateY(-5px);
+}
+
+.profile-details-on-tweet {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tweet-privacy-on-profile .privacy-spans {
+  margin-left: -6px;
+}
+
+.tweet-privacy-on-profile .privacy-spans .privacy-svg {
+  margin: 4px;
+}
+
+.profile-page-svg-icons {
+  width: 29px;
+  height: 26px;
+}
+
+#profile-page-container #tweet-container .right-portion .icon-svg {
+  /* background: silver; */
+  border-radius: 50%;
+  padding-left: 1%;
+  padding-top: 1%;
+  transform: translate(-4px, -8px);
+}
+
+#profile-page-container #tweet-container .right-portion .icon-svg:hover {
+  /* background-color: silver; */
+  background: silver;
+}
+
+#profile-page-container #tweet-container .right-portion .additionals-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 87%;
+  margin-left: -1.3%;
+}
+
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  .hover-div {
+  position: relative;
+  /* padding-top: 8px;
+    padding-left: 6px; */
+  /* width: 38px; */
+  /* padding-left: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center; */
+  width: min-content;
+}
+
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  .hover-div:hover {
+  background-color: silver;
+  border-radius: 100%;
+  /* padding-top: 8px; */
+}
+
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  #like,
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  #share,
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  #retweet,
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  #reply {
+  /* width: 38px; */
+  padding-top: 4px;
+  padding-left: 4px;
+  /* padding-bottom: -2px; */
+}
+
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  #like
+  .tooltips-text {
+  margin-left: 6px;
+}
+
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  #share
+  .tooltips-text {
+  margin-left: 0px;
+}
+
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  #analytics
+  .tooltips-text {
+  margin-left: -11px;
+}
+
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  #retweet
+  .tooltips-text {
+  margin-left: -4px;
+}
+
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  #reply
+  .tooltips-text {
+  margin-left: 4.11px;
+}
+
+#profile-page-container
+  #tweet-container
+  .right-portion
+  .additionals-icons
+  .tooltips-text {
+  position: absolute;
+  top: 105%;
+  left: 0%;
 }
