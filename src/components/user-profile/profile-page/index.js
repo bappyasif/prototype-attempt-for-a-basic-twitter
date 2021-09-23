@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import "./index.css";
+import ProfilePageTopView from './profile-top-view-section';
 import { moreIcon, tweetAdditionalIconsArray } from './svg-resources';
+import ProfilePageTopNavigationMenuBar from './top-menu-navigation';
 
 function ProfilePage({ tweetText, extraTweetText, privacySelected, readyTweetPublish, tweetData }) {
 
@@ -43,6 +45,8 @@ function ProfilePage({ tweetText, extraTweetText, privacySelected, readyTweetPub
 
     return (
         <div id='profile-page-container'>
+            <ProfilePageTopView />
+            <ProfilePageTopNavigationMenuBar />
             {renderingData}
         </div>
     )

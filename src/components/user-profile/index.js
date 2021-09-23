@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import LeftSideNavigationPanel from './navigation-panels/left-side'
-import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from './navigation-panels/left-side/tweet-modal'
+import LeftSideNavigationPanel from '../navigation-panels/left-side'
+import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../navigation-panels/left-side/tweet-modal'
 import ProfilePage from './profile-page'
 
-function HomePage() {
+function UserProfile() {
     let [primaryTweetText, setPrimaryTweetText] = useState('');
     let [extraTweetText, setExtraTweetText] = useState('');
     let [tweetPrivacy, setTweetPrivacy] = useState('01');
@@ -35,7 +35,7 @@ function HomePage() {
     )
 }
 
-export default HomePage
+export default UserProfile
 
 
 /**

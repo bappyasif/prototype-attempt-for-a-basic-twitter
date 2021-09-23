@@ -78,7 +78,8 @@ function LoginPage() {
         document.querySelector("#announcement-div").textContent =
           announcementText;
       } else if (userId && userPassword) {
-        window.open("/home", "_blank");
+        // window.open("/home", "_blank");
+        window.open("/user-profile", "_blank");
       } else {
         document.querySelector("#announcement-div").textContent = "";
         divElem.style.display = "none";

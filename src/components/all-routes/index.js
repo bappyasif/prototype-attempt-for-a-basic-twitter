@@ -1,6 +1,6 @@
 import React from 'react'
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
-import HomePage from '../home-page';
+// import HomePage from '../user-profile';
 import LoginPage from '../login-page';
 import PasswordResetPage from '../password-reset-page';
 import BeginReset from '../password-reset-page/begin-reset';
@@ -8,6 +8,7 @@ import TopNavigation from '../password-reset-page/top-navigation';
 import VerifyUserInfo from '../password-reset-page/verify-user-info';
 import ContainerForSignupPage from '../signup-page/containerForLoginPage';
 import SignupPageUILogics from '../signup-page/ui-logics';
+import UserProfile from '../user-profile';
 
 function AllRoutes() {
     return (
@@ -24,7 +25,8 @@ function AllRoutes() {
                     <TopNavigation />
                     <VerifyUserInfo />
                 </Route>
-                <Route path='/home' component={HomePage} />
+                {/* <Route path='/home' component={HomePage} /> */}
+                <Route path='/user-profile' component={UserProfile} />
             </Switch>
         </Router>
     )

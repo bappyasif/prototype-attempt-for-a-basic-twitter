@@ -1,0 +1,119 @@
+#profile-top-view-container {
+    width: 560px;
+    height: 380px;
+}
+
+#profile-top-view-container #header-section, 
+#profile-top-view-container #header-section #profile-sneak-peak, 
+#profile-top-view-container #edit-details-div,
+#profile-top-view-container #profile-info-section,
+#profile-info-section #handle-info, 
+#profile-info-section #profile-info,
+#profile-info-section #profile-info #profile-location,
+#profile-info-section #profile-info #website-info,
+#profile-info-section #profile-info #joined-info,
+#profile-info-section #profile-reach-info 
+{
+    display: flex;
+    width: 100%;
+}
+
+#profile-top-view-container #header-section #profile-sneak-peak {
+    flex-direction: column;
+    text-align: left;
+    margin-left: 35px;
+}
+
+#profile-sneak-peak .total-tweets, #profile-info-section #handle-info #profile-handle, #profile-info-section #profile-info span {
+    color: silver;
+    font-size: smaller;
+}
+
+#profile-top-view-container #header-photo-div {
+    height: 175px;
+}
+
+#header-section #header-photo-div img {
+    width: 100%;
+    height: 100%;
+}
+
+#profile-top-view-container #edit-details-div {
+    align-items: center;
+    justify-content: space-between;
+    transform: translate(-4px, -78px);
+}
+
+#profile-top-view-container #edit-details-div #profile-pic {
+    width: 114px;
+    height: 114px;
+}
+
+#profile-top-view-container #edit-details-div #edit-profile {
+    width: 101px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid silver .11em;
+    padding: .2em;
+    border-radius: 20px;
+    transform: translate(-11px, 31px);
+    font-weight: 600;
+    font-size: smaller;
+}
+
+#profile-top-view-container #profile-info-section, #profile-info-section #handle-info {
+    flex-direction: column;
+    transform: translateY(-47px);
+}
+
+#profile-info-section #handle-info {
+    text-align: left;
+    width: max-content;
+}
+
+#profile-info-section #profile-bio {
+    text-align: left;
+    transform: translateY(-42px);
+}
+
+#profile-info-section #profile-info {
+    justify-content: space-between;
+    align-items: center;
+    transform: translate(-6px, -40px);
+}
+
+#profile-info-section #profile-info #profile-location, #profile-info-section #profile-info #website-info, #profile-info-section #profile-info #joined-info {
+    align-items: center;
+    width: max-content;
+}
+
+#profile-info-section #profile-info svg {
+    transform: scale(.8);
+}
+
+#profile-info-section #profile-reach-info {
+    transform: translate(-1px, -38px);
+}
+
+#profile-info-section #profile-reach-info a {
+    color: black;
+}
+
+#profile-info-section #profile-reach-info a:hover {
+    text-decoration: underline;
+}
+
+#profile-info-section #profile-reach-info a:nth-child(2) {
+    margin-left: 20px;
+}
+
+#profile-info-section #profile-reach-info .audience-numbers {
+    margin-right: 8px;
+}
+
+#profile-info-section #profile-reach-info .audience-reach-type {
+    color: silver;
+    font-size: .9em;
+}
