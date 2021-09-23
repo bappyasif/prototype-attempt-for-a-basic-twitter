@@ -9,7 +9,7 @@ function ProfilePageTopView() {
                 <div id='go-back-to-previous'>{backIcon()}</div>
                 <div id='profile-sneak-peak'>
                     <text className='profile-name'>A.B.</text>
-                    <text className='total-tweets'>832 Tweets</text>
+                    <text className='total-tweets'>0000 Tweets</text>
                 </div>
             </div>
             <div id='header-photo-div'>

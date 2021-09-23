@@ -27,6 +27,11 @@ function AllRoutes() {
                 </Route>
                 {/* <Route path='/home' component={HomePage} /> */}
                 <Route path='/user-profile' component={UserProfile} />
+                <Route path='/tweets' component={UserProfile} />
+                {/* <Route path='/tweets' component={AllTweetsPage} /> */}
+                <Route path='/tweets-and-replies' component={UserProfile} />
+                <Route path='/media' component={UserProfile} />
+                <Route path='/likes' component={UserProfile} />
             </Switch>
         </Router>
     )

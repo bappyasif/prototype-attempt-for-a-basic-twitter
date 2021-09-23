@@ -9,7 +9,7 @@ function ProfilePageTopNavigationMenuBar() {
         setNavID(menuClicked)
     }
 
-    let renderNavigations = navigationArray.map(item => <a key={item.id} id={item.id} className={navID == item.id ? 'menu-active' : ''} onClick={handleClicks}>{item.name}</a>)
+    let renderNavigations = navigationArray.map(item => <a key={item.id} href={'/'+item.id} target='_blank' id={item.id} className={navID == item.id ? 'menu-active' : ''} onClick={handleClicks}>{item.name}</a>)
     return (
         <nav id='top-navigation-menu-container'>
             {renderNavigations}

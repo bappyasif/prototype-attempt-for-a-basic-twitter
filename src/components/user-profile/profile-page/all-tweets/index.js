@@ -1,31 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import AllTweetsPage from './all-tweets';
-import "./index.css";
-import ProfilePageTopView from './profile-top-view-section';
-import { moreIcon, tweetAdditionalIconsArray } from './svg-resources';
-import ProfilePageTopNavigationMenuBar from './top-menu-navigation';
+import React, { useState } from 'react'
+import { moreIcon, tweetAdditionalIconsArray } from '../svg-resources';
 
-function ProfilePage({ tweetData }) {
-    // let [menuSelected, setMenuSelected] = useState();
-    // if(menuSelected == 01 && <Component01 />)
-    // if(menuSelected == 02 && <Component02 />)
-
-    return (
-        <div id='profile-page-container'>
-            <ProfilePageTopView />
-            <ProfilePageTopNavigationMenuBar />
-            {/* {renderingData} */}
-            <AllTweetsPage tweetData={tweetData} />
-        </div>
-    )
-}
-
-export default ProfilePage
-
-/**
- * 
- * 
- let [hoveredID, setHoveredID] = useState('');
+function AllTweetsPage({ tweetData }) {
+    let [hoveredID, setHoveredID] = useState('');
 
     let findWhichIconId = evt => {
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.id
@@ -57,8 +34,11 @@ export default ProfilePage
 
             <div className='additionals-icons'>
                 {tweetAdditionalIconsArray.map(elem => <div key={elem.id} id={elem.id} className='hover-div' onMouseOver={mouseHoveredIn} onMouseOut={mouseHoveredOut}><span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span></div>)}
-                {/* {tweetAdditionalIconsArray.map(elem => <div key={elem.id} id={elem.id} onMouseOver={mouseHoveredIn} onMouseOut={mouseHoveredOut}><span>{elem.icon}</span> <span className={hoveredID == elem.id ? 'tooltips-text' : ''}>{elem.id}</span></div>)} *}
-                </div>
-                </div>
-            </div>))
- */
+                {/* {tweetAdditionalIconsArray.map(elem => <div key={elem.id} id={elem.id} onMouseOver={mouseHoveredIn} onMouseOut={mouseHoveredOut}><span>{elem.icon}</span> <span className={hoveredID == elem.id ? 'tooltips-text' : ''}>{elem.id}</span></div>)} */}
+            </div>
+        </div>
+    </div>))
+    return renderingData
+}
+
+export default AllTweetsPage

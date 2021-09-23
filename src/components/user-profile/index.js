@@ -30,32 +30,9 @@ function UserProfile() {
         <div id='home-page-container' style={{display: 'flex', justifyContent: 'space-between'}}>
             <LeftSideNavigationPanel />
             <TweetModal tweetText={primaryTweetText} setTweetText={setPrimaryTweetText} extraTweetText={extraTweetText} setExtraTweetText={setExtraTweetText} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy} readyTweetPublish={setTweetPublishReady} />
-            <ProfilePage tweetText={primaryTweetText} extraTweetText={extraTweetText} privacySelected={tweetPrivacy} readyTweetPublish={tweetPublishReady} tweetData={tweetData} />
+            <ProfilePage tweetData={tweetData} />
         </div>
     )
 }
 
 export default UserProfile
-
-
-/**
- * 
- * 
- useEffect(() => {
-        if(tweetPublishReady) {
-            // tweetData.concat({primaryTweetText})
-            // setTweetData([...tweetData, {primaryTweetText: primaryTweetText}])
-            // console.log(tweetData)
-        }
-        setTweetData([...tweetData, {tweetText: primaryTweetText}])
-        // setTweetData([primaryTweetText])
-        // setTweetData(tweetData => {[...tweetData, {text: primaryTweetText}]})
-        // console.log(tweetData, primaryTweetText, 'here!!')
-        // console.log(tweetData, tweetPublishReady)
-    }, [tweetPublishReady])
-
-    // if(tweetPublishReady) {
-    //     setTweetData([...tweetData, [{primaryTweetText}]])
-    //     console.log(tweetData, 'here!!')
-    // }
- */
