@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { deleteIcon, scheduleIcon, selectIcon } from '../../svg-resources'
+import { deleteIcon, scheduleIcon, selectIcon } from '../../navigation-panels/left-side/svg-resources'
 
 function TweetScheduler({ isScheduleIconClicked, handleToggle }) {
     let [month, setMonth] = useState('January');

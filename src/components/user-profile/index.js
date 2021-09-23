@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import LeftSideNavigationPanel from '../navigation-panels/left-side'
-import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../navigation-panels/left-side/tweet-modal'
+import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import ProfilePage from './profile-page'
 
 function UserProfile() {
