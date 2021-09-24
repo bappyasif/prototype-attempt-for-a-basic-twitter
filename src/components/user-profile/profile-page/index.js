@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react'
+import LeftSideNavigationPanel from '../../navigation-panels/left-side';
 import AllTweetsPage from './all-tweets';
 import "./index.css";
 import ProfilePageTopView from './profile-top-view-section';
 import { moreIcon, tweetAdditionalIconsArray } from './svg-resources';
 import ProfilePageTopNavigationMenuBar from './top-menu-navigation';
 
-function ProfilePage({ tweetData }) {
+function ProfilePageUpperView({ tweetData }) {
     // let [menuSelected, setMenuSelected] = useState();
     // if(menuSelected == 01 && <Component01 />)
     // if(menuSelected == 02 && <Component02 />)
 
     return (
-        <div id='profile-page-container'>
+        <div id='profile-page-upperview-container'>
+            {/* <LeftSideNavigationPanel /> */}
             <ProfilePageTopView />
             <ProfilePageTopNavigationMenuBar />
             {/* {renderingData} */}
-            <AllTweetsPage tweetData={tweetData} />
+            {/* <AllTweetsPage tweetData={tweetData} /> */}
         </div>
     )
 }
 
-export default ProfilePage
+export default ProfilePageUpperView
 
 /**
  * 

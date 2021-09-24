@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { moreIcon, tweetAdditionalIconsArray } from '../svg-resources';
+import '../../profile-page/index.css'
 
 function AllTweetsPage({ tweetData }) {
     let [hoveredID, setHoveredID] = useState('');
@@ -38,7 +39,8 @@ function AllTweetsPage({ tweetData }) {
             </div>
         </div>
     </div>))
-    return renderingData
+    // return renderingData
+    return <div id='all-tweets-container'>{renderingData}</div>
 }
 
 export default AllTweetsPage

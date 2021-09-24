@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import LeftSideNavigationPanel from '../navigation-panels/left-side'
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import ProfilePage from './profile-page'
+import AllTweetsPage from './profile-page/all-tweets';
+// import '../user-profile/profile-page/index.css';
+import ProfilePageUpperView from './profile-page';
 
 function UserProfile() {
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -27,10 +30,15 @@ function UserProfile() {
     }
 
     return (
-        <div id='home-page-container' style={{display: 'flex', justifyContent: 'space-between'}}>
-            <LeftSideNavigationPanel />
+        <div id='user-profile-page-container'>
+            {/* <LeftSideNavigationPanel /> */}
             <TweetModal tweetText={primaryTweetText} setTweetText={setPrimaryTweetText} extraTweetText={extraTweetText} setExtraTweetText={setExtraTweetText} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy} readyTweetPublish={setTweetPublishReady} />
-            <ProfilePage tweetData={tweetData} />
+            {/* <ProfilePage tweetData={tweetData} /> */}
+            <ProfilePageUpperView />
+            {/* <div id='all-tweets-container'>
+                <AllTweetsPage tweetData={tweetData} />
+            </div> */}
+            <AllTweetsPage tweetData={tweetData} />
         </div>
     )
 }

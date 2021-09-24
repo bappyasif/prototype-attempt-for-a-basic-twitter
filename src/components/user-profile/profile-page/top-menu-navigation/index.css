@@ -13,7 +13,10 @@
     color: gray;
 } */
 
-#top-navigation-menu-container a {
+#top-navigation-menu-container #tweets, 
+#top-navigation-menu-container #tweets-and-replies, 
+#top-navigation-menu-container #media,
+#top-navigation-menu-container #likes {
     /* background: silver; */
     padding: .8em;
     min-width: 101px;
@@ -21,7 +24,10 @@
     text-decoration: none;
 }
 
-#top-navigation-menu-container a:hover {
+#top-navigation-menu-container #tweets:hover,
+#top-navigation-menu-container #tweets-and-replies:hover, 
+#top-navigation-menu-container #media:hover,
+#top-navigation-menu-container #likes:hover {
     background: silver;
     text-decoration: underline;
     text-decoration-thickness: 4px;

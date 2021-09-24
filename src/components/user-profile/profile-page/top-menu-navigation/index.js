@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 import './index.css'
 
 function ProfilePageTopNavigationMenuBar() {
@@ -9,7 +10,8 @@ function ProfilePageTopNavigationMenuBar() {
         setNavID(menuClicked)
     }
 
-    let renderNavigations = navigationArray.map(item => <a key={item.id} href={'/'+item.id} target='_blank' id={item.id} className={navID == item.id ? 'menu-active' : ''} onClick={handleClicks}>{item.name}</a>)
+    // let renderNavigations = navigationArray.map(item => <a key={item.id} href={'/'+item.id} target='_blank' id={item.id} className={navID == item.id ? 'menu-active' : ''} onClick={handleClicks}>{item.name}</a>)
+    let renderNavigations = navigationArray.map(item => <Link key={item.id} to={item.id == 'tweets' ? '/user-profile' : '/user-profile/'+item.id} target='_blank' id={item.id} className={navID == item.id ? 'menu-active' : ''} onClick={handleClicks}>{item.name}</Link>)
     return (
         <nav id='top-navigation-menu-container'>
             {renderNavigations}
