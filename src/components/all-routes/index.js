@@ -12,6 +12,8 @@ import SignupPageUILogics from '../signup-page/ui-logics';
 import UserProfile from '../user-profile';
 import ProfilePageUpperView from '../user-profile/profile-page';
 import AllTweetsPage from '../user-profile/profile-page/all-tweets';
+import ProfilePageTopNavigationMenuBar from '../user-profile/profile-page/top-menu-navigation';
+import TweetsAndRepliesPage from '../user-profile/tweets-and-replies-page';
 
 function AllRoutes() {
     let [tweetData, setTweetData] = useState([]);
@@ -32,28 +34,29 @@ function AllRoutes() {
                     <VerifyUserInfo />
                 </Route>
 
-                <Route path='/user-profile'>
+                <Route exact path='/user-profile'>
                     <LeftSideNavigationPanel />
                     <ProfilePageUpperView />
                     <UserProfile tweetData={tweetData} setTweetData={setTweetData}/>
                 </Route>
 
-                <Route path='/user-profile/tweets-and-replies'>
+                {/* <Route exact path='/user-profile/'>
+                    <UserProfile tweetData={tweetData} setTweetData={setTweetData}/>
+                </Route> */}
+
+                <Route path='/user-profile/tweets-and-replies' render={props=> <TweetsAndRepliesPage tweetData={tweetData} />}>
                     <LeftSideNavigationPanel />
-                    {/* <UserProfile /> */}
                     <ProfilePageUpperView />
+                    {/* <TweetsAndRepliesPage tweetData={tweetData} /> */}
+                    {/* <TweetsAndRepliesPage /> */}
                 </Route>
 
                 <Route path='/user-profile/media'>
-                    <LeftSideNavigationPanel />
-                    {/* <UserProfile /> */}
-                    <ProfilePageUpperView />
+                    
                 </Route>
 
                 <Route path='/user-profile/likes'>
-                    <LeftSideNavigationPanel />
-                    {/* <UserProfile /> */}
-                    <ProfilePageUpperView />
+                    
                 </Route>
             </Switch>
         </Router>
