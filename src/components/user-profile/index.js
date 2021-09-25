@@ -34,4 +34,29 @@ function UserProfile({tweetData, setTweetData}) {
     )
 }
 
+// let extractingDataFromModal = (tweetData) => {
+//     let [primaryTweetText, setPrimaryTweetText] = useState('');
+//     let [extraTweetText, setExtraTweetText] = useState('');
+//     let [tweetPrivacy, setTweetPrivacy] = useState('01');
+//     let [tweetPublishReady, setTweetPublishReady] = useState(false);
+//     // let [tweetData, setTweetData] = useState([]);
+    
+//     useEffect(() => {
+//         setTweetData([...tweetData, {tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy)}])
+//     }, [tweetPublishReady])
+
+//     let getPrivacySelectedElement = whichOption => {
+//         switch(whichOption) {
+//             case '01':
+//                 return tweetPrivacySelected01()
+//             case '02':
+//                 return tweetPrivacySelected02()
+//             case '03':
+//                 return tweetPrivacySelected03()
+//             default: console.log('somethigs wrong!!')
+//         }
+//     }
+//     return tweetData
+// }
+
 export default UserProfile

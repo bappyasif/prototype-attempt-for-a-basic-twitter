@@ -1,12 +1,15 @@
-#top-navigation-menu-container {
-    /* position: absolute;
+#top-navigation-menu-container
+/* #top-navigation-menu-container .menu-active */
+/* #top-navigation-menu-container .menu-default-view  */
+{
+  /* position: absolute;
     left: 289px;
     top: 394px; */
-    
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 4px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
 }
 
 /* #top-navigation-menu-container .navigation-menu:active {
@@ -17,32 +20,40 @@
     color: gray;
 } */
 
-#top-navigation-menu-container #tweets, 
+/* #top-navigation-menu-container #tweets, 
 #top-navigation-menu-container #tweets-and-replies, 
 #top-navigation-menu-container #media,
-#top-navigation-menu-container #likes {
-    /* background: silver; */
-    padding: .8em;
+#top-navigation-menu-container #likes { */
+/* background: silver; */
+/* padding: .8em;
     min-width: 101px;
     color: gray;
-    text-decoration: none;
+    text-decoration: none; */
+/* } */
+
+#top-navigation-menu-container .menu-default-view, #top-navigation-menu-container .menu-active {
+  /* background: rgba(250, 242, 242, .6); */
+  padding: 0.8em;
+  min-width: 101px;
+  color: gray;
+  text-decoration: none;
 }
 
 #top-navigation-menu-container #tweets:hover,
-#top-navigation-menu-container #tweets-and-replies:hover, 
+#top-navigation-menu-container #tweets-and-replies:hover,
 #top-navigation-menu-container #media:hover,
 #top-navigation-menu-container #likes:hover {
-    background: silver;
-    text-decoration: underline;
+  background: rgba(197, 192, 192, 0.808);
+  /* text-decoration: underline;
     text-decoration-thickness: 4px;
     text-decoration-color: aqua;
-    text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none; */
 }
 
 #top-navigation-menu-container .menu-active {
-    color: black;
-    text-decoration: underline;
-    text-decoration-thickness: 4px;
-    text-decoration-color: aqua;
-    text-decoration-skip-ink: none;
+  color: black;
+  text-decoration: underline;
+  text-decoration-thickness: 4px;
+  text-decoration-color: aqua;
+  text-decoration-skip-ink: none;
 }

@@ -40,15 +40,10 @@ function AllRoutes() {
                     <UserProfile tweetData={tweetData} setTweetData={setTweetData}/>
                 </Route>
 
-                {/* <Route exact path='/user-profile/'>
-                    <UserProfile tweetData={tweetData} setTweetData={setTweetData}/>
-                </Route> */}
-
-                <Route path='/user-profile/tweets-and-replies' render={props=> <TweetsAndRepliesPage tweetData={tweetData} />}>
+                <Route path='/user-profile/tweets-and-replies'>
                     <LeftSideNavigationPanel />
                     <ProfilePageUpperView />
-                    {/* <TweetsAndRepliesPage tweetData={tweetData} /> */}
-                    {/* <TweetsAndRepliesPage /> */}
+                    <TweetsAndRepliesPage tweetData={tweetData} />
                 </Route>
 
                 <Route path='/user-profile/media'>
@@ -64,3 +59,59 @@ function AllRoutes() {
 }
 
 export default AllRoutes
+
+
+/**
+ * 
+ * 
+ function AllRoutes() {
+    let [tweetData, setTweetData] = useState([]);
+    return (
+        <Router>
+            <Switch>
+                <Route exact path='/' component={SignupPageUILogics} />
+
+                <Route path='/login' component={LoginPage} />
+                
+                <Route path='/begin-password-reset'>
+                    <TopNavigation />
+                    <BeginReset />
+                </Route>
+
+                <Route path='/verify-user-info'>
+                    <TopNavigation />
+                    <VerifyUserInfo />
+                </Route>
+
+                <Route exact path='/user-profile'>
+                    <LeftSideNavigationPanel />
+                    <ProfilePageUpperView />
+                    <UserProfile tweetData={tweetData} setTweetData={setTweetData}/>
+                    {/* <UserProfile tweetData={props.tweetData} setTweetData={props.setTweetData}/> *}
+                    {/* <UserProfile /> *}
+                    </Route>
+
+                    {/* <Route exact path='/user-profile/'>
+                        <UserProfile tweetData={tweetData} setTweetData={setTweetData}/>
+                    </Route> *}
+    
+                    <Route path='/user-profile/tweets-and-replies' render={props=> <TweetsAndRepliesPage tweetData={tweetData} />}>
+                        <LeftSideNavigationPanel />
+                        <ProfilePageUpperView />
+                        <TweetsAndRepliesPage tweetData={tweetData} />
+                        {/* <TweetsAndRepliesPage tweetData={props.tweetData} /> *}
+                        {/* <TweetsAndRepliesPage /> *}
+                    </Route>
+    
+                    <Route path='/user-profile/media'>
+                        
+                    </Route>
+    
+                    <Route path='/user-profile/likes'>
+                        
+                    </Route>
+                </Switch>
+            </Router>
+        )
+    }
+ */
