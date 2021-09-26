@@ -10,8 +10,9 @@ import VerifyUserInfo from '../password-reset-page/verify-user-info';
 import ContainerForSignupPage from '../signup-page/containerForLoginPage';
 import SignupPageUILogics from '../signup-page/ui-logics';
 import UserProfile from '../user-profile';
+import AllTweetsPage from '../user-profile/all-tweets';
 import ProfilePageUpperView from '../user-profile/profile-page';
-import AllTweetsPage from '../user-profile/profile-page/all-tweets';
+// import AllTweetsPage from '../user-profile/profile-page/all-tweets';
 import ProfilePageTopNavigationMenuBar from '../user-profile/profile-page/top-menu-navigation';
 import TweetsAndRepliesPage from '../user-profile/tweets-and-replies-page';
 
@@ -38,6 +39,7 @@ function AllRoutes() {
                     <LeftSideNavigationPanel />
                     <ProfilePageUpperView />
                     <UserProfile tweetData={tweetData} setTweetData={setTweetData}/>
+                    <AllTweetsPage tweetData={tweetData} />
                 </Route>
 
                 <Route path='/user-profile/tweets-and-replies'>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { moreIcon, tweetAdditionalIconsArray } from '../svg-resources';
-import '../../profile-page/index.css'
+import { moreIcon, tweetAdditionalIconsArray } from '../profile-page/svg-resources';
+// import '../../profile-page/index.css'
+import '../../user-profile/profile-page/index.css';
 
 function AllTweetsPage({ tweetData }) {
     let [hoveredID, setHoveredID] = useState('');

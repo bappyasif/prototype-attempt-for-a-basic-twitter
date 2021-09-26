@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
-import AllTweetsPage from './profile-page/all-tweets';
+import AllTweetsPage from './all-tweets';
+// import AllTweetsPage from './profile-page/all-tweets';
 
 function UserProfile({tweetData, setTweetData}) {
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -29,7 +30,7 @@ function UserProfile({tweetData, setTweetData}) {
         <div id='user-profile-page-container'>
             <TweetModal tweetText={primaryTweetText} setTweetText={setPrimaryTweetText} extraTweetText={extraTweetText} setExtraTweetText={setExtraTweetText} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy} readyTweetPublish={setTweetPublishReady} />
 
-            <AllTweetsPage tweetData={tweetData} />
+            {/* <AllTweetsPage tweetData={tweetData} /> */}
         </div>
     )
 }
