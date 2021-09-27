@@ -1,11 +1,19 @@
 #tweet-modal {
-  position: absolute;
+  /* position: absolute;
   left: 360px;
   top: 40px;
   width: 560px;
   min-height: 240px;
   border-radius: 11px;
-  background-color: gray;
+  background-color: gray; */
+  background-color: whitesmoke;
+  /* position: absolute;
+  left: 324px;
+  top: 40px; */
+  width: 560px;
+  min-height: 240px;
+  border-radius: 11px;
+  /* background-color: whitesmoke; */
 }
 
 .left-opaque {
@@ -19,7 +27,8 @@
   margin: 1.1em;
 }
 
-#middle-content #header-section, #extra-tweet-view {
+#middle-content #header-section,
+#extra-tweet-view {
   display: flex;
   /* justify-content: space-around; */
   justify-content: space-evenly;
@@ -130,6 +139,7 @@
   justify-content: space-between;
   align-items: center;
   margin-left: 11px;
+  margin-top: -20px;
 }
 
 /* #tweet-medias {
@@ -201,7 +211,8 @@
   top: 288px;
 }
 
-#line-extension, .line-extension-extended {
+#line-extension,
+.line-extension-extended {
   position: absolute;
   height: 60.02px;
   width: 2px;
@@ -228,6 +239,10 @@
   margin-right: 8px;
 }
 
+#tweet-compose-container {
+  margin-top: -44px;
+}
+
 #image-view img {
   /* width: 380px; */
   /* display: flex; */
@@ -235,18 +250,53 @@
   /* align-items: center; */
   /* height: 290px; */
   /* margin-right: 40%; */
+  border-radius: 11px;
+  margin-bottom: 4px;
 }
 
 #image-view {
   text-align: left;
-  padding: 15px 33px;
+  /* padding: 15px 33px; */
+  padding: 15px 2px;
+  margin-left: 78px;
+  display: flex;
+  flex-direction: column;
 }
 
 #remove-image {
   /* text-align: left; */
-  background: silver;
-  padding: 8px 4px 2px 2px;
+  /* background: silver; */
+  background: linear-gradient(45deg, black, transparent);
+  padding: 5px 5px 4px 2px;
   border-radius: 50%;
+  width: fit-content;
+  transform: translate(8px, 38px);
+}
+
+#image-view #picture-info {
+  color: silver;
+  font-size: smaller;
+  display: flex;
+  /* justify-content: space-between; */
+  /* align-items: center; */
+}
+
+#image-view #picture-info #tag-div,
+#image-view #picture-info #description-div {
+  display: flex;
+  align-items: center;
+}
+
+#image-view #picture-info svg {
+  margin-right: 4px;
+}
+
+#image-view #picture-info #description-div svg {
+  margin-right: 8px;
+}
+
+#image-view #picture-info a:nth-child(2) {
+  margin-left: 29px;
 }
 
 #gif-container {
@@ -292,7 +342,7 @@
   flex-direction: column;
   border: silver 0.2em solid;
   border-radius: 11px;
-  margin-top: 0.6em;
+  margin-top: 1.1em;
 }
 
 #top-layer {
@@ -437,8 +487,9 @@
   padding: 20px;
   font-size: larger;
   color: red;
-  margin-left: -2px;
-  border-bottom-right-radius: 8px;
+  /* margin-left: -2px; */
+  /* border-bottom-right-radius: 8px; */
+  height: 22px;
 }
 
 .split-divs {

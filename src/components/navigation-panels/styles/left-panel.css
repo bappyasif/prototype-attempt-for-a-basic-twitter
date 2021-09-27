@@ -9,16 +9,18 @@
     align-items: center; */
 }
 
-.item-divs {
-    width: 11px;
+.item-divs{
+    width: min-content;
     /* margin: 4px; */
     padding: 11px;
     display: flex;
     align-items: center;
+    color: black;
+    text-decoration: none;
 }
 
 .item-divs:hover {
-    width: min-content;
+    /* width: min-content; */
     /* border: solid; */
     background-color: rgba(208, 226, 243, .5);
     border-radius: 999999px;
@@ -34,22 +36,27 @@
 .names-span {
     /* padding-top: 6px; */
     /* padding: 6px; */
-    padding-top: 8px;
+    /* padding-top: 8px; */
     padding-right: 20px;
     margin-left: 26px;
 }
 
 #Twitter {
     margin-bottom: 11px;
+    width: 45px;
+}
+
+#Twitter .item-divs {
+    width: 22px;
 }
 
 #Twitter:hover {
-    width: 31px;
+    /* width: 31px; */
     border-radius: 50%;
 }
 
 #Tweet {
-    background-color: rgb(29, 155, 240);
+    /* background-color: rgb(29, 155, 240);
     width: max-content;
     border-radius: 999999px;
     font-size: larger;
@@ -57,12 +64,31 @@
     padding-bottom: 11px;
     color: white;
     height: 20px;
+    margin-top: 8px; */
+    background-color: rgb(29, 155, 240);
+    /* width: 121px; */
+    border-radius: 999999px;
+    font-size: larger;
+    /* padding-right: 36px; */
+    /* padding-top: 6px; */
+    color: white;
+    /* height: 33px; */
     margin-top: 8px;
 }
 
+#Tweet .item-divs {
+    width: 89%;
+}
+
+#Tweet:hover, #Tweet.item-divs:hover{
+    background-color: rgba(208, 226, 243, .5);
+    
+    /* width: max-content; */
+}
+
 #Tweet span {
-    padding-bottom: 9px;
-    /* padding-right: 20px; */
+    /* padding-bottom: 8px; */
+    margin-left: 36%;
 }
 
 

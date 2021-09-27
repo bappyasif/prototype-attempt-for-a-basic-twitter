@@ -1,18 +1,43 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "../styles/left-panel.css";
 import { deleteIcon, iconsArray } from "./svg-resources";
 
-function LeftSideNavigationPanel() {
+function LeftSideNavigationPanel({toggleModality, setToggleModality}) {
+  // let [toggleModality, setToggleModality] = useState(false);
 
+  useEffect(() => {
+    let tweetDiv = document.querySelector("#Tweet");
+    let leftPanelContainer = document.querySelector("#left-panel-container");
+
+    tweetDiv.addEventListener("click", () => {
+      if (!toggleModality) {
+        setToggleModality(true);
+        // leftPanelContainer.classList.add("left-opaque");
+        // setTweetText('');
+        // setExtraTweetText('');
+        // readyTweetPublish(false);
+
+      } else {
+        setToggleModality(false);
+        // leftPanelContainer.classList.remove("left-opaque");
+      }
+    });
+  }, [toggleModality]);
 
   let panelDivs = iconsArray.map((icon) => (
-    <div key={icon.id} id={icon.id} className="item-divs">
-      <span className="icons-span">{icon.svg}</span>
-      <span className="names-span">{icon.id == "Twitter" ? "" : icon.id}</span>
+    <div key={icon.id} id={icon.id}>
+      <Link className="item-divs" to={icon.id == 'Tweet' ? '/tweet/compose' : icon.id == 'Profile' ? '/user-profile' : '/'}>
+        <span className="icons-span" style={{display: icon.id == 'Tweet' ? 'none': 'block'}}>{icon.svg}</span>
+        <span className="names-span">{icon.id == "Twitter" ? "" : icon.id}</span>
+      </Link>
+
+      {/* <span className="icons-span">{icon.svg}</span>
+      <span className="names-span">{icon.id == "Twitter" ? "" : icon.id}</span> */}
     </div>
   ));
 
-  return <div id="left-panel-container">{panelDivs}</div>;
+  return <div id="left-panel-container" className={toggleModality ? 'left-opaque' : ''}>{panelDivs}</div>;
 }
 
 // let iconArrays = [TwitterIcon, HomeIcon, ExploreIcon, NotificationIcon, MessageIcon, BookmarkIcon, ListIcon, ProfileIcon, MoreIcon, TweetIcon]
@@ -21,16 +46,16 @@ export default LeftSideNavigationPanel;
 
 
 /**
- * 
- * 
- * 
+ *
+ *
+ *
    useEffect(() => {
     let tweetDiv = document.querySelector("#Tweet");
     let leftPanelContainer = document.querySelector("#left-panel-container");
     let modalDiv = tweetModal();;
 
     // console.log(toggleModality, "??")
-    
+
     tweetDiv.addEventListener("click", () => {
         if(!toggleModality) {
             setToggleModality(true);
@@ -49,7 +74,7 @@ export default LeftSideNavigationPanel;
     //       document.body.querySelector('#tweet-modal').remove();
     // })
   }, [!toggleModality]);
-  
+
   return <div id="left-panel-container">{panelDivs}</div>;
 }
 
@@ -67,13 +92,13 @@ let upperContentInModal = () => {
   console.log(deleteDiv)
   // console.log(deleteIcon);
 };
- * 
- * 
+ *
+ *
  useEffect(() => {
     let tweetDiv = document.querySelector("#Tweet");
     let leftPanelContainer = document.querySelector("#left-panel-container");
     let modalDiv;
-    
+
     tweetDiv.addEventListener("click", handleClick);
 
     let handleClick = (evt) => {
@@ -82,7 +107,7 @@ let upperContentInModal = () => {
             setToggleModality(true);
             let modalDiv = tweetModal();
         //   modalDiv = tweetModal();
-    
+
             leftPanelContainer.classList.add("left-opaque");
             document.body.insertAdjacentElement("afterbegin", modalDiv);
         } else {
@@ -96,7 +121,7 @@ let upperContentInModal = () => {
           // document.body.querySelector('#tweet-modal').style.display = 'none';
         }
     }
-    
+
 
     return () => tweetDiv.removeEventListener('click', handleClick)
   }, [toggleModality]);

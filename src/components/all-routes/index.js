@@ -9,6 +9,8 @@ import TopNavigation from '../password-reset-page/top-navigation';
 import VerifyUserInfo from '../password-reset-page/verify-user-info';
 import ContainerForSignupPage from '../signup-page/containerForLoginPage';
 import SignupPageUILogics from '../signup-page/ui-logics';
+import TweetCompose from '../tweet-modal';
+import ComposeTweet from '../compose-tweet';
 import UserProfile from '../user-profile';
 import AllTweetsPage from '../user-profile/all-tweets';
 import ProfilePageUpperView from '../user-profile/profile-page';
@@ -18,6 +20,7 @@ import TweetsAndRepliesPage from '../user-profile/tweets-and-replies-page';
 
 function AllRoutes() {
     let [tweetData, setTweetData] = useState([]);
+    let [toggleModality, setToggleModality] = useState(false);
     return (
         <Router>
             <Switch>
@@ -35,15 +38,31 @@ function AllRoutes() {
                     <VerifyUserInfo />
                 </Route>
 
-                <Route exact path='/user-profile'>
+                <Route exact path='/tweet/compose'>
+                    <LeftSideNavigationPanel toggleModality={toggleModality} setToggleModality={setToggleModality} />
+                    {/* naming of it could be adjusted appropriately when necessary */}
+                    {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData}/> */}
+                    <ComposeTweet tweetData={tweetData} setTweetData={setTweetData} toggleModality={toggleModality} setToggleModality={setToggleModality} />
+                    {/* {<TweetCompose />} */}
+                </Route>
+
+                <Route exact path='/tweet/compose/media'>
                     <LeftSideNavigationPanel />
+                    {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData}/> */}
+                    {/* another modal alike view for media (text, for now) edit */}
+                </Route>
+
+                <Route exact path='/user-profile'>
+                    {/* <LeftSideNavigationPanel /> */}
+                    <LeftSideNavigationPanel toggleModality={toggleModality} setToggleModality={setToggleModality} />
                     <ProfilePageUpperView />
                     <UserProfile tweetData={tweetData} setTweetData={setTweetData}/>
                     <AllTweetsPage tweetData={tweetData} />
                 </Route>
 
                 <Route path='/user-profile/tweets-and-replies'>
-                    <LeftSideNavigationPanel />
+                    {/* <LeftSideNavigationPanel /> */}
+                    <LeftSideNavigationPanel toggleModality={toggleModality} setToggleModality={setToggleModality} />
                     <ProfilePageUpperView />
                     <TweetsAndRepliesPage tweetData={tweetData} />
                 </Route>

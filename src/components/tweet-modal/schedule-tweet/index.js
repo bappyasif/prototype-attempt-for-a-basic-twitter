@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { deleteIcon, scheduleIcon, selectIcon } from '../../navigation-panels/left-side/svg-resources'
+import { deleteIcon, scheduleIcon, selectIcon } from '../svg-resources'
 
 function TweetScheduler({ isScheduleIconClicked, handleToggle }) {
     let [month, setMonth] = useState('January');
@@ -12,7 +12,7 @@ function TweetScheduler({ isScheduleIconClicked, handleToggle }) {
     // style={{display: isIconClicked ? 'block' : 'none'}}
     
     // getFormattedDateString(month, day, year, hour, minute);
-    console.log(isScheduleIconClicked)
+    // console.log(isScheduleIconClicked)
 
     return (
         <div id='tweet-scheduler-container' style={{display: isScheduleIconClicked ? 'block' : 'none'}}>

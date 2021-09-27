@@ -7,17 +7,15 @@ import TweetPoll from './tweet-poll';
 import EmojiPicker from './emoji-picker';
 import TweetScheduler from './schedule-tweet';
 import TweetWordCount from './tweet-word-count';
-import ContentInComposeTweet from '../compose-tweet/content-in-compose-tweet';
-
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
-function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish }) {
+function TweetModal({ tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
     let [isBothTextareaExist, setIsBothTextareaExist] = useState(false);
 
-    // let [toggleModality, setToggleModality] = useState(false);
+    let [toggleModality, setToggleModality] = useState(false);
     let [tweetOptions, setTweetOptions] = useState(false);
 
     let [selectedFile, setSelectedFile] = useState();
@@ -30,24 +28,24 @@ function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText,
     let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(false)
 
 
-    // useEffect(() => {
-    //     let tweetDiv = document.querySelector("#Tweet");
-    //     let leftPanelContainer = document.querySelector("#left-panel-container");
+    useEffect(() => {
+        let tweetDiv = document.querySelector("#Tweet");
+        let leftPanelContainer = document.querySelector("#left-panel-container");
 
-    //     tweetDiv.addEventListener("click", () => {
-    //         if (!toggleModality) {
-    //             setToggleModality(true);
-    //             leftPanelContainer.classList.add("left-opaque");
-    //             setTweetText('');
-    //             setExtraTweetText('');
-    //             readyTweetPublish(false);
+        tweetDiv.addEventListener("click", () => {
+            if (!toggleModality) {
+                setToggleModality(true);
+                leftPanelContainer.classList.add("left-opaque");
+                setTweetText('');
+                setExtraTweetText('');
+                readyTweetPublish(false);
 
-    //         } else {
-    //             setToggleModality(false);
-    //             leftPanelContainer.classList.remove("left-opaque");
-    //         }
-    //     });
-    // }, [toggleModality]);
+            } else {
+                setToggleModality(false);
+                leftPanelContainer.classList.remove("left-opaque");
+            }
+        });
+    }, [toggleModality]);
 
     useEffect(() => {
         let optionsDiv = document.querySelector('#options-selected');
@@ -107,14 +105,16 @@ function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText,
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />
 
-                    <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{isPollIconClicked ? <TweetTextInput height="42.6px" placeholderText="Ask a question" tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} /> : <TweetTextInput height="81.6px" placeholderText="What's happening?" tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} />}</div>
+                    <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{isPollIconClicked ? <TweetTextInput height="42.6px" placeholderText="Ask a question" tweetText={tweetText} setTweetText={setTweetText} /> : <TweetTextInput height="81.6px" placeholderText="What's happening?" tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} />}</div>
                 </div>
 
                 <p id='line-extension' style={{ visibility: addExtraTweetClicked ? 'visible' : 'hidden' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'line-extension-extended' : ''}></p>
 
-                <ContentInComposeTweet selectedFile={selectedFile} removeImageHandler={removeImageHandler} isPollIconClicked={isPollIconClicked} handlePollViewToggle={handlePollIconClicked}/>
+                {selectedFile && <div id='image-view'><span id='remove-image' onClick={removeImageHandler}>{deleteIcon('silver')}</span> <img src={URL.createObjectURL(selectedFile)} /> <div id='picture-info'> <a id='tag-div'><span class='picture-svgs'>{tagIcon()}</span><span id='tag-people'>Tag people</span></a> <a id='description-div'><span className='picture-svgs'>{descriptionIcon()}</span><span id='picture-description'>Description</span></a></div></div>}
 
                 {gifFile && <div id='gif-view'><span id='remove-gif' onClick={removeGifFileHandler}>{deleteIcon()}</span><Gif gif={gifFile} /></div>}
+
+                <TweetPoll isPollIconClicked={isPollIconClicked} handleToggle={handlePollIconClicked} />
 
                 <TweetScheduler isScheduleIconClicked={isScheduleIconClicked} handleToggle={handleScheduleIconClicked} />
 
@@ -129,7 +129,7 @@ function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText,
                     <div id='tweet-additionals'>
                         <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} scheduleToggler={handleScheduleIconClicked} />
 
-                        <div id='modal-tweet-div'> <div id='extra-tweet-options' style={{ visibility: (extraTweetText) ? 'visible' : (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : (addExtraTweetClicked && tweetText) ? 'hidden' : tweetText ? 'visible' : 'hidden' }}><span className='extra-tweet' onClick={() => setAddExtraTweetClicked(!addExtraTweetClicked)}>+</span> <span className='extra-tweet'>|</span> <span id='radial-progressbar'>{isPrimaryTweetClicked ? <TweetWordCount wordCount={tweetText.length} /> : <TweetWordCount wordCount={extraTweetText.length} />}</span></div> <span id='tweet-now' onClick={handlePublishTweetNow}>tweet</span></div>
+                        <div id='modal-tweet-div'> <div id='extra-tweet-options' style={{ visibility: (extraTweetText) ? 'visible' : (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : (addExtraTweetClicked && tweetText) ? 'hidden' : tweetText ? 'visible' : 'hidden' }}><span class='extra-tweet' onClick={() => setAddExtraTweetClicked(!addExtraTweetClicked)}>+</span> <span class='extra-tweet'>|</span> <span id='radial-progressbar'>{isPrimaryTweetClicked ? <TweetWordCount wordCount={tweetText.length} /> : <TweetWordCount wordCount={extraTweetText.length} />}</span></div> <span id='tweet-now' onClick={handlePublishTweetNow}>tweet</span></div>
                     </div>
 
                     <UploadFile chnageHandler={fileUploadChangeHandler} inputRef={inputRef} />
@@ -224,15 +224,14 @@ let TweetTextInput = ({ height, placeholderText, tweetText, setTweetText, setPri
 
     let handleTextareaWhenFocused = (evt) => {
         let focusedTextarea = evt.target.parentNode;
-        if(focusedTextarea) {
-            if (focusedTextarea.id == 'primary-tweet-view') {
-                setExtraTweetClicked(false)
-                setPrimaryTweetClicked(true)
-            } else {
-                setExtraTweetClicked(true)
-                setPrimaryTweetClicked(false)
-                setBoth(true);
-            }
+
+        if (focusedTextarea.id == 'primary-tweet-view') {
+            setExtraTweetClicked(false)
+            setPrimaryTweetClicked(true)
+        } else {
+            setExtraTweetClicked(true)
+            setPrimaryTweetClicked(false)
+            setBoth(true);
         }
 
         evt.target.parentNode.style.opacity = '1';
