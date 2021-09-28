@@ -13,7 +13,9 @@
 }
 
 /* #profile-page-container  */
-#tweet-container {
+#tweet-container, 
+#extra-tweet-portion-container,
+#without-extra-tweet-container {
   display: flex;
   justify-content: center;
   /* align-items: center; */
@@ -21,6 +23,10 @@
   /* flex-direction: column; */
   border: solid silver 0.1em;
   border-bottom: none;
+}
+
+#tweet-container {
+  flex-direction: column;
 }
 
 /* #profile-page-container  */
@@ -49,7 +55,26 @@
 
 /* #profile-page-container  */
 #tweet-container .left-portion {
-  transform: translate(-4px, -35px);
+  /* transform: translate(-4px, -35px); */
+}
+
+#tweet-container #show-connecting-line {
+  border-left: 2px solid silver;
+    position: absolute;
+    height: 69px;
+    transform: translate(-543px, -9px);
+}
+
+#extra-tweet-portion-container, #without-extra-tweet-container {
+  border: none;
+}
+
+#extra-tweet-portion-container .left-portion {
+  transform: translate(-4px, 24px);
+}
+
+#without-extra-tweet-container .left-portion img {
+  transform: translate(6px, -42px);
 }
 
 /* #profile-page-container  */

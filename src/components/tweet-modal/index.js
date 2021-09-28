@@ -8,10 +8,11 @@ import EmojiPicker from './emoji-picker';
 import TweetScheduler from './schedule-tweet';
 import TweetWordCount from './tweet-word-count';
 import ContentInComposeTweet from '../compose-tweet/content-in-compose-tweet';
+import { Link } from 'react-router-dom';
 
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
-function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish }) {
+function TweetModal({toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -32,19 +33,19 @@ function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText,
 
     // useEffect(() => {
     //     let tweetDiv = document.querySelector("#Tweet");
-    //     let leftPanelContainer = document.querySelector("#left-panel-container");
+    //     // let leftPanelContainer = document.querySelector("#left-panel-container");
 
     //     tweetDiv.addEventListener("click", () => {
     //         if (!toggleModality) {
     //             setToggleModality(true);
-    //             leftPanelContainer.classList.add("left-opaque");
+    //             // leftPanelContainer.classList.add("left-opaque");
     //             setTweetText('');
     //             setExtraTweetText('');
     //             readyTweetPublish(false);
 
     //         } else {
     //             setToggleModality(false);
-    //             leftPanelContainer.classList.remove("left-opaque");
+    //             // leftPanelContainer.classList.remove("left-opaque");
     //         }
     //     });
     // }, [toggleModality]);
@@ -61,6 +62,8 @@ function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText,
 
     }, [tweetOptions])
 
+    useEffect(() => setExtraTweetText(''), [!readyTweetPublish])
+
     let fileUploadChangeHandler = (evt) => setSelectedFile(evt.target.files[0])
 
     let removeImageHandler = () => setSelectedFile('')
@@ -68,7 +71,9 @@ function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText,
     let removeGifFileHandler = () => setGifFile('');
 
     let closeTweetModalHandler = () => {
-        setToggleModality(!toggleModality)
+        // setToggleModality(!toggleModality)
+        handleTweetModalToggle()
+
         // setTweetText('');
         // setExtraTweetText('');
         // readyTweetPublish(false);
@@ -83,10 +88,15 @@ function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText,
 
     let handlePublishTweetNow = evt => {
         readyTweetPublish(true);
-        setToggleModality(!toggleModality)
-        // closeTweetModalHandler();
+        // setToggleModality(!toggleModality)
+        handleTweetModalToggle()
+
+        closeTweetModalHandler();
         // setTweetText('');
         // setExtraTweetText('');
+        setAddExtraTweetClicked(false);
+        setIsExtraTweetClicked(false);
+        setIsBothTextareaExist(false);
         // console.log(tweetText, "??")
     }
 
@@ -110,7 +120,10 @@ function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText,
                     <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{isPollIconClicked ? <TweetTextInput height="42.6px" placeholderText="Ask a question" tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} /> : <TweetTextInput height="81.6px" placeholderText="What's happening?" tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} />}</div>
                 </div>
 
-                <p id='line-extension' style={{ visibility: addExtraTweetClicked ? 'visible' : 'hidden' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'line-extension-extended' : ''}></p>
+                {/* <p id='line-extension' style={{ visibility: addExtraTweetClicked ? 'visible' : 'hidden'}} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'line-extension-extended' : ''}></p> */}
+                <p id='line-extension' style={{ visibility: addExtraTweetClicked ? 'visible' : 'hidden'}}></p>
+
+                <p id='line-extension-extended' style={{ visibility: isBothTextareaExist && isPrimaryTweetClicked ? 'visible' : 'hidden'}}></p>
 
                 <ContentInComposeTweet selectedFile={selectedFile} removeImageHandler={removeImageHandler} isPollIconClicked={isPollIconClicked} handlePollViewToggle={handlePollIconClicked}/>
 
@@ -129,7 +142,8 @@ function TweetModal({toggleModality, setToggleModality, tweetText, setTweetText,
                     <div id='tweet-additionals'>
                         <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} scheduleToggler={handleScheduleIconClicked} />
 
-                        <div id='modal-tweet-div'> <div id='extra-tweet-options' style={{ visibility: (extraTweetText) ? 'visible' : (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : (addExtraTweetClicked && tweetText) ? 'hidden' : tweetText ? 'visible' : 'hidden' }}><span className='extra-tweet' onClick={() => setAddExtraTweetClicked(!addExtraTweetClicked)}>+</span> <span className='extra-tweet'>|</span> <span id='radial-progressbar'>{isPrimaryTweetClicked ? <TweetWordCount wordCount={tweetText.length} /> : <TweetWordCount wordCount={extraTweetText.length} />}</span></div> <span id='tweet-now' onClick={handlePublishTweetNow}>tweet</span></div>
+                        {/* <div id='modal-tweet-div'> <div id='extra-tweet-options' style={{ visibility: (extraTweetText) ? 'visible' : (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : (addExtraTweetClicked && tweetText) ? 'hidden' : tweetText ? 'visible' : 'hidden' }}><span className='extra-tweet' onClick={() => setAddExtraTweetClicked(!addExtraTweetClicked)}>+</span> <span className='extra-tweet'>|</span> <span id='radial-progressbar'>{isPrimaryTweetClicked ? <TweetWordCount wordCount={tweetText.length} /> : <TweetWordCount wordCount={extraTweetText.length} />}</span></div> <span id='tweet-now' onClick={handlePublishTweetNow}>tweet</span></div> */}
+                        <div id='modal-tweet-div'> <div id='extra-tweet-options' style={{ visibility: (extraTweetText) ? 'visible' : (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : (addExtraTweetClicked && tweetText) ? 'hidden' : tweetText ? 'visible' : 'hidden' }}><span className='extra-tweet' onClick={() => setAddExtraTweetClicked(!addExtraTweetClicked)}>+</span> <span className='extra-tweet'>|</span> <span id='radial-progressbar'>{isPrimaryTweetClicked ? <TweetWordCount wordCount={tweetText.length} /> : <TweetWordCount wordCount={extraTweetText.length} />}</span></div> <Link to='/user-profile' id='tweet-now' onClick={handlePublishTweetNow}>tweet</Link></div>
                     </div>
 
                     <UploadFile chnageHandler={fileUploadChangeHandler} inputRef={inputRef} />
@@ -172,7 +186,7 @@ let TweetOptionsDropDown = ({ tweetOptions }) => {
             </div>
 
             <div className='options-div' id='opt-02'>
-                <span className='option-svg'>{peopleIcon('white')}</span> <span className='option-text'>People you follow</span>
+                <span className='option-svg'>{peopleIcon('white', 'transparent')}</span> <span className='option-text'>People you follow</span>
             </div>
 
             <div className='options-div' id='opt-03'>

@@ -3,30 +3,40 @@ import { Link } from "react-router-dom";
 import "../styles/left-panel.css";
 import { deleteIcon, iconsArray } from "./svg-resources";
 
-function LeftSideNavigationPanel({toggleModality, setToggleModality}) {
+function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle}) {
   // let [toggleModality, setToggleModality] = useState(false);
 
-  useEffect(() => {
-    let tweetDiv = document.querySelector("#Tweet");
-    let leftPanelContainer = document.querySelector("#left-panel-container");
+  // useEffect(() => {
+  //   let tweetDiv = document.querySelector("#Tweet");
+  //   let leftPanelContainer = document.querySelector("#left-panel-container");
 
-    tweetDiv.addEventListener("click", () => {
-      if (!toggleModality) {
-        setToggleModality(true);
-        // leftPanelContainer.classList.add("left-opaque");
-        // setTweetText('');
-        // setExtraTweetText('');
-        // readyTweetPublish(false);
+  //   tweetDiv.addEventListener("click", (evt) => {
+  //     clickHandler(evt);
 
-      } else {
-        setToggleModality(false);
-        // leftPanelContainer.classList.remove("left-opaque");
-      }
-    });
-  }, [toggleModality]);
+  //     return () => tweetDiv.removeEventListener('click', clickHandler)
+  //   });
+
+  //   let clickHandler = (evt) => {
+  //     if (!toggleModality) {
+  //       // setToggleModality(true);
+  //       handleTweetModalToggle()
+  //       // leftPanelContainer.classList.add("left-opaque");
+  //       // setTweetText('');
+  //       // setExtraTweetText('');
+  //       // readyTweetPublish(false);
+
+  //     } else {
+  //       // setToggleModality(false);
+  //       handleTweetModalToggle();
+  //       // leftPanelContainer.classList.remove("left-opaque");
+  //     }
+  //   }
+  // }, [!toggleModality]);
+
+  let clickHandler = () => handleTweetModalToggle()
 
   let panelDivs = iconsArray.map((icon) => (
-    <div key={icon.id} id={icon.id}>
+    <div key={icon.id} id={icon.id} onClick={icon.id == 'Tweet' ? clickHandler : ''}>
       <Link className="item-divs" to={icon.id == 'Tweet' ? '/tweet/compose' : icon.id == 'Profile' ? '/user-profile' : '/'}>
         <span className="icons-span" style={{display: icon.id == 'Tweet' ? 'none': 'block'}}>{icon.svg}</span>
         <span className="names-span">{icon.id == "Twitter" ? "" : icon.id}</span>
