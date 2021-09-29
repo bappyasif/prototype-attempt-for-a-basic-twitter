@@ -31,21 +31,6 @@ function AllRoutes({count, handleCount}) {
 
     // useEffect(() => handleCount, [])
 
-    // useEffect(() => {
-    //     setTweetData([...tweetData, {tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy)}])
-    // }, [tweetPublishReady])
-
-    // let getPrivacySelectedElement = whichOption => {
-    //     switch(whichOption) {
-    //         case '01':
-    //             return tweetPrivacySelected01()
-    //         case '02':
-    //             return tweetPrivacySelected02()
-    //         case '03':
-    //             return tweetPrivacySelected03()
-    //         default: console.log('somethigs wrong!!')
-    //     }
-    // }
 
     let handleTweetModalityToggle = () => setToggleModality(!toggleModality);
     return (
@@ -67,10 +52,6 @@ function AllRoutes({count, handleCount}) {
 
                 <Route exact path='/tweet/compose'>
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
-                    {/* <LeftSideNavigationPanel toggleModality={toggleModality} setToggleModality={setToggleModality} /> */}
-                    {/* naming of it could be adjusted appropriately when necessary */}
-                    {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData}/> */}
-                    {/* <ComposeTweet tweetData={tweetData} setTweetData={setTweetData} toggleModality={toggleModality} setToggleModality={setToggleModality} /> */}
                     <ComposeTweet
                         toggleModality={toggleModality}
                         handleTweetModalToggle={handleTweetModalityToggle}
@@ -83,29 +64,19 @@ function AllRoutes({count, handleCount}) {
                         setTweetPrivacy={setTweetPrivacy}
                         setTweetPublishReady={setTweetPublishReady}
                     />
-                    {/* <AllTweetsPage tweetData={tweetData} /> */}
-                    {/* {<TweetCompose />} */}
                 </Route>
 
                 <Route exact path='/tweet/compose/media'>
                     <LeftSideNavigationPanel />
-                    {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData}/> */}
-                    {/* another modal alike view for media (text, for now) edit */}
                 </Route>
 
                 <Route exact path='/user-profile'>
-                    {/* <LeftSideNavigationPanel /> */}
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
-                    {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData} /> */}
                     <UserProfile count={count} handleCount={handleCount} tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} />
-                    {/* {console.log(tweetData)} */}
-                    {/* <AllTweetsPage tweetData={tweetData} /> */}
-                    {/* <AllTweetsPage tweetData={tweetData} tweetPublishReady={tweetPublishReady} /> */}
                 </Route>
 
                 <Route path='/user-profile/tweets-and-replies'>
-                    {/* <LeftSideNavigationPanel /> */}
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
                     <TweetsAndRepliesPage tweetData={tweetData} />

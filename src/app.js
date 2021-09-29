@@ -3,7 +3,7 @@ import './app.css';
 import ComponentsContainer from './components/componentsContainer';
 
 function App() {
-    let [count, setCount] = useState(0)
+    let [count, setCount] = useState(1)
 
     let handleCount = () => setCount(count+1);
 
@@ -11,22 +11,10 @@ function App() {
 
     return (
         <div>
-            <ComponentsContainer count={count} handleCount={handleCount}/>
+            <ComponentsContainer count={count} handleCount={handleCount} />
         </div>
     )
 
 }
-
-
-// class App extends Component {
-
-//     render() {
-//         return (
-//             <div>
-//                 <ComponentsContainer />
-//             </div>
-//         )
-//     }
-// }
 
 export default App
