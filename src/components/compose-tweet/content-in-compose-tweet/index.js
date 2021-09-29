@@ -17,7 +17,7 @@ function ContentInComposeTweet({ selectedFile, removeImageHandler, isPollIconCli
                     <span id='remove-image' onClick={removeImageHandler}>{deleteIcon('silver')}</span>
                     <img src={URL.createObjectURL(selectedFile)} />
                     <div id='picture-info'>
-                        <Link id='tag-div' to='/tweet/compose/media'><span class='picture-svgs'>{tagIcon()}</span><span id='tag-people'>Tag people</span></Link>
+                        <Link id='tag-div' to='/tweet/compose/media'><span className='picture-svgs'>{tagIcon()}</span><span id='tag-people'>Tag people</span></Link>
                         <Link id='description-div' to='/tweet/compose/media'><span className='picture-svgs'>{descriptionIcon()}</span><span id='picture-description'>Description</span></Link>
                     </div>
                 </div>}

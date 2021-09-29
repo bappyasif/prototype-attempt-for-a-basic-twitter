@@ -3,53 +3,15 @@ import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivac
 import AllTweetsPage from '../user-profile/all-tweets';
 import './index.css';
 
-function ComposeTweet({ tweetData, setTweetData, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady }) {
-    // let [primaryTweetText, setPrimaryTweetText] = useState('');
-    // let [extraTweetText, setExtraTweetText] = useState('');
-    // let [tweetPrivacy, setTweetPrivacy] = useState('01');
-    // let [tweetPublishReady, setTweetPublishReady] = useState(false);
-    // let [tweetData, setTweetData] = useState([]);
+function ComposeTweet({ selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady }) {
 
-    // useEffect(() => {
-    //     setTweetData([...tweetData, { tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy) }])
-
-    //     console.log(tweetData, 'tweet compose', primaryTweetText)
-    // }, [tweetPublishReady])
-    
-    // useEffect(() => {
-    //     setTweetData([...tweetData, { tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy) }])
-
-    //     console.log(tweetData, 'tweet compose', primaryTweetText, tweetPublishReady)
-    // }, [primaryTweetText, tweetPublishReady])
-
-    // useEffect(() => {
-    //     setTweetData([...tweetData, { tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy) }])
-
-    //     console.log(tweetData, 'tweet compose', primaryTweetText, tweetPublishReady)
-    // }, [primaryTweetText])
-
-    // useEffect(() => {
-    //     if(tweetPublishReady) setTweetData([...tweetData, { tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy) }])
-
-    //     console.log(tweetData, 'tweet compose', primaryTweetText, tweetPublishReady)
-    // }, [primaryTweetText])
-
-    // useEffect(() => setToggleModality(!toggleModality), [!toggleModality])
-
-    // let getPrivacySelectedElement = whichOption => {
-    //     switch (whichOption) {
-    //         case '01':
-    //             return tweetPrivacySelected01()
-    //         case '02':
-    //             return tweetPrivacySelected02()
-    //         case '03':
-    //             return tweetPrivacySelected03()
-    //         default: console.log('somethigs wrong!!')
-    //     }
-    // }
     return (
         <div id='compose-tweet-container'>
             <TweetModal
+                selectedFile={selectedFile}
+                setSelectedFile={setSelectedFile}
+                gifFile={gifFile}
+                setGifFile={setGifFile}
                 toggleModality={toggleModality}
                 handleTweetModalToggle={handleTweetModalToggle}
                 tweetText={primaryTweetText}
@@ -59,8 +21,6 @@ function ComposeTweet({ tweetData, setTweetData, toggleModality, handleTweetModa
                 tweetPrivacy={tweetPrivacy}
                 setTweetPrivacy={setTweetPrivacy}
                 readyTweetPublish={setTweetPublishReady} />
-            
-            {/* <AllTweetsPage tweetData={tweetData} /> */}
         </div>
     )
 }

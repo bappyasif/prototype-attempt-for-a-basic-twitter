@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
-function TweetModal({toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish }) {
+function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -21,8 +21,8 @@ function TweetModal({toggleModality, handleTweetModalToggle, tweetText, setTweet
     // let [toggleModality, setToggleModality] = useState(false);
     let [tweetOptions, setTweetOptions] = useState(false);
 
-    let [selectedFile, setSelectedFile] = useState();
-    let [gifFile, setGifFile] = useState('');
+    // let [selectedFile, setSelectedFile] = useState();
+    // let [gifFile, setGifFile] = useState('');
     let inputRef = useRef();
 
     let [isGifIconClicked, setIsGifIconClicked] = useState(false);
@@ -92,6 +92,7 @@ function TweetModal({toggleModality, handleTweetModalToggle, tweetText, setTweet
         handleTweetModalToggle()
 
         closeTweetModalHandler();
+        // removeImageHandler()
         // setTweetText('');
         // setExtraTweetText('');
         setAddExtraTweetClicked(false);

@@ -19,7 +19,8 @@
   display: flex;
   justify-content: center;
   /* align-items: center; */
-  align-items: flex-end;
+  /* align-items: flex-end; */
+  align-items: flex-start;
   /* flex-direction: column; */
   border: solid silver 0.1em;
   border-bottom: none;
@@ -55,7 +56,7 @@
 
 /* #profile-page-container  */
 #tweet-container .left-portion {
-  /* transform: translate(-4px, -35px); */
+  transform: translate(-4px, 27px);
 }
 
 #tweet-container #show-connecting-line {
@@ -213,4 +214,17 @@
   position: absolute;
   top: 105%;
   left: 0%;
+}
+
+#tweet-container .tweet-media-on-profile {
+  height: 323px;
+  width: 96%;
+}
+
+.tweet-media-on-profile img {
+  border-radius: 11px;
+}
+
+#extra-tweet-portion-container .left-portion #profile-pic {
+  transform: translate(8px, -38px);
 }

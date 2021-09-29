@@ -25,6 +25,9 @@ function AllRoutes({count, handleCount}) {
     let [extraTweetText, setExtraTweetText] = useState('');
     let [tweetPrivacy, setTweetPrivacy] = useState('01');
     let [tweetPublishReady, setTweetPublishReady] = useState(false);
+    let [selectedFile, setSelectedFile] = useState();
+    let [gifFile, setGifFile] = useState('');
+    
     // let [count, setCount] = useState(0)
 
     // let handleCount = () => setCount(count+1);
@@ -53,6 +56,10 @@ function AllRoutes({count, handleCount}) {
                 <Route exact path='/tweet/compose'>
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ComposeTweet
+                        selectedFile={selectedFile}
+                        setSelectedFile={setSelectedFile}
+                        gifFile={gifFile}
+                        setGifFile={setGifFile}
                         toggleModality={toggleModality}
                         handleTweetModalToggle={handleTweetModalityToggle}
                         primaryTweetText={primaryTweetText}
@@ -73,7 +80,8 @@ function AllRoutes({count, handleCount}) {
                 <Route exact path='/user-profile'>
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
-                    <UserProfile count={count} handleCount={handleCount} tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} />
+                    <UserProfile selectedFile={selectedFile} setSelectedFile={setSelectedFile} gifFile={gifFile} count={count} handleCount={handleCount} tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} />
+                    {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} /> */}
                 </Route>
 
                 <Route path='/user-profile/tweets-and-replies'>
