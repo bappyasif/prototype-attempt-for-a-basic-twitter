@@ -4,15 +4,20 @@ import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivac
 import AllTweetsPage from './all-tweets';
 // import AllTweetsPage from './profile-page/all-tweets';
 
-function UserProfile({tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady}) {
+function UserProfile({count, handleCount, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady}) {
     // let [primaryTweetText, setPrimaryTweetText] = useState('');
     // let [extraTweetText, setExtraTweetText] = useState('');
     // let [tweetPrivacy, setTweetPrivacy] = useState('01');
     // let [tweetPublishReady, setTweetPublishReady] = useState(false);
     // let [tweetData, setTweetData] = useState([]);
+    // let [count, setCount] = useState(1)
+
+    // useEffect(() => setCount(count + 1), [])
+    // useEffect(() => handleCount, [count])
     
     useEffect(() => {
-        setTweetData([...tweetData, {tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy)}])
+        setTweetData([...tweetData, {tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count}])
+        // handleCount();
     }, [tweetPublishReady])
 
     let getPrivacySelectedElement = whichOption => {
@@ -43,7 +48,7 @@ function UserProfile({tweetData, setTweetData, primaryTweetText, extraTweetText,
                 readyTweetPublish={setTweetPublishReady} /> */}
             {/* {console.log(tweetData, "!!!!")} */}
             {/* <AllTweetsPage tweetData={tweetData} /> */}
-            {tweetData && <AllTweetsPage tweetData={tweetData} />}
+            {tweetData && <AllTweetsPage tweetData={tweetData} count={count} handleCount={handleCount} />}
         </div>
     )
 }

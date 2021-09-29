@@ -1,14 +1,20 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import AllRoutes from './all-routes'
 import ContainerForSignupPage from './signup-page/containerForLoginPage'
 
-function ComponentsContainer () {
+function ComponentsContainer ({count, handleCount}) {
     // let [tweetData, setTweetData] = useState([]);
+    // let [count, setCount] = useState(0)
+    // let count = 0;
+
+    // let handleCount = () => setCount(count+1);
+
+    useEffect(() => handleCount, [count])
         return (
             <div id='components-container'>
                 {/* <ContainerForSignupPage /> */}
                 {/* <AllRoutes tweetData={tweetData} setTweetData={setTweetData}/> */}
-                <AllRoutes />
+                <AllRoutes count={count} handleCount={handleCount}/>
             </div>
         )
 }

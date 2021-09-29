@@ -3,8 +3,9 @@ import { moreIcon, tweetAdditionalIconsArray } from '../profile-page/svg-resourc
 // import '../../profile-page/index.css'
 import '../../user-profile/profile-page/index.css';
 
-function AllTweetsPage({ tweetData, tweetPublishReady }) {
+function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
     let [hoveredID, setHoveredID] = useState('');
+    // let [count, setCount] = useState(1)
 
     let findWhichIconId = evt => {
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.id
@@ -34,6 +35,8 @@ function AllTweetsPage({ tweetData, tweetPublishReady }) {
     //     console.log(tweetData, 'here!!')
     // }, [])
 
+    // useEffect(() => handleCount(), [count])
+
     let whenExtraTweetExists = (item, idx) =>
         <div id='extra-tweet-portion-container'>
             <div className='left-portion'>
@@ -45,7 +48,20 @@ function AllTweetsPage({ tweetData, tweetPublishReady }) {
                 <div className='additionals-icons'>
                     {/* {tweetAdditionalIconsArray.map(elem => <div key={elem.id} id={elem.id} className='hover-div' onMouseOver={mouseHoveredIn} onMouseOut={mouseHoveredOut}><span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span></div>)} */}
                     {/* {tweetAdditionalIconsArray.map(elem => <div key={elem.id} id={elem.id} className='hover-div' onMouseOver={(evt) => mouseHoveredIn(evt, idx)} onMouseOut={(evt) => mouseHoveredOut(evt, idx)}><span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span></div>)} */}
-                    {tweetAdditionalIconsArray.map((elem, id) => <div key={elem.id} id={elem.id} className='hover-div' onMouseOver={(evt) => mouseHoveredIn(evt, idx, id)} onMouseOut={(evt) => mouseHoveredOut(evt, idx, id)}><span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span></div>)}
+                    {/* {tweetAdditionalIconsArray.map((elem, id) => <div key={elem.id} id={elem.id+'extra'} className='hover-div' onMouseOver={(evt) => mouseHoveredIn(evt, idx, id)} onMouseOut={(evt) => mouseHoveredOut(evt, idx, id)}><span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span></div>)} */}
+                    {/* {tweetAdditionalIconsArray.map((elem, id) => <div key={elem.id} id={elem.id} className='hover-div' onMouseOver={(evt) => mouseHoveredIn(evt, idx, id)} onMouseOut={(evt) => mouseHoveredOut(evt, idx, id)}><span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span></div>)} */}
+                    {tweetAdditionalIconsArray.map((elem, id) =>
+                        <div
+                            key={elem.id}
+                            id={elem.id + `${count}`}
+                            className='hover-div'
+                            onMouseOver={(evt) => mouseHoveredIn(evt, idx, id)}
+                            onMouseOut={(evt) => mouseHoveredOut(evt, idx, id)}
+                        >
+                            {console.log(item.count, item)}
+                            <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + count ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -64,7 +80,15 @@ function AllTweetsPage({ tweetData, tweetPublishReady }) {
                 <div className='additionals-icons'>
                     {/* {tweetAdditionalIconsArray.map(elem => <div key={elem.id} id={elem.id} className='hover-div' onMouseOver={mouseHoveredIn} onMouseOut={mouseHoveredOut}><span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span></div>)} */}
                     {/* {tweetAdditionalIconsArray.map(elem => <div key={elem.id} id={elem.id} className='hover-div' onMouseOver={(evt) => mouseHoveredIn(evt, idx)} onMouseOut={(evt) => mouseHoveredOut(evt, idx)}><span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span></div>)} */}
-                    {tweetAdditionalIconsArray.map((elem, id) => <div key={elem.id} id={elem.id} className='hover-div' onMouseOver={(evt) => mouseHoveredIn(evt, idx, id)} onMouseOut={(evt) => mouseHoveredOut(evt, idx, id)}><span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span></div>)}
+                    {tweetAdditionalIconsArray.map((elem, id) => <div
+                        key={elem.id}
+                        id={elem.id}
+                        className='hover-div'
+                        onMouseOver={(evt) => mouseHoveredIn(evt, idx, id)}
+                        onMouseOut={(evt) => mouseHoveredOut(evt, idx, id)}
+                    >
+                        <span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span>
+                    </div>)}
                 </div>
             </div>
         </div>
@@ -84,7 +108,7 @@ function AllTweetsPage({ tweetData, tweetPublishReady }) {
             </div>
         </div> */}
         {whenNoExtraTweet(item, idx)}
-        <div id='show-connecting-line' style={{visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden'}}></div>
+        <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>
         {item.extraTweet ? whenExtraTweetExists(item, idx) : ''}
 
     </div>))

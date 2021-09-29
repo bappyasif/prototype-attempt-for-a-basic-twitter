@@ -18,13 +18,18 @@ import ProfilePageUpperView from '../user-profile/profile-page';
 import ProfilePageTopNavigationMenuBar from '../user-profile/profile-page/top-menu-navigation';
 import TweetsAndRepliesPage from '../user-profile/tweets-and-replies-page';
 
-function AllRoutes() {
+function AllRoutes({count, handleCount}) {
     let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
     let [extraTweetText, setExtraTweetText] = useState('');
     let [tweetPrivacy, setTweetPrivacy] = useState('01');
     let [tweetPublishReady, setTweetPublishReady] = useState(false);
+    // let [count, setCount] = useState(0)
+
+    // let handleCount = () => setCount(count+1);
+
+    // useEffect(() => handleCount, [])
 
     // useEffect(() => {
     //     setTweetData([...tweetData, {tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy)}])
@@ -93,7 +98,7 @@ function AllRoutes() {
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
                     {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData} /> */}
-                    <UserProfile tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} />
+                    <UserProfile count={count} handleCount={handleCount} tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} />
                     {/* {console.log(tweetData)} */}
                     {/* <AllTweetsPage tweetData={tweetData} /> */}
                     {/* <AllTweetsPage tweetData={tweetData} tweetPublishReady={tweetPublishReady} /> */}
