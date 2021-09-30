@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { copyIcon, deleteIcon, descriptionIcon, everybodyIcon, gifIcon, imageIcon, mentionedIcon, peopleIcon, pollIcon, scheduleIcon, tagIcon } from './svg-resources';
+import { copyIcon, deleteIcon, deleteIconForGif, descriptionIcon, everybodyIcon, gifIcon, imageIcon, mentionedIcon, peopleIcon, pollIcon, scheduleIcon, tagIcon } from './svg-resources';
 import './tweet-modal.css'
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Grid, Gif } from '@giphy/react-components';
@@ -108,7 +108,7 @@ function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleM
     }
 
     return (
-        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '999999' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >
+        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >
             <div className='upper-content'>
                 <span id='delete-icon' onClick={closeTweetModalHandler}>{deleteIcon()}</span>
                 <hr />
@@ -126,9 +126,10 @@ function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleM
 
                 <p id='line-extension-extended' style={{ visibility: isBothTextareaExist && isPrimaryTweetClicked ? 'visible' : 'hidden'}}></p>
 
-                <ContentInComposeTweet selectedFile={selectedFile} removeImageHandler={removeImageHandler} isPollIconClicked={isPollIconClicked} handlePollViewToggle={handlePollIconClicked}/>
+                {/* <ContentInComposeTweet selectedFile={selectedFile} removeImageHandler={removeImageHandler} isPollIconClicked={isPollIconClicked} handlePollViewToggle={handlePollIconClicked}/> */}
+                <ContentInComposeTweet gifFile={gifFile} removeGifHandler={removeGifFileHandler} selectedFile={selectedFile} removeImageHandler={removeImageHandler} isPollIconClicked={isPollIconClicked} handlePollViewToggle={handlePollIconClicked}/>
 
-                {gifFile && <div id='gif-view'><span id='remove-gif' onClick={removeGifFileHandler}>{deleteIcon()}</span><Gif gif={gifFile} /></div>}
+                {/* {gifFile && <div id='gif-view'><span id='remove-gif' onClick={removeGifFileHandler}>{deleteIconForGif('silver')}</span><Gif gif={gifFile} /></div>} */}
 
                 <TweetScheduler isScheduleIconClicked={isScheduleIconClicked} handleToggle={handleScheduleIconClicked} />
 

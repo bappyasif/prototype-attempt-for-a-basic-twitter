@@ -9,7 +9,7 @@
 #all-tweets-container {
   position: absolute;
   left: 30.5%;
-  top: 53%;
+  top: 56%;
 }
 
 /* #profile-page-container  */
@@ -216,14 +216,20 @@
   left: 0%;
 }
 
-#tweet-container .tweet-media-on-profile {
+#tweet-container .tweet-media-on-profile, #tweet-container .tweet-gif-on-profile {
   height: 323px;
   width: 96%;
 }
 
-.tweet-media-on-profile img {
+#tweet-container .tweet-gif-on-profile {
+  width: 100%;
+}
+
+.tweet-media-on-profile img, .tweet-gif-on-profile .style-gif-border-radius picture img {
   border-radius: 11px;
 }
+
+.tweet-gif-on-profile .style-gif-border-radius {}
 
 #extra-tweet-portion-container .left-portion #profile-pic {
   transform: translate(8px, -38px);

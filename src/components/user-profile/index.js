@@ -1,16 +1,21 @@
+import { Gif } from '@giphy/react-components';
 import React, { useEffect, useState } from 'react'
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
-function UserProfile({count, handleCount, selectedFile, setSelectedFile, gifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady}) {
+function UserProfile({count, handleCount, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady}) {
 
     useEffect(() => handleCount, [count])
     
     useEffect(() => {
-        setTweetData([...tweetData, {tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count}])
+        setTweetData([...tweetData, {tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count}])
         // handleCount();
         setSelectedFile('');
+        setGifFile('');
+        console.log(tweetData, 'is it?!')
     }, [tweetPublishReady])
+
+    let showGif = selectedGif => selectedGif && <Gif height='290px' width='96%' gif={selectedGif} className='style-gif-border-radius' />;
 
     // let showImg = (imgRR) => <img src={URL.createObjectURL(imgRR)} />
     // let showImg = (imgRR) => <img src={imgRR} />
@@ -35,6 +40,7 @@ function UserProfile({count, handleCount, selectedFile, setSelectedFile, gifFile
     return (
         <div id='user-profile-page-container'>
             {tweetData && <AllTweetsPage tweetData={tweetData} handleCount={handleCount} />}
+            {/* <AllTweetsPage tweetData={tweetData} handleCount={handleCount} /> */}
         </div>
     )
 }

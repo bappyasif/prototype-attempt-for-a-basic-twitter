@@ -28,12 +28,26 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
         if (findwhich != -1) setHoveredID('')
     }
 
-    tweetData = tweetData.filter(data => data.tweetText != '').reverse();
+    tweetData = tweetData.reverse();
+    // tweetData = tweetData.filter(data => Object.values(data) != null).reverse();
+    // tweetData = tweetData.filter(data => {
+    //     console.log((Object.values(data)).length, Object.values(data))
+    //     return Object.values(data) != null && data.tweetPrivacy
+        
+    // }).reverse();
+    // tweetData = tweetData.filter(data => (data.tweetText || data.extraTweetText ) && (data.tweetMedia  || data.tweetGif )).reverse();
+
+    // tweetData = tweetData.filter(data => (data.tweetPrivacy && data.tweetText!=''|| data.extraTweetText!='' || data.tweetMedia!=null  || data.tweetGif!=null)).reverse();
+
+    // tweetData = tweetData.filter(data => (data.tweetMedia!=''  && data.tweetGif!='' && data.tweetText!='' && data.extraTweetText!='')).reverse();
+
+    // tweetData = tweetData.filter(data => (data.tweetText!=''|| data.extraTweetText!='' || data.tweetMedia!=null  || data.tweetGif!=null)).reverse();
 
     // useEffect(() => handleCount(), [count])
 
     let whenExtraTweetExists = (item) =>
         <div id='extra-tweet-portion-container'>
+            {/* {console.log('here??')} */}
             <div className='left-portion'>
                 <img id='profile-pic' src='https://picsum.photos/200/300' />
             </div>
@@ -59,6 +73,7 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
 
     let whenNoExtraTweet = (item) =>
         <div id='without-extra-tweet-container'>
+            {/* {console.log('here!!')} */}
             <div className='left-portion'>
                 <img id='profile-pic' src='https://picsum.photos/200/300' />
             </div>
@@ -66,6 +81,7 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
                 <div className='profile-details-on-tweet'><div className='user-info'>User Name Goes Here <span>@profile handle goes here</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div></div>
                 <div className='tweet-text-on-profile'>{item.tweetText}</div>
                 <div className='tweet-media-on-profile' style={{display: item.tweetMedia ? 'block' : 'none'}}>{item.tweetMedia}</div>
+                <div className='tweet-gif-on-profile' style={{display: item.tweetGif ? 'block' : 'none'}}>{item.tweetGif}</div>
                 {/* <div className='tweet-media-on-profile'>{item.tweetMedia ? item.tweetMedia : ''}</div> */}
                 <div className='tweet-privacy-on-profile'>{item.tweetPrivacy}</div>
 
@@ -88,12 +104,20 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
 
     let renderingData = tweetData.map((item) =>
     (<div key={item.tweetText} id='tweet-container'>
-        {whenNoExtraTweet(item)}
+        {/* {whenNoExtraTweet(item)} */}
+        {(item.tweetText || item.extraTweetText || item.tweetMedia  || item.tweetGif) ? whenNoExtraTweet(item) : null}
+        {/* {item.tweetText || item.extraTweetText || item.tweetMedia  || item.tweetGif && whenNoExtraTweet(item)} */}
         {/* {console.log(item)} */}
         <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>
         {item.extraTweet ? whenExtraTweetExists(item) : ''}
 
     </div>))
+
+    // let showMediasOnTweet = () => <div className='tweet-media-on-profile' style={{display: (item.tweetMedia || item.tweetGif) ? 'block' : 'none'}}>
+    //     <div id='remove-element'></div>
+    //     <div id='media-content'>{item.tweetMedia ? item.tweetMedia : item.tweetGif}</div>
+    //     <div></div>
+    // </div>
     return <div id='all-tweets-container'>{renderingData}</div>
 }
 

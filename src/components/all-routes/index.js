@@ -17,8 +17,9 @@ import ProfilePageUpperView from '../user-profile/profile-page';
 // import AllTweetsPage from '../user-profile/profile-page/all-tweets';
 import ProfilePageTopNavigationMenuBar from '../user-profile/profile-page/top-menu-navigation';
 import TweetsAndRepliesPage from '../user-profile/tweets-and-replies-page';
+import EditTweetMediaContents from '../edit-tweet-media-contents';
 
-function AllRoutes({count, handleCount}) {
+function AllRoutes({ count, handleCount }) {
     let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -27,7 +28,7 @@ function AllRoutes({count, handleCount}) {
     let [tweetPublishReady, setTweetPublishReady] = useState(false);
     let [selectedFile, setSelectedFile] = useState();
     let [gifFile, setGifFile] = useState('');
-    
+
     // let [count, setCount] = useState(0)
 
     // let handleCount = () => setCount(count+1);
@@ -75,12 +76,26 @@ function AllRoutes({count, handleCount}) {
 
                 <Route exact path='/tweet/compose/media'>
                     <LeftSideNavigationPanel />
+                    <EditTweetMediaContents />
                 </Route>
 
                 <Route exact path='/user-profile'>
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
-                    <UserProfile selectedFile={selectedFile} setSelectedFile={setSelectedFile} gifFile={gifFile} count={count} handleCount={handleCount} tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} />
+                    <UserProfile
+                        selectedFile={selectedFile}
+                        setSelectedFile={setSelectedFile}
+                        gifFile={gifFile}
+                        setGifFile={setGifFile}
+                        count={count}
+                        handleCount={handleCount}
+                        tweetData={tweetData}
+                        setTweetData={setTweetData}
+                        primaryTweetText={primaryTweetText}
+                        extraTweetText={extraTweetText}
+                        tweetPrivacy={tweetPrivacy}
+                        tweetPublishReady={tweetPublishReady}
+                    />
                     {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} /> */}
                 </Route>
 

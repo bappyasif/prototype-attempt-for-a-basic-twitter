@@ -17,6 +17,14 @@ let deleteIcon = (color) => (
   </svg>
 );
 
+let deleteIconForGif = (color) => (
+  <svg style={svgStyle, {transform: 'scale(.69)'}}>
+    <g>
+      <path stroke={color} fill={color} d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path>
+    </g>
+  </svg>
+);
+
 let imageIcon = () => (
   <svg style={svgStyle}>
     <g>
@@ -92,6 +100,19 @@ let mentionedIcon = (color) => (
   </svg>
 );
 
+let giphyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" style={{width: '29px', height: '35px'}}>
+  <g fill="none" fill-rule="evenodd">
+    <path d="M4 4h20v27H4z" fill="#000"/>
+    <g fill-rule="nonzero">
+      <path d="M0 3h4v29H0z" fill="#04ff8e"/>
+      <path d="M24 11h4v21h-4z" fill="#8e2eff"/>
+      <path d="M0 31h28v4H0z" fill="#00c5ff"/>
+      <path d="M0 0h16v4H0z" fill="#fff152"/>
+      <path d="M24 8V4h-4V0h-4v12h12V8" fill="#ff5b5b"/>
+      <path d="M24 16v-4h4" fill="#551c99"/>
+      </g><path d="M16 0v4h-4" fill="#999131"/>
+      </g></svg>
+
 export {
-  tagIcon, descriptionIcon, copyIcon, deleteIcon, everybodyIcon, gifIcon, imageIcon, mentionedIcon, peopleIcon, pollIcon, scheduleIcon, selectIcon
+  giphyIcon, deleteIconForGif, tagIcon, descriptionIcon, copyIcon, deleteIcon, everybodyIcon, gifIcon, imageIcon, mentionedIcon, peopleIcon, pollIcon, scheduleIcon, selectIcon
 }

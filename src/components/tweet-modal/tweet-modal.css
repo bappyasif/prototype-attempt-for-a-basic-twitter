@@ -285,8 +285,12 @@
   background: linear-gradient(45deg, black, transparent);
   padding: 5px 5px 4px 2px;
   border-radius: 50%;
-  width: fit-content;
+  /* width: fit-content;
+  transform: translate(8px, 38px); */
+  width: 24px;
+  height: 24px;
   transform: translate(8px, 38px);
+  z-index: 9999;
 }
 
 #image-view #picture-info {
@@ -301,6 +305,8 @@
 #image-view #picture-info #description-div {
   display: flex;
   align-items: center;
+  color: slategray;
+  text-decoration: none;
 }
 
 #image-view #picture-info svg {
@@ -343,6 +349,23 @@
 #gif-view {
   padding: 0.2em;
   /* max-height: 470px; */
+  text-align: left;
+    position: relative;
+}
+
+#gif-view #remove-gif {
+  transform: translate(8px, 8px);
+  z-index: 999999999;
+  position: absolute;
+  background: lightslategrey;
+  border-radius: 47%;
+  display: flex;
+  max-width: 24px;
+  max-height: 24px;
+}
+
+#gif-view #remove-gif img {
+  border-radius: 11px;
 }
 
 #poll-container {
