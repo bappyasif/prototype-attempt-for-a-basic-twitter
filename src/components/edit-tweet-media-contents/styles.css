@@ -65,6 +65,13 @@
     justify-content: center;
     align-items: center;
     background: rgba(128, 128, 128, .4);
+    position: relative;
+}
+
+#media-editing-container #middle-section #overlay-view {
+    position: absolute;
+    border: solid aqua .11em;
+    border-radius: 2px;
 }
 
 #media-editing-container #middle-section #media-view {
@@ -126,15 +133,17 @@
 }
 
 #media-editing-container #photo-edit-bottom-section #zoom-in-and-out #progress-bar {
-    width: 146px;
+    /* width: 146px;
     height: 2px;
-    background-color: rgba(29, 155, 240, .2);
+    background-color: rgba(29, 155, 240, .2); */
+    display: flex;
 }
 
 #media-editing-container #photo-edit-bottom-section #zoom-in-and-out #progress-bar #slider-filler {
-    height: 100%;
     background-color: rgb(29, 155, 240);
     position: relative;
+    width: fit-content;
+    height: 4px;
 }
 
 #media-editing-container #photo-edit-bottom-section #zoom-in-and-out #progress-bar #slider-filler #slider-nob {
@@ -145,3 +154,42 @@
     position: absolute;
     top: -4.5px;
 }
+
+/* 
+#media-editing-container #photo-edit-bottom-section #zoom-in-and-out #progress-bar {
+    display: flex;
+}
+
+#media-editing-container #photo-edit-bottom-section #zoom-in-and-out #progress-bar #slider-filler {
+    background-color: rgb(29, 155, 240);
+    position: relative;
+    width: fit-content;
+    appearance: none;
+    height: 4px;
+}
+
+#media-editing-container #photo-edit-bottom-section #zoom-in-and-out #progress-bar #slider-filler #slider-nob {
+    width: 6px;
+    height: 10px;
+    background-color: aqua;
+    border-radius: 50%;
+    position: absolute;
+    top: -4.5px;
+}
+
+#media-editing-container #photo-edit-bottom-section #zoom-in-and-out #progress-bar #slider-filler::-ms-thumb {
+    appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+#media-editing-container #photo-edit-bottom-section #zoom-in-and-out #progress-bar #slider-filler::-moz-range-thumb {
+    width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+} */

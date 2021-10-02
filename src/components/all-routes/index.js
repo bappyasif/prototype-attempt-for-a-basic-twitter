@@ -76,7 +76,7 @@ function AllRoutes({ count, handleCount }) {
 
                 <Route exact path='/tweet/compose/media'>
                     <LeftSideNavigationPanel />
-                    <EditTweetMediaContents />
+                    <EditTweetMediaContents mediaFile={selectedFile} updateMediaFile={setSelectedFile} />
                 </Route>
 
                 <Route exact path='/user-profile'>
