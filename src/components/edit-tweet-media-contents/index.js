@@ -8,10 +8,11 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
     let [textAreaValue, setTextAreaValue] = useState('');
     let [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
     let [sideIsClicked, setSideIsClicked] = useState('');
-    let [height, setHeight] = useState(0);
-    let [width, setWidth] = useState(0);
-    let [shapedClicked, setShapedClicked] = useState('')
+    let [height, setHeight] = useState(251);
+    let [width, setWidth] = useState(456);
+    let [shapedClicked, setShapedClicked] = useState('original')
     let [goBackTo, setGoBackTo] = useState('')
+    let [zoomedWidth, setZoomedWidth] = useState('')
 
     let handleTextAreaChanges = evt => setTextAreaValue(evt.target.value);
     // let handleFocused = () => setIsTextAreaFocused(!isTextAreaFocused)
@@ -29,6 +30,9 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
                 setHeight={setHeight}
                 shapedClicked={shapedClicked}
                 setShapedClicked={setShapedClicked}
+                // handleImageZoom={handleImageZoom}
+                zoomedWidth={zoomedWidth}
+                setZoomedWidth={setZoomedWidth}
             />
         } else if (sideIsClicked == 'alt-div-tab') {
             elements = <AltTagComponents
@@ -53,9 +57,16 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
         let canvas = document.getElementById('canvas');
         let ctx = canvas.getContext('2d')
         let sourceImg = document.getElementById('media-view');
+        canvas.width = sourceImg.naturalWidth
+        canvas.height = sourceImg.naturalHeight
+        // ctx.drawImage(sourceImg, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
+        // ctx.drawImage(sourceImg, 0, 0)
         // ctx.drawImage(sourceImg, 20, 90, 110, 99, 0, 0, 200, 200)
         ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
         // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasHeight()}`, `${setCanvasWidth()}`, 0, 0, `${setCanvasHeight()}`, `${setCanvasWidth()}`)
+        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, 456, 853)
+        // ctx.drawImage(sourceImg, 0, 0)
+        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`)
     }
 
     let decideCropShapeTop = () => shapedClicked == 'wide' ? 20 : 0;
@@ -66,6 +77,12 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
 
     let setCanvasHeight = () => shapedClicked == 'wide' ? 211 : 249;
     // let setCanvasHeight = () => shapedClicked == 'wide' ? 411 : 449;
+
+    // let handleImageZoom = () => {
+    //     let sourceImg = document.getElementById('media-view');
+    //     let currWidth = sourceImg.clientWidth
+    //     setZoomedWidth(currWidth + percentage) + 'px'
+    // }
 
     return (
         <div id='media-editing-container'>
@@ -89,9 +106,10 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
             </div>
             <div id='middle-section'>
                 {/* <canvas id='canvas'></canvas> */}
-                <img id='media-view' src='https://picsum.photos/200/300' />
+                {/* <img id='media-view' src='https://picsum.photos/200/300' /> */}
+                <img id='media-view' src='https://picsum.photos/200/300' style={{width: zoomedWidth}} />
                 {/* <img id='media-view' src={mediaFile && URL.createObjectURL(mediaFile)}/> */}
-                <div id='overlay-view' style={{ width: width+'px', height: height+'px' }}></div>
+                <div id='overlay-view' style={{ width: sideIsClicked == 'svg-icon-tab' && width+'px', height: sideIsClicked == 'svg-icon-tab' && height+'px' }}></div>
             </div>
             {renderBottomComponents()}
             <canvas id='canvas'></canvas>
@@ -99,11 +117,19 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
     )
 }
 
-let PhotoEditToolsComponent = ({width, setWidth, height, setHeight, shapedClicked, setShapedClicked}) => {
+let PhotoEditToolsComponent = ({width, setWidth, height, setHeight, shapedClicked, setShapedClicked, setZoomedWidth}) => {
     let [percentage, setPercentage] = useState(0);
+
+    let handleImageZoom = () => {
+        let sourceImg = document.getElementById('media-view');
+        let currWidth = sourceImg.clientWidth
+        setZoomedWidth(eval(currWidth + percentage)) + 'px'
+        console.log(currWidth, currWidth+percentage)
+    }
 
     let handleZoom = (evt) => {
         setPercentage(`${evt.target.value}`)
+        handleImageZoom()
     }
 
     let handleOriginalSize = () => {
@@ -130,9 +156,9 @@ let PhotoEditToolsComponent = ({width, setWidth, height, setHeight, shapedClicke
 
     return (
         <div id='photo-edit-bottom-section'>
-            <span id='original-size' onClick={handleOriginalSize}>{originalSizeIcon()}</span>
-            <span id='wide-angle' onClick={handleWideAngle}>{wideAngleIcon()}</span>
-            <span id='squared-size' onClick={handleSquaredSize}>{sqaureSizeIcon()}</span>
+            <span className='image-shapes' id='original-size' onClick={handleOriginalSize}>{originalSizeIcon(shapedClicked)}</span>
+            <span className='image-shapes' id='wide-angle' onClick={handleWideAngle}>{wideAngleIcon(shapedClicked)}</span>
+            <span className='image-shapes' id='squared-size' onClick={handleSquaredSize}>{sqaureSizeIcon(shapedClicked)}</span>
             <div id='zoom-in-and-out'>
                 <span id='zoom-out'>{zoomOutIcon()}</span>
                 <div id='zoom-slider'>
@@ -184,11 +210,11 @@ let style = {
     display: 'flex'
 }
 
-let originalSizeIcon = () => <svg width='24px' height='24px'><g><path d="M19.75 19.944H4.25c-1.24 0-2.25-1.01-2.25-2.25V6.306c0-1.24 1.01-2.25 2.25-2.25h15.5c1.24 0 2.25 1.01 2.25 2.25v11.39c0 1.24-1.01 2.248-2.25 2.248zM4.25 5.556c-.413 0-.75.337-.75.75v11.39c0 .412.337.75.75.75h15.5c.413 0 .75-.338.75-.75V6.305c0-.413-.337-.75-.75-.75H4.25z"></path></g></svg>
+let originalSizeIcon = (shapedClicked) => <svg width='24px' height='24px' className={shapedClicked == 'original' ? 'shape-active' : ''}><g><path d="M19.75 19.944H4.25c-1.24 0-2.25-1.01-2.25-2.25V6.306c0-1.24 1.01-2.25 2.25-2.25h15.5c1.24 0 2.25 1.01 2.25 2.25v11.39c0 1.24-1.01 2.248-2.25 2.248zM4.25 5.556c-.413 0-.75.337-.75.75v11.39c0 .412.337.75.75.75h15.5c.413 0 .75-.338.75-.75V6.305c0-.413-.337-.75-.75-.75H4.25z"></path></g></svg>
 
-let wideAngleIcon = () => <svg width='24px' height='24px'><g><path d="M19.75 19.89H4.25C3.01 19.89 2 18.88 2 17.64v-7.28c0-1.24 1.01-2.25 2.25-2.25h15.5c1.24 0 2.25 1.01 2.25 2.25v7.277c0 1.24-1.01 2.25-2.25 2.25zM4.25 9.61c-.413 0-.75.338-.75.75v7.278c0 .413.337.75.75.75h15.5c.413 0 .75-.337.75-.75V10.36c0-.412-.337-.75-.75-.75H4.25z"></path></g></svg>
+let wideAngleIcon = (shapedClicked) => <svg width='24px' height='24px' className={shapedClicked == 'wide' ? 'shape-active' : ''}><g><path d="M19.75 19.89H4.25C3.01 19.89 2 18.88 2 17.64v-7.28c0-1.24 1.01-2.25 2.25-2.25h15.5c1.24 0 2.25 1.01 2.25 2.25v7.277c0 1.24-1.01 2.25-2.25 2.25zM4.25 9.61c-.413 0-.75.338-.75.75v7.278c0 .413.337.75.75.75h15.5c.413 0 .75-.337.75-.75V10.36c0-.412-.337-.75-.75-.75H4.25z"></path></g></svg>
 
-let sqaureSizeIcon = () => <svg width='24px' height='24px'><g><path d="M19.75 22H4.25C3.01 22 2 20.99 2 19.75V4.25C2 3.01 3.01 2 4.25 2h15.5C20.99 2 22 3.01 22 4.25v15.5c0 1.24-1.01 2.25-2.25 2.25zM4.25 3.5c-.413 0-.75.337-.75.75v15.5c0 .413.337.75.75.75h15.5c.413 0 .75-.337.75-.75V4.25c0-.413-.337-.75-.75-.75H4.25z"></path></g></svg>
+let sqaureSizeIcon = (shapedClicked) => <svg width='24px' height='24px' className={shapedClicked == 'squared' ? 'shape-active' : ''}><g><path d="M19.75 22H4.25C3.01 22 2 20.99 2 19.75V4.25C2 3.01 3.01 2 4.25 2h15.5C20.99 2 22 3.01 22 4.25v15.5c0 1.24-1.01 2.25-2.25 2.25zM4.25 3.5c-.413 0-.75.337-.75.75v15.5c0 .413.337.75.75.75h15.5c.413 0 .75-.337.75-.75V4.25c0-.413-.337-.75-.75-.75H4.25z"></path></g></svg>
 
 let zoomOutIcon = () => <svg width='24px' height='24px' style={style}><g><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path><path d="M14.46 11.75H7.54c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h6.92c.415 0 .75.336.75.75s-.335.75-.75.75z"></path></g></svg>
 
