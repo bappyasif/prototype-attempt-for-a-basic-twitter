@@ -66,6 +66,7 @@
     align-items: center;
     background: rgba(128, 128, 128, .4);
     position: relative;
+    overflow: auto;
 }
 
 #media-editing-container #middle-section #overlay-view {
@@ -77,8 +78,9 @@
 #media-editing-container #middle-section #media-view {
     /* width: 100%;
     height: 63%; */
-    width: 456px;
+    /* width: 456px; */
     height: 254px;
+    /* overflow: scroll; */
 }
 
 #media-editing-container #bottom-section {

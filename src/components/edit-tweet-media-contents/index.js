@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { backIcon } from '../user-profile/profile-page/svg-resources'
 import './styles.css'
 
-function EditTweetMediaContents({mediaFile, updateMediaFile}) {
+function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
     let [textAreaValue, setTextAreaValue] = useState('');
     let [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
     let [sideIsClicked, setSideIsClicked] = useState('');
@@ -13,6 +13,7 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
     let [shapedClicked, setShapedClicked] = useState('original')
     let [goBackTo, setGoBackTo] = useState('')
     let [zoomedWidth, setZoomedWidth] = useState('')
+    let [adjustedImage, setAdjustedImage] = useState('');
 
     let handleTextAreaChanges = evt => setTextAreaValue(evt.target.value);
     // let handleFocused = () => setIsTextAreaFocused(!isTextAreaFocused)
@@ -48,13 +49,14 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
 
     let GoBack = () => {
         return (
-            <Route 
-            render = {({history}) => <div id='svg-icon' onClick={() => {history.push('/tweet/compose')}}>{backIcon()}</div>} />
+            <Route
+                render={({ history }) => <div id='svg-icon' onClick={() => { history.push('/tweet/compose') }}>{backIcon()}</div>} />
         )
     }
 
     let handleCropImage = () => {
         let canvas = document.getElementById('canvas');
+        canvas.origin
         let ctx = canvas.getContext('2d')
         let sourceImg = document.getElementById('media-view');
         canvas.width = sourceImg.naturalWidth
@@ -67,6 +69,12 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
         // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, 456, 853)
         // ctx.drawImage(sourceImg, 0, 0)
         // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`)
+        // console.log(canvas.toDataURI(), "??")
+        sourceImg.crossOrigin = 'anonymous'
+        // console.log(canvas && canvas.toDataURL('image/png'), "??")
+        // updateMediaFile(canvas.toDataURL('image/png'))
+        
+        // updateMediaFile(mediaFile && canvas.toDataURL('image/png'))
     }
 
     let decideCropShapeTop = () => shapedClicked == 'wide' ? 20 : 0;
@@ -107,9 +115,11 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
             <div id='middle-section'>
                 {/* <canvas id='canvas'></canvas> */}
                 {/* <img id='media-view' src='https://picsum.photos/200/300' /> */}
-                <img id='media-view' src='https://picsum.photos/200/300' style={{width: zoomedWidth}} />
-                {/* <img id='media-view' src={mediaFile && URL.createObjectURL(mediaFile)}/> */}
-                <div id='overlay-view' style={{ width: sideIsClicked == 'svg-icon-tab' && width+'px', height: sideIsClicked == 'svg-icon-tab' && height+'px' }}></div>
+                {/* <img id='media-view' src='https://picsum.photos/200/300' style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 452}`, minWidth: '100%' }} /> */}
+                {/* <img id='media-view' src='https://picsum.photos/200/300' style={{flex: `0 0 ${zoomedWidth}`}} /> */}
+                {/* <img id='media-view' src='https://picsum.photos/200/300' style={{flex: `0 0 ${zoomedWidth}`}} /> */}
+                <img id='media-view' src={mediaFile && URL.createObjectURL(mediaFile)} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 452}`, minWidth: '100%' }}/>
+                <div id='overlay-view' style={{ width: sideIsClicked == 'svg-icon-tab' && width + 'px', height: sideIsClicked == 'svg-icon-tab' && height + 'px' }}></div>
             </div>
             {renderBottomComponents()}
             <canvas id='canvas'></canvas>
@@ -117,19 +127,35 @@ function EditTweetMediaContents({mediaFile, updateMediaFile}) {
     )
 }
 
-let PhotoEditToolsComponent = ({width, setWidth, height, setHeight, shapedClicked, setShapedClicked, setZoomedWidth}) => {
+let PhotoEditToolsComponent = ({ width, setWidth, height, setHeight, shapedClicked, setShapedClicked, setZoomedWidth, zoomedWidth }) => {
     let [percentage, setPercentage] = useState(0);
+    // let [checkValue, setCheckValue] = useState()
 
-    let handleImageZoom = () => {
+    let handleImageZoom = (checker) => {
         let sourceImg = document.getElementById('media-view');
         let currWidth = sourceImg.clientWidth
-        setZoomedWidth(eval(currWidth + percentage)) + 'px'
-        console.log(currWidth, currWidth+percentage)
+
+        checker ? setZoomedWidth((currWidth - Number(percentage)) + 'px') : setZoomedWidth((currWidth + Number(percentage)) + 'px')
+
+        // percentage == 1 ? setZoomedWidth(0) : null
+        // percentage == 0 ? console.log(percentage, zoomedWidth) : null
+        // setZoomedWidth((Number(percentage))+'%')
+        // setZoomedWidth((currWidth + Number(percentage)) + 'px')
+        // console.log(checker)
+        // console.log(currWidth,(currWidth + Number(percentage)))
+    }
+
+    let clearUpCoords = (evt) => {
+        // setPercentage(0);
+        // setZoomedWidth(0)
+        // setZoomedWidth((evt.target.value + Number(percentage)) + 'px')
     }
 
     let handleZoom = (evt) => {
+        // evt.target.value == 0 ? setZoomedWidth(0) : null
         setPercentage(`${evt.target.value}`)
-        handleImageZoom()
+        // handleImageZoom(evt.target.value < percentage)
+        evt.target.value == 0 ? setZoomedWidth(110) : handleImageZoom(evt.target.value < percentage)
     }
 
     let handleOriginalSize = () => {
@@ -162,7 +188,7 @@ let PhotoEditToolsComponent = ({width, setWidth, height, setHeight, shapedClicke
             <div id='zoom-in-and-out'>
                 <span id='zoom-out'>{zoomOutIcon()}</span>
                 <div id='zoom-slider'>
-                    <SliderFiller value={percentage} handleZoom={handleZoom} />
+                    <SliderFiller value={percentage} handleZoom={handleZoom} handleOnMouseUp={clearUpCoords} />
                 </div>
                 <span id='zoom-in'>{zoomInIcon()}</span>
             </div>
@@ -170,10 +196,18 @@ let PhotoEditToolsComponent = ({width, setWidth, height, setHeight, shapedClicke
     )
 }
 
-let SliderFiller = ({ value, handleZoom }) => {
+let SliderFiller = ({ value, handleZoom, handleOnMouseUp }) => {
     return (
         <div id='progress-bar'>
-            <input type='range' min='0' max='100' value={value} id='slider-filler' onChange={handleZoom} />
+            <input
+                type='range'
+                min='0'
+                max='100'
+                value={value}
+                id='slider-filler'
+                onChange={handleZoom}
+                onMouseUp={handleOnMouseUp}
+            />
         </div>
     )
 }
