@@ -7,9 +7,18 @@ import TweetPoll from '../../tweet-modal/tweet-poll'
 
 
 function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, removeGifHandler, isPollIconClicked, handlePollViewToggle }) {
+    let handleMediaFileChecks = () => {
+        let mediaSrc = selectedFile;
+        if (selectedFile instanceof File || selectedFile instanceof Blob || selectedFile instanceof MediaSource) {
+            mediaSrc = URL.createObjectURL(selectedFile)
+        }
+        return mediaSrc;
+    }
+
     let tweetComposeMediaView = () => <div id='image-view'>
         <span id='remove-image' onClick={selectedFile ? removeImageHandler : removeGifHandler}>{deleteIcon('silver')}</span>
-        {selectedFile ? <img src={URL.createObjectURL(selectedFile)} /> : <Gif gif={gifFile} />}
+        {/* {selectedFile ? <img src={URL.createObjectURL(selectedFile)} /> : <Gif gif={gifFile} />} */}
+        {selectedFile ? <img src={handleMediaFileChecks()} /> : <Gif gif={gifFile} />}
         <div id='picture-info'>
             <Link id='tag-div' to='/tweet/compose/media'><span className='picture-svgs'>{selectedFile ? tagIcon() : giphyIcon()}</span><span id='tag-people'>{selectedFile ? 'Tag people' : <span id='gif-via'>via <span id='giphy-text' style={{color: 'black', fontSize: '1.1em', fontWeight: '800'}}>GIPHY</span></span>}</span></Link>
             <Link id='description-div' to='/tweet/compose/media'><span className='picture-svgs'>{descriptionIcon()}</span><span id='picture-description'>Description</span></Link>

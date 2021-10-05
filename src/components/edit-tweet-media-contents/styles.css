@@ -27,13 +27,21 @@
     align-items: center;
 }
 
-#media-editing-container #header-section #top-portion #right-side button{
+#media-editing-container #header-section #top-portion #right-side button, 
+#media-editing-container #header-section #top-portion #right-side #save-button {
     border-radius: 20px;
     outline: none;
     outline-color: transparent;
     background-color: black;
     color: whitesmoke;
     box-shadow: none;
+    padding: 4px 13px 4px 13px;
+    text-decoration: none;
+}
+
+#media-editing-container #header-section #top-portion #right-side #save-button {
+    padding: 4px 13px 4px 13px;
+    text-decoration: none;
 }
 
 #media-editing-container #header-section #bottom-portion {
@@ -87,9 +95,11 @@
     display: flex;
     flex-direction: column;
     margin-left: 0px;
+    position: relative;
 }
 
-#media-editing-container #bottom-section #description-div {
+#media-editing-container #bottom-section #description-div, 
+#media-editing-container #bottom-section #description-div-corrected {
     display: flex;
     justify-content: space-between;
     margin-top: 4px;
@@ -98,12 +108,46 @@
     border-bottom: none;
     padding: 0.4em;
     font-size: smaller;
+    /* position: absolute; */
+}
+
+#media-editing-container #bottom-section #description-div-corrected {
+    position: absolute;
+    width: -webkit-fill-available;
+}
+
+#media-editing-container #bottom-section #description-div .div-headers, 
+#media-editing-container #bottom-section #description-div-corrected  .div-headers  {
+    color: rgb(29, 155, 240);
 }
 
 .highlight-description-div-border {
-    border-color: rgb(29, 155, 240);
+    /* border-color: rgb(29, 155, 240); */
     /* border-bottom-color: none; */
 }
+
+#media-editing-container #bottom-section .div-border-highlight {
+    position: relative;
+}
+
+textarea:focus + .div-border-highlight {
+    /* border: solid .11em rgb(29, 155, 240); */
+    /* border-color: rgb(29, 155, 240); */
+    /* background-color: rgb(29, 155, 240); */
+    /* color: rgba(29, 155, 240, .69); */
+    visibility: visible;
+}
+
+textarea + .div-border-highlight {
+    /* color: red; */
+    visibility: hidden;
+    
+    /* background-color: red; */
+}
+
+/* textarea:focus + textarea::-webkit-input-placeholder {
+    color: red;
+} */
 
 #media-editing-container #bottom-section #description-area {
     outline: none;
@@ -111,11 +155,13 @@
     border-color: rgba(128, 128, 128, .4);
     border-top-color: white;
     background-color: transparent;
+    margin-top: 4px;
+    padding: 20px 0px 0px 6px;
 }
 
 #media-editing-container #bottom-section #description-area:focus {
     border-color: rgb(29, 155, 240);
-    border-top-color: white;
+    /* border-top-color: white; */
 }
 
 #media-editing-container #bottom-section a {

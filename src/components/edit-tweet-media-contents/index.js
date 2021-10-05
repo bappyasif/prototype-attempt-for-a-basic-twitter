@@ -54,27 +54,24 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
         )
     }
 
-    let handleCropImage = () => {
+    let handleCropImage = (evt) => {
+        // evt.preventDefault();
+
         let canvas = document.getElementById('canvas');
-        canvas.origin
         let ctx = canvas.getContext('2d')
         let sourceImg = document.getElementById('media-view');
-        canvas.width = sourceImg.naturalWidth
-        canvas.height = sourceImg.naturalHeight
-        // ctx.drawImage(sourceImg, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
-        // ctx.drawImage(sourceImg, 0, 0)
-        // ctx.drawImage(sourceImg, 20, 90, 110, 99, 0, 0, 200, 200)
-        ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
-        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasHeight()}`, `${setCanvasWidth()}`, 0, 0, `${setCanvasHeight()}`, `${setCanvasWidth()}`)
-        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, 456, 853)
-        // ctx.drawImage(sourceImg, 0, 0)
-        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`)
-        // console.log(canvas.toDataURI(), "??")
-        sourceImg.crossOrigin = 'anonymous'
-        // console.log(canvas && canvas.toDataURL('image/png'), "??")
-        // updateMediaFile(canvas.toDataURL('image/png'))
         
-        // updateMediaFile(mediaFile && canvas.toDataURL('image/png'))
+        canvas.width = sourceImg.clientWidth
+        canvas.height = sourceImg.clientHeight
+
+        // canvas.width = sourceImg.naturalWidth
+        // canvas.height = sourceImg.naturalHeight
+
+        ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
+
+        sourceImg.crossOrigin = 'anonymous'
+
+        updateMediaFile(mediaFile && canvas.toDataURL('image/png'))
     }
 
     let decideCropShapeTop = () => shapedClicked == 'wide' ? 20 : 0;
@@ -86,11 +83,13 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
     let setCanvasHeight = () => shapedClicked == 'wide' ? 211 : 249;
     // let setCanvasHeight = () => shapedClicked == 'wide' ? 411 : 449;
 
-    // let handleImageZoom = () => {
-    //     let sourceImg = document.getElementById('media-view');
-    //     let currWidth = sourceImg.clientWidth
-    //     setZoomedWidth(currWidth + percentage) + 'px'
-    // }
+    let handleMediaFileChecks = () => {
+        let mediaSrc = mediaFile;
+        if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
+            mediaSrc = URL.createObjectURL(mediaFile)
+        }
+        return mediaSrc;
+    }
 
     return (
         <div id='media-editing-container'>
@@ -104,7 +103,8 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
                         <p id='header-text'>Edit Photo</p>
                     </div>
                     <div id='right-side'>
-                        <button id='save-button' onClick={handleCropImage}>Save</button>
+                        {/* <button id='save-button' onClick={handleCropImage}>Save</button> */}
+                        <Link to='/tweet/compose' id='save-button' onClick={handleCropImage}>Save</Link>
                     </div>
                 </div>
                 <div id='bottom-portion'>
@@ -118,7 +118,8 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
                 {/* <img id='media-view' src='https://picsum.photos/200/300' style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 452}`, minWidth: '100%' }} /> */}
                 {/* <img id='media-view' src='https://picsum.photos/200/300' style={{flex: `0 0 ${zoomedWidth}`}} /> */}
                 {/* <img id='media-view' src='https://picsum.photos/200/300' style={{flex: `0 0 ${zoomedWidth}`}} /> */}
-                <img id='media-view' src={mediaFile && URL.createObjectURL(mediaFile)} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 452}`, minWidth: '100%' }}/>
+                {/* <img id='media-view' src={mediaFile && URL.createObjectURL(mediaFile)} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 452}`, minWidth: '100%' }}/> */}
+                <img id='media-view' src={handleMediaFileChecks()} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 99}`, minWidth: '100%' }} />
                 <div id='overlay-view' style={{ width: sideIsClicked == 'svg-icon-tab' && width + 'px', height: sideIsClicked == 'svg-icon-tab' && height + 'px' }}></div>
             </div>
             {renderBottomComponents()}
@@ -213,27 +214,32 @@ let SliderFiller = ({ value, handleZoom, handleOnMouseUp }) => {
 }
 
 let AltTagComponents = ({ isTextAreaFocused, textAreaValue, handleTextAreaChanges, handleFocused, setIsTextAreaFocused }) => {
+    let [placeholderText, setPlaceholderText] = useState('Description')
+
+    let handleOnFocused = (evt) => {
+        handleFocused();
+        setPlaceholderText('')
+    }
+
     return (
         <div id='bottom-section'>
-            {/* style={{borderColor: isTextAreaFocused ? 'rgb(29, 155, 240)' : ''}} */}
-            {/* className={isTextAreaFocused ? 'highlight-description-div-border' : ''} */}
-            {/* className={classes} */}
-            <div
-                id='description-div'
-                style={{ borderColor: isTextAreaFocused ? 'rgb(29, 155, 240)' : '' }}
-                onClick={() => setIsTextAreaFocused(false)}
-            >
-                <span id='tag-text'>Description</span>
-                <span>0/1,000</span>
-            </div>
             <textarea
                 rows='4'
                 id='description-area'
+                placeholder={placeholderText}
                 value={textAreaValue}
                 onChange={handleTextAreaChanges}
-                onFocus={handleFocused}
-            // onClick={() => setIsTextAreaFocused(!isTextAreaFocused)}
+                onFocus={handleOnFocused}
+                maxLength='11'
+                onBlur={() => setPlaceholderText('Description')}
             />
+            <div
+                id='description-div-corrected'
+                className='div-border-highlight'
+            >
+                <span className='div-headers' id='tag-text'>Description</span>
+                <span style={{ color: 'silver' }}>{textAreaValue.length}/1,000</span>
+            </div>
             <a href='#' target='_blank'>What is alt text?</a>
         </div>
     )
@@ -260,6 +266,81 @@ export default EditTweetMediaContents
 
 
 /**
+ * 
+ * 
+ let handleCropImage = () => {
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext('2d')
+        let sourceImg = document.getElementById('media-view');
+        
+        canvas.width = sourceImg.clientWidth
+        canvas.height = sourceImg.clientHeight
+
+        // canvas.width = sourceImg.naturalWidth
+        // canvas.height = sourceImg.naturalHeight
+
+        ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
+        // ctx.drawImage(sourceImg, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
+        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
+
+        // ctx.drawImage(sourceImg, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
+        // ctx.drawImage(sourceImg, 0, 0)
+        // ctx.drawImage(sourceImg, 20, 90, 110, 99, 0, 0, 200, 200)
+        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
+        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasHeight()}`, `${setCanvasWidth()}`, 0, 0, `${setCanvasHeight()}`, `${setCanvasWidth()}`)
+        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, 456, 853)
+        // ctx.drawImage(sourceImg, 0, 0)
+        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`)
+        // console.log(canvas.toDataURI(), "??")
+        sourceImg.crossOrigin = 'anonymous'
+        // console.log(canvas && canvas.toDataURL('image/png'), "??")
+        // updateMediaFile(canvas.toDataURL('image/png'))
+        // setAdjustedImage(canvas.toDataURL('image/png'))
+        // console.log(adjustedImage)
+
+        updateMediaFile(mediaFile && canvas.toDataURL('image/png'))
+    }
+ * 
+ * 
+     let [showHeader, setShowHeader] = useState(false)
+    let [placeholderText, setPlaceholderText] = useState('Description')
+
+    let handleOnFocused = () => {
+        setShowHeader(true);
+        handleFocused();
+        setPlaceholderText('')
+    }
+
+    let mimicUnfocused = () => {
+        setIsTextAreaFocused(false);
+        setShowHeader(false);
+        setPlaceholderText('Description')
+    }
+ <div id='bottom-section'>
+            {/* style={{borderColor: isTextAreaFocused ? 'rgb(29, 155, 240)' : ''}} *}
+            {/* className={isTextAreaFocused ? 'highlight-description-div-border' : ''} *}
+            {/* className={classes} *}
+            <div
+                id='description-div'
+                style={{ borderColor: isTextAreaFocused ? 'rgb(29, 155, 240)' : '' }}
+                onClick={mimicUnfocused}
+                className='div-border-highlight'
+            >
+                <span className='div-headers' id='tag-text' style={{ visibility: showHeader ? 'visible' : 'hidden' }}>Description</span>
+                <span style={{ color: 'silver' }}>{textAreaValue.length}/1,000</span>
+            </div>
+            <textarea
+                rows='4'
+                id='description-area'
+                placeholder={placeholderText}
+                value={textAreaValue}
+                onChange={handleTextAreaChanges}
+                onFocus={handleOnFocused}
+                maxLength='11'
+            // onClick={() => setIsTextAreaFocused(!isTextAreaFocused)}
+            />
+            <a href='#' target='_blank'>What is alt text?</a>
+        </div>
  *
  *
  let PhotoEditToolsComponent = () => {
