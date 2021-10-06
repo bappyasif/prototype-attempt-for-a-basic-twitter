@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
-function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish }) {
+function TweetModal({ isScheduleIconClicked, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -28,7 +28,7 @@ function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleM
     let [isGifIconClicked, setIsGifIconClicked] = useState(false);
     let [isPollIconClicked, setIsPollIconClicked] = useState(false);
     let [isEmojiIconClicked, setIsEmojiIconClicked] = useState(false);
-    let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(false)
+    // let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(false)
 
 
     // useEffect(() => {
@@ -72,7 +72,8 @@ function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleM
 
     let closeTweetModalHandler = () => {
         // setToggleModality(!toggleModality)
-        handleTweetModalToggle()
+        handleTweetModalToggle();
+        setScheduleStamp('')
 
         // setTweetText('');
         // setExtraTweetText('');
@@ -81,15 +82,17 @@ function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleM
 
     let handlePollIconClicked = () => setIsPollIconClicked(!isPollIconClicked);
 
-    let handleScheduleIconClicked = () => {
-        setIsScheduleIconClicked(!isScheduleIconClicked);
-        if (isPollIconClicked) handlePollIconClicked()
-    }
+    // let handleScheduleIconClicked = () => {
+    //     setIsScheduleIconClicked(!isScheduleIconClicked);
+    //     if (isPollIconClicked) handlePollIconClicked()
+    // }
 
     let handlePublishTweetNow = evt => {
         readyTweetPublish(true);
         // setToggleModality(!toggleModality)
         handleTweetModalToggle()
+        
+        setScheduleStamp('')
 
         closeTweetModalHandler();
         // removeImageHandler()
@@ -115,6 +118,7 @@ function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleM
             </div>
 
             <div id='middle-content'>
+                {scheduleStamp && scheduleStamp}
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />
 
@@ -122,16 +126,35 @@ function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleM
                 </div>
 
                 {/* <p id='line-extension' style={{ visibility: addExtraTweetClicked ? 'visible' : 'hidden'}} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'line-extension-extended' : ''}></p> */}
-                <p id='line-extension' style={{ visibility: addExtraTweetClicked ? 'visible' : 'hidden'}}></p>
+                <p id='line-extension' style={{ visibility: addExtraTweetClicked ? 'visible' : 'hidden' }}></p>
 
-                <p id='line-extension-extended' style={{ visibility: isBothTextareaExist && isPrimaryTweetClicked ? 'visible' : 'hidden'}}></p>
+                <p id='line-extension-extended' style={{ visibility: isBothTextareaExist && isPrimaryTweetClicked ? 'visible' : 'hidden' }}></p>
 
                 {/* <ContentInComposeTweet selectedFile={selectedFile} removeImageHandler={removeImageHandler} isPollIconClicked={isPollIconClicked} handlePollViewToggle={handlePollIconClicked}/> */}
-                <ContentInComposeTweet gifFile={gifFile} removeGifHandler={removeGifFileHandler} selectedFile={selectedFile} removeImageHandler={removeImageHandler} isPollIconClicked={isPollIconClicked} handlePollViewToggle={handlePollIconClicked}/>
+                <ContentInComposeTweet
+                    gifFile={gifFile}
+                    removeGifHandler={removeGifFileHandler}
+                    selectedFile={selectedFile}
+                    removeImageHandler={removeImageHandler}
+                    isPollIconClicked={isPollIconClicked}
+                    handlePollViewToggle={handlePollIconClicked}
+                    inputTextChoice01={inputTextChoice01}
+                    setInputTextChoice01={setInputTextChoice01}
+                    inputTextChoice02={inputTextChoice02}
+                    setInputTextChoice02={setInputTextChoice02}
+                    inputTextChoice03={inputTextChoice03}
+                    setInputTextChoice03={setInputTextChoice03}
+                    inputTextChoice04={inputTextChoice04}
+                    setInputTextChoice04={setInputTextChoice04}
+                />
 
                 {/* {gifFile && <div id='gif-view'><span id='remove-gif' onClick={removeGifFileHandler}>{deleteIconForGif('silver')}</span><Gif gif={gifFile} /></div>} */}
 
-                <TweetScheduler isScheduleIconClicked={isScheduleIconClicked} handleToggle={handleScheduleIconClicked} />
+                {/* <TweetScheduler
+                    isScheduleIconClicked={isScheduleIconClicked}
+                    handleToggle={handleScheduleIconClicked}
+                    setScheduleStamp={setScheduleStamp}
+                /> */}
 
                 <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1' }}>
                     {(addExtraTweetClicked) && <img id='profile-pic' src='https://picsum.photos/200/300' />}
@@ -142,10 +165,11 @@ function TweetModal({selectedFile, setSelectedFile, gifFile, setGifFile, toggleM
                     <TweetPrivacySelected setTweetOptions={setTweetOptions} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy} />
 
                     <div id='tweet-additionals'>
-                        <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} scheduleToggler={handleScheduleIconClicked} />
+                        {/* <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} scheduleToggler={handleScheduleIconClicked} /> */}
+                        <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} />
 
                         {/* <div id='modal-tweet-div'> <div id='extra-tweet-options' style={{ visibility: (extraTweetText) ? 'visible' : (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : (addExtraTweetClicked && tweetText) ? 'hidden' : tweetText ? 'visible' : 'hidden' }}><span className='extra-tweet' onClick={() => setAddExtraTweetClicked(!addExtraTweetClicked)}>+</span> <span className='extra-tweet'>|</span> <span id='radial-progressbar'>{isPrimaryTweetClicked ? <TweetWordCount wordCount={tweetText.length} /> : <TweetWordCount wordCount={extraTweetText.length} />}</span></div> <span id='tweet-now' onClick={handlePublishTweetNow}>tweet</span></div> */}
-                        <div id='modal-tweet-div'> <div id='extra-tweet-options' style={{ visibility: (extraTweetText) ? 'visible' : (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : (addExtraTweetClicked && tweetText) ? 'hidden' : tweetText ? 'visible' : 'hidden' }}><span className='extra-tweet' onClick={() => setAddExtraTweetClicked(!addExtraTweetClicked)}>+</span> <span className='extra-tweet'>|</span> <span id='radial-progressbar'>{isPrimaryTweetClicked ? <TweetWordCount wordCount={tweetText.length} /> : <TweetWordCount wordCount={extraTweetText.length} />}</span></div> <Link to='/user-profile' id='tweet-now' onClick={handlePublishTweetNow}>tweet</Link></div>
+                        <div id='modal-tweet-div'> <div id='extra-tweet-options' style={{ visibility: (extraTweetText) ? 'visible' : (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : (addExtraTweetClicked && tweetText) ? 'hidden' : tweetText ? 'visible' : 'hidden' }}><span className='extra-tweet' onClick={() => setAddExtraTweetClicked(!addExtraTweetClicked)}>+</span> <span className='extra-tweet'>|</span> <span id='radial-progressbar'>{isPrimaryTweetClicked ? <TweetWordCount wordCount={tweetText.length} /> : <TweetWordCount wordCount={extraTweetText.length} />}</span></div> <Link to='/user-profile' id='tweet-now' onClick={handlePublishTweetNow}>{scheduleStamp ? 'Schedule' : 'Tweet'}</Link></div>
                     </div>
 
                     <UploadFile chnageHandler={fileUploadChangeHandler} inputRef={inputRef} />
@@ -173,7 +197,8 @@ let TweetMediaOptions = ({ gifFile, selectedFile, inputRef, setIsGifIconClicked,
         scheduleToggler();
     }
 
-    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{ pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto' }}>{imageIcon()}</div> <div id='gif-icon' style={{ pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto' }} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{ pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto' }} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div> <div id='schedule-icon' onClick={handleScheduleToggler}>{scheduleIcon()}</div></div>
+    // return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{ pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto' }}>{imageIcon()}</div> <div id='gif-icon' style={{ pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto' }} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{ pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto' }} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div> <div id='schedule-icon' onClick={handleScheduleToggler}>{scheduleIcon()}</div></div>
+    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{ pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto' }}>{imageIcon()}</div> <div id='gif-icon' style={{ pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto' }} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{ pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto' }} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div><Link to='/tweet/compose/schedule' id='schedule-icon' >{scheduleIcon()}</Link></div>
 }
 
 
@@ -240,7 +265,7 @@ let TweetTextInput = ({ height, placeholderText, tweetText, setTweetText, setPri
 
     let handleTextareaWhenFocused = (evt) => {
         let focusedTextarea = evt.target.parentNode;
-        if(focusedTextarea) {
+        if (focusedTextarea) {
             if (focusedTextarea.id == 'primary-tweet-view') {
                 setExtraTweetClicked(false)
                 setPrimaryTweetClicked(true)

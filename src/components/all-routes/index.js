@@ -18,6 +18,7 @@ import ProfilePageUpperView from '../user-profile/profile-page';
 import ProfilePageTopNavigationMenuBar from '../user-profile/profile-page/top-menu-navigation';
 import TweetsAndRepliesPage from '../user-profile/tweets-and-replies-page';
 import EditTweetMediaContents from '../edit-tweet-media-contents';
+import TweetScheduler from '../tweet-modal/schedule-tweet';
 
 function AllRoutes({ count, handleCount }) {
     let [tweetData, setTweetData] = useState([]);
@@ -28,12 +29,33 @@ function AllRoutes({ count, handleCount }) {
     let [tweetPublishReady, setTweetPublishReady] = useState(false);
     let [selectedFile, setSelectedFile] = useState();
     let [gifFile, setGifFile] = useState('');
+    let [inputTextChoice01, setInputTextChoice01] = useState('');
+    let [inputTextChoice02, setInputTextChoice02] = useState('');
+    let [inputTextChoice03, setInputTextChoice03] = useState('');
+    let [inputTextChoice04, setInputTextChoice04] = useState('');
+    let [scheduleStamp, setScheduleStamp] = useState('');
+    let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(true)
+
+    // useEffect(() => console.log(scheduleStamp, '?!'), [scheduleStamp])
+
+    let handleScheduleIconClicked = () => {
+        setIsScheduleIconClicked(!isScheduleIconClicked);
+        // if (isPollIconClicked) handlePollIconClicked()
+    }
 
     // let [count, setCount] = useState(0)
 
     // let handleCount = () => setCount(count+1);
 
     // useEffect(() => handleCount, [])
+
+    // let handleTextChangesForChoice01 = value => setInputTextChoice01(value)
+
+    // let handleTextChangesForChoice02 = value => setInputTextChoice02(value)
+
+    // let handleTextChangesForChoice03 = value => setInputTextChoice03(value)
+
+    // let handleTextChangesForChoice04 = value => setInputTextChoice04(value)
 
 
     let handleTweetModalityToggle = () => setToggleModality(!toggleModality);
@@ -71,6 +93,25 @@ function AllRoutes({ count, handleCount }) {
                         setExtraTweetText={setExtraTweetText}
                         setTweetPrivacy={setTweetPrivacy}
                         setTweetPublishReady={setTweetPublishReady}
+                        inputTextChoice01={inputTextChoice01}
+                        setInputTextChoice01={setInputTextChoice01}
+                        inputTextChoice02={inputTextChoice02}
+                        setInputTextChoice02={setInputTextChoice02}
+                        inputTextChoice03={inputTextChoice03}
+                        setInputTextChoice03={setInputTextChoice03}
+                        inputTextChoice04={inputTextChoice04}
+                        setInputTextChoice04={setInputTextChoice04}
+                        scheduleStamp={scheduleStamp}
+                        setScheduleStamp={setScheduleStamp}
+                    />
+                </Route>
+
+                <Route exact path='/tweet/compose/schedule'>
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <TweetScheduler
+                        isScheduleIconClicked={isScheduleIconClicked}
+                        handleToggle={handleScheduleIconClicked}
+                        setScheduleStamp={setScheduleStamp}
                     />
                 </Route>
 
@@ -95,6 +136,14 @@ function AllRoutes({ count, handleCount }) {
                         extraTweetText={extraTweetText}
                         tweetPrivacy={tweetPrivacy}
                         tweetPublishReady={tweetPublishReady}
+                        inputTextChoice01={inputTextChoice01}
+                        setInputTextChoice01={setInputTextChoice01}
+                        inputTextChoice02={inputTextChoice02}
+                        setInputTextChoice02={setInputTextChoice02}
+                        inputTextChoice03={inputTextChoice03}
+                        setInputTextChoice03={setInputTextChoice03}
+                        inputTextChoice04={inputTextChoice04}
+                        setInputTextChoice04={setInputTextChoice04}
                     />
                     {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} /> */}
                 </Route>

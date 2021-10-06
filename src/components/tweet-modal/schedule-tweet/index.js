@@ -1,25 +1,38 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
+import { useHistory } from 'react-router';
 import { deleteIcon, scheduleIcon, selectIcon } from '../svg-resources'
 
-function TweetScheduler({ isScheduleIconClicked, handleToggle }) {
+function TweetScheduler({ isScheduleIconClicked, handleToggle, setScheduleStamp }) {
     let [month, setMonth] = useState('January');
     let [day, setDay] = useState(1);
     let [year, setYear] = useState(2021);
     let [hour, setHour] = useState(11)
     let [minute, setMinute] = useState(22)
     let [amPm, setAmPm] = useState('AM')
+    let history = useHistory()
     // style={{display: isIconClicked ? 'block' : 'none'}}
-    
+
     // getFormattedDateString(month, day, year, hour, minute);
     // console.log(isScheduleIconClicked)
 
+    let handleConfirm = () => {
+        // setScheduleStamp(getFormattedDateString(month, day, year, hour, minute))
+        // history.push('/tweet/compose');
+        setScheduleStamp(<div id='annnounce-schedule'>
+            <span id='schedule-svg'>{scheduleIcon('silver')}</span> <span id='annonunce-text'>{getFormattedDateString(month, day, year, hour, minute)}</span>
+        </div>)
+        history.push('/tweet/compose');
+        
+        // console.log('clicked!!', getFormattedDateString(month, day, year, hour, minute))
+    }
+
     return (
-        <div id='tweet-scheduler-container' style={{display: isScheduleIconClicked ? 'block' : 'none'}}>
+        <div id='tweet-scheduler-container' style={{ display: isScheduleIconClicked ? 'block' : 'none' }}>
             <div id='top-section'>
                 <div className='left-side'><span id='delete-icon' onClick={handleToggle}>{deleteIcon()}</span> <span className='header-text'>Schedule</span></div>
                 <div className='right-side'>
-                    <input type='button' value='Confirm' />
+                    <input type='button' value='Confirm' onClick={handleConfirm} />
                 </div>
             </div>
             <hr />
@@ -42,7 +55,7 @@ function TweetScheduler({ isScheduleIconClicked, handleToggle }) {
     )
 }
 
-let DateSelection = ({month, setMonth, day, setDay, year, setYear}) => {
+let DateSelection = ({ month, setMonth, day, setDay, year, setYear }) => {
     // let [month, setMonth] = useState('January');
 
     let years = [2020, 2021, 2022, 2023]
@@ -82,7 +95,7 @@ let DateSelection = ({month, setMonth, day, setDay, year, setYear}) => {
     )
 }
 
-let TimeSelection = ({hour, setHour, minute, setMinute, amPm, setAmPm}) => {
+let TimeSelection = ({ hour, setHour, minute, setMinute, amPm, setAmPm }) => {
     // let [hour, setHour] = useState()
     // let [minute, setMinute] = useState()
     // let [amPm, setAmPm] = useState()

@@ -82,6 +82,14 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
                 <div className='tweet-text-on-profile'>{item.tweetText}</div>
                 <div className='tweet-media-on-profile' style={{display: item.tweetMedia ? 'block' : 'none'}}>{item.tweetMedia}</div>
                 <div className='tweet-gif-on-profile' style={{display: item.tweetGif ? 'block' : 'none'}}>{item.tweetGif}</div>
+                <div className='tweet-poll-on-profile'>{renderPolls(item)}</div>
+                {/* <div className='tweet-poll-on-profile'>{item.tweetPoll.map(choice => <p key={choice['choice01']}>{renderPolls(choice)}</p>)}</div> */}
+                {/* <div className='tweet-poll-on-profile'>{item.tweetPoll.map(choice => <p key={choice['choice01']}>{choice['choice01']}</p>)}</div> */}
+                {/* {item.tweetPoll.map(choice => console.log(choice, "<><>"))} */}
+                {/* {<div className='tweet-poll-on-profile'>{item.tweetPoll.map(choice => <p key={choice}>{choice}</p>)}</div>} */}
+                {/* {console.log(typeof item.tweetPoll, item.tweetPoll.map(choice => <p key={choice}>{choice}</p>))} */}
+                {/* <div className='tweet-poll-on-profile'>{[item.tweetPoll].map(choice => <p key={choice}>{choice}</p>)}</div> */}
+                {/* <div className='tweet-poll-on-profile'>{item.tweetPoll.map(choice => <p key={choice}>{choice}</p>)}</div> */}
                 {/* <div className='tweet-media-on-profile'>{item.tweetMedia ? item.tweetMedia : ''}</div> */}
                 <div className='tweet-privacy-on-profile'>{item.tweetPrivacy}</div>
 
@@ -102,10 +110,19 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
             </div>
         </div>
 
+        let renderPolls = item => {
+            return item.tweetPoll.map(choice => {
+                return Object.values(choice).map(value => value ? <div key={value} className='poll-info'><div className='left-view'><span className='poll-progress' style={{minWidth: '500%'}}>[]</span><p>{value}</p></div><span className='poll-percentage'>50%</span></div> : null)
+                // for(let key in choice) {
+                //     <p key={choice[key]}>{choice[key]}</p>
+                // }
+            })
+        }
+
     let renderingData = tweetData.map((item) =>
     (<div key={item.tweetText} id='tweet-container'>
         {/* {whenNoExtraTweet(item)} */}
-        {(item.tweetText || item.extraTweetText || item.tweetMedia  || item.tweetGif) ? whenNoExtraTweet(item) : null}
+        {(item.tweetText || item.extraTweetText || item.tweetMedia  || item.tweetGif ) ? whenNoExtraTweet(item) : null}
         {/* {item.tweetText || item.extraTweetText || item.tweetMedia  || item.tweetGif && whenNoExtraTweet(item)} */}
         {/* {console.log(item)} */}
         <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>

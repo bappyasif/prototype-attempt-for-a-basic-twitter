@@ -6,7 +6,7 @@ import TweetPoll from '../../tweet-modal/tweet-poll'
 
 
 
-function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, removeGifHandler, isPollIconClicked, handlePollViewToggle }) {
+function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, removeGifHandler, isPollIconClicked, handlePollViewToggle, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
     let handleMediaFileChecks = () => {
         let mediaSrc = selectedFile;
         if (selectedFile instanceof File || selectedFile instanceof Blob || selectedFile instanceof MediaSource) {
@@ -20,7 +20,7 @@ function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, remo
         {/* {selectedFile ? <img src={URL.createObjectURL(selectedFile)} /> : <Gif gif={gifFile} />} */}
         {selectedFile ? <img src={handleMediaFileChecks()} /> : <Gif gif={gifFile} />}
         <div id='picture-info'>
-            <Link id='tag-div' to='/tweet/compose/media'><span className='picture-svgs'>{selectedFile ? tagIcon() : giphyIcon()}</span><span id='tag-people'>{selectedFile ? 'Tag people' : <span id='gif-via'>via <span id='giphy-text' style={{color: 'black', fontSize: '1.1em', fontWeight: '800'}}>GIPHY</span></span>}</span></Link>
+            <Link id='tag-div' to='/tweet/compose/media'><span className='picture-svgs'>{selectedFile ? tagIcon() : giphyIcon()}</span><span id='tag-people'>{selectedFile ? 'Tag people' : <span id='gif-via'>via <span id='giphy-text' style={{ color: 'black', fontSize: '1.1em', fontWeight: '800' }}>GIPHY</span></span>}</span></Link>
             <Link id='description-div' to='/tweet/compose/media'><span className='picture-svgs'>{descriptionIcon()}</span><span id='picture-description'>Description</span></Link>
         </div>
     </div>
@@ -35,7 +35,18 @@ function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, remo
             </div>
             :
             <div id='tweet-compose-container' style={{ marginTop: !selectedFile ? '-20px' : "-44px" }}>
-                <TweetPoll isPollIconClicked={isPollIconClicked} handleToggle={handlePollViewToggle} />
+                <TweetPoll
+                    isPollIconClicked={isPollIconClicked}
+                    handleToggle={handlePollViewToggle}
+                    inputTextChoice01={inputTextChoice01}
+                    setInputTextChoice01={setInputTextChoice01}
+                    inputTextChoice02={inputTextChoice02}
+                    setInputTextChoice02={setInputTextChoice02}
+                    inputTextChoice03={inputTextChoice03}
+                    setInputTextChoice03={setInputTextChoice03}
+                    inputTextChoice04={inputTextChoice04}
+                    setInputTextChoice04={setInputTextChoice04}
+                />
             </div>
     )
 }

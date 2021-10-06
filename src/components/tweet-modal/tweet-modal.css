@@ -11,7 +11,7 @@
   left: 324px;
   top: 40px; */
   width: 560px;
-  min-height: 240px;
+  min-height: 258px;
   border-radius: 11px;
   /* background-color: whitesmoke; */
 }
@@ -39,6 +39,10 @@
 #middle-content {
   /* width: 551px; */
   width: 546px;
+}
+
+#middle-content #annnounce-schedule {
+  margin-left: 78px;
 }
 
 #profile-pic {
@@ -73,7 +77,8 @@
 }
 
 #footer-section {
-  position: absolute;
+  /* position: absolute; */
+  width: 100%;
 }
 
 #options-selected {
@@ -147,6 +152,7 @@
   align-items: center;
   margin-left: 11px;
   margin-top: -20px;
+  padding-right: 20px;
 }
 
 /* #tweet-medias {
@@ -561,8 +567,10 @@
 #tweet-scheduler-container {
   width: 560px;
   position: absolute;
-  top: 0px;
-  left: 0px;
+  /* top: 0px;
+  left: 0px; */
+  top: 40px;
+  left: 321px;
   background-color: whitesmoke;
   z-index: 999999;
   border-radius: 11px;

@@ -13,7 +13,7 @@
 }
 
 /* #profile-page-container  */
-#tweet-container, 
+#tweet-container,
 #extra-tweet-portion-container,
 #without-extra-tweet-container {
   display: flex;
@@ -61,12 +61,13 @@
 
 #tweet-container #show-connecting-line {
   border-left: 2px solid silver;
-    position: absolute;
-    height: 69px;
-    transform: translate(-543px, -9px);
+  position: absolute;
+  height: 69px;
+  transform: translate(-543px, -9px);
 }
 
-#extra-tweet-portion-container, #without-extra-tweet-container {
+#extra-tweet-portion-container,
+#without-extra-tweet-container {
   border: none;
 }
 
@@ -216,7 +217,8 @@
   left: 0%;
 }
 
-#tweet-container .tweet-media-on-profile, #tweet-container .tweet-gif-on-profile {
+#tweet-container .tweet-media-on-profile,
+#tweet-container .tweet-gif-on-profile {
   height: 323px;
   width: 96%;
 }
@@ -225,12 +227,38 @@
   width: 100%;
 }
 
-.tweet-media-on-profile img, .tweet-gif-on-profile .style-gif-border-radius picture img {
+.tweet-media-on-profile img,
+.tweet-gif-on-profile .style-gif-border-radius picture img {
   border-radius: 11px;
 }
 
-.tweet-gif-on-profile .style-gif-border-radius {}
+.tweet-gif-on-profile .style-gif-border-radius {
+}
 
 #extra-tweet-portion-container .left-portion #profile-pic {
   transform: translate(8px, -38px);
+}
+
+#tweet-container .tweet-poll-on-profile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#tweet-container .tweet-poll-on-profile .poll-info, #tweet-container .tweet-poll-on-profile .poll-info .left-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#tweet-container .tweet-poll-on-profile .poll-info {
+  padding: 0px 11px 0px 0px;
+  height: 2em;
+}
+
+#tweet-container .tweet-poll-on-profile .poll-info .poll-progress {
+  min-width: 4px;
+  background-color: silver;
+  margin-right: 4px;
+  line-height: 2em;
 }
