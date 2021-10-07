@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
-function TweetModal({ isScheduleIconClicked, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp }) {
+function TweetModal({ isScheduleIconClicked, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -91,7 +91,7 @@ function TweetModal({ isScheduleIconClicked, selectedFile, setSelectedFile, gifF
         readyTweetPublish(true);
         // setToggleModality(!toggleModality)
         handleTweetModalToggle()
-        
+
         setScheduleStamp('')
 
         closeTweetModalHandler();
@@ -146,6 +146,8 @@ function TweetModal({ isScheduleIconClicked, selectedFile, setSelectedFile, gifF
                     setInputTextChoice03={setInputTextChoice03}
                     inputTextChoice04={inputTextChoice04}
                     setInputTextChoice04={setInputTextChoice04}
+                    mediaDescriptionText={mediaDescriptionText}
+                    setMediaDescriptionText={setMediaDescriptionText}
                 />
 
                 {/* {gifFile && <div id='gif-view'><span id='remove-gif' onClick={removeGifFileHandler}>{deleteIconForGif('silver')}</span><Gif gif={gifFile} /></div>} */}
@@ -292,6 +294,7 @@ let GridDemo = ({ onGifClick, isGifIconClicked }) => {
     const fetchGifs = (offset) =>
         giphyFetch.trending({ offset, limit: 10 });
     const [width, setWidth] = useState(window.innerWidth);
+    // const [width, setWidth] = useState('470px');
     return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon'>{deleteIcon()}</span><input id='gif-search' /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} /></div>
 }
 

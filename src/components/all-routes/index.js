@@ -35,6 +35,7 @@ function AllRoutes({ count, handleCount }) {
     let [inputTextChoice04, setInputTextChoice04] = useState('');
     let [scheduleStamp, setScheduleStamp] = useState('');
     let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(true)
+    let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
 
     // useEffect(() => console.log(scheduleStamp, '?!'), [scheduleStamp])
 
@@ -103,6 +104,8 @@ function AllRoutes({ count, handleCount }) {
                         setInputTextChoice04={setInputTextChoice04}
                         scheduleStamp={scheduleStamp}
                         setScheduleStamp={setScheduleStamp}
+                        mediaDescriptionText={mediaFileDescriptionText}
+                        setMediaDescriptionText={setMediaFileDescriptionText}
                     />
                 </Route>
 
@@ -117,7 +120,13 @@ function AllRoutes({ count, handleCount }) {
 
                 <Route exact path='/tweet/compose/media'>
                     <LeftSideNavigationPanel />
-                    <EditTweetMediaContents mediaFile={selectedFile} updateMediaFile={setSelectedFile} />
+                    <EditTweetMediaContents
+                        mediaFile={selectedFile}
+                        updateMediaFile={setSelectedFile}
+                        gifFile={gifFile}
+                        mediaDescriptionText={mediaFileDescriptionText}
+                        setMediaDescriptionText={setMediaFileDescriptionText}
+                    />
                 </Route>
 
                 <Route exact path='/user-profile'>

@@ -11,7 +11,7 @@
   left: 324px;
   top: 40px; */
   width: 560px;
-  min-height: 258px;
+  /* min-height: 258px; */
   border-radius: 11px;
   /* background-color: whitesmoke; */
 }
@@ -229,16 +229,21 @@
 #line-extension-extended
 {
   position: absolute;
-  height: 51.02px;
+  height: 42.02px;
   width: 2px;
-  left: 7.2%;
+  left: 40.2px;
   background-color: silver;
-  top: 31.4%;
+  /* top: 126px; */
   transform: translate(7px, -4px);
+}
+
+#line-extension {
+  top: 76px;
 }
 
 #line-extension-extended {
   min-height: 206.6px;
+  top: 126px;
     /* position: absolute;
     width: 2px;
     left: 7.2%;
@@ -270,7 +275,7 @@
   /* display: flex; */
   /* justify-content: space-between; */
   /* align-items: center; */
-  /* height: 290px; */
+  height: 290px;
   /* margin-right: 40%; */
   border-radius: 11px;
   margin-bottom: 4px;

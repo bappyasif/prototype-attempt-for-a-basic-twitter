@@ -6,7 +6,7 @@ import TweetPoll from '../../tweet-modal/tweet-poll'
 
 
 
-function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, removeGifHandler, isPollIconClicked, handlePollViewToggle, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
+function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, removeGifHandler, isPollIconClicked, handlePollViewToggle, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, mediaDescriptionText, setMediaDescriptionText }) {
     let handleMediaFileChecks = () => {
         let mediaSrc = selectedFile;
         if (selectedFile instanceof File || selectedFile instanceof Blob || selectedFile instanceof MediaSource) {
@@ -18,10 +18,10 @@ function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, remo
     let tweetComposeMediaView = () => <div id='image-view'>
         <span id='remove-image' onClick={selectedFile ? removeImageHandler : removeGifHandler}>{deleteIcon('silver')}</span>
         {/* {selectedFile ? <img src={URL.createObjectURL(selectedFile)} /> : <Gif gif={gifFile} />} */}
-        {selectedFile ? <img src={handleMediaFileChecks()} /> : <Gif gif={gifFile} />}
+        {selectedFile ? <img width='461px' src={handleMediaFileChecks()} /> : <Gif width={461} height={290} gif={gifFile} />}
         <div id='picture-info'>
             <Link id='tag-div' to='/tweet/compose/media'><span className='picture-svgs'>{selectedFile ? tagIcon() : giphyIcon()}</span><span id='tag-people'>{selectedFile ? 'Tag people' : <span id='gif-via'>via <span id='giphy-text' style={{ color: 'black', fontSize: '1.1em', fontWeight: '800' }}>GIPHY</span></span>}</span></Link>
-            <Link id='description-div' to='/tweet/compose/media'><span className='picture-svgs'>{descriptionIcon()}</span><span id='picture-description'>Description</span></Link>
+            <Link id='description-div' to='/tweet/compose/media'><span className='picture-svgs'>{descriptionIcon()}</span><span id='picture-description'>{mediaDescriptionText}</span></Link>
         </div>
     </div>
     return (

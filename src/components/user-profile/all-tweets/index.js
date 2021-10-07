@@ -8,63 +8,66 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
     // let [count, setCount] = useState(1)
 
     let findWhichIconId = evt => {
-        let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.id
+        // let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.id
+        let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
         return whichIcon
     }
 
     let mouseHoveredIn = (evt) => {
-        // console.log(evt.target.parentNode, 'in')
-        // console.log(idx, id)
         let findwhich = findWhichIconId(evt);
-        findwhich = findwhich ? findwhich : -1
-        if (findwhich != -1) setHoveredID(findwhich)
+        console.log(findwhich)
+        setHoveredID(findwhich)
+        // findwhich = findwhich ? findwhich : -1
+        // if (findwhich != -1) setHoveredID(findwhich)
+        // if(hoveredID == findwhich) setHoveredID(findwhich)
+        // else setHoveredID(findwhich)
     }
 
     let mouseHoveredOut = (evt) => {
-        // console.log(evt.target.parentNode, 'out')
-        // console.log(idx, id)
-        let findwhich = findWhichIconId(evt);
-        findwhich = findwhich ? findwhich : -1
-        if (findwhich != -1) setHoveredID('')
+        setHoveredID('')
     }
 
-    tweetData = tweetData.reverse();
-    // tweetData = tweetData.filter(data => Object.values(data) != null).reverse();
-    // tweetData = tweetData.filter(data => {
-    //     console.log((Object.values(data)).length, Object.values(data))
-    //     return Object.values(data) != null && data.tweetPrivacy
-        
-    // }).reverse();
-    // tweetData = tweetData.filter(data => (data.tweetText || data.extraTweetText ) && (data.tweetMedia  || data.tweetGif )).reverse();
+    // tweetData = tweetData.reverse();
+    // tweetData = [...tweetData].reverse();
+    // let reversedTweetData = [...tweetData].reverse();
 
-    // tweetData = tweetData.filter(data => (data.tweetPrivacy && data.tweetText!=''|| data.extraTweetText!='' || data.tweetMedia!=null  || data.tweetGif!=null)).reverse();
+    let renderAdditionalTweetIcons = (item, extra) => {
+        return <div className='additionals-icons'>
+            {tweetAdditionalIconsArray.map((elem) => <div
+                key={elem.id}
 
-    // tweetData = tweetData.filter(data => (data.tweetMedia!=''  && data.tweetGif!='' && data.tweetText!='' && data.extraTweetText!='')).reverse();
+                id={extra ? elem.id + `${item.count}extra` : elem.id + `${item.count}tweet`}
+                className='hover-div'
 
-    // tweetData = tweetData.filter(data => (data.tweetText!=''|| data.extraTweetText!='' || data.tweetMedia!=null  || data.tweetGif!=null)).reverse();
-
-    // useEffect(() => handleCount(), [count])
+                onMouseOver={mouseHoveredIn}
+                onMouseOut={mouseHoveredOut}
+            >
+                <span>{elem.icon}</span> <span style={{ display: extra && hoveredID == elem.id + item.count + 'extra' ? 'flex' : hoveredID == elem.id + item.count + 'tweet' ? 'flex' : 'none' }} className='tooltips-text'>{elem.id}</span>
+            </div>)}
+        </div>
+    }
 
     let whenExtraTweetExists = (item) =>
         <div id='extra-tweet-portion-container'>
-            {/* {console.log('here??')} */}
             <div className='left-portion'>
                 <img id='profile-pic' src='https://picsum.photos/200/300' />
             </div>
             <div className='right-portion'>
                 <div className='profile-details-on-tweet'><div className='user-info'>User Name Goes Here <span>@profile handle goes here</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div></div>
                 <div className='tweet-text-on-profile'>{item.extraTweet}</div>
+
+                {/* {renderAdditionalTweetIcons(item, 'extra')} */}
                 <div className='additionals-icons'>
                     {tweetAdditionalIconsArray.map((elem) =>
                         <div
                             key={elem.id}
                             id={elem.id + `${item.count}extra`}
                             className='hover-div'
-                            onMouseOver={(evt) => mouseHoveredIn(evt)}
-                            onMouseOut={(evt) => mouseHoveredOut(evt)}
+                            onMouseOver={mouseHoveredIn}
+                            onMouseOut={mouseHoveredOut}
                         >
                             {/* {console.log(item.count, item)} */}
-                            <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + item.count+'extra' ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span>
+                            <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + item.count + 'extra' ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span>
                         </div>
                     )}
                 </div>
@@ -73,68 +76,38 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
 
     let whenNoExtraTweet = (item) =>
         <div id='without-extra-tweet-container'>
-            {/* {console.log('here!!')} */}
             <div className='left-portion'>
                 <img id='profile-pic' src='https://picsum.photos/200/300' />
             </div>
             <div className='right-portion'>
                 <div className='profile-details-on-tweet'><div className='user-info'>User Name Goes Here <span>@profile handle goes here</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div></div>
                 <div className='tweet-text-on-profile'>{item.tweetText}</div>
-                <div className='tweet-media-on-profile' style={{display: item.tweetMedia ? 'block' : 'none'}}>{item.tweetMedia}</div>
-                <div className='tweet-gif-on-profile' style={{display: item.tweetGif ? 'block' : 'none'}}>{item.tweetGif}</div>
+                <div className='tweet-media-on-profile' style={{ display: item.tweetMedia ? 'block' : 'none' }}>{item.tweetMedia}</div>
+                <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{item.tweetGif}</div>
                 <div className='tweet-poll-on-profile'>{renderPolls(item)}</div>
-                {/* <div className='tweet-poll-on-profile'>{item.tweetPoll.map(choice => <p key={choice['choice01']}>{renderPolls(choice)}</p>)}</div> */}
-                {/* <div className='tweet-poll-on-profile'>{item.tweetPoll.map(choice => <p key={choice['choice01']}>{choice['choice01']}</p>)}</div> */}
-                {/* {item.tweetPoll.map(choice => console.log(choice, "<><>"))} */}
-                {/* {<div className='tweet-poll-on-profile'>{item.tweetPoll.map(choice => <p key={choice}>{choice}</p>)}</div>} */}
-                {/* {console.log(typeof item.tweetPoll, item.tweetPoll.map(choice => <p key={choice}>{choice}</p>))} */}
-                {/* <div className='tweet-poll-on-profile'>{[item.tweetPoll].map(choice => <p key={choice}>{choice}</p>)}</div> */}
-                {/* <div className='tweet-poll-on-profile'>{item.tweetPoll.map(choice => <p key={choice}>{choice}</p>)}</div> */}
-                {/* <div className='tweet-media-on-profile'>{item.tweetMedia ? item.tweetMedia : ''}</div> */}
                 <div className='tweet-privacy-on-profile'>{item.tweetPrivacy}</div>
 
-                <div className='additionals-icons'>
-                    {tweetAdditionalIconsArray.map((elem) => <div
-                        key={elem.id}
-                        // id={elem.id}
-                        id={elem.id + `${item.count}tweet`}
-                        className='hover-div'
-                        onMouseOver={(evt) => mouseHoveredIn(evt)}
-                        onMouseOut={(evt) => mouseHoveredOut(evt)}
-                    >
-                        {/* {console.log(item)} */}
-                        {/* <span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span> */}
-                        <span>{elem.icon}</span> <span style={{ display: hoveredID == elem.id + item.count+'tweet' ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span>
-                    </div>)}
-                </div>
+                {renderAdditionalTweetIcons(item)}
             </div>
         </div>
 
-        let renderPolls = item => {
-            return item.tweetPoll.map(choice => {
-                return Object.values(choice).map(value => value ? <div key={value} className='poll-info'><div className='left-view'><span className='poll-progress' style={{minWidth: '500%'}}>[]</span><p>{value}</p></div><span className='poll-percentage'>50%</span></div> : null)
-                // for(let key in choice) {
-                //     <p key={choice[key]}>{choice[key]}</p>
-                // }
-            })
-        }
+    let renderPolls = item => {
+        return item.tweetPoll.map(choice => {
+            return Object.values(choice).map(value => value ? <div key={value} className='poll-info'><div className='left-view'><span className='poll-progress' style={{ minWidth: '500%' }}>[]</span><p>{value}</p></div><span className='poll-percentage'>50%</span></div> : null)
+        })
+    }
 
-    let renderingData = tweetData.map((item) =>
-    (<div key={item.tweetText} id='tweet-container'>
-        {/* {whenNoExtraTweet(item)} */}
-        {(item.tweetText || item.extraTweetText || item.tweetMedia  || item.tweetGif ) ? whenNoExtraTweet(item) : null}
-        {/* {item.tweetText || item.extraTweetText || item.tweetMedia  || item.tweetGif && whenNoExtraTweet(item)} */}
-        {/* {console.log(item)} */}
+    let renderingData = tweetData && tweetData.map((item) =>
+    (<div key={item.tweetText} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
+
+        {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText ) ? whenNoExtraTweet(item) : null}
+
         <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>
+
         {item.extraTweet ? whenExtraTweetExists(item) : ''}
 
     </div>))
 
-    // let showMediasOnTweet = () => <div className='tweet-media-on-profile' style={{display: (item.tweetMedia || item.tweetGif) ? 'block' : 'none'}}>
-    //     <div id='remove-element'></div>
-    //     <div id='media-content'>{item.tweetMedia ? item.tweetMedia : item.tweetGif}</div>
-    //     <div></div>
-    // </div>
     return <div id='all-tweets-container'>{renderingData}</div>
 }
 

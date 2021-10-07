@@ -1,11 +1,12 @@
+import { Gif } from '@giphy/react-components';
 import React, { useEffect, useState } from 'react'
 import { Redirect, Route } from 'react-router';
 import { Link } from 'react-router-dom';
 import { backIcon } from '../user-profile/profile-page/svg-resources'
 import './styles.css'
 
-function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
-    let [textAreaValue, setTextAreaValue] = useState('');
+function EditTweetMediaContents({ mediaFile, updateMediaFile, gifFile, mediaDescriptionText, setMediaDescriptionText }) {
+    // let [textAreaValue, setTextAreaValue] = useState('');
     let [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
     let [sideIsClicked, setSideIsClicked] = useState('');
     let [height, setHeight] = useState(251);
@@ -15,7 +16,8 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
     let [zoomedWidth, setZoomedWidth] = useState('')
     let [adjustedImage, setAdjustedImage] = useState('');
 
-    let handleTextAreaChanges = evt => setTextAreaValue(evt.target.value);
+    // let handleTextAreaChanges = evt => setTextAreaValue(evt.target.value);
+    let handleTextAreaChanges = evt => setMediaDescriptionText(evt.target.value);
     // let handleFocused = () => setIsTextAreaFocused(!isTextAreaFocused)
     let handleFocused = () => setIsTextAreaFocused(true)
 
@@ -37,11 +39,14 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
             />
         } else if (sideIsClicked == 'alt-div-tab') {
             elements = <AltTagComponents
-                textAreaValue={textAreaValue}
+                // textAreaValue={textAreaValue}
+                textAreaValue={mediaDescriptionText}
                 isTextAreaFocused={isTextAreaFocused}
                 setIsTextAreaFocused={setIsTextAreaFocused}
                 handleFocused={handleFocused}
                 handleTextAreaChanges={handleTextAreaChanges}
+                mediaDescriptionText={mediaDescriptionText}
+                setMediaDescriptionText={setMediaDescriptionText}
             />
         }
         return elements
@@ -57,15 +62,19 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
     let handleCropImage = (evt) => {
         // evt.preventDefault();
 
-        let canvas = document.getElementById('canvas');
+        // let canvas = document.getElementById('canvas');
+        let canvas = document.createElement('canvas');
         let ctx = canvas.getContext('2d')
         let sourceImg = document.getElementById('media-view');
-        
-        canvas.width = sourceImg.clientWidth
-        canvas.height = sourceImg.clientHeight
+
+        // canvas.width = sourceImg.clientWidth
+        // canvas.height = sourceImg.clientHeight
 
         // canvas.width = sourceImg.naturalWidth
         // canvas.height = sourceImg.naturalHeight
+
+        // canvas.width = '461'
+        // canvas.height = '290'
 
         ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
 
@@ -78,7 +87,7 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
 
     let decideCropShapeLeft = () => shapedClicked == 'squared' ? 20 : 0;
 
-    let setCanvasWidth = () => shapedClicked == 'squared' ? 411 : 456;
+    let setCanvasWidth = () => shapedClicked == 'squared' ? 411 : 461;
 
     let setCanvasHeight = () => shapedClicked == 'wide' ? 211 : 249;
     // let setCanvasHeight = () => shapedClicked == 'wide' ? 411 : 449;
@@ -88,7 +97,17 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
         if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
             mediaSrc = URL.createObjectURL(mediaFile)
         }
+        // if(gifFile) return gifFile
+        // else return mediaSrc;
         return mediaSrc;
+    }
+
+    let renderWhichMediafile = () => {
+        if (mediaFile) {
+            return <img id='media-view' src={handleMediaFileChecks()} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 99}`, minWidth: '100%' }} />
+        } else {
+            return <Gif gif={gifFile} width={449} height={290} borderRadius={20} />
+        }
     }
 
     return (
@@ -107,23 +126,38 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile }) {
                         <Link to='/tweet/compose' id='save-button' onClick={handleCropImage}>Save</Link>
                     </div>
                 </div>
-                <div id='bottom-portion'>
+                <div id='bottom-portion' style={{ display: gifFile ? 'none' : 'flex' }}>
                     <div id='svg-icon-tab' onClick={handleClick}>{cropIcon()}</div>
                     <div id='alt-div-tab' onClick={handleClick}>ALT</div>
                 </div>
             </div>
-            <div id='middle-section'>
+            <div id='middle-section' style={{ overflow: gifFile ? 'hidden' : 'auto' }}>
                 {/* <canvas id='canvas'></canvas> */}
                 {/* <img id='media-view' src='https://picsum.photos/200/300' /> */}
                 {/* <img id='media-view' src='https://picsum.photos/200/300' style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 452}`, minWidth: '100%' }} /> */}
                 {/* <img id='media-view' src='https://picsum.photos/200/300' style={{flex: `0 0 ${zoomedWidth}`}} /> */}
                 {/* <img id='media-view' src='https://picsum.photos/200/300' style={{flex: `0 0 ${zoomedWidth}`}} /> */}
                 {/* <img id='media-view' src={mediaFile && URL.createObjectURL(mediaFile)} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 452}`, minWidth: '100%' }}/> */}
-                <img id='media-view' src={handleMediaFileChecks()} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 99}`, minWidth: '100%' }} />
+                {/* <img id='media-view' src={handleMediaFileChecks()} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 99}`, minWidth: '100%' }} /> */}
+                {renderWhichMediafile()}
                 <div id='overlay-view' style={{ width: sideIsClicked == 'svg-icon-tab' && width + 'px', height: sideIsClicked == 'svg-icon-tab' && height + 'px' }}></div>
             </div>
+
             {renderBottomComponents()}
-            <canvas id='canvas'></canvas>
+            {
+                gifFile
+                &&
+                <AltTagComponents
+                    textAreaValue={textAreaValue}
+                    isTextAreaFocused={isTextAreaFocused}
+                    setIsTextAreaFocused={setIsTextAreaFocused}
+                    handleFocused={handleFocused}
+                    handleTextAreaChanges={handleTextAreaChanges}
+                    mediaDescriptionText={mediaDescriptionText}
+                    setMediaDescriptionText={setMediaDescriptionText}
+                />
+            }
+            {/* <canvas id='canvas'></canvas> */}
         </div>
     )
 }
@@ -266,13 +300,13 @@ export default EditTweetMediaContents
 
 
 /**
- * 
- * 
+ *
+ *
  let handleCropImage = () => {
         let canvas = document.getElementById('canvas');
         let ctx = canvas.getContext('2d')
         let sourceImg = document.getElementById('media-view');
-        
+
         canvas.width = sourceImg.clientWidth
         canvas.height = sourceImg.clientHeight
 
@@ -300,8 +334,8 @@ export default EditTweetMediaContents
 
         updateMediaFile(mediaFile && canvas.toDataURL('image/png'))
     }
- * 
- * 
+ *
+ *
      let [showHeader, setShowHeader] = useState(false)
     let [placeholderText, setPlaceholderText] = useState('Description')
 

@@ -8,7 +8,11 @@ function UserProfile({ count, handleCount, selectedFile, setSelectedFile, gifFil
     useEffect(() => handleCount, [count])
 
     useEffect(() => {
-        setTweetData([...tweetData, { tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }])
+        setTweetData([{ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
+        // setTweetData([...tweetData].shift({ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }))
+        // setTweetData([tweetData].shift({ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }))
+        // setTweetData([...tweetData, { tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }])
+        // setTweetData([tweetData].shift({ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }))
         // handleCount();
         setSelectedFile('');
         setGifFile('');
@@ -25,8 +29,19 @@ function UserProfile({ count, handleCount, selectedFile, setSelectedFile, gifFil
     // let showImg = (imgRR) => <img src={imgRR} />
     let showImg = (imgRR) => {
         // console.log(imgRR, "?!")
-        return imgRR && <img src={URL.createObjectURL(imgRR)} />
+        // return imgRR && <img src={URL.createObjectURL(imgRR)} />
         // return <img src={URL.createObjectURL(selectedFile)} />
+        return imgRR && <img src={handleMediaFileChecks(imgRR)} />
+    }
+
+    let handleMediaFileChecks = (mediaFile) => {
+        let mediaSrc = mediaFile;
+        if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
+            mediaSrc = URL.createObjectURL(mediaFile)
+        }
+        // if(gifFile) return gifFile
+        // else return mediaSrc;
+        return mediaSrc;
     }
 
     let getPrivacySelectedElement = whichOption => {
@@ -43,7 +58,13 @@ function UserProfile({ count, handleCount, selectedFile, setSelectedFile, gifFil
 
     return (
         <div id='user-profile-page-container'>
-            {tweetData && <AllTweetsPage
+             {tweetData && <AllTweetsPage
+                // tweetData={[...tweetData].reverse()}
+                tweetData={tweetData}
+                handleCount={handleCount}
+            />
+            }
+            {/* {tweetData && <AllTweetsPage
                 tweetData={tweetData}
                 handleCount={handleCount}
                 // inputTextChoice01={inputTextChoice01}
@@ -55,7 +76,7 @@ function UserProfile({ count, handleCount, selectedFile, setSelectedFile, gifFil
                 // inputTextChoice04={inputTextChoice04}
                 // setInputTextChoice04={setInputTextChoice04}
             />
-            }
+            } */}
             {/* <AllTweetsPage tweetData={tweetData} handleCount={handleCount} /> */}
         </div>
     )
