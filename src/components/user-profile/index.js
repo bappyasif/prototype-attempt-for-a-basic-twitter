@@ -6,21 +6,73 @@ import AllTweetsPage from './all-tweets';
 function UserProfile({ count, handleCount, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
 
     useEffect(() => handleCount, [count])
+    let [previousID, setPreviousID] = useState('');
 
     useEffect(() => {
-        setTweetData([{ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
-        // setTweetData([...tweetData].shift({ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }))
-        // setTweetData([tweetData].shift({ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }))
-        // setTweetData([...tweetData, { tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }])
-        // setTweetData([tweetData].shift({ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }))
-        // handleCount();
+        
+        setTweetData([{ tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
+        
+        tweetData.length && setPreviousID(tweetData[0].tweetText)
+        
+        let removeDuplicates = tweetData && tweetData.filter((item, idx) => tweetData.indexOf(item.tweetText) == (idx && (item.count - 1)))
+        console.log(removeDuplicates, "huh?!", previousID)
+
+        // let refineData = tweetData.map(item => {
+        //     if(item.count) {
+        //         delete item.count;
+        //         console.log('here??')
+        //     }
+        //     return item
+        // })
+        // console.log(refineData, 'wat wat!!')
+
+        // let removeDuplicates = new Set(refineData)
+        // console.log(removeDuplicates, 'duplicates?!')
+
+        // setTweetData(Array.from(removeDuplicates));
+
+        // let refineData = tweetData.filter(item => {
+        //     if(item.tweetText) {
+        //         if(item.tweetText == previousID) {
+        //             return tweetData
+        //         } else {
+        //             setPreviousID(item.tweetText)
+        //         }
+        //     }
+        // })
+        // console.log(refineData, 'wat wat!!')
+
+        // tweetData.map((item, idx) => {
+        //     if(idx == 0) {
+        //         setPreviousID(item.tweetText)
+        //         setTweetData([{ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
+        //         console.log('here!!')
+        //     } else {
+        //         setTweetData([...tweetData])
+        //         console.log('here!!!!', item.tweetText, previousID, "??")
+        //     }
+        // })
+
+        // if(tweetData.length == 0) setTweetData([{ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
+        
+        // // tweetData.forEach(item => setPreviousID(item.tweetText + item.count))
+        // else tweetData.forEach((item, idx) => {
+        //     console.log(previousID, previousID != item.tweetText, item.tweetText)
+        //     if(previousID != item.tweetText) {
+        //         setPreviousID(item.tweetText)
+        //         setTweetData([{ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
+        //     } else {
+        //         setTweetData([...tweetData])
+        //     }
+        // })
+
         setSelectedFile('');
         setGifFile('');
         setInputTextChoice01('')
         setInputTextChoice02('')
         setInputTextChoice03('')
         setInputTextChoice04('')
-        console.log(tweetData, 'is it?!')
+        // console.log(tweetData, 'is it?!', tweetData.length ? tweetData[0].tweetText == primaryTweetText : null)
     }, [tweetPublishReady])
 
     let showGif = selectedGif => selectedGif && <Gif height='290px' width='96%' gif={selectedGif} className='style-gif-border-radius' />;
@@ -58,7 +110,7 @@ function UserProfile({ count, handleCount, selectedFile, setSelectedFile, gifFil
 
     return (
         <div id='user-profile-page-container'>
-             {tweetData && <AllTweetsPage
+            {tweetData && <AllTweetsPage
                 // tweetData={[...tweetData].reverse()}
                 tweetData={tweetData}
                 handleCount={handleCount}
@@ -83,3 +135,57 @@ function UserProfile({ count, handleCount, selectedFile, setSelectedFile, gifFil
 }
 
 export default UserProfile
+
+/**
+ * 
+ * 
+ useEffect(() => {
+        // console.log(tweetData.length, 'is it?!')
+        // if (tweetData.length) {
+        //     tweetData[tweetData.length - 1].tweetText == primaryTweetText ? [...tweetData] : null
+        //     console.log(tweetData, 'is it?!')
+        // } else {
+        //     setTweetData([{ tweetPoll: [{ choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04 }], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
+        // }
+
+        setTweetData([{ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
+        
+        // let removeDuplicates = [...tweetData].filter((item, idx) => tweetData.indexOf(item.tweetText) == idx)
+        // let removeDuplicates = tweetData && Array.from(new Set([...tweetData].map(JSON.stringify))).map(JSON.parse)
+        // let removeDuplicates = tweetData.filter((item, idx) => tweetData.indexOf(item.tweetText) == idx)
+        // let removeDuplicates = tweetData && Array.from(new Set(tweetData))
+        
+        // let removeDuplicates = tweetData && tweetData.map(item => item.tweetText == primaryTweetText).filter(item => item)
+        // let removeDuplicates = tweetData && [...tweetData].filter(item => item.tweetText == primaryTweetText)
+        // let removeDuplicates = tweetData && [...tweetData].filter((item, idx) => tweetData.indexOf(item.tweetText) == idx)
+        // let removeDuplicates = Array.from(new Set(tweetData))
+        // let removeDuplicates = []
+        
+        // setRemoveDuplicates(Array.from(new Set(tweetData)))
+
+        // if(removeDuplicates.length) {
+        //     // removeDuplicates = Array.from(new Set(tweetData))
+        //     setTweetData(removeDuplicates)
+        //     console.log(removeDuplicates, 'duplicates!!', primaryTweetText, new Set(tweetData))
+        // } else {
+        //     setTweetData([{ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
+        // }
+        // if(removeDuplicates) {
+        //     setTweetData(tweetData)
+        // } else {
+        //     setTweetData([{ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }, ...tweetData])
+        // }
+        // setTweetData([...tweetData].shift({ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }))
+        // setTweetData([tweetData].shift({ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }))
+        // setTweetData([...tweetData, { tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }])
+        // setTweetData([tweetData].shift({ tweetPoll: [{choice01: inputTextChoice01,choice02: inputTextChoice02,choice03: inputTextChoice03,choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count }))
+        // handleCount();
+        setSelectedFile('');
+        setGifFile('');
+        setInputTextChoice01('')
+        setInputTextChoice02('')
+        setInputTextChoice03('')
+        setInputTextChoice04('')
+        // console.log(tweetData, 'is it?!', tweetData.length ? tweetData[0].tweetText == primaryTweetText : null)
+    }, [tweetPublishReady])
+ */

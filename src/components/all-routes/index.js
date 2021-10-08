@@ -19,6 +19,7 @@ import ProfilePageTopNavigationMenuBar from '../user-profile/profile-page/top-me
 import TweetsAndRepliesPage from '../user-profile/tweets-and-replies-page';
 import EditTweetMediaContents from '../edit-tweet-media-contents';
 import TweetScheduler from '../tweet-modal/schedule-tweet';
+import AllMedias from '../user-profile/all-medias';
 
 function AllRoutes({ count, handleCount }) {
     let [tweetData, setTweetData] = useState([]);
@@ -164,7 +165,9 @@ function AllRoutes({ count, handleCount }) {
                 </Route>
 
                 <Route path='/user-profile/media'>
-
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <ProfilePageUpperView />
+                    <AllMedias tweetData={tweetData} />
                 </Route>
 
                 <Route path='/user-profile/likes'>

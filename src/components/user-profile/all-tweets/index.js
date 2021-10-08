@@ -3,9 +3,10 @@ import { moreIcon, tweetAdditionalIconsArray } from '../profile-page/svg-resourc
 // import '../../profile-page/index.css'
 import '../../user-profile/profile-page/index.css';
 
-function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
+function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handleCount }) {
     let [hoveredID, setHoveredID] = useState('');
     // let [count, setCount] = useState(1)
+    let [test, setTest] = useState('')
 
     let findWhichIconId = evt => {
         // let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.id
@@ -30,6 +31,23 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
     // tweetData = tweetData.reverse();
     // tweetData = [...tweetData].reverse();
     // let reversedTweetData = [...tweetData].reverse();
+    // let removeDuplicates = [...tweetData].filter(item =>  item)
+    // console.log(removeDuplicates, 'dupliactes')
+    // let removeDuplicates = tweetData && tweetData.filter((item, idx) => tweetData.indexOf(item.tweetText) == idx)
+    // console.log(tweetData, 'updated?!', removeDuplicates)
+    
+    // let refineData = [...tweetData].map(item => {
+    //     if(item.count) {
+    //         delete item.count;
+    //         console.log('here??')
+    //     }
+    //     return item
+    // })
+    // console.log(refineData, 'wat wat!!')
+
+    // let removeDuplicates = new Set(refineData)
+    // console.log(removeDuplicates, 'duplicates?!')
+    
 
     let renderAdditionalTweetIcons = (item, extra) => {
         return <div className='additionals-icons'>
@@ -97,10 +115,29 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
         })
     }
 
-    let renderingData = tweetData && tweetData.map((item) =>
-    (<div key={item.tweetText} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
+    // let renderingData = tweetData && tweetData.map((item, idx) => {
+    //     if (item.tweetText) {
+    //         setTest(item.tweetText)
+    //     }
+        
+    //     return item.tweetText == test
+    //     ?
+    //     (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
 
-        {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText ) ? whenNoExtraTweet(item) : null}
+    //         {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
+
+    //         <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>
+
+    //         {item.extraTweet ? whenExtraTweetExists(item) : ''}
+
+    //     </div>)
+    //     : null
+    // })
+
+    let renderingData = tweetData && tweetData.map((item, idx) =>    
+    (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
+
+        {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
 
         <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>
 
@@ -108,7 +145,21 @@ function AllTweetsPage({ tweetData, tweetPublishReady, count, handleCount }) {
 
     </div>))
 
-    return <div id='all-tweets-container'>{renderingData}</div>
+    let renderMediaTweetsOnly = onlyMedias && onlyMedias.map((item, idx) => {
+
+        return <div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
+
+            {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
+
+            {/* <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div> */}
+
+            {/* {item.extraTweet ? whenExtraTweetExists(item) : ''} */}
+
+        </div>
+    })
+
+    // return <div id='all-tweets-container'>{renderingData}</div>
+    return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData}</div>
 }
 
 export default AllTweetsPage
