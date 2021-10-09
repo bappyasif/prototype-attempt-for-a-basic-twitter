@@ -12,7 +12,7 @@ function ComponentsContainer () {
     // useEffect(() => handleCount, [count])
 
         return (
-            <div id='components-container'>
+            <div id='components-container' style={{display: 'flex', justifyContent: 'space-around'}}>
                 <AllRoutes count={countForTweetContainer} handleCount={handleCount}/>
                 {/* <AllRoutes /> */}
             </div>

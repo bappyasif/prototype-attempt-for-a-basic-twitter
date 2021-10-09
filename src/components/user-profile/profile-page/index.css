@@ -1,15 +1,18 @@
 #profile-page-container,
 #profile-page-upperview-container {
-  position: absolute;
+  /* position: absolute;
   top: 20px;
-  left: 290px;
+  left: 290px; */
   /* width: 492px; */
 }
 
 #all-tweets-container {
   position: absolute;
-  left: 30.5%;
-  top: 56%;
+  /* left: 30.19%;
+  top: 56%; */
+  /* left: 310px; */
+  left: 29.69%;
+  top: 445px;
 }
 
 /* #profile-page-container  */
@@ -33,6 +36,7 @@
 
 #tweet-container {
   flex-direction: column;
+  width: 557px;
 }
 
 /* #profile-page-container  */
@@ -66,9 +70,9 @@
 
 #tweet-container #show-connecting-line {
   border-left: 2px solid silver;
-    position: absolute;
-    height: 101px;
-    transform: translate(65px, -82px);
+  position: absolute;
+  height: 101px;
+  transform: translate(65px, -82px);
 }
 
 #extra-tweet-portion-container,
@@ -252,7 +256,8 @@
   width: 100%;
 }
 
-#tweet-container .tweet-poll-on-profile .poll-info, #tweet-container .tweet-poll-on-profile .poll-info .left-view {
+#tweet-container .tweet-poll-on-profile .poll-info,
+#tweet-container .tweet-poll-on-profile .poll-info .left-view {
   display: flex;
   align-items: center;
   justify-content: space-between;

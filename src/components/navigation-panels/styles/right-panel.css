@@ -1,0 +1,64 @@
+#search-twitter-container {
+    display: flex;
+    justify-content: space-between;
+    padding:  0px 8px 0px 2px;
+    align-items: center;
+    border: .11em solid lightgray;
+    border-radius: 20px;
+    position: relative;
+}
+
+#search-twitter-container #search-in-twitter {
+    width: 166px;
+    border: none;
+    margin-left: 11px;
+}
+
+#search-twitter-container #svg-icon {
+    margin-left: 20px;
+}
+
+#search-twitter-container #search-dropdown-container {
+    position: absolute;
+    top: 33.5px;
+    width: 236px;
+    background-color: white;
+}
+
+#search-dropdown-container #headings-section {
+    display: flex;
+    justify-content: space-between;
+    line-height: .11em;
+}
+
+#search-dropdown-container .keywords-section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 3.3em;
+}
+
+#search-dropdown-container .keywords-section:hover {
+    /* border: .11em solid lightgray; */
+    background-color: rgba(245, 245, 245, .4)
+}
+
+#search-dropdown-container .search-icon, 
+#search-dropdown-container .remove-icon {
+    display: flex;
+    border-radius: 50%;
+    height: 42px;
+    width: 42px;
+    justify-content: center;
+    align-items: center;
+}
+
+#search-dropdown-container .search-icon:hover, 
+#search-dropdown-container .remove-icon:hover {
+    background: lightgray;
+}
+
+#search-dropdown-container .remove-icon {
+    height: fit-content;
+    width: fit-content;
+}

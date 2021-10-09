@@ -20,6 +20,7 @@ import TweetsAndRepliesPage from '../user-profile/tweets-and-replies-page';
 import EditTweetMediaContents from '../edit-tweet-media-contents';
 import TweetScheduler from '../tweet-modal/schedule-tweet';
 import AllMedias from '../user-profile/all-medias';
+import RightSideNavigationPanel from '../navigation-panels/right-side';
 
 function AllRoutes({ count, handleCount }) {
     let [tweetData, setTweetData] = useState([]);
@@ -37,6 +38,7 @@ function AllRoutes({ count, handleCount }) {
     let [scheduleStamp, setScheduleStamp] = useState('');
     let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(true)
     let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
+    let [newDataStatus, setNewDataStatus] = useState(false)
 
     // useEffect(() => console.log(scheduleStamp, '?!'), [scheduleStamp])
 
@@ -107,6 +109,7 @@ function AllRoutes({ count, handleCount }) {
                         setScheduleStamp={setScheduleStamp}
                         mediaDescriptionText={mediaFileDescriptionText}
                         setMediaDescriptionText={setMediaFileDescriptionText}
+                        setNewDataStatus={setNewDataStatus}
                     />
                 </Route>
 
@@ -133,6 +136,7 @@ function AllRoutes({ count, handleCount }) {
                 <Route exact path='/user-profile'>
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
+                    <RightSideNavigationPanel />
                     <UserProfile
                         selectedFile={selectedFile}
                         setSelectedFile={setSelectedFile}
@@ -146,6 +150,7 @@ function AllRoutes({ count, handleCount }) {
                         extraTweetText={extraTweetText}
                         tweetPrivacy={tweetPrivacy}
                         tweetPublishReady={tweetPublishReady}
+                        setTweetPublishReady={setTweetPublishReady}
                         inputTextChoice01={inputTextChoice01}
                         setInputTextChoice01={setInputTextChoice01}
                         inputTextChoice02={inputTextChoice02}
@@ -154,11 +159,14 @@ function AllRoutes({ count, handleCount }) {
                         setInputTextChoice03={setInputTextChoice03}
                         inputTextChoice04={inputTextChoice04}
                         setInputTextChoice04={setInputTextChoice04}
+                        setNewDataStatus={setNewDataStatus}
+                        newDataStatus={newDataStatus}
                     />
                     {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} /> */}
                 </Route>
 
                 <Route path='/user-profile/tweets-and-replies'>
+                    {/* {tweetPublishReady && setTweetPublishReady(false)} */}
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
                     <TweetsAndRepliesPage tweetData={tweetData} />

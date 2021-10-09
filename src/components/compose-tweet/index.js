@@ -3,7 +3,7 @@ import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivac
 import AllTweetsPage from '../user-profile/all-tweets';
 import './index.css';
 
-function ComposeTweet({ selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
+function ComposeTweet({ selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText, setNewDataStatus }) {
 
     return (
         <div id='compose-tweet-container'>
@@ -33,6 +33,7 @@ function ComposeTweet({ selectedFile, setSelectedFile, gifFile, setGifFile, togg
                 setScheduleStamp={setScheduleStamp}
                 mediaDescriptionText={mediaDescriptionText}
                 setMediaDescriptionText={setMediaDescriptionText}
+                setNewDataStatus={setNewDataStatus}
             />
         </div>
     )
