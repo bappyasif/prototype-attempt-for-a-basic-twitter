@@ -136,7 +136,7 @@ function AllRoutes({ count, handleCount }) {
                 <Route exact path='/user-profile'>
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
-                    <RightSideNavigationPanel />
+                    <RightSideNavigationPanel tweetData={tweetData} />
                     <UserProfile
                         selectedFile={selectedFile}
                         setSelectedFile={setSelectedFile}

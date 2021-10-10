@@ -1,62 +1,87 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import '../../styles/right-panel.css'
+import useOnClickOutside from '../click-outside-utility-hook/useOnClickOutside';
 
 function SearchTwitter() {
     let [searchText, setSearchText] = useState('')
     let [searchedKeywords, setSearchedKeywords] = useState([])
+    let [focused, setFocused] = useState(false);
+    let ref = useRef();
+
     let handleUserInput = (evt) => setSearchText(evt.target.value)
     let handleUserInputSubmnit = (evt) => {
         if (evt.key == 'Enter') {
             if (searchText) {
                 let curateData = [{ keyword: searchText }, ...searchedKeywords]
-                // let sanitizeData = curateData.map((item, idx, self) => self.indexOf(item.keyword) != idx ? item : '')
+
                 let sanitizeData = curateData.filter((item, idx, self) => idx == self.findIndex(elem => elem.keyword == item.keyword))
 
-                // arr.filter( (ele, ind) => ind === arr.findIndex( elem => elem.jobid === ele.jobid && elem.id === ele.id))
-                console.log(sanitizeData, '>>')
-                // setSearchedKeywords([{keyword: searchText}, ...searchedKeywords]);
                 setSearchedKeywords(sanitizeData);
             }
             setSearchText('');
         }
     }
 
+    // calling hook passing in ref and a cb on click outside
+    useOnClickOutside(ref, () => setFocused(false))
+
     useEffect(() => {
         setSearchedKeywords([{ keyword: 'test' }, { keyword: 'test02' }, ...searchedKeywords])
     }, [])
 
+    let handleFocused = () => setFocused(true)
+
     return (
-        <div id='search-twitter-container'>
+        <div id='search-twitter-container' ref={ref}>
             <span id='svg-icon'>{searchIcon()}</span>
             <label htmlFor='search-in-twitter'>
-                <input id='search-in-twitter' type='text' placeholder='Searching Twitter' value={searchText} onChange={handleUserInput} onKeyPress={handleUserInputSubmnit} />
+                <input id='search-in-twitter' onFocus={handleFocused} type='text' placeholder='Searching Twitter' value={searchText} onChange={handleUserInput} onKeyPress={handleUserInputSubmnit} />
             </label>
-            {/* {searchText} */}
-            <SearchDropdown searchedKeywords={searchedKeywords} setSearchedKeywords={setSearchedKeywords} />
+            {focused &&
+                <SearchDropdown
+                    searchedKeywords={searchedKeywords}
+                    setSearchedKeywords={setSearchedKeywords}
+                />
+            }
         </div>
     )
 }
 
 let SearchDropdown = ({ searchedKeywords, setSearchedKeywords }) => {
-    // let [searchedKeywords, setSearchedKeywords] = useState([])
 
     let handleSearchKeywordRemoval = evt => {
         let findId = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.id;
-        // console.log(evt.target.id, evt.target, findId)
+
         let findIndex = searchedKeywords.findIndex(item => item.keyword == findId)
-        let newSearchedKeywordList = searchedKeywords.splice(findIndex, 1)
+
+        let newSearchedKeywordList = searchedKeywords.slice(0, findIndex).concat(searchedKeywords.slice(findIndex + 1))
+
         setSearchedKeywords(newSearchedKeywordList);
-        console.log(findId, findIndex)
+
+        // console.log(findId, findIndex, newSearchedKeywordList)
     }
 
     let renderAlreadySearchedKeywords = searchedKeywords.map((item, idx) => <div key={item.keyword} className='keywords-section'><span className='search-icon'>{searchIcon(null, 'scale(1.3)')}</span><span className='searched-keywords'>{item.keyword}</span><span className='remove-icon' id={item.keyword} onClick={handleSearchKeywordRemoval}>{removeIcon()}</span></div>)
 
+    let handleClearAllAlreadySearchedKeywords = () => {
+        searchedKeywords = [];
+        setSearchedKeywords(searchedKeywords);
+    }
+
     return <div id='search-dropdown-container'>
-        <div id='headings-section'>
-            <h4>Recent</h4>
-            <h5 style={{ color: 'rgb(29, 155, 240)', fontWeight: 'bolder' }}>Clear all</h5>
-        </div>
+        {
+            renderAlreadySearchedKeywords.length == 0
+                ?
+                <div id='show-to-search-announcement'>Try searching for people, topics or keywords</div>
+                :
+                <div id='headings-section'>
+                    <div id='recent-text'>Recent</div>
+                    <div id='clear-all-searched-keywords' onClick={handleClearAllAlreadySearchedKeywords}>Clear all</div>
+                </div>
+        }
+
         {renderAlreadySearchedKeywords}
+
     </div>
 }
 
@@ -66,16 +91,32 @@ let removeIcon = () => <svg width='24px' height='24px' transform='scale(.8)'><g>
 
 export default SearchTwitter
 
-
 /**
- * 
- * 
- let handleSearchKeywordRemoval = evt => {
-        // let findId = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.id
-        let findId = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id ;
-        // console.log(evt.target.id, evt.target, findId)
-        let newSearchedKeywordList = searchedKeywords.splice(findId, 1)
-        setSearchedKeywords(newSearchedKeywordList);
-        // console.log(findId, evt.target, )
-    }
+ *
+ *
+ return (
+        <div id='search-twitter-container'>
+            <span id='svg-icon'>{searchIcon()}</span>
+            {/* <label htmlFor='search-in-twitter'>
+                <input id='search-in-twitter' type='text' placeholder='Searching Twitter' value={searchText} onChange={handleUserInput} onKeyPress={handleUserInputSubmnit} />
+            </label> *}
+            <input
+                id='search-in-twitter'
+                type='text'
+                placeholder='Searching Twitter'
+                value={searchText}
+                onChange={handleUserInput}
+                onKeyPress={handleUserInputSubmnit}
+                onFocus={handleFocused}
+            />
+            {/* {searchText} *}
+            {/* <SearchDropdown searchedKeywords={searchedKeywords} setSearchedKeywords={setSearchedKeywords} /> *}
+            <SearchDropdown
+                searchedKeywords={searchedKeywords}
+                setSearchedKeywords={setSearchedKeywords}
+                focused={focused}
+                setFocused={setFocused}
+            />
+        </div>
+    )
  */
