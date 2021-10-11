@@ -22,7 +22,7 @@ import TweetScheduler from '../tweet-modal/schedule-tweet';
 import AllMedias from '../user-profile/all-medias';
 import RightSideNavigationPanel from '../navigation-panels/right-side';
 
-function AllRoutes({ count, handleCount }) {
+function AllRoutes({ count, handleCount, setChangeLayout }) {
     let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -81,6 +81,7 @@ function AllRoutes({ count, handleCount }) {
                 </Route>
 
                 <Route exact path='/tweet/compose'>
+                    {/* {setChangeLayout(true)} */}
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ComposeTweet
                         selectedFile={selectedFile}
@@ -110,7 +111,10 @@ function AllRoutes({ count, handleCount }) {
                         mediaDescriptionText={mediaFileDescriptionText}
                         setMediaDescriptionText={setMediaFileDescriptionText}
                         setNewDataStatus={setNewDataStatus}
+                        setChangeLayout={setChangeLayout}
                     />
+                    {/* <ProfilePageUpperView /> */}
+                    <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
                 <Route exact path='/tweet/compose/schedule'>
@@ -120,6 +124,7 @@ function AllRoutes({ count, handleCount }) {
                         handleToggle={handleScheduleIconClicked}
                         setScheduleStamp={setScheduleStamp}
                     />
+                    <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
                 <Route exact path='/tweet/compose/media'>
@@ -131,9 +136,11 @@ function AllRoutes({ count, handleCount }) {
                         mediaDescriptionText={mediaFileDescriptionText}
                         setMediaDescriptionText={setMediaFileDescriptionText}
                     />
+                    <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
                 <Route exact path='/user-profile'>
+                    {/* {setChangeLayout(false)} */}
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
                     <RightSideNavigationPanel tweetData={tweetData} />
@@ -161,6 +168,7 @@ function AllRoutes({ count, handleCount }) {
                         setInputTextChoice04={setInputTextChoice04}
                         setNewDataStatus={setNewDataStatus}
                         newDataStatus={newDataStatus}
+                        setChangeLayout={setChangeLayout}
                     />
                     {/* <UserProfile tweetData={tweetData} setTweetData={setTweetData} primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} /> */}
                 </Route>
@@ -170,12 +178,14 @@ function AllRoutes({ count, handleCount }) {
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
                     <TweetsAndRepliesPage tweetData={tweetData} />
+                    <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
                 <Route path='/user-profile/media'>
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
                     <AllMedias tweetData={tweetData} />
+                    <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
                 <Route path='/user-profile/likes'>
