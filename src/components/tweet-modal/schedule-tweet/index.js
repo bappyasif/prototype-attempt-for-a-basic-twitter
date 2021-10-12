@@ -11,20 +11,12 @@ function TweetScheduler({ isScheduleIconClicked, handleToggle, setScheduleStamp 
     let [minute, setMinute] = useState(22)
     let [amPm, setAmPm] = useState('AM')
     let history = useHistory()
-    // style={{display: isIconClicked ? 'block' : 'none'}}
-
-    // getFormattedDateString(month, day, year, hour, minute);
-    // console.log(isScheduleIconClicked)
 
     let handleConfirm = () => {
-        // setScheduleStamp(getFormattedDateString(month, day, year, hour, minute))
-        // history.push('/tweet/compose');
         setScheduleStamp(<div id='annnounce-schedule'>
             <span id='schedule-svg'>{scheduleIcon('silver')}</span> <span id='annonunce-text'>{getFormattedDateString(month, day, year, hour, minute)}</span>
         </div>)
         history.push('/tweet/compose');
-        
-        // console.log('clicked!!', getFormattedDateString(month, day, year, hour, minute))
     }
 
     return (
@@ -96,9 +88,6 @@ let DateSelection = ({ month, setMonth, day, setDay, year, setYear }) => {
 }
 
 let TimeSelection = ({ hour, setHour, minute, setMinute, amPm, setAmPm }) => {
-    // let [hour, setHour] = useState()
-    // let [minute, setMinute] = useState()
-    // let [amPm, setAmPm] = useState()
 
     let generateOptions = data => data.map(val => <option key={val} value={val}>{val}</option>)
     let generateData = (start, end, doubled) => Array(end - start + 1).fill().map((_, idx) => {
@@ -142,124 +131,13 @@ let getTimeZoneName = () => {
     let today = new Date();
     let short = today.toLocaleDateString(undefined);
     let long = today.toLocaleDateString(undefined, { timeZoneName: 'long' })
-    // console.log(short, long);
-    // console.log(long.split(', ')[1])
-    // { console.log(Intl.DateTimeFormat().resolvedOptions().timeZone) }
-    // { console.log(new Date().toLocaleTimeString('en-us', { timeZoneName: 'long' }).split(' ')[2]) }
-    // { getTimezoneName() }
     return long.split(', ')[1]
 }
 
 let getFormattedDateString = (month, day, year, hrs, min) => {
     let dateAndTimeString = `${month}/${day}/${year} ${hrs}:${min}`
     let dateString = new Date(dateAndTimeString);
-    // console.log(dateAndTimeString, dateString);
-    // console.log(dateString.toString().split(' (')[0]);
-    // return dateString.toString()
     return dateString.toString().split(' (')[0]
 }
 
 export default TweetScheduler
-
-
-/**
- *
- *
- function getTimezoneName() {
-  const today = new Date();
-  const short = today.toLocaleDateString(undefined);
-  const full = today.toLocaleDateString(undefined, { timeZoneName: 'long' });
-
-  // Trying to remove date from the string in a locale-agnostic way
-  const shortIndex = full.indexOf(short);
-  if (shortIndex >= 0) {
-    const trimmed = full.substring(0, shortIndex) + full.substring(shortIndex + short.length);
-    console.log(trimmed, full, shortIndex, short)
-    // by this time `trimmed` should be the timezone's name with some punctuation -
-    // trim it from both sides
-    return trimmed.replace(/^[\s,.\-:;]+|[\s,.\-:;]+$/g, '');
-
-  } else {
-    // in some magic case when short representation of date is not present in the long one, just return the long one as a fallback, since it should contain the timezone's name
-    return full;
-  }
-}
- *
- *
- let GenerateSelector = ({ title, value, options, handleChange }) => {
-    return <div id={title} className='scroll-container'>
-        <div className='left-side'>
-            <p className='title'>{title}</p>
-            <p className='value'>{value}</p>
-        </div>
-        <select className='right-side' value={value} onChange={(evt) => handleChange(evt.target.value)}>
-            {options}
-        </select>
-    </div>
-}
- *
- *
- let DateSelection = () => {
-    let [month, setMonth] = useState('January');
-    // let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    let years = [2020, 2021, 2022, 2023]
-    let monthsAndDays = [{ month: 'January', days: 31 }, { month: 'February', days: 28 }, { month: 'March', days: 31 }, { month: 'April', days: 30 }, { month: 'May', days: 31 }, { month: 'June', days: 30 }, { month: 'July', days: 31 }, { month: 'August', days: 31 }, { month: 'September', days: 30 }, { month: 'October', days: 31 }, { month: 'November', days: 30 }, { month: 'December', days: 31 }]
-
-    let allMonths = monthsAndDays.map(item => <option key={item.month} value={item.month}>{item.month}</option>)
-
-    // let allDays = monthsAndDays.map((item) => Array.from(Array(item.days + 1)).map(val => <option key={val} value={val}>{val}</option>))
-
-    // let allDays = monthsAndDays.map((item) => getAnArray(1, item.days).map(val => <option value={val}>{val}</option>))
-
-    // let getAnArray = (start, end) => Array(end - start + 1).fill().map((_, idx) => start + idx)
-
-    let allYears = years.map(year => <option key={year} value={year}>{year}</option>)
-
-    // console.log(allDays);
-    let allDays;
-
-    let curateDays = () => {
-        monthsAndDays.map(item => {
-            if(item.month == month) {
-                allDays = Array.from(Array(item.days + 1).keys()).filter(val => val).map(val => <option key={val} value={val}>{val}</option>)
-                // allDays = Array.from(Array(item.days + 1).keys()).map(val => <option key={val} value={val}>{val}</option>)
-                // allDays = Array.from(Array(item.days + 1).keys())
-                // console.log(allDays);
-            }
-        })
-    }
-
-    curateDays();
-
-    return (<div id='date-selection'>
-        {/* <div id='select-month'>
-            <div className='left-side'>
-                <p>Month</p>
-                <p>Month!!</p>
-            </div>
-            <select className='right-side'>
-                {allMonths}
-            </select>
-        </div>
-        <div id='select-day'></div>
-        <div id='select-year'></div> }
-
-        <GenerateSelector title="Month" value={month} options={allMonths} handleChange={setMonth} />
-        <GenerateSelector title="Days" value="Days!!" options={allDays} />
-        <GenerateSelector title="Years" value="Years!!" options={allYears} />
-    </div>)
-}
-
-let GenerateSelector = ({ title, value, options, handleChange }) => {
-    // let makeChange = () => console.log()
-    return <div id={title}>
-        <div className='left-side'>
-            <p>{title}</p>
-            <p>{value}</p>
-        </div>
-        <select className='right-side' value={value} onChange={(evt) => handleChange(evt.target.value)}>
-            {options}
-        </select>
-    </div>
-}
- */

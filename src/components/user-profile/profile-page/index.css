@@ -1,16 +1,10 @@
 #profile-page-container,
 #profile-page-upperview-container {
-  /* position: absolute;
-  top: 20px;
-  left: 290px; */
-  /* width: 492px; */
+
 }
 
 #all-tweets-container {
   position: absolute;
-  /* left: 30.19%;
-  top: 56%; */
-  /* left: 310px; */
   left: 29.69%;
   top: 445px;
 }
@@ -21,10 +15,7 @@
 #without-extra-tweet-container {
   display: flex;
   justify-content: center;
-  /* align-items: center; */
-  /* align-items: flex-end; */
   align-items: flex-start;
-  /* flex-direction: column; */
   border: solid silver 0.1em;
   border-bottom: none;
 }
@@ -151,14 +142,6 @@
 /* #profile-page-container */
 #tweet-container .right-portion .additionals-icons .hover-div {
   position: relative;
-  /* padding-top: 8px;
-    padding-left: 6px; */
-  /* width: 38px; */
-  /* padding-left: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center; */
-  /* width: min-content; */
   display: flex;
   padding: 2px 0px 0px 4px;
 }

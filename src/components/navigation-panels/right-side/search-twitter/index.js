@@ -90,33 +90,3 @@ let searchIcon = (color, scaled) => <svg width='24px' height='24px' transform={s
 let removeIcon = () => <svg width='24px' height='24px' transform='scale(.8)'><g><path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path></g></svg>
 
 export default SearchTwitter
-
-/**
- *
- *
- return (
-        <div id='search-twitter-container'>
-            <span id='svg-icon'>{searchIcon()}</span>
-            {/* <label htmlFor='search-in-twitter'>
-                <input id='search-in-twitter' type='text' placeholder='Searching Twitter' value={searchText} onChange={handleUserInput} onKeyPress={handleUserInputSubmnit} />
-            </label> *}
-            <input
-                id='search-in-twitter'
-                type='text'
-                placeholder='Searching Twitter'
-                value={searchText}
-                onChange={handleUserInput}
-                onKeyPress={handleUserInputSubmnit}
-                onFocus={handleFocused}
-            />
-            {/* {searchText} *}
-            {/* <SearchDropdown searchedKeywords={searchedKeywords} setSearchedKeywords={setSearchedKeywords} /> *}
-            <SearchDropdown
-                searchedKeywords={searchedKeywords}
-                setSearchedKeywords={setSearchedKeywords}
-                focused={focused}
-                setFocused={setFocused}
-            />
-        </div>
-    )
- */

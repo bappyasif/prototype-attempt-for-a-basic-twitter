@@ -1,17 +1,10 @@
 #left-panel-container {
-    /* width: 22%; */
     width: 200px;
     margin-left: 51px;
-    /* margin-top: 42px; */
-    
-    /* display: flex;
-    flex-direction: column;
-    align-items: center; */
 }
 
 .item-divs{
     width: min-content;
-    /* margin: 4px; */
     padding: 11px;
     display: flex;
     align-items: center;
@@ -20,12 +13,8 @@
 }
 
 .item-divs:hover {
-    /* width: min-content; */
-    /* border: solid; */
     background-color: rgba(208, 226, 243, .5);
     border-radius: 999999px;
-    /* box-sizing: border-box; */
-    /* opacity: .5; */
 }
 
 .icons-span {
@@ -34,9 +23,6 @@
 }
 
 .names-span {
-    /* padding-top: 6px; */
-    /* padding: 6px; */
-    /* padding-top: 8px; */
     padding-right: 20px;
     margin-left: 26px;
 }
@@ -51,28 +37,14 @@
 }
 
 #Twitter:hover {
-    /* width: 31px; */
     border-radius: 50%;
 }
 
 #Tweet {
-    /* background-color: rgb(29, 155, 240);
-    width: max-content;
-    border-radius: 999999px;
-    font-size: larger;
-    padding-right: 36px;
-    padding-bottom: 11px;
-    color: white;
-    height: 20px;
-    margin-top: 8px; */
     background-color: rgb(29, 155, 240);
-    /* width: 121px; */
     border-radius: 999999px;
     font-size: larger;
-    /* padding-right: 36px; */
-    /* padding-top: 6px; */
     color: white;
-    /* height: 33px; */
     margin-top: 8px;
 }
 
@@ -82,39 +54,8 @@
 
 #Tweet:hover, #Tweet.item-divs:hover{
     background-color: rgba(208, 226, 243, .5);
-    
-    /* width: max-content; */
 }
 
 #Tweet span {
-    /* padding-bottom: 8px; */
     margin-left: 36%;
 }
-
-
-/* .item-divs {
-    display: flex;
-    width: 100%;
-    max-width: 200px;
-    width: 90px;
-    justify-content: space-evenly;
-    align-items: center;
-    align-items: baseline;
-    margin: 2em;
-    font-size: larger;
-}
-
-.item-divs span {
-    color: black;
-    align-items: baseline;
-    padding: 12px;
-}
-
-.names-span {
-    color: black;
-}
-
-.icons-span {
-    padding: 12px;
-    
-} */

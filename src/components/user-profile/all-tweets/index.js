@@ -1,53 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { moreIcon, tweetAdditionalIconsArray } from '../profile-page/svg-resources';
-// import '../../profile-page/index.css'
 import '../../user-profile/profile-page/index.css';
 
 function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handleCount }) {
     let [hoveredID, setHoveredID] = useState('');
-    // let [count, setCount] = useState(1)
-    let [test, setTest] = useState('')
 
     let findWhichIconId = evt => {
-        // let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.id
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
         return whichIcon
     }
 
     let mouseHoveredIn = (evt) => {
         let findwhich = findWhichIconId(evt);
-        console.log(findwhich)
         setHoveredID(findwhich)
-        // findwhich = findwhich ? findwhich : -1
-        // if (findwhich != -1) setHoveredID(findwhich)
-        // if(hoveredID == findwhich) setHoveredID(findwhich)
-        // else setHoveredID(findwhich)
     }
 
     let mouseHoveredOut = (evt) => {
         setHoveredID('')
-    }
-
-    // tweetData = tweetData.reverse();
-    // tweetData = [...tweetData].reverse();
-    // let reversedTweetData = [...tweetData].reverse();
-    // let removeDuplicates = [...tweetData].filter(item =>  item)
-    // console.log(removeDuplicates, 'dupliactes')
-    // let removeDuplicates = tweetData && tweetData.filter((item, idx) => tweetData.indexOf(item.tweetText) == idx)
-    // console.log(tweetData, 'updated?!', removeDuplicates)
-    
-    // let refineData = [...tweetData].map(item => {
-    //     if(item.count) {
-    //         delete item.count;
-    //         console.log('here??')
-    //     }
-    //     return item
-    // })
-    // console.log(refineData, 'wat wat!!')
-
-    // let removeDuplicates = new Set(refineData)
-    // console.log(removeDuplicates, 'duplicates?!')
-    
+    }    
 
     let renderAdditionalTweetIcons = (item, extra) => {
         return <div className='additionals-icons'>
@@ -74,7 +44,6 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
                 <div className='profile-details-on-tweet'><div className='user-info'>User Name Goes Here <span>@profile handle goes here</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div></div>
                 <div className='tweet-text-on-profile'>{item.extraTweet}</div>
 
-                {/* {renderAdditionalTweetIcons(item, 'extra')} */}
                 <div className='additionals-icons'>
                     {tweetAdditionalIconsArray.map((elem) =>
                         <div
@@ -84,7 +53,7 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
                             onMouseOver={mouseHoveredIn}
                             onMouseOut={mouseHoveredOut}
                         >
-                            {/* {console.log(item.count, item)} */}
+
                             <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + item.count + 'extra' ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span>
                         </div>
                     )}
@@ -115,25 +84,6 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
         })
     }
 
-    // let renderingData = tweetData && tweetData.map((item, idx) => {
-    //     if (item.tweetText) {
-    //         setTest(item.tweetText)
-    //     }
-        
-    //     return item.tweetText == test
-    //     ?
-    //     (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
-
-    //         {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
-
-    //         <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>
-
-    //         {item.extraTweet ? whenExtraTweetExists(item) : ''}
-
-    //     </div>)
-    //     : null
-    // })
-
     let renderingData = tweetData && tweetData.map((item, idx) =>    
     (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
 
@@ -151,14 +101,9 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
 
             {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
 
-            {/* <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div> */}
-
-            {/* {item.extraTweet ? whenExtraTweetExists(item) : ''} */}
-
         </div>
     })
 
-    // return <div id='all-tweets-container'>{renderingData}</div>
     return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData}</div>
 }
 

@@ -22,11 +22,10 @@ function TweetWordCount({wordCount}) {
     let normalizedRadius = radius - stroke * 2;
 
     useEffect(()=> {
-        // if(wordCount == 20) return
         setCircumference(normalizedRadius * 2 * Math.PI);
         let newOffset = circumference - wordCount / 100 * circumference;
         setOffset(newOffset);
-        console.log(wordCount, offset, circumference)
+        // console.log(wordCount, offset, circumference)
     }, [wordCount])
 
     return (
@@ -36,7 +35,6 @@ function TweetWordCount({wordCount}) {
     )
 }
 
-// Step 1: Let’s make an SVG ring  radius = (width / 2) - (strokeWidth * 2) and constantly update offset value so that it reflects progress in radial
 let CircleSvg = ({radius, circumference, offset, stroke, normalizedRadius}) => <svg className='progress-ring' width='56' height='56'><circle className='progress-ring-circle' stroke='white' fill='aqua' strokeDasharray={circumference +' '+ circumference} style={{strokeDashoffset: offset, transformOrigin: '50%, 50%'}} strokeWidth={stroke} r={normalizedRadius} cx={radius} cy={radius} /></svg>
 
 export default TweetWordCount
