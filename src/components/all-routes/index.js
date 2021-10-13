@@ -14,6 +14,7 @@ import EditTweetMediaContents from '../edit-tweet-media-contents';
 import TweetScheduler from '../tweet-modal/schedule-tweet';
 import AllMedias from '../user-profile/all-medias';
 import RightSideNavigationPanel from '../navigation-panels/right-side';
+import EditProfile from '../user-profile/profile-page/edit-profile';
 
 function AllRoutes({ count, handleCount, setChangeLayout }) {
     let [tweetData, setTweetData] = useState([]);
@@ -118,7 +119,7 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
                     <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
-                <Route exact path='/user-profile'>
+                <Route exact path='/username'>
                     {/* {setChangeLayout(false)} */}
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
@@ -151,7 +152,14 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
                     />
                 </Route>
 
-                <Route path='/user-profile/tweets-and-replies'>
+                <Route path='/username/profile'>
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <EditProfile />
+                    <ProfilePageUpperView />
+                    <RightSideNavigationPanel tweetData={tweetData} />
+                </Route>
+
+                <Route path='/username/tweets-and-replies'>
                     {/* {tweetPublishReady && setTweetPublishReady(false)} */}
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
@@ -159,14 +167,14 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
                     <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
-                <Route path='/user-profile/media'>
+                <Route path='/username/media'>
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ProfilePageUpperView />
                     <AllMedias tweetData={tweetData} />
                     <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
-                <Route path='/user-profile/likes'>
+                <Route path='/username/likes'>
 
                 </Route>
             </Switch>

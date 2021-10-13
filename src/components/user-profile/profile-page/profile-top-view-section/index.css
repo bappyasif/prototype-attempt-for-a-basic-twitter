@@ -61,6 +61,13 @@
     transform: translate(-11px, 31px);
     font-weight: 600;
     font-size: smaller;
+    color: black;
+    text-decoration: none;
+}
+
+#profile-top-view-container #edit-details-div #edit-profile:hover {
+    cursor: pointer;
+    background-color: lightgrey;
 }
 
 #profile-top-view-container #profile-info-section, #profile-info-section #handle-info {

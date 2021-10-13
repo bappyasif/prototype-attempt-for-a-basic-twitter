@@ -21,7 +21,7 @@ function ProfilePageTopNavigationMenuBar() {
 
     let renderNavigations = navigationArray.map((item, idx) => <Link
         key={item.id}
-        to={item.id == 'tweets' ? '/user-profile' : '/user-profile/' + item.id}
+        to={item.id == 'tweets' ? '/username' : '/username/' + item.id}
         id={item.id}
         className={navID == item.id ? 'menu-active' : 'menu-default-view'}
         onClick={handleClicks}

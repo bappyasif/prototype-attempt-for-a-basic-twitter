@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import { backIcon, calendarIcon, linkIcon, locationIcon } from '../svg-resources'
 import './index.css';
 
@@ -17,7 +18,8 @@ function ProfilePageTopView() {
             </div>
             <div id='edit-details-div'>
                 <img id='profile-pic' src='https://picsum.photos/200/300' />
-                <div id='edit-profile'>Edit profile</div>
+                {/* <div id='edit-profile'>Edit profile</div> */}
+                <Link id='edit-profile' to='/username/profile'>Edit profile</Link>
             </div>
             <div id='profile-info-section'>
                 <div id='handle-info'>

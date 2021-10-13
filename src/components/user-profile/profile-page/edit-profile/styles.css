@@ -1,0 +1,132 @@
+#edit-profile-container {
+    position: absolute;
+    width: 551px;
+    top: 110px;
+    left: 429px;
+    z-index: 999999;
+    background-color: white;
+    border-radius: 11px;
+}
+
+#edit-profile-container #header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 8px 8px 15px;
+}
+
+#edit-profile-container #header-section #remove-icon {
+    background-color: transparent;
+    padding: 2px 4px 0px 4px;
+}
+
+#edit-profile-container #header-section #remove-icon:hover {
+    background-color: lightgrey;
+}
+
+#edit-profile-container #header-section #edit-profile-text {
+    margin-left: -265px;
+    font-size: larger;
+    font-weight: bold;
+}
+
+#edit-profile-container #header-section #save-edit-profile-changes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: black;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 20px;
+    width: 74px;
+    line-height: 2em;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo {
+    width: 100%;
+    height: 188px;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo #cover-photo {
+    padding: 2px 0px 2px 2px;
+    opacity: .83;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo #svg-visuals {
+    display: flex;
+    justify-content: center;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo #svg-visuals .camera-icon {
+    margin-right: 35px;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo #svg-visuals .camera-icon #cover-camera-icon-tooltips,
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo #svg-visuals .remove-icon-svg #cover-remove-icon-tooltips,
+#edit-profile-container #body-section #profile-visuals #profile-photo-div .camera-icon #profile-camera-icon-tooltips {
+    position: absolute;
+    transform: translate(-13px, -130px);
+    width: max-content;
+    font-size: smaller;
+    color: white;
+    background-color: lightslategrey;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-photo-div .camera-icon #profile-camera-icon-tooltips {
+    transform: translate(44px, -145px);
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo svg:nth-child(0),
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo svg:nth-child(1),
+#edit-profile-container #body-section #profile-visuals #profile-photo-div svg {
+    transform: translate(2px, -128px);
+    stroke-width: 0px;
+    padding: 4px;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo svg:nth-child(0):hover,
+#edit-profile-container #body-section #profile-visuals #profile-cover-photo svg:nth-child(1):hover,
+#edit-profile-container #body-section #profile-visuals #profile-photo-div svg:hover {
+    background-color: rgba(206, 200, 200, .4);
+    border-radius: 50%;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-photo-div{
+    width: 110px;
+    height: 58px;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-photo-div #profile-photo {
+    transform: translate(18px, -62px);
+    border-radius: 50%;
+    height: 117px;
+    opacity: .83;
+}
+
+#edit-profile-container #body-section #profile-visuals #profile-photo-div svg {
+    transform: translate(18px, -141px);
+}
+
+#edit-profile-container #body-section #profile-infos .editable-text-area-container {
+    border: solid silver 1.1px;
+    padding: 2px 8px 0px 4px;
+    margin-bottom: 4px;
+}
+
+#edit-profile-container #body-section #profile-infos .editable-text-area-container .top-fragment {
+    display: flex;
+    justify-content: space-between;
+    font-size: smaller;
+    color: gray;
+}
+
+#edit-profile-container #body-section #profile-infos .editable-text-area-container .editable-item-title {
+    text-align: left;
+}
+
+#edit-profile-container #body-section #profile-infos .editable-text-area-container textarea {
+    width: 99%;
+    border: none;
+    resize: none;
+    outline: none;
+}
