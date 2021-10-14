@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/left-panel.css";
 import { deleteIcon, iconsArray } from "./svg-resources";
 
-function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle}) {
+function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle, opacity}) {
 
   let clickHandler = () => handleTweetModalToggle()
 
@@ -17,7 +17,7 @@ function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle}) {
     </div>
   ));
 
-  return <div id="left-panel-container" className={toggleModality ? 'left-opaque' : ''}>{panelDivs}</div>;
+  return <div id="left-panel-container" className={toggleModality ? 'left-opaque' : ''} style={{opacity: opacity ? '.2' : 1}}>{panelDivs}</div>;
 }
 
 export default LeftSideNavigationPanel;

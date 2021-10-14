@@ -33,6 +33,7 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
     let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(true)
     let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
     let [newDataStatus, setNewDataStatus] = useState(false)
+    let [opacity, setOpacity] = useState(false)
 
     // useEffect(() => console.log(scheduleStamp, '?!'), [scheduleStamp])
 
@@ -153,10 +154,10 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
                 </Route>
 
                 <Route path='/username/profile'>
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
-                    <EditProfile />
-                    <ProfilePageUpperView />
-                    <RightSideNavigationPanel tweetData={tweetData} />
+                    <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <EditProfile setOpacity={setOpacity} />
+                    <ProfilePageUpperView opacity={opacity} />
+                    <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
                 <Route path='/username/tweets-and-replies'>

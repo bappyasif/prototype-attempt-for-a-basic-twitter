@@ -1,43 +1,84 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './styles.css'
 
-function EditProfile() {
-    // let [test, setTest] = useState('')
+function EditProfile({setOpacity}) {
+    let [hovered, setHovered] = useState('')
+    let [photoElement, setPhotoElement] = useState('https://picsum.photos/200/300')
+    let inputRef = useRef();
+    let handleMouseEnter = evt => {
+        let findWhich = evt.target.id || evt.target.parentNode.id
+        // console.log(evt.target, 'enter', findWhich)
+        setHovered(findWhich)
+    }
+    let handleMouseLeave = evt => {
+        // console.log(evt.target, 'leave')
+        // let findWhich = evt.target.id || evt.target.parentNode.id
+        // console.log(evt.target, 'leave', findWhich)
+        setHovered('')
+    }
+    let handleClick = evt => {
+        inputRef.current.click();
+        // console.log(fileSelected, photoElement, evt.target.files[0], inputRef)
+        // console.log(inputRef)
+    }
+    let handleChange = evt => {
+        let fileSelected = evt.target.files[0]
+        setPhotoElement(fileSelected)
+        // console.log(fileSelected)
+    }
+    let handleMediaFileFormats = (mediaFile) => {
+        let mediaSrc = mediaFile;
+        if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
+            mediaSrc = URL.createObjectURL(mediaFile);
+        }
+        return mediaSrc;
+    }
+
+    useEffect(() => setOpacity(true), [])
+    // let decideSvgVisualsClassnames = () => photoElement ? '' : 'additive'
+
     return (
         <div id='edit-profile-container'>
             <div id='header-section'>
-                <div id='remove-icon'>{removeIcon()}</div>
+                <Link id='remove-icon' to='/username'>{removeIcon()}</Link>
                 <div id='edit-profile-text'>Edit profile</div>
-                <Link id='save-edit-profile-changes'>Save</Link>
+                <Link id='save-edit-profile-changes' to='/username'>Save</Link>
             </div>
             <div id='body-section'>
-                <div id='profile-visuals'>
-                    <div id='profile-cover-photo'>
-                        <img id='cover-photo' src='https://picsum.photos/200/300' />
-                        <div id='svg-visuals'>
+                <div id='profile-visuals' style={{maxHeight: '249px'}}>
+                    <div id='profile-cover-photo' style={{backgroundColor: photoElement == '' && 'darkslategray'}}>
+                        {/* <img id='cover-photo' src='https://picsum.photos/200/300' /> */}
+                        <input type='file' onChange={handleChange} name='image-file' ref={inputRef} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
+
+                        {photoElement && <img id='cover-photo' src={handleMediaFileFormats(photoElement)} />}
+                        {/* <img id='cover-photo' src={handleMediaFileFormats(photoElement ? photoElement : 'https://picsum.photos/200/300')} /> */}
+
+                        <div id='svg-visuals' style={{ transform: photoElement == '' && 'translate(10px, 76px)' }}>
                             {/* <div className='camera-icon'>{cameraIcon()}</div>
                             <div className='remove-icon-svg'>{removeIcon(true)}</div> */}
-                            <div className='camera-icon'>
+                            <div id='cover-camera' className='camera-icon' onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                                 {cameraIcon()}
-                                <div id='cover-camera-icon-tooltips'>Add Photo</div>
+                                <div id='cover-camera-icon-tooltips' style={{ display: hovered == 'cover-camera' ? 'block' : 'none' }}>Add Photo</div>
                             </div>
-                            <div className='remove-icon-svg'>
+                            <div id='cover-remove' className='remove-icon-svg' onClick={() => setPhotoElement('')} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                                 {removeIcon(true)}
-                                <div id='cover-remove-icon-tooltips'>Remove Photo</div>
+                                <div id='cover-remove-icon-tooltips' style={{ display: hovered == 'cover-remove' ? 'block' : 'none' }}>Remove Photo</div>
                             </div>
                         </div>
                     </div>
-                    <div id='profile-photo-div'>
-                        <img id='profile-photo' src='https://picsum.photos/200/300' />
-                        <div className='camera-icon'>
+                    <div id='profile-photo-div' style={{backgroundColor: photoElement == '' && 'darkslategray'}}>
+                        {/* <img id='profile-photo' src='https://picsum.photos/200/300' /> */}
+                        {photoElement && <img id='profile-photo' src={handleMediaFileFormats(photoElement)} />}
+                        <div id='profile-camera' className='camera-icon' style={{ transform: photoElement == '' && 'translate(0px, 42px)' }} onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                             {cameraIcon()}
-                            <div id='profile-camera-icon-tooltips'>Add Photo</div>
+                            <div id='profile-camera-icon-tooltips' style={{ display: hovered == 'profile-camera' ? 'block' : 'none' }}>Add Photo</div>
                         </div>
                     </div>
                 </div>
-                <div id='profile-infos'>
-                    {returnAnEditableTextarea()}
+                <div id='profile-infos' style={{padding: '8px'}}>
+                    {returnAnEditableTextarea(hovered, setHovered)}
+                    {/* {returnAnEditableTextarea()} */}
                     {/* <ReturnAnEditableTextarea /> */}
                     {/* <ReturnAnEditableTextarea test={test} setTest={setTest} /> */}
                 </div>
@@ -74,12 +115,13 @@ let userObject = [
 
 ]
 
-let returnAnEditableTextarea = () => {
-    let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} />)
+let returnAnEditableTextarea = (hovered, setHovered) => {
+    // let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} />)
+    let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} hovered={hovered} setHovered={setHovered} />)
     return generateProfileEditableInfos
 }
 
-let ReturnComponent = ({ item }) => {
+let ReturnComponent = ({ item, hovered, setHovered }) => {
     let [test, setTest] = useState('')
     let [length, setLength] = useState(item.content.length);
     let [show, setShow] = useState(false);
