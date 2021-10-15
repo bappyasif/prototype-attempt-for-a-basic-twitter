@@ -85,7 +85,7 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
     }
 
     let renderingData = tweetData && tweetData.map((item, idx) =>    
-    (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
+    (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: (item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? 'block' : 'none' }}>
 
         {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
 
@@ -104,7 +104,8 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
         </div>
     })
 
-    return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData}</div>
+    // return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData}</div>
+    return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}</div>
 }
 
 export default AllTweetsPage

@@ -9,7 +9,7 @@ function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle, opacit
 
   let panelDivs = iconsArray.map((icon) => (
     <div key={icon.id} id={icon.id} onClick={icon.id == 'Tweet' ? clickHandler : null}>
-      <Link className="item-divs" to={icon.id == 'Tweet' ? '/tweet/compose' : icon.id == 'Profile' ? '/user-profile' : '/'}>
+      <Link className="item-divs" to={icon.id == 'Tweet' ? '/tweet/compose' : icon.id == 'Profile' ? '/username' : '/'}>
         <span className="icons-span" style={{display: icon.id == 'Tweet' ? 'none': 'block'}}>{icon.svg}</span>
         <span className="names-span">{icon.id == "Twitter" ? "" : icon.id}</span>
       </Link>

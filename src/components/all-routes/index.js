@@ -63,7 +63,7 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
 
                 <Route exact path='/tweet/compose'>
                     {/* {setChangeLayout(true)} */}
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ComposeTweet
                         selectedFile={selectedFile}
                         setSelectedFile={setSelectedFile}
@@ -93,9 +93,11 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
                         setMediaDescriptionText={setMediaFileDescriptionText}
                         setNewDataStatus={setNewDataStatus}
                         setChangeLayout={setChangeLayout}
+                        setOpacity={setOpacity}
+                        opacity={opacity}
                     />
                     {/* <ProfilePageUpperView /> */}
-                    <RightSideNavigationPanel tweetData={tweetData} />
+                    <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
                 <Route exact path='/tweet/compose/schedule'>

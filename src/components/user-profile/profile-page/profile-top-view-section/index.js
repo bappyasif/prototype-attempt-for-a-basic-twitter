@@ -9,8 +9,8 @@ function ProfilePageTopView() {
             <div id='header-section'>
                 <div id='go-back-to-previous'>{backIcon()}</div>
                 <div id='profile-sneak-peak'>
-                    <text className='profile-name'>A.B.</text>
-                    <text className='total-tweets'>0000 Tweets</text>
+                    <div className='profile-name'>A.B.</div>
+                    <div className='total-tweets'>0000 Tweets</div>
                 </div>
             </div>
             <div id='header-photo-div'>
@@ -23,8 +23,8 @@ function ProfilePageTopView() {
             </div>
             <div id='profile-info-section'>
                 <div id='handle-info'>
-                    <text className='profile-name'>A.B.</text>
-                    <text id='profile-handle'>@bappyasif</text>
+                    <div className='profile-name'>A.B.</div>
+                    <div id='profile-handle'>@bappyasif</div>
                 </div>
                 <div id='profile-bio'>profile sample bio goes here as an example</div>
                 <div id='profile-info'>
@@ -43,10 +43,10 @@ function ProfilePageTopView() {
                 </div>
                 <div id='profile-reach-info'>
                     <a id='profile-following'>
-                        <text className='audience-numbers'>0000 <span className='audience-reach-type'>Following</span></text>
+                        <div className='audience-numbers'>0000 <span className='audience-reach-type'>Following</span></div>
                     </a>
                     <a id='profile-follower'>
-                        <text className='audience-numbers'>0000 <span className='audience-reach-type'>Followers</span></text>
+                        <div className='audience-numbers'>0000 <span className='audience-reach-type'>Followers</span></div>
                     </a>
                 </div>
             </div>

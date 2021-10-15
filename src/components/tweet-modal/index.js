@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
-function TweetModal({ setNewDataStatus, isScheduleIconClicked, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
+function TweetModal({opacity ,setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -50,6 +50,9 @@ function TweetModal({ setNewDataStatus, isScheduleIconClicked, selectedFile, set
     //     });
     // }, [toggleModality]);
 
+    // useEffect(() => setOpacity(true), [])
+    // useEffect(() => setOpacity(true), [opacity])
+
     useEffect(() => {
         let optionsDiv = document.querySelector('#options-selected');
         optionsDiv.addEventListener('click', () => {
@@ -74,6 +77,8 @@ function TweetModal({ setNewDataStatus, isScheduleIconClicked, selectedFile, set
         // setToggleModality(!toggleModality)
         handleTweetModalToggle();
         setScheduleStamp('')
+
+        setOpacity(false)
 
         // setTweetText('');
         // setExtraTweetText('');
@@ -103,6 +108,7 @@ function TweetModal({ setNewDataStatus, isScheduleIconClicked, selectedFile, set
         setIsBothTextareaExist(false);
         setNewDataStatus(true)
         // console.log(tweetText, "??")
+        setOpacity(false)
     }
 
     let onGifClick = (gif, evt) => {
@@ -114,7 +120,8 @@ function TweetModal({ setNewDataStatus, isScheduleIconClicked, selectedFile, set
     return (
         <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >
             <div className='upper-content'>
-                <span id='delete-icon' onClick={closeTweetModalHandler}>{deleteIcon()}</span>
+                {/* <span id='delete-icon' onClick={closeTweetModalHandler}>{deleteIcon()}</span> */}
+                <span id='delete-icon' onClick={closeTweetModalHandler}><Link to='/username'>{deleteIcon()}</Link></span>
                 <hr />
             </div>
 

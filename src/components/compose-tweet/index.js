@@ -3,9 +3,14 @@ import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivac
 import AllTweetsPage from '../user-profile/all-tweets';
 import './index.css';
 
-function ComposeTweet({ setChangeLayout, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText, setNewDataStatus }) {
+function ComposeTweet({opacity, setOpacity, setChangeLayout, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText, setNewDataStatus }) {
 
-    setChangeLayout(true)
+    // setChangeLayout(true)
+
+    useEffect(() => setOpacity(true), [])
+    useEffect(() => setChangeLayout(true), [])
+
+    // useEffect(() => setOpacity(true), [opacity])
 
     return (
         <div id='compose-tweet-container'>
@@ -36,6 +41,8 @@ function ComposeTweet({ setChangeLayout, selectedFile, setSelectedFile, gifFile,
                 mediaDescriptionText={mediaDescriptionText}
                 setMediaDescriptionText={setMediaDescriptionText}
                 setNewDataStatus={setNewDataStatus}
+                setOpacity={setOpacity}
+                opacity={opacity}
             />
         </div>
     )
