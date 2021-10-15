@@ -1,0 +1,60 @@
+#signup-page-container {
+    width: 560px;
+    background-color: whitesmoke;
+    border-radius: 11px;
+}
+
+#signup-page-container #top-div, 
+#signup-page-container #bottom-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 261px 4px 20px;
+}
+
+#signup-page-container #top-div #remove-modal, 
+#signup-page-container #top-div #twitter-logo {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+}
+
+#signup-page-container #top-div #remove-modal:hover, 
+#signup-page-container #top-div #twitter-logo:hover {
+    background-color: lightgray;
+    border-radius: 50%;
+}
+
+#signup-page-container #user-info-div #first-half {
+    padding: 2px 15px 2px 17px;
+}
+
+#signup-page-container #user-info-div #first-half .custom-input-component-container {
+    border: solid .17em silver;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+#signup-page-container #user-info-div #first-half .custom-input-component-container .component-header {
+    height: 1.7em;
+    text-align: left;
+    margin-left: 4px;
+}
+
+#signup-page-container #user-info-div #first-half .custom-input-component-container input {
+    width: -webkit-fill-available;
+    height: 2.7em;
+    border: none;
+    background-color: transparent;
+}
+
+#signup-page-container #bottom-div {
+    background-color: rgba(29, 155, 240, .6);
+    border-radius: 27px;
+    margin: 4px 6px 6px 6px;
+    height: 2em;
+    padding: 0px;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}

@@ -5,7 +5,6 @@ import LeftSideNavigationPanel from '../navigation-panels/left-side';
 import BeginReset from '../password-reset-page/begin-reset';
 import TopNavigation from '../password-reset-page/top-navigation';
 import VerifyUserInfo from '../password-reset-page/verify-user-info';
-import SignupPageUILogics from '../signup-page/ui-logics';
 import ComposeTweet from '../compose-tweet';
 import UserProfile from '../user-profile';
 import ProfilePageUpperView from '../user-profile/profile-page';
@@ -15,6 +14,8 @@ import TweetScheduler from '../tweet-modal/schedule-tweet';
 import AllMedias from '../user-profile/all-medias';
 import RightSideNavigationPanel from '../navigation-panels/right-side';
 import EditProfile from '../user-profile/profile-page/edit-profile';
+import LandingPageUILogics from '../landing-page/ui-logics';
+import SignupPage from '../signup-page';
 
 function AllRoutes({ count, handleCount, setChangeLayout }) {
     let [tweetData, setTweetData] = useState([]);
@@ -47,9 +48,11 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
     return (
         <Router>
             <Switch>
-                <Route exact path='/' component={SignupPageUILogics} />
+                <Route exact path='/' component={LandingPageUILogics} />
 
                 <Route path='/login' component={LoginPage} />
+
+                <Route path='/i/flow/signup' component={SignupPage} />
 
                 <Route path='/begin-password-reset'>
                     <TopNavigation />

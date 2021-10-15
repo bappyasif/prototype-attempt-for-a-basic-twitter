@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import LoginPageBackDrop from "./backdrop";
 import LoginPageFrontView from "./frontview";
 
-function SignupPageUILogics() {
+function LandingPageUILogics() {
   return (
     <div>
       <LoginPageBackDrop />
@@ -11,4 +11,4 @@ function SignupPageUILogics() {
   );
 }
 
-export default SignupPageUILogics;
+export default LandingPageUILogics;
