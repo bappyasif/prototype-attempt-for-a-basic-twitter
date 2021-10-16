@@ -39,6 +39,11 @@
     height: 1.7em;
     text-align: left;
     margin-left: 4px;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 4px;
+    color: darkslategray;
+    font-size: medium;
 }
 
 #signup-page-container #user-info-div #first-half .custom-input-component-container input {
@@ -48,8 +53,60 @@
     background-color: transparent;
 }
 
+#signup-page-container #user-info-div #second-half #birth-date-selection-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 11px;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container:nth-child(1) {
+    width: 236px;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container:nth-child(2) {
+    width: 110px;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container:nth-child(3) {
+    width: 164px;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container {
+    border: solid .11em lightgrey;
+    /* display: flex;
+    justify-content: space-between;
+    align-items: center; */
+    position: relative;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .dropdown-icon {
+    position: absolute;
+    top: 13px;
+    right: 2px;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .left-side .element-header {
+    text-align: left;
+    padding-left: 11px;
+    font-size: smaller;
+    color: darkslategrey;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .left-side select {
+    width: -webkit-fill-available;
+    height: 2.7em;
+    font-size: small;
+    appearance: none;
+    /* padding: 2px 0px 4px 8px; */
+    padding-left: 11px;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .left-side #Month-select {
+    /* width: 362%; */
+}
+
 #signup-page-container #bottom-div {
-    background-color: rgba(29, 155, 240, .6);
+    /* background-color: rgba(29, 155, 240, .6); */
     border-radius: 27px;
     margin: 4px 6px 6px 6px;
     height: 2em;
@@ -57,4 +114,16 @@
     justify-content: center;
     font-weight: bold;
     color: white;
+    width: -webkit-fill-available;
+    border: none;
+}
+
+.ready {
+    pointer-events: auto;
+    background-color: rgba(29, 155, 240, 1);
+}
+
+.not-ready {
+    pointer-events: none;
+    background-color: rgba(29, 155, 240, .6);
 }

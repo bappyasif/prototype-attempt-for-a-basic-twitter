@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import useOnClickOutside from '../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside';
 import './styles.css'
 
 function SignupPage() {
@@ -8,76 +9,52 @@ function SignupPage() {
     let [year, setYear] = useState('');
     let [name, setname] = useState('');
     let [emailOrPassword, setEmailOrPassword] = useState('')
-    let [step, setStep] = useState(1);
+
+    // let selectRef = useRef();
 
     let handleSelectElementChanges = evt => {
+        // console.log(evt.target.id, evt.target.value, month)
         let whichSelectElement = evt.target.id;
         let value = evt.target.value;
-
-        if (whichSelectElement.includes('Month')) {
+        
+        if(whichSelectElement.includes('Month')) {
+            // console.log('here!!')
             setMonth(value)
-        } else if (whichSelectElement.includes('Date')) {
+        } else if(whichSelectElement.includes('Date')) {
+            // console.log('here!!')
             setDate(value)
-        } else if (whichSelectElement.includes('Year')) {
+        } else if(whichSelectElement.includes('Year')) {
+            // console.log('here!!')
             setYear(value)
-        }
-    }
-
-    let handleGoNextButton = () => {
-        if (step == 1) {
-            setStep(2)
-        } else if (step == 2) {
-            setStep(3)
-        } else if (step == 3) {
-            setStep(4)
-        } else if (step == 4) {
-            setStep(5)
         }
     }
 
     return (
         <div id='signup-page-container'>
             <div id='top-div'>
-                {step == 1 && <div id='remove-modal'> {removeIcon()} </div>}
-                {step != 1 && <div id='remove-modal' onClick={() => setStep(step - 1)}> {backIcon()} </div>}
+                <div id='remove-modal'> {removeIcon()} </div>
                 <div id='twitter-logo'> {twitterLogo()} </div>
             </div>
-            {
-                step == 1
-                &&
-                <div id='user-info-div'>
-                    <h2>Create your account</h2>
-                    <div id='first-half'>
-                        <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} />
-                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} />
-                        <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
-                    </div>
-                    <div id='second-half'>
-                        <h2>Date of birth</h2>
-                        <p>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
-                        <div id='birth-date-selection-container'>
-                            <ReturnASelectElement data={allMonths} name='Month' handleChnage={handleSelectElementChanges} />
-                            <ReturnASelectElement data={[]} name='Date' handleChnage={handleSelectElementChanges} whichMonth={month} />
-                            <ReturnASelectElement data={[]} name='Year' handleChnage={handleSelectElementChanges} />
-                        </div>
+            <div id='user-info-div'>
+                <h2>Create your account</h2>
+                <div id='first-half'>
+                    <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} />
+                    <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} />
+                    <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
+                </div>
+                <div id='second-half'>
+                    <h2>Date of birth</h2>
+                    <p>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
+                    <div id='birth-date-selection-container'>
+                        <ReturnASelectElement data={allMonths} name='Month' handleChnage={handleSelectElementChanges} />
+                        <ReturnASelectElement data={[]} name='Date' handleChnage={handleSelectElementChanges} whichMonth={month} />
+                        <ReturnASelectElement data={[]} name='Year' handleChnage={handleSelectElementChanges} />
                     </div>
                 </div>
-            }
-            {
-                step == 2
-                &&
-                <div id='customize-your-experience-container'>
-                    <h2>Customize your experience</h2>
-                    <h4>Track where you see Twitter content across the web</h4>
-                    <label htmlFor='experience-checkbox'>
-                        Twitter uses this data to personalize your experience. This web browsing history will never be stored with your name, email, or phone number.
-                    </label>
-                    <input type='checkbox' id='experience-checkbox' checked style={{width: 'fit-content', marginLeft: '8px'}} />
-                    <p style={{marginLeft: '26px'}}>For more details about these settings, visit the <a style={{color: 'rgba(29, 155, 240, 1)'}} href='https://help.twitter.com/en/managing-your-account/new-account-settings' target='_blank'>Help Center</a>.</p>
-                </div>
-            }
-
-            <button id='bottom-div' className={(name && emailOrPassword) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
+            </div>
+            {/* <div id='bottom-div' style={{pointerEvents: !(name && emailOrPassword && month && date && year) ? 'none' : 'auto'}}>Next</div> */}
+            {/* <button id='bottom-div' style={{pointerEvents: !(name && emailOrPassword) ? 'none' : 'auto'}}>Next</button> */}
+            <button id='bottom-div' className={(name && emailOrPassword) ? 'ready' : 'not-ready'}>Next</button>
         </div>
     )
 }
@@ -85,59 +62,71 @@ function SignupPage() {
 let ReturnASelectElement = ({ data, name, handleChnage, whichMonth, ref }) => {
     let [focused, setFocused] = useState(false);
     let selectRef = useRef(null);
-
+    
     let monthsAndDays = [{ month: 'January', days: 31 }, { month: 'February', days: 28 }, { month: 'March', days: 31 }, { month: 'April', days: 30 }, { month: 'May', days: 31 }, { month: 'June', days: 30 }, { month: 'July', days: 31 }, { month: 'August', days: 31 }, { month: 'September', days: 30 }, { month: 'October', days: 31 }, { month: 'November', days: 30 }, { month: 'December', days: 31 }]
 
-    let findEndDateRange = whichMonth && monthsAndDays.filter(item => item.month == whichMonth).map(item => item.days)[0]
+    let findEndDateRange = whichMonth && monthsAndDays.filter(item => item.month == whichMonth).map(item=>item.days)[0]
 
     const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step));
 
+    // if (name == 'Date') data = range(1, 30, 1)
     if (name == 'Date') data = range(1, findEndDateRange, 1)
 
     if (name == 'Year') data = range(1901, 2021, 1).reverse()
 
+    // let test = whichMonth && monthsAndDays.filter(item => item.month == whichMonth).map(item=>item.days)
+
+    // console.log(test, "<>", whichMonth)
+
+    // useEffect(() => console.log(value, '?!'), [!value])
+
+    // let renderSelectElementOptions = data.map(item => <option key={item} value={item} onClick={() => name == 'Month' && setValue(item)}>{item}</option>)
     let renderSelectElementOptions = data.map(item => <option key={item} value={item} onSelect={() => setFocused(false)}>{item}</option>)
 
     let handleRef = () => {
         selectRef.current.click()
-        // console.log(selectRef, selectRef.current, selectRef.current.click(), selectRef.current.focus())
+        // selectRef.current.click()
+        // setFocused(true)
+        console.log(selectRef, selectRef.current, selectRef.current.click(), selectRef.current.focus())
+        // console.log(ref.current, ref)
     }
 
     // useOnClickOutside(selectRef, () => setFocused(false))
 
     return (
-        <div className='select-element-container' style={{ border: focused && 'solid .11em aqua' }}>
+        <div className='select-element-container' style={{border: focused && 'solid .11em aqua'}}>
             <div className='left-side'>
                 <div className='element-header'>{name}</div>
                 <select id={name + '-select'} onChange={handleChnage} ref={selectRef} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
                     {renderSelectElementOptions}
                 </select>
             </div>
+            {/* <span className='dropdown-icon' onClick={handleRef} onBlur={() => setFocused(false)}>{dropdownIcon()}</span> */}
             <span className='dropdown-icon' onClick={handleRef}>{dropdownIcon()}</span>
         </div>
     )
 }
 
-let ReturnAnInputElement = ({ type, name, maxLength, updateValue, value }) => {
+let ReturnAnInputElement = ({ type, name, maxLength, updateValue }) => {
+    let [value, setValue] = useState('')
     let [focused, setFocused] = useState(false);
-
+    // let hgandleChange = evt => setValue(evt.target.value)
     let hgandleChange = evt => {
+        setValue(evt.target.value)
         updateValue(evt.target.value)
     }
     return (
         <div className='custom-input-component-container'>
             <div className='component-header'>
                 <div className='header-title'>{name}</div>
-                {maxLength && <div className='word-counts' style={{ display: focused ? 'block' : 'none' }}>{value.length}/{maxLength}</div>}
+                {maxLength && <div className='word-counts' style={{display: focused ? 'block' : 'none'}}>{value.length}/{maxLength}</div>}
             </div>
-            <input type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={hgandleChange} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
+            <input type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={hgandleChange} onFocus={()=>setFocused(true)} onBlur={()=>setFocused(false)} />
         </div>
     )
 }
 
 let allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
-let backIcon = () => <svg width='24px' height='24px'><g><path d="M20 11H7.414l4.293-4.293c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0l-6 6c-.39.39-.39 1.023 0 1.414l6 6c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L7.414 13H20c.553 0 1-.447 1-1s-.447-1-1-1z"></path></g></svg>
 
 let dropdownIcon = () => <svg width='24px' height='24px'><g><path d="M20.207 8.147c-.39-.39-1.023-.39-1.414 0L12 14.94 5.207 8.147c-.39-.39-1.023-.39-1.414 0-.39.39-.39 1.023 0 1.414l7.5 7.5c.195.196.45.294.707.294s.512-.098.707-.293l7.5-7.5c.39-.39.39-1.022 0-1.413z"></path></g></svg>
 
