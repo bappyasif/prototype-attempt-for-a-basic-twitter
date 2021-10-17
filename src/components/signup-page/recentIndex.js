@@ -10,7 +10,6 @@ function SignupPage() {
     let [emailOrPassword, setEmailOrPassword] = useState('')
     let [step, setStep] = useState(1);
     let nameRef = useRef(null);
-    let testRef = React.createRef();
 
     let handleSelectElementChanges = evt => {
         let whichSelectElement = evt.target.id;
@@ -39,10 +38,8 @@ function SignupPage() {
 
     let handleFocused = () => {
         setStep(1);
-        testRef.current.focus();
         // nameRef.current.focus();
-        // console.log(testRef, testRef.current, testRef.current.focus(), '>?')
-        console.log(testRef, testRef.current, '>?')
+        console.log(nameRef, nameRef.current)
     }
 
     return (
@@ -58,10 +55,8 @@ function SignupPage() {
                 <div id='user-info-div'>
                     <h2>Create your account</h2>
                     <div id='first-half'>
-                        <ReturnRevampedInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={testRef} />
-                        <ReturnRevampedInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} />
-                        {/* <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
-                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} /> */}
+                        <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
+                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} />
                         <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
                     </div>
                     <div id='second-half'>
@@ -94,10 +89,9 @@ function SignupPage() {
                 &&
                 <div id='signup-confirmation-container'>
                     <h2>Create your account</h2>
-                    {/* <ReturnAnInputVisual name="Name" value={name} /> */}
-                    {/* <ReturnRevampedInputElement name="Name" maxLength={50} updateValue={setname} value={name} handleFocused={handleFocused} ref={testRef} /> */}
-                    {/* <ReturnRevampedInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} /> */}
-                    <Test name='Name' value={name} focused={handleFocused} ref={testRef} />
+                    <ReturnAnInputVisual name='Name' value={name} focused={handleFocused} />
+                    <ReturnAnInputVisual name='Email/Password' value={emailOrPassword} />
+
                 </div>
             }
 
@@ -105,15 +99,6 @@ function SignupPage() {
         </div>
     )
 }
-
-let Test = React.forwardRef((props, ref) => {
-    // console.log(props, ref)
-    let { name, value, focused } = { ...props }
-    return <div className='an-input-visual-container'>
-        <div className='header-title'>{name}</div>
-        <input defaultValue={value} onFocus={focused} />
-    </div>
-})
 
 let ReturnAnInputVisual = ({ name, value, focused }) => {
     return <div className='an-input-visual-container'>
@@ -157,31 +142,6 @@ let ReturnASelectElement = ({ data, name, handleChnage, whichMonth, ref }) => {
         </div>
     )
 }
-
-let ReturnRevampedInputElement = React.forwardRef((props, ref) => {
-    let { type, name, maxLength, updateValue, value, handleFocused } = { ...props }
-    let [focused, setFocused] = useState(false);
-
-    let hgandleChange = evt => {
-        updateValue(evt.target.value)
-    }
-
-    console.log(props, ref)
-    let handlingFocus = () => {
-        setFocused(true)
-        handleFocused && handleFocused()
-    }
-
-    return (
-        <div className='custom-input-component-container'>
-            <div className='component-header'>
-                <div className='header-title'>{name}</div>
-                {maxLength && <div className='word-counts' style={{ display: focused ? 'block' : 'none' }}>{value.length}/{maxLength}</div>}
-            </div>
-            <input ref={ref && ref} type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={hgandleChange} onFocus={handlingFocus} onBlur={() => setFocused(false)} />
-        </div>
-    )
-})
 
 let ReturnAnInputElement = ({ type, name, maxLength, updateValue, value, ref }) => {
     let [focused, setFocused] = useState(false);
