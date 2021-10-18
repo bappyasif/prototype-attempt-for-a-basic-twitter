@@ -9,11 +9,8 @@ function SignupPage() {
     let [name, setname] = useState('');
     let [emailOrPassword, setEmailOrPassword] = useState('')
     let [step, setStep] = useState(1);
-    let [focusedWhich, setFocusedWhich] = useState('');
-    let [birthDate, setBirthDate] = useState('');
-    let nameRef = React.createRef();
-    let epRef = React.createRef();
-    let birthDateRef = React.createRef();
+    let nameRef = useRef(null);
+    let testRef = React.createRef();
 
     let handleSelectElementChanges = evt => {
         let whichSelectElement = evt.target.id;
@@ -30,7 +27,6 @@ function SignupPage() {
 
     let handleGoNextButton = () => {
         if (step == 1) {
-            setBirthDate(`${month.substr(0, 3)} ${date}, ${year}`)
             setStep(2)
         } else if (step == 2) {
             setStep(3)
@@ -41,26 +37,13 @@ function SignupPage() {
         }
     }
 
-    let handleFocused = (evt) => {
-        let whichElement = evt.target.name
-        setStep(1);
-        setFocusedWhich(whichElement)
-        // let findEl = document.getElementsByName(`${whichSelectElement}`)[0]
-        // console.log(whichSelectElement, findEl, document.body, testRef, test)
-        // findEl.focus()
-        // testRef.current.focus()
-        // test.current.focus()
+    let handleFocused = () => {
+        // setStep(1);
+        testRef.current.focus();
+        // nameRef.current.focus();
+        // console.log(testRef, testRef.current, testRef.current.focus(), '>?')
+        console.log(testRef, testRef.current, '>?')
     }
-
-    useEffect(() => {
-        // setTest(testRef)
-        // console.log(test, '??')
-        // step == 1 && testRef.current.focus()
-        step == 1 && focusedWhich == 'Name' && nameRef.current.focus()
-        step == 1 && focusedWhich == 'Email or Password' && epRef.current.focus()
-        // step == 1 && focusedWhich == 'Birth date' && birthDateRef.current.click()
-        step == 1 && focusedWhich == 'Birth date' && birthDateRef.current.focus()
-    }, [step])
 
     return (
         <div id='signup-page-container'>
@@ -75,16 +58,17 @@ function SignupPage() {
                 <div id='user-info-div'>
                     <h2>Create your account</h2>
                     <div id='first-half'>
-                        <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
-                        {/* <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} setTest={setTest} ref={testRef} /> */}
-                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} ref={epRef} />
+                        <ReturnRevampedInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={testRef} />
+                        <ReturnRevampedInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} />
+                        {/* <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
+                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} /> */}
                         <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
                     </div>
                     <div id='second-half'>
                         <h2>Date of birth</h2>
                         <p>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
                         <div id='birth-date-selection-container'>
-                            <ReturnASelectElement data={allMonths} name='Month' handleChnage={handleSelectElementChanges} ref={birthDateRef} />
+                            <ReturnASelectElement data={allMonths} name='Month' handleChnage={handleSelectElementChanges} />
                             <ReturnASelectElement data={[]} name='Date' handleChnage={handleSelectElementChanges} whichMonth={month} />
                             <ReturnASelectElement data={[]} name='Year' handleChnage={handleSelectElementChanges} />
                         </div>
@@ -110,9 +94,10 @@ function SignupPage() {
                 &&
                 <div id='signup-confirmation-container'>
                     <h2>Create your account</h2>
-                    <ReturnAnInputVisual name="Name" value={name} focused={handleFocused} />
-                    <ReturnAnInputVisual name="Email or Password" value={emailOrPassword} focused={handleFocused} />
-                    <ReturnAnInputVisual name="Birth date" value={birthDate} focused={handleFocused} />
+                    {/* <ReturnAnInputVisual name="Name" value={name} /> */}
+                    {/* <ReturnRevampedInputElement name="Name" maxLength={50} updateValue={setname} value={name} handleFocused={handleFocused} ref={testRef} /> */}
+                    {/* <ReturnRevampedInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} /> */}
+                    <Test name='Name' value={name} focused={handleFocused} ref={testRef} />
                 </div>
             }
 
@@ -121,19 +106,25 @@ function SignupPage() {
     )
 }
 
+let Test = React.forwardRef((props, ref) => {
+    // console.log(props, ref)
+    let { name, value, focused } = { ...props }
+    return <div className='an-input-visual-container'>
+        <div className='header-title'>{name}</div>
+        <input defaultValue={value} onFocus={focused} ref={ref} />
+    </div>
+})
+
 let ReturnAnInputVisual = ({ name, value, focused }) => {
     return <div className='an-input-visual-container'>
         <div className='header-title'>{name}</div>
-        <input name={name} defaultValue={value} onFocus={focused} />
+        <input defaultValue={value} onFocus={focused} />
     </div>
 }
 
-let ReturnASelectElement = React.forwardRef((props, ref) => {
-    let { data, name, handleChnage, whichMonth } = { ...props }
+let ReturnASelectElement = ({ data, name, handleChnage, whichMonth, ref }) => {
     let [focused, setFocused] = useState(false);
-    // let selectRef = useRef(null);
-
-    ref && console.log(ref, "<>")
+    let selectRef = useRef(null);
 
     let monthsAndDays = [{ month: 'January', days: 31 }, { month: 'February', days: 28 }, { month: 'March', days: 31 }, { month: 'April', days: 30 }, { month: 'May', days: 31 }, { month: 'June', days: 30 }, { month: 'July', days: 31 }, { month: 'August', days: 31 }, { month: 'September', days: 30 }, { month: 'October', days: 31 }, { month: 'November', days: 30 }, { month: 'December', days: 31 }]
 
@@ -147,66 +138,67 @@ let ReturnASelectElement = React.forwardRef((props, ref) => {
 
     let renderSelectElementOptions = data.map(item => <option key={item} value={item} onSelect={() => setFocused(false)}>{item}</option>)
 
-    // let handleRef = () => {
-    //     selectRef.current.click()
-    //     // console.log(selectRef, selectRef.current, selectRef.current.click(), selectRef.current.focus())
-    // }
+    let handleRef = () => {
+        selectRef.current.click()
+        // console.log(selectRef, selectRef.current, selectRef.current.click(), selectRef.current.focus())
+    }
 
     // useOnClickOutside(selectRef, () => setFocused(false))
 
     return (
         <div className='select-element-container' style={{ border: focused && 'solid .11em aqua' }}>
-            {/* <div className='left-side'>
-            <div className='element-header'>{name}</div>
-            <select id={name + '-select'} onChange={handleChnage} ref={ref && ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
-                {renderSelectElementOptions}
-            </select>
-        </div> */}
-            {/* <span className='dropdown-icon' onClick={handleRef}>{dropdownIcon()}</span> */}
-            <div className='dropdown-icon'>
-                <div className='left-side'>
-                    <div className='element-header'>{name}</div>
-                    <select id={name + '-select'} onChange={handleChnage} ref={ref && ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
-                        {renderSelectElementOptions}
-                    </select>
-                </div>
-                {dropdownIcon()}
+            <div className='left-side'>
+                <div className='element-header'>{name}</div>
+                <select id={name + '-select'} onChange={handleChnage} ref={selectRef} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
+                    {renderSelectElementOptions}
+                </select>
             </div>
+            <span className='dropdown-icon' onClick={handleRef}>{dropdownIcon()}</span>
         </div>
-
-        // <div className='select-element-container' style={{ border: focused && 'solid .11em aqua' }}>
-        //     <div className='left-side'>
-        //         <div className='element-header'>{name}</div>
-        //         <select id={name + '-select'} onChange={handleChnage} ref={ref && ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
-        //             {renderSelectElementOptions}
-        //         </select>
-        //     </div>
-        //     {/* <span className='dropdown-icon' onClick={handleRef}>{dropdownIcon()}</span> */}
-        //     <span className='dropdown-icon'>{dropdownIcon()}</span>
-        // </div>
     )
-})
+}
 
-let ReturnAnInputElement = React.forwardRef((props, ref) => {
+let ReturnRevampedInputElement = React.forwardRef((props, ref) => {
+    let { type, name, maxLength, updateValue, value, handleFocused } = { ...props }
     let [focused, setFocused] = useState(false);
-    let { type, name, maxLength, updateValue, value } = { ...props }
 
-    let handleChange = evt => {
+    let hgandleChange = evt => {
         updateValue(evt.target.value)
     }
 
-    // console.log(ref, "<>")
-    // setTest(ref && ref)
+    console.log(props, ref)
+    let handlingFocus = () => {
+        setFocused(true)
+        handleFocused && handleFocused()
+    }
+
     return (
-        <div className='custom-input-component-container' style={{ border: focused && 'solid .11em aqua' }}>
+        <div className='custom-input-component-container'>
             <div className='component-header'>
                 <div className='header-title'>{name}</div>
                 {maxLength && <div className='word-counts' style={{ display: focused ? 'block' : 'none' }}>{value.length}/{maxLength}</div>}
             </div>
-            <input name={name} ref={ref} type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={handleChange} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
+            <input ref={ref && ref} type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={hgandleChange} onFocus={handlingFocus} onBlur={() => setFocused(false)} />
         </div>
     )
 })
+
+let ReturnAnInputElement = ({ type, name, maxLength, updateValue, value, ref }) => {
+    let [focused, setFocused] = useState(false);
+
+    let hgandleChange = evt => {
+        updateValue(evt.target.value)
+    }
+    return (
+        <div className='custom-input-component-container'>
+            <div className='component-header'>
+                <div className='header-title'>{name}</div>
+                {maxLength && <div className='word-counts' style={{ display: focused ? 'block' : 'none' }}>{value.length}/{maxLength}</div>}
+            </div>
+            <input ref={ref} type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={hgandleChange} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
+        </div>
+    )
+}
 
 let allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
