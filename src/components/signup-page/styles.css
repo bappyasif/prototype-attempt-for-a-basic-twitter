@@ -79,7 +79,7 @@
     position: relative;
 }
 
-#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .dropdown-icon {
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .dropdown-icon-div {
     /* position: absolute; */
     /* top: 13px; */
     /* right: 2px; */
@@ -89,14 +89,24 @@
 }
 
 
-#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .dropdown-icon::before {
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .dropdown-icon-div::after {
     position: absolute;
-    top: 0;
-    left: 8px;
-    width: 20px;
-    height: 20px;
-    content: "😎";
+    top: 31%;
+    right: 8px;
+    /* width: 20px;
+    height: 20px; */
+    /* content: "😎"; */
+    /* content: attr(dataDropdownIcon()); */
+    /* content: '\\/'; */
+    content: '˅';
     pointer-events: none;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .dropdown-icon-div .dropdown-icon {
+    position: absolute;
+    top: 27%;
+    right: 8px;
+    cursor: pointer;
 }
 
 #signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .left-side {
