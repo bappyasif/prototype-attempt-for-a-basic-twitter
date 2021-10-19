@@ -2,6 +2,7 @@
     width: 560px;
     background-color: whitesmoke;
     border-radius: 11px;
+    text-align: left;
 }
 
 #signup-page-container #top-div, 
@@ -26,7 +27,13 @@
 }
 
 #signup-page-container #user-info-div #first-half {
-    padding: 2px 15px 2px 17px;
+    /* padding: 2px 27px 2px 27px; */
+    /* text-align: left; */
+}
+
+#signup-page-container #user-info-div,
+#signup-page-container #customize-your-experience-container {
+    margin: 0px 27px 2px 27px;
 }
 
 #signup-page-container #user-info-div #first-half .custom-input-component-container {
@@ -143,8 +150,8 @@
 #signup-page-container #bottom-div {
     /* background-color: rgba(29, 155, 240, .6); */
     border-radius: 27px;
-    margin: 4px 6px 6px 6px;
-    height: 2em;
+    margin: 4px 27px 6px 27px;
+    height: 2.7em;
     padding: 0px;
     justify-content: center;
     font-weight: bold;
@@ -163,3 +170,30 @@
     background-color: rgba(29, 155, 240, .6);
 }
 
+#signup-confirmation-container {
+    margin: 0px 27px 0px 27px;
+}
+
+#signup-confirmation-container .an-input-visual-container {
+    border: solid .11em lightgrey;
+    margin-bottom: 17px;
+}
+
+#signup-confirmation-container .an-input-visual-container .header-title {
+    text-align: left;
+    font-size: smaller;
+    color: darkslategray;
+}
+
+#signup-confirmation-container .an-input-visual-container input {
+    border: none;
+    background-color: transparent;
+}
+
+#signup-confirmation-container p,
+#signup-page-container #user-info-div #second-half p,
+#signup-page-container #customize-your-experience-container p {
+    font-size: .9em;
+    max-width: fit-content;
+    text-align: justify;
+}

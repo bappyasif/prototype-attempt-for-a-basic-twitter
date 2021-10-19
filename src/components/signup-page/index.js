@@ -15,6 +15,7 @@ function SignupPage() {
     let epRef = React.createRef();
     let birthDateRef = React.createRef();
     // let testRef = React.createRef();
+    let birthRef =  useRef();
 
     let handleSelectElementChanges = evt => {
         let whichSelectElement = evt.target.id;
@@ -61,16 +62,18 @@ function SignupPage() {
         step == 1 && focusedWhich == 'Name' && nameRef.current.focus()
         step == 1 && focusedWhich == 'Email or Password' && epRef.current.focus()
         // step == 1 && focusedWhich == 'Birth date' && birthDateRef.current.click()
-        step == 1 && focusedWhich == 'Birth date' && birthDateRef.current.focus()
+        step == 1 && focusedWhich == 'Birth date' && birthRef.current.focus()
+        // step == 1 && focusedWhich == 'Birth date' && birthDateRef.current.focus()
         // step == 1 && focusedWhich == 'Birth date' && birthDateRef.current.focus() && birthDateRef.current.select()
-        console.log(birthDateRef, nameRef)
+        // console.log(birthRef, nameRef)
     }, [step])
 
     return (
         <div id='signup-page-container'>
             <div id='top-div'>
                 {step == 1 && <div id='remove-modal'> {removeIcon()} </div>}
-                {step != 1 && <div id='remove-modal' onClick={() => setStep(step - 1)}> {backIcon()}  <span>{step + ' of 5'}</span> </div>}
+                {/* <span>{step + ' of 5'}</span> */}
+                {step != 1 && <div id='remove-modal' onClick={() => setStep(step - 1)}> {backIcon()} </div>}
                 <div id='twitter-logo'> {twitterLogo()} </div>
             </div>
             {
@@ -87,7 +90,8 @@ function SignupPage() {
                         <h2>Date of birth</h2>
                         <p>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
                         <div id='birth-date-selection-container'>
-                            <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthDateRef} />
+                            {/* <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthDateRef} /> */}
+                            <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthRef} />
                             <ReturnASelectElement name='Date' handleChnage={handleSelectElementChanges} whichMonth={month} />
                             <ReturnASelectElement name='Year' handleChnage={handleSelectElementChanges} />
                         </div>
@@ -104,7 +108,7 @@ function SignupPage() {
                         Twitter uses this data to personalize your experience. This web browsing history will never be stored with your name, email, or phone number.
                     </label>
                     <input type='checkbox' id='experience-checkbox' defaultChecked style={{ width: 'fit-content', marginLeft: '8px' }} />
-                    <p style={{ marginLeft: '26px' }}>For more details about these settings, visit the <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='https://help.twitter.com/en/managing-your-account/new-account-settings' target='_blank'>Help Center</a>.</p>
+                    <p>For more details about these settings, visit the <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='https://help.twitter.com/en/managing-your-account/new-account-settings' target='_blank'>Help Center</a>.</p>
                 </div>
             }
 
@@ -116,10 +120,13 @@ function SignupPage() {
                     <ReturnAnInputVisual name="Name" value={name} focused={handleFocused} />
                     <ReturnAnInputVisual name="Email or Password" value={emailOrPassword} focused={handleFocused} />
                     <ReturnAnInputVisual name="Birth date" value={birthDate} focused={handleFocused} />
+                    <p>By signing up, you agree to the <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Terms of Service </a> and <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Privacy Policy</a>, 
+                    including <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Cookie Use</a>. Others will be able to find you by email or phone number when 
+                    provided · <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Privacy Options</a></p>
                 </div>
             }
 
-            <button id='bottom-div' className={(name && emailOrPassword) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
+            <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} id='bottom-div' className={(name && emailOrPassword) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>{step == 3 ? 'Signup' : 'Next'}</button>
         </div>
     )
 }
@@ -142,15 +149,29 @@ let ReturnASelectElement = React.forwardRef((props, ref) => {
 
     const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step));
 
-    if (name == 'Date') data = range(1, findEndDateRange, 1)
+    if (name == 'Date') data = range(0, findEndDateRange, 1)
+    let getYear = new Date().getFullYear();
+    // console.log(getYear)
 
-    if (name == 'Year') data = range(1901, 2021, 1).reverse()
+    if (name == 'Year') data = range(1901, getYear+1, 1).reverse()
 
     if (name == 'Month') data = allMonths;
 
-    let renderSelectElementOptions = data.map(item => <option key={item} value={item} onSelect={() => setFocused(false)}>{item}</option>)
+    let renderSelectElementOptions = data.map(item => <option style={{backgroundColor: (item == 0 || item == getYear+1) && 'silver', color: (item == 0 || item == getYear+1) && 'silver'}} key={item} value={item} onSelect={() => setFocused(false)}>{(item != getYear+1 || item != 0) && item}</option>)
 
-    // console.log(ref, "??")
+    // ref && console.log(ref, "??")
+    // useEffect(() => {
+    //     let elDiv = document.querySelectorAll('.select-element-container');
+    //     // console.log(elDiv)
+    //     let opEl = document.createElement('option')
+    //     opEl.value = 0
+    //     opEl.textContent = 0;
+    //     console.log(opEl)
+    //     elDiv.forEach(node => {
+    //         // console.log(node.querySelector('select'))
+    //         node.querySelector('select').append(opEl)
+    //     })
+    // }, [])
 
     return (
         <div className='select-element-container' style={{ border: focused && 'solid .11em aqua' }}>
@@ -159,7 +180,7 @@ let ReturnASelectElement = React.forwardRef((props, ref) => {
                 
                 <div className='left-side'>
                     <div className='element-header'>{name}</div>
-                    <select id={name + '-select'} onChange={handleChnage} ref={ref && ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
+                    <select id={name + '-select'} onFocus={() => setFocused(true)} onChange={handleChnage} ref={ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
                         {renderSelectElementOptions}
                     </select>
                 </div>
