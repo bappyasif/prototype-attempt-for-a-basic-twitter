@@ -15,10 +15,10 @@ function SignupPage() {
     let nameRef = React.createRef();
     let epRef = React.createRef();
     let birthDateRef = React.createRef();
+    // let testRef = React.createRef();
     let birthRef =  useRef();
 
     let handleSelectElementChanges = evt => {
-        // evt.preventDefault()
         let whichSelectElement = evt.target.id;
         let value = evt.target.value;
 
@@ -37,6 +37,10 @@ function SignupPage() {
             setStep(2)
         } else if (step == 2) {
             setStep(3)
+        } else if (step == 3) {
+            setStep(4)
+        } else if (step == 4) {
+            setStep(5)
         }
     }
 
@@ -44,18 +48,29 @@ function SignupPage() {
         let whichElement = evt.target.name
         setStep(1);
         setFocusedWhich(whichElement)
+        // console.log(whichElement, birthDateRef, nameRef)
+        // let findEl = document.getElementsByName(`${whichSelectElement}`)[0]
+        // console.log(whichSelectElement, findEl, document.body, testRef, test)
+        // findEl.focus()
+        // testRef.current.focus()
+        // test.current.focus()
     }
 
     useEffect(() => {
+        // setTest(testRef)
+        // console.log(test, '??')
+        // step == 1 && testRef.current.focus()
         step == 1 && focusedWhich == 'Name' && nameRef.current.focus()
-
         step == 1 && focusedWhich == 'Email or Password' && epRef.current.focus()
-
+        // step == 1 && focusedWhich == 'Birth date' && birthDateRef.current.click()
         step == 1 && focusedWhich == 'Birth date' && birthRef.current.focus()
+        // step == 1 && focusedWhich == 'Birth date' && birthDateRef.current.focus()
+        // step == 1 && focusedWhich == 'Birth date' && birthDateRef.current.focus() && birthDateRef.current.select()
+        // console.log(birthRef, nameRef)
     }, [step])
 
     return (
-        <div id='signup-page-container' onSubmit={(evt) => evt.preventDefault()}>
+        <div id='signup-page-container'>
             <div id='top-div'>
                 {step == 1 && <div id='remove-modal'> {removeIcon()} </div>}
                 {/* <span>{step + ' of 5'}</span> */}
@@ -111,12 +126,13 @@ function SignupPage() {
                     provided · <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Privacy Options</a></p>
                 </div>
             }
-
             {
                 step != 3
                 &&
                 <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} id='bottom-div' className={(name && emailOrPassword && month && date && year) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
             }
+
+            {/* <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} id='bottom-div' className={(name && emailOrPassword) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>{step == 3 ? 'Signup' : 'Next'}</button> */}
 
             {
                 step == 3
@@ -153,7 +169,14 @@ let ReturnASelectElement = React.forwardRef((props, ref) => {
 
     if (name == 'Month') data = allMonths;
 
+    // let renderSelectElementOptions = data.map(item => <option style={{backgroundColor: (item == 0 || item == getYear+1) && 'silver', color: (item == 0 || item == getYear+1) && 'silver'}} key={item} value={item} onSelect={() => setFocused(false)}>{(item != getYear+1 || item != 0) && item}</option>)
+    // let renderSelectElementOptions = data.map(item => <option key={item} value={item} onSelect={() => setFocused(false)}>{item}</option>)
+    // let renderSelectElementOptions = data.map(item => <option key={item} value={(!item || item == getYear+1) ? '' : item} onSelect={() => setFocused(false)}>{(!item || item == getYear+1) ? '' : item}</option>)
+    // let renderSelectElementOptions = data.map(item => <option style={{backgroundColor: (!item) && 'silver'}} key={item} value={(!item || item == getYear+1) ? '' : item} onSelect={() => setFocused(false)}>{(!item || item == getYear+1) ? '' : item}</option>)
+    // let renderSelectElementOptions = data.map(item => <option disabled={(!item || item == getYear+1) ? true : null} key={item} value={(!item || item == getYear+1) ? '' : item} onSelect={() => setFocused(false)}>{(!item || item == getYear+1) ? '' : item}</option>)
     let renderSelectElementOptions = data.map(item => <option style={{backgroundColor: (date || month || year) ? 'transparent' : (!item || item == getYear+1) ? 'silver' : 'transparent'}} disabled={(date || month || year) && (!item || item == getYear+1) ? true : null} key={item} value={(!item || item == getYear+1) ? '' : item} onSelect={() => setFocused(false)}>{(!item || item == getYear+1) ? '' : item}</option>)
+
+    // ref && console.log(ref, "??")
 
     return (
         <div className='select-element-container' style={{ border: focused && 'solid .11em aqua' }}>
@@ -162,7 +185,7 @@ let ReturnASelectElement = React.forwardRef((props, ref) => {
                 
                 <div className='left-side'>
                     <div className='element-header'>{name}</div>
-                    <select id={name + '-select'} onFocus={() => setFocused(true)} onChange={handleChnage} ref={ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)} required>
+                    <select id={name + '-select'} onFocus={() => setFocused(true)} onChange={handleChnage} ref={ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
                         {renderSelectElementOptions}
                     </select>
                 </div>
@@ -204,3 +227,101 @@ let twitterLogo = () => <svg width='24px' height='24px'><g><path d="M23.643 4.93
 let removeIcon = () => <svg width='24px' height='24px'><g><path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path></g></svg>
 
 export default SignupPage
+
+/**
+ * 
+ * 
+     useEffect(() => {
+        let monthSel = document.querySelector('#Month-select');
+        let dateSel = document.querySelector('#Date-select');
+        let yearSel = document.querySelector('#Year-select');
+        // console.log(elDiv)
+        let opEl = document.createElement('option')
+        opEl.value = 0
+        opEl.textContent = 0;
+        // console.log(opEl)
+        // monthSel.prepend(opEl);
+        // dateSel.prepend(opEl);
+        // yearSel.prepend(opEl)
+    }, [])
+ * 
+ * 
+ useEffect(() => {
+        let elDiv = document.querySelectorAll('select');
+        // console.log(elDiv)
+        let opEl = document.createElement('option')
+        opEl.value = 0
+        opEl.textContent = 0;
+        // console.log(opEl)
+        elDiv.forEach(node => {
+            console.log(node)
+            node.appendChild(opEl)
+            // console.log(node.querySelector('#Month-select'))
+            // node.querySelector('select').append(opEl)
+            // node.querySelector('#Month-select').appendChild(opEl)
+            // node.querySelector('#Date-select').appendChild(opEl)
+            // node.querySelector('#Year-select').appendChild(opEl)
+        })
+    }, [])
+ * 
+ * 
+let ReturnASelectElement = React.forwardRef((props, ref) => {
+    let { data, name, handleChnage, whichMonth } = { ...props }
+    let [focused, setFocused] = useState(false);
+    // let selectRef = useRef(null);
+
+    ref && console.log(ref, "<>")
+
+    let monthsAndDays = [{ month: 'January', days: 31 }, { month: 'February', days: 28 }, { month: 'March', days: 31 }, { month: 'April', days: 30 }, { month: 'May', days: 31 }, { month: 'June', days: 30 }, { month: 'July', days: 31 }, { month: 'August', days: 31 }, { month: 'September', days: 30 }, { month: 'October', days: 31 }, { month: 'November', days: 30 }, { month: 'December', days: 31 }]
+
+    let findEndDateRange = whichMonth && monthsAndDays.filter(item => item.month == whichMonth).map(item => item.days)[0]
+
+    const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step));
+
+    if (name == 'Date') data = range(1, findEndDateRange, 1)
+
+    if (name == 'Year') data = range(1901, 2021, 1).reverse()
+
+    let renderSelectElementOptions = data.map(item => <option key={item} value={item} onSelect={() => setFocused(false)}>{item}</option>)
+
+    // let handleRef = () => {
+    //     selectRef.current.click()
+    //     // console.log(selectRef, selectRef.current, selectRef.current.click(), selectRef.current.focus())
+    // }
+
+    // useOnClickOutside(selectRef, () => setFocused(false))
+
+    return (
+        <div className='select-element-container' style={{ border: focused && 'solid .11em aqua' }}>
+            {/* <div className='left-side'>
+            <div className='element-header'>{name}</div>
+            <select id={name + '-select'} onChange={handleChnage} ref={ref && ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
+                {renderSelectElementOptions}
+            </select>
+        </div> *}
+            {/* <span className='dropdown-icon' onClick={handleRef}>{dropdownIcon()}</span> *}
+            <div className='dropdown-icon-div' dataDropdownIcon={dropdownIcon()}>
+                
+                <div className='left-side'>
+                    <div className='element-header'>{name}</div>
+                    <select id={name + '-select'} onChange={handleChnage} ref={ref && ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
+                        {renderSelectElementOptions}
+                    </select>
+                </div>
+                <span className='dropdown-icon'>{dropdownIcon()}</span>
+            </div>
+        </div>
+
+        // <div className='select-element-container' style={{ border: focused && 'solid .11em aqua' }}>
+        //     <div className='left-side'>
+        //         <div className='element-header'>{name}</div>
+        //         <select id={name + '-select'} onChange={handleChnage} ref={ref && ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)}>
+        //             {renderSelectElementOptions}
+        //         </select>
+        //     </div>
+        //     {/* <span className='dropdown-icon' onClick={handleRef}>{dropdownIcon()}</span> *}
+        //     <span className='dropdown-icon'>{dropdownIcon()}</span>
+        // </div>
+    )
+})
+ */

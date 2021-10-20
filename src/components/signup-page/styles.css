@@ -68,10 +68,12 @@
 
 #signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container:nth-child(1) {
     width: 236px;
+    margin-right: 17px;
 }
 
 #signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container:nth-child(2) {
     width: 110px;
+    margin-right: 17px;
 }
 
 #signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container:nth-child(3) {
@@ -142,6 +144,25 @@
         /* height: 22px; */
         cursor: pointer;
 }
+
+/* #signup-page-container #user-info-div #second-half #birth-date-selection-container select option {
+    cursor: pointer;
+}
+
+#signup-page-container #user-info-div #second-half #birth-date-selection-container select option:active {
+    /* background-color: transparent; /
+    /* color: white; /
+    outline: none;
+    cursor: pointer;
+} */
+
+/* #signup-page-container #user-info-div #second-half #birth-date-selection-container select option:first-child {
+    background-color: silver;
+} */
+
+/* #signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .left-side select:first-child:focus {
+    background-color: transparent;
+} */
 
 #signup-page-container #user-info-div #second-half #birth-date-selection-container .select-element-container .left-side #Month-select {
     /* width: 362%; */
