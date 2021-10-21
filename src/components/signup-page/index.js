@@ -1,3 +1,4 @@
+import { createUserWithEmailAndPassword, getAuth, signInWithPhoneNumber } from '@firebase/auth';
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom';
 import './styles.css'
@@ -12,10 +13,59 @@ function SignupPage() {
     let [step, setStep] = useState(1);
     let [focusedWhich, setFocusedWhich] = useState('');
     let [birthDate, setBirthDate] = useState('');
+    let [validated, setValidated] = useState(false)
+    // let [error, setError] = useState('');
     let nameRef = React.createRef();
     let epRef = React.createRef();
     let birthDateRef = React.createRef();
     let birthRef =  useRef();
+    
+    // let handleValidation = () => {
+    //     if(type == 'email') {
+    //         let regEx = /\w+@\w+.[a-z]{2,}/
+    //         let test = regEx.test(value);
+    //         !test && setError('email pattern must be followed, e.g. word@word.domains-suffix')
+    //         // console.log(test, error)
+    //         test && setError('')
+    //     }
+    // }
+
+    let verifyUserSignUp = (evt) => {
+        evt.preventDefault()
+
+        let auth = getAuth();
+        if(isPhoneNumberUsed) {
+            createUserWithEmailAndPassword(auth, emailOrPassword, name).then(res => {
+                console.log(res)
+            }).catch(err => {
+                let errCode = err.code;
+                let errMsg = err.message;
+                console.log(errCode, errMsg)
+            })
+        } else {
+            auth.languageCode = 'it'
+            
+            window.recaptchaVerifier = auth.RecaptchaVerifier('recaptcha-container')
+            
+            recaptchaVerifier.render().then(widgetId => {
+                window.recaptchaWidgetId = widgetId
+            });
+
+            let recaptchaResponse = grecaptcha.getResponse(recaptchaWidgetId)
+            let phoneNumber = getPhoneNumberFromUserInput();
+            let appVerifier = window.recaptchaVerifier;
+            signInWithPhoneNumber(phoneNumber, appVerifier).then(confirmationResult => window.confirmationResult = confirmationResult).catch(err=>console.log(err.code, err.message))
+
+            console.log('what what!!')
+            // createUserWithPhoneNumber(auth, emailOrPassword, name).then(res => {
+            //     console.log(res)
+            // }).catch(err => {
+            //     let errCode = err.code;
+            //     let errMsg = err.message;
+            //     console.log(errCode, errMsg)
+            // })
+        }        
+    }
 
     let handleSelectElementChanges = evt => {
         // evt.preventDefault()
@@ -32,11 +82,15 @@ function SignupPage() {
     }
 
     let handleGoNextButton = () => {
-        if (step == 1) {
-            setBirthDate(`${month.substr(0, 3)} ${date}, ${year}`)
-            setStep(2)
-        } else if (step == 2) {
-            setStep(3)
+        if(validated) {
+            if (step == 1) {
+                setBirthDate(`${month.substr(0, 3)} ${date}, ${year}`)
+                setStep(2)
+            } else if (step == 2) {
+                setStep(3)
+            }
+        } else {
+            alert('please fillout values correctly!!')
         }
     }
 
@@ -69,7 +123,7 @@ function SignupPage() {
                     <h2>Create your account</h2>
                     <div id='first-half'>
                         <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
-                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} ref={epRef} type={isPhoneNumberUsed ? 'email' : 'tel'} />
+                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} ref={epRef} type={isPhoneNumberUsed ? 'email' : 'tel'} setValidated={setValidated} />
                         <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
                     </div>
                     <div id='second-half'>
@@ -104,7 +158,7 @@ function SignupPage() {
                 <div id='signup-confirmation-container'>
                     <h2>Create your account</h2>
                     <ReturnAnInputVisual name="Name" value={name} focused={handleFocused} />
-                    <ReturnAnInputVisual name="Email or Password" value={emailOrPassword} focused={handleFocused} />
+                    <ReturnAnInputVisual name={!isPhoneNumberUsed ? "Phone number" : 'Email address'} value={emailOrPassword} focused={handleFocused} />
                     <ReturnAnInputVisual name="Birth date" value={birthDate} focused={handleFocused} />
                     <p>By signing up, you agree to the <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Terms of Service </a> and <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Privacy Policy</a>, 
                     including <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Cookie Use</a>. Others will be able to find you by email or phone number when 
@@ -121,7 +175,8 @@ function SignupPage() {
             {
                 step == 3
                 &&
-                <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} id='bottom-div' to='/username/'>Signup</Link>
+                <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to='/username/'>Signup</Link>
+                // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div'>Signup</Link>
             }
         </div>
     )
@@ -174,21 +229,47 @@ let ReturnASelectElement = React.forwardRef((props, ref) => {
 
 let ReturnAnInputElement = React.forwardRef((props, ref) => {
     let [focused, setFocused] = useState(false);
-    let { type, name, maxLength, updateValue, value } = { ...props }
+    let [error, setError] = useState('');
+    let { type, name, maxLength, updateValue, value, setValidated } = { ...props }
 
     let handleChange = evt => {
         updateValue(evt.target.value)
     }
 
+    useEffect(() => handleValidation(), [value])
+    
+    let handleValidation = () => {
+        if(type == 'email') {
+            let regEx = /\w+@\w+.[a-z]{2,}/
+            let test = regEx.test(value);
+            !test && setError('email pattern must be followed, e.g. word@word.domains-suffix')
+            !test && setValidated(false)
+            // console.log(test, error)
+            test && setError('')
+            test && setValidated(true)
+        } else if(type == 'tel') {
+            let regEx = /([0-9]{3}(-){0,1}){2}[0-9]{4}/
+            let test = regEx.test(value)
+            if(!test) {
+                setError('phone number pattern must be matched, e.g. 123-456-7890')
+                setValidated(false)
+            } else {
+                setError('')
+                setValidated(true)
+            }
+        }
+    }
+
     // console.log(ref, "<>")
     // setTest(ref && ref)
     return (
-        <div className='custom-input-component-container' style={{ border: focused && 'solid .11em aqua' }}>
+        <div className='custom-input-component-container' style={{ border: error && value && 'solid .11em red' || focused && 'solid .11em aqua' }}>
             <div className='component-header'>
-                <div className='header-title'>{name}</div>
+                <div className='header-title' style={{display: focused || value ? 'block' : 'none'}}>{name}</div>
                 {maxLength && <div className='word-counts' style={{ display: focused ? 'block' : 'none' }}>{value.length}/{maxLength}</div>}
             </div>
-            <input name={name} ref={ref} type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={handleChange} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
+            <input placeholder={focused ? '' : name} name={name} ref={ref} type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={handleChange} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
+            {error && value && <span>{error}</span>}
         </div>
     )
 })

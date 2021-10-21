@@ -40,6 +40,7 @@
     border: solid .17em silver;
     margin-bottom: 20px;
     border-radius: 4px;
+    position: relative;
 }
 
 #signup-page-container #user-info-div #first-half .custom-input-component-container .component-header {
@@ -55,9 +56,17 @@
 
 #signup-page-container #user-info-div #first-half .custom-input-component-container input {
     width: -webkit-fill-available;
-    height: 2.7em;
+    /* height: 2.7em; */
+    font-size: larger;
     border: none;
     background-color: transparent;
+}
+
+#signup-page-container #user-info-div #first-half .custom-input-component-container span {
+    color: red;
+    position: absolute;
+    left: 0;
+    bottom: -20px;
 }
 
 #signup-page-container #user-info-div #second-half #birth-date-selection-container {
