@@ -1,7 +1,9 @@
 import { createUserWithEmailAndPassword, getAuth, signInWithPhoneNumber } from '@firebase/auth';
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom';
+import FirebaseApp from '../firebase-configs';
 import './styles.css'
+import { phoneVerification, verifyUserSignUp, withEmailUserVerification } from './user-verification';
 
 function SignupPage() {
     let [isPhoneNumberUsed, setIsPhoneNumberUsed] = useState(false);
@@ -9,62 +11,25 @@ function SignupPage() {
     let [date, setDate] = useState('');
     let [year, setYear] = useState('');
     let [name, setname] = useState('');
-    let [emailOrPassword, setEmailOrPassword] = useState('')
+    let [emailOrPhone, setEmailOrPhone] = useState('')
     let [step, setStep] = useState(1);
     let [focusedWhich, setFocusedWhich] = useState('');
     let [birthDate, setBirthDate] = useState('');
     let [validated, setValidated] = useState(false)
+    let [verificationDone, setVerificationDone] = useState(false)
     // let [error, setError] = useState('');
     let nameRef = React.createRef();
     let epRef = React.createRef();
     let birthDateRef = React.createRef();
     let birthRef =  useRef();
-    
-    // let handleValidation = () => {
-    //     if(type == 'email') {
-    //         let regEx = /\w+@\w+.[a-z]{2,}/
-    //         let test = regEx.test(value);
-    //         !test && setError('email pattern must be followed, e.g. word@word.domains-suffix')
-    //         // console.log(test, error)
-    //         test && setError('')
-    //     }
-    // }
 
-    let verifyUserSignUp = (evt) => {
-        evt.preventDefault()
-
-        let auth = getAuth();
+    let verifyUserSignUp = () => {
         if(isPhoneNumberUsed) {
-            createUserWithEmailAndPassword(auth, emailOrPassword, name).then(res => {
-                console.log(res)
-            }).catch(err => {
-                let errCode = err.code;
-                let errMsg = err.message;
-                console.log(errCode, errMsg)
-            })
+            withEmailUserVerification(emailOrPhone)
         } else {
-            auth.languageCode = 'it'
-            
-            window.recaptchaVerifier = auth.RecaptchaVerifier('recaptcha-container')
-            
-            recaptchaVerifier.render().then(widgetId => {
-                window.recaptchaWidgetId = widgetId
-            });
-
-            let recaptchaResponse = grecaptcha.getResponse(recaptchaWidgetId)
-            let phoneNumber = getPhoneNumberFromUserInput();
-            let appVerifier = window.recaptchaVerifier;
-            signInWithPhoneNumber(phoneNumber, appVerifier).then(confirmationResult => window.confirmationResult = confirmationResult).catch(err=>console.log(err.code, err.message))
-
-            console.log('what what!!')
-            // createUserWithPhoneNumber(auth, emailOrPassword, name).then(res => {
-            //     console.log(res)
-            // }).catch(err => {
-            //     let errCode = err.code;
-            //     let errMsg = err.message;
-            //     console.log(errCode, errMsg)
-            // })
-        }        
+            let recaptchaContainer = document.querySelector('#recaptcha-container')
+            phoneVerification(emailOrPhone, recaptchaContainer)
+        }
     }
 
     let handleSelectElementChanges = evt => {
@@ -116,6 +81,7 @@ function SignupPage() {
                 {step != 1 && <div id='remove-modal' onClick={() => setStep(step - 1)}> {backIcon()} </div>}
                 <div id='twitter-logo'> {twitterLogo()} </div>
             </div>
+            <div id='recaptcha-container'></div>
             {
                 step == 1
                 &&
@@ -123,7 +89,7 @@ function SignupPage() {
                     <h2>Create your account</h2>
                     <div id='first-half'>
                         <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
-                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPassword} value={emailOrPassword} ref={epRef} type={isPhoneNumberUsed ? 'email' : 'tel'} setValidated={setValidated} />
+                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPhone} value={emailOrPhone} ref={epRef} type={isPhoneNumberUsed ? 'email' : 'tel'} setValidated={setValidated} />
                         <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
                     </div>
                     <div id='second-half'>
@@ -158,7 +124,7 @@ function SignupPage() {
                 <div id='signup-confirmation-container'>
                     <h2>Create your account</h2>
                     <ReturnAnInputVisual name="Name" value={name} focused={handleFocused} />
-                    <ReturnAnInputVisual name={!isPhoneNumberUsed ? "Phone number" : 'Email address'} value={emailOrPassword} focused={handleFocused} />
+                    <ReturnAnInputVisual name={!isPhoneNumberUsed ? "Phone number" : 'Email address'} value={emailOrPhone} focused={handleFocused} />
                     <ReturnAnInputVisual name="Birth date" value={birthDate} focused={handleFocused} />
                     <p>By signing up, you agree to the <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Terms of Service </a> and <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Privacy Policy</a>, 
                     including <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Cookie Use</a>. Others will be able to find you by email or phone number when 
@@ -169,14 +135,16 @@ function SignupPage() {
             {
                 step != 3
                 &&
-                <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} id='bottom-div' className={(name && emailOrPassword && month && date && year) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
+                <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} id='bottom-div' className={(name && emailOrPhone && month && date && year) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
             }
 
             {
                 step == 3
                 &&
-                <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to='/username/'>Signup</Link>
+                // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to='/username/'>Signup</Link>
                 // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div'>Signup</Link>
+                // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to={verificationDone &&'/username/'}>Signup</Link>
+                <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div'>Signup</button>
             }
         </div>
     )
@@ -285,3 +253,62 @@ let twitterLogo = () => <svg width='24px' height='24px'><g><path d="M23.643 4.93
 let removeIcon = () => <svg width='24px' height='24px'><g><path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path></g></svg>
 
 export default SignupPage
+
+/**
+ * 
+ * 
+     // let handleValidation = () => {
+    //     if(type == 'email') {
+    //         let regEx = /\w+@\w+.[a-z]{2,}/
+    //         let test = regEx.test(value);
+    //         !test && setError('email pattern must be followed, e.g. word@word.domains-suffix')
+    //         // console.log(test, error)
+    //         test && setError('')
+    //     }
+    // }
+ * 
+ * 
+ // let verifyUserSignUp = (evt) => {
+    //     // evt.preventDefault()
+
+    //     let auth = getAuth();
+    //     if(isPhoneNumberUsed) {
+    //         createUserWithEmailAndPassword(auth, emailOrPhone, emailOrPhone+'1234').then(res => {
+    //             console.log(res)
+    //             setVerificationDone(true)
+    //             window.open('/username/', '_parent')
+    //         }).catch(err => {
+    //             let errCode = err.code;
+    //             let errMsg = err.message;
+    //             console.log(errCode, errMsg)
+    //         })
+    //     } else {
+    //         phoneVerification(emailOrPhone)
+    //     //     auth.languageCode = 'it'
+            
+    //     //     window.recaptchaVerifier = auth.RecaptchaVerifier('recaptcha-container')
+    //     //     // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
+    //     //     // window.recaptchaVerifier = new FirebaseApp.auth.RecaptchaVerifier('recaptcha-container')
+    //     //     // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
+            
+    //     //     recaptchaVerifier.render().then(widgetId => {
+    //     //         window.recaptchaWidgetId = widgetId
+    //     //     });
+
+    //     //     let recaptchaResponse = grecaptcha.getResponse(recaptchaWidgetId)
+    //     //     let phoneNumber = getPhoneNumberFromUserInput();
+    //     //     let appVerifier = window.recaptchaVerifier;
+    //     //     signInWithPhoneNumber(phoneNumber, appVerifier).then(confirmationResult => window.confirmationResult = confirmationResult).catch(err=>console.log(err.code, err.message))
+
+    //     //     console.log('what what!!')
+    //     //     // createUserWithPhoneNumber(auth, emailOrPassword, name).then(res => {
+    //     //     //     console.log(res)
+    //     //     // }).catch(err => {
+    //     //     //     let errCode = err.code;
+    //     //     //     let errMsg = err.message;
+    //     //     //     console.log(errCode, errMsg)
+    //     //     // })
+    //     }
+    //     // verificationDone && window.open('/username/profile');
+    // }
+ */
