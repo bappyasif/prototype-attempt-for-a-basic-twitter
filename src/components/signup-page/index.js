@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom';
 import FirebaseApp from '../firebase-configs';
 import './styles.css'
-import { phoneVerification, verifyUserSignUp, withEmailUserVerification } from './user-verification';
+import { phoneVerification, verifyUserSignUp, verifyUserSmsCode, withEmailLinkSignUp, withEmailUserVerification, withoutEmailLinkSignup } from './user-verification';
 
 function SignupPage() {
     let [isPhoneNumberUsed, setIsPhoneNumberUsed] = useState(false);
@@ -24,12 +24,31 @@ function SignupPage() {
     let birthRef =  useRef();
 
     let verifyUserSignUp = () => {
+        // if(isPhoneNumberUsed) {
+        //     withEmailUserVerification(emailOrPhone)
+        // } else {
+        //     let recaptchaContainer = document.querySelector('#recaptcha-container')
+        //     phoneVerification(emailOrPhone, recaptchaContainer)
+        // }
+        let codeDiv = document.querySelector('#confirmation-code');
+        let verificationCode = codeDiv.value;
+        console.log(verificationCode, 'here!!');
+        verifyUserSmsCode(verificationCode);
+        handleGoNextButton();
+    }
+
+    let confirmUserSignUp = () => {
         if(isPhoneNumberUsed) {
-            withEmailUserVerification(emailOrPhone)
+            // withEmailUserVerification(emailOrPhone)
+            
+            withEmailLinkSignUp(emailOrPhone)
+            
+            // withoutEmailLinkSignup(emailOrPhone)
         } else {
             let recaptchaContainer = document.querySelector('#recaptcha-container')
             phoneVerification(emailOrPhone, recaptchaContainer)
         }
+        handleGoNextButton();
     }
 
     let handleSelectElementChanges = evt => {
@@ -53,6 +72,10 @@ function SignupPage() {
                 setStep(2)
             } else if (step == 2) {
                 setStep(3)
+            } else if (step == 3) {
+                setStep(4)
+            } else if (step == 4) {
+                setStep(5)
             }
         } else {
             alert('please fillout values correctly!!')
@@ -131,11 +154,31 @@ function SignupPage() {
                     provided · <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Privacy Options</a></p>
                 </div>
             }
+            
+            {
+                step == 4
+                &&
+                <div id='signup-verification-container'>
+                    <label htmlFor='confirmation-code'>
+                        Enter confirmation code below:
+                        <input id='confirmation-code' placeholder='enter secret code here' />
+                    </label>
+                </div>
+            }
 
             {
-                step != 3
+                step == 5
                 &&
-                <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} id='bottom-div' className={(name && emailOrPhone && month && date && year) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
+                <div id='signup-completed-container'>
+                    <p>your profile page will load shortly, wait a moment please....</p>
+                    <div id='loader-spinner'></div>
+                </div>
+            }
+
+            {
+                (step < 3)
+                &&
+                <button style={{cursor: 'pointer'}} id='bottom-div' className={(name && emailOrPhone && month && date && year) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
             }
 
             {
@@ -144,7 +187,12 @@ function SignupPage() {
                 // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to='/username/'>Signup</Link>
                 // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div'>Signup</Link>
                 // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to={verificationDone &&'/username/'}>Signup</Link>
-                <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div'>Signup</button>
+                <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={confirmUserSignUp} id='bottom-div'>Signup</button>
+            }
+            {
+                step == 4
+                &&
+                <button style={{cursor: 'pointer'}} className='ready' onClick={verifyUserSignUp} id='bottom-div'>Verify</button>
             }
         </div>
     )
@@ -216,7 +264,8 @@ let ReturnAnInputElement = React.forwardRef((props, ref) => {
             test && setError('')
             test && setValidated(true)
         } else if(type == 'tel') {
-            let regEx = /([0-9]{3}(-){0,1}){2}[0-9]{4}/
+            // let regEx = /([0-9]{3}(-){0,1}){2}[0-9]{4}/
+            let regEx = /(\+)|([0-9]{3}(-){0,1}){2}[0-9]{4,}/
             let test = regEx.test(value)
             if(!test) {
                 setError('phone number pattern must be matched, e.g. 123-456-7890')
