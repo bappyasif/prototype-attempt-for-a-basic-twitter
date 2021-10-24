@@ -50,26 +50,49 @@ export let withEmailLinkSignUp = (email) => {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log(errorCode, errorMessage)
-  });    
+  })
+//   .finally(() => userEmailLinkVerification())
 }
 
 // Completing sign-in in a web page
 export let userEmailLinkVerification = () => {
+    
+    // if(localStorage.getItem('emailForSignIn') !== null) {
+    //     let email = window.localStorage.getItem('emailForSignIn');
+    //     if (!email) {
+    //         // User opened the link on a different device. To prevent session fixation
+    //         // attacks, ask the user to provide the associated email again. For example:
+    //         email = window.prompt('Please provide your email for confirmation');
+    //     }
+    //     console.log('checkpoint 02') 
+    // }
+    
     // to check whether a link is a sign-in with email link.
-    if(isSignInWithEmailLink(auth)) {
+    if(isSignInWithEmailLink(auth, actionCodeSettings.url)) {
         // Additional state parameters can also be passed via URL.
         // This can be used to continue the user's intended action before triggering
         // the sign-in operation.
         // Get the email if available. This should be available if the user completes
         // the flow on the same device where they started it.
         // let email = localStorage.getItem('emailForSignIn');
-        let email = window.localStorage.getItem('emailForSignIn');
-        if (!email) {
-            // User opened the link on a different device. To prevent session fixation
-            // attacks, ask the user to provide the associated email again. For example:
-            email = window.prompt('Please provide your email for confirmation');
+        if(localStorage.getItem('emailForSignIn')) {
+            let email = window.localStorage.getItem('emailForSignIn');
+            if (!email) {
+                // User opened the link on a different device. To prevent session fixation
+                // attacks, ask the user to provide the associated email again. For example:
+                email = window.prompt('Please provide your email for confirmation');
+            }
+            console.log('checkpoint 02') 
         }
+        // let email = window.localStorage.getItem('emailForSignIn');
+        // if (!email) {
+        //     // User opened the link on a different device. To prevent session fixation
+        //     // attacks, ask the user to provide the associated email again. For example:
+        //     email = window.prompt('Please provide your email for confirmation');
+        // }
+        console.log('checkpoint 03')
     }
+    console.log('checkpoint 04')
 }
 
 export let phoneVerification = (number, recaptchaContainer) => {

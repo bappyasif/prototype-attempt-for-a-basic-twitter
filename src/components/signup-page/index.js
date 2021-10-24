@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom';
 import FirebaseApp from '../firebase-configs';
 import './styles.css'
-import { phoneVerification, verifyUserSignUp, verifyUserSmsCode, withEmailLinkSignUp, withEmailUserVerification, withoutEmailLinkSignup } from './user-verification';
+import { phoneVerification, userEmailLinkVerification, verifyUserSignUp, verifyUserSmsCode, withEmailLinkSignUp, withEmailUserVerification, withoutEmailLinkSignup } from './user-verification';
 
 function SignupPage() {
     let [isPhoneNumberUsed, setIsPhoneNumberUsed] = useState(false);
@@ -21,7 +21,7 @@ function SignupPage() {
     let nameRef = React.createRef();
     let epRef = React.createRef();
     let birthDateRef = React.createRef();
-    let birthRef =  useRef();
+    let birthRef = useRef();
 
     let verifyUserSignUp = () => {
         // if(isPhoneNumberUsed) {
@@ -38,11 +38,12 @@ function SignupPage() {
     }
 
     let confirmUserSignUp = () => {
-        if(isPhoneNumberUsed) {
+        if (isPhoneNumberUsed) {
             // withEmailUserVerification(emailOrPhone)
-            
+
             withEmailLinkSignUp(emailOrPhone)
-            
+            // userEmailLinkVerification();
+
             // withoutEmailLinkSignup(emailOrPhone)
         } else {
             let recaptchaContainer = document.querySelector('#recaptcha-container')
@@ -66,7 +67,7 @@ function SignupPage() {
     }
 
     let handleGoNextButton = () => {
-        if(validated) {
+        if (validated) {
             if (step == 1) {
                 setBirthDate(`${month.substr(0, 3)} ${date}, ${year}`)
                 setStep(2)
@@ -149,14 +150,15 @@ function SignupPage() {
                     <ReturnAnInputVisual name="Name" value={name} focused={handleFocused} />
                     <ReturnAnInputVisual name={!isPhoneNumberUsed ? "Phone number" : 'Email address'} value={emailOrPhone} focused={handleFocused} />
                     <ReturnAnInputVisual name="Birth date" value={birthDate} focused={handleFocused} />
-                    <p>By signing up, you agree to the <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Terms of Service </a> and <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Privacy Policy</a>, 
-                    including <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Cookie Use</a>. Others will be able to find you by email or phone number when 
-                    provided · <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Privacy Options</a></p>
+                    <p>By signing up, you agree to the <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Terms of Service </a> and <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'> Privacy Policy</a>,
+                        including <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Cookie Use</a>. Others will be able to find you by email or phone number when
+                        provided · <a style={{ color: 'rgba(29, 155, 240, 1)' }} href='#'>Privacy Options</a></p>
                 </div>
             }
-            
+
             {
-                step == 4
+                step == 4 && !isPhoneNumberUsed
+                // step == 4
                 &&
                 <div id='signup-verification-container'>
                     <label htmlFor='confirmation-code'>
@@ -167,6 +169,7 @@ function SignupPage() {
             }
 
             {
+                // step == 5 || (step == 3 && isPhoneNumberUsed)
                 step == 5
                 &&
                 <div id='signup-completed-container'>
@@ -178,7 +181,7 @@ function SignupPage() {
             {
                 (step < 3)
                 &&
-                <button style={{cursor: 'pointer'}} id='bottom-div' className={(name && emailOrPhone && month && date && year) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
+                <button style={{ cursor: 'pointer' }} id='bottom-div' className={(name && emailOrPhone && month && date && year) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
             }
 
             {
@@ -187,12 +190,21 @@ function SignupPage() {
                 // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to='/username/'>Signup</Link>
                 // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div'>Signup</Link>
                 // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to={verificationDone &&'/username/'}>Signup</Link>
-                <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={confirmUserSignUp} id='bottom-div'>Signup</button>
+                <button style={{ backgroundColor: step == 3 && 'black', cursor: 'pointer' }} onClick={confirmUserSignUp} id='bottom-div'>Signup</button>
             }
             {
-                step == 4
+                step == 4 && isPhoneNumberUsed
                 &&
-                <button style={{cursor: 'pointer'}} className='ready' onClick={verifyUserSignUp} id='bottom-div'>Verify</button>
+                <div id='signup-completed-container'>
+                    <p>your profile page will load shortly, wait a moment please....</p>
+                    <div id='loader-spinner'></div>
+                </div>
+                // <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={confirmUserSignUp} id='bottom-div'>Signup</button>
+            }
+            {
+                step == 4 && !isPhoneNumberUsed
+                &&
+                <button style={{ cursor: 'pointer' }} className='ready' onClick={verifyUserSignUp} id='bottom-div'>Verify</button>
             }
         </div>
     )
@@ -220,17 +232,17 @@ let ReturnASelectElement = React.forwardRef((props, ref) => {
     let getYear = new Date().getFullYear();
     // console.log(which)
 
-    if (name == 'Year') data = range(1901, getYear+1, 1).reverse()
+    if (name == 'Year') data = range(1901, getYear + 1, 1).reverse()
 
     if (name == 'Month') data = allMonths;
 
-    let renderSelectElementOptions = data.map(item => <option style={{backgroundColor: (date || month || year) ? 'transparent' : (!item || item == getYear+1) ? 'silver' : 'transparent'}} disabled={(date || month || year) && (!item || item == getYear+1) ? true : null} key={item} value={(!item || item == getYear+1) ? '' : item} onSelect={() => setFocused(false)}>{(!item || item == getYear+1) ? '' : item}</option>)
+    let renderSelectElementOptions = data.map(item => <option style={{ backgroundColor: (date || month || year) ? 'transparent' : (!item || item == getYear + 1) ? 'silver' : 'transparent' }} disabled={(date || month || year) && (!item || item == getYear + 1) ? true : null} key={item} value={(!item || item == getYear + 1) ? '' : item} onSelect={() => setFocused(false)}>{(!item || item == getYear + 1) ? '' : item}</option>)
 
     return (
         <div className='select-element-container' style={{ border: focused && 'solid .11em aqua' }}>
-            
+
             <div className='dropdown-icon-div'>
-                
+
                 <div className='left-side'>
                     <div className='element-header'>{name}</div>
                     <select id={name + '-select'} onFocus={() => setFocused(true)} onChange={handleChnage} ref={ref} onMouseUp={() => setFocused(false)} onMouseDown={() => setFocused(true)} onBlur={() => setFocused(false)} required>
@@ -253,9 +265,9 @@ let ReturnAnInputElement = React.forwardRef((props, ref) => {
     }
 
     useEffect(() => handleValidation(), [value])
-    
+
     let handleValidation = () => {
-        if(type == 'email') {
+        if (type == 'email') {
             let regEx = /\w+@\w+.[a-z]{2,}/
             let test = regEx.test(value);
             !test && setError('email pattern must be followed, e.g. word@word.domains-suffix')
@@ -263,11 +275,11 @@ let ReturnAnInputElement = React.forwardRef((props, ref) => {
             // console.log(test, error)
             test && setError('')
             test && setValidated(true)
-        } else if(type == 'tel') {
+        } else if (type == 'tel') {
             // let regEx = /([0-9]{3}(-){0,1}){2}[0-9]{4}/
             let regEx = /(\+)|([0-9]{3}(-){0,1}){2}[0-9]{4,}/
             let test = regEx.test(value)
-            if(!test) {
+            if (!test) {
                 setError('phone number pattern must be matched, e.g. 123-456-7890')
                 setValidated(false)
             } else {
@@ -282,7 +294,7 @@ let ReturnAnInputElement = React.forwardRef((props, ref) => {
     return (
         <div className='custom-input-component-container' style={{ border: error && value && 'solid .11em red' || focused && 'solid .11em aqua' }}>
             <div className='component-header'>
-                <div className='header-title' style={{display: focused || value ? 'block' : 'none'}}>{name}</div>
+                <div className='header-title' style={{ display: focused || value ? 'block' : 'none' }}>{name}</div>
                 {maxLength && <div className='word-counts' style={{ display: focused ? 'block' : 'none' }}>{value.length}/{maxLength}</div>}
             </div>
             <input placeholder={focused ? '' : name} name={name} ref={ref} type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={handleChange} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
@@ -304,8 +316,8 @@ let removeIcon = () => <svg width='24px' height='24px'><g><path d="M13.414 12l5.
 export default SignupPage
 
 /**
- * 
- * 
+ *
+ *
      // let handleValidation = () => {
     //     if(type == 'email') {
     //         let regEx = /\w+@\w+.[a-z]{2,}/
@@ -315,8 +327,8 @@ export default SignupPage
     //         test && setError('')
     //     }
     // }
- * 
- * 
+ *
+ *
  // let verifyUserSignUp = (evt) => {
     //     // evt.preventDefault()
 
@@ -334,12 +346,12 @@ export default SignupPage
     //     } else {
     //         phoneVerification(emailOrPhone)
     //     //     auth.languageCode = 'it'
-            
+
     //     //     window.recaptchaVerifier = auth.RecaptchaVerifier('recaptcha-container')
     //     //     // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
     //     //     // window.recaptchaVerifier = new FirebaseApp.auth.RecaptchaVerifier('recaptcha-container')
     //     //     // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
-            
+
     //     //     recaptchaVerifier.render().then(widgetId => {
     //     //         window.recaptchaWidgetId = widgetId
     //     //     });
