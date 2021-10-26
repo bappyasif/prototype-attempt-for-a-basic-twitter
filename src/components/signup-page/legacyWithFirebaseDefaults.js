@@ -1,6 +1,8 @@
+import { createUserWithEmailAndPassword, getAuth, signInWithPhoneNumber } from '@firebase/auth';
 import React, { useEffect, useRef, useState } from 'react'
-import './styles.css'
+import { Link } from 'react-router-dom';
 import FirebaseApp from '../firebase-configs';
+import './styles.css'
 import { testTwilio } from './twilio-configs-for-signup';
 import { authenticateUserWithFirebase, phoneVerification, userEmailLinkVerification, verifyUserSignUp, verifyUserSmsCode, withEmailLinkSignUp, withEmailUserVerification, withoutEmailLinkSignup } from './user-verification';
 
@@ -27,14 +29,19 @@ function SignupPage() {
 
     let revampedAuthetications = () => {
         authenticateUserWithFirebase(emailOrPhone, userPassword);
-        console.log(emailOrPhone, userPassword, 'is it?!')
     }
 
     let verifyUserSignUp = () => {
+        // if(isPhoneNumberUsed) {
+        //     withEmailUserVerification(emailOrPhone)
+        // } else {
+        //     let recaptchaContainer = document.querySelector('#recaptcha-container')
+        //     phoneVerification(emailOrPhone, recaptchaContainer)
+        // }
         let codeDiv = document.querySelector('#confirmation-code');
         let verificationCode = codeDiv.value;
         console.log(verificationCode, 'here!!');
-        !isPhoneNumberUsed && verifyUserSmsCode(verificationCode);
+        verifyUserSmsCode(verificationCode);
         handleGoNextButton();
     }
 
@@ -42,7 +49,7 @@ function SignupPage() {
         if (isPhoneNumberUsed) {
             // withEmailUserVerification(emailOrPhone)
 
-            // withEmailLinkSignUp(emailOrPhone)
+            withEmailLinkSignUp(emailOrPhone)
             // userEmailLinkVerification();
 
             // withoutEmailLinkSignup(emailOrPhone)
@@ -158,8 +165,8 @@ function SignupPage() {
             }
 
             {
-                // step == 4 && !isPhoneNumberUsed
-                step == 4
+                step == 4 && !isPhoneNumberUsed
+                // step == 4
                 &&
                 <div id='signup-verification-container'>
                     <label htmlFor='confirmation-code'>
@@ -170,8 +177,8 @@ function SignupPage() {
             }
 
             {
-                // step == 5 || (step == 3 && isPhoneNumberUsed)
-                step == 5
+                step == 5 || (step == 3 && isPhoneNumberUsed)
+                // step == 5
                 &&
                 <div id='signup-completed-container'>
                     <label htmlFor='account-password'>
@@ -179,8 +186,8 @@ function SignupPage() {
                         <input id='account-password' placeholder='Enter password for account' value={userPassword} onChange={(evt)=>setUserPassword(evt.target.value)} />
                     </label>
                     <button onClick={revampedAuthetications}>Create your account</button>
-                    {/* <p>your profile page will load shortly, wait a moment please....</p>
-                    <div id='loader-spinner'></div> */}
+                    <p>your profile page will load shortly, wait a moment please....</p>
+                    <div id='loader-spinner'></div>
                 </div>
             }
 
@@ -193,10 +200,23 @@ function SignupPage() {
             {
                 step == 3
                 &&
+                // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to='/username/'>Signup</Link>
+                // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div'>Signup</Link>
+                // <Link style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={verifyUserSignUp} id='bottom-div' to={verificationDone &&'/username/'}>Signup</Link>
                 <button style={{ backgroundColor: step == 3 && 'black', cursor: 'pointer' }} onClick={confirmUserSignUp} id='bottom-div'>Signup</button>
             }
             {
-                step == 4
+                step == 4 && isPhoneNumberUsed
+                &&
+                <div id='signup-completed-container'>
+                    <p>your profile page will load shortly, wait a moment please....</p>
+                    <div id='loader-spinner'></div>
+                </div>
+                // <button style={{backgroundColor: step == 3 && 'black', cursor: 'pointer'}} onClick={confirmUserSignUp} id='bottom-div'>Signup</button>
+            }
+            {
+                step == 4 && !isPhoneNumberUsed
+                // step == 4
                 &&
                 <button style={{ cursor: 'pointer' }} className='ready' onClick={verifyUserSignUp} id='bottom-div'>Verify</button>
             }
@@ -308,3 +328,62 @@ let twitterLogo = () => <svg width='24px' height='24px'><g><path d="M23.643 4.93
 let removeIcon = () => <svg width='24px' height='24px'><g><path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path></g></svg>
 
 export default SignupPage
+
+/**
+ *
+ *
+     // let handleValidation = () => {
+    //     if(type == 'email') {
+    //         let regEx = /\w+@\w+.[a-z]{2,}/
+    //         let test = regEx.test(value);
+    //         !test && setError('email pattern must be followed, e.g. word@word.domains-suffix')
+    //         // console.log(test, error)
+    //         test && setError('')
+    //     }
+    // }
+ *
+ *
+ // let verifyUserSignUp = (evt) => {
+    //     // evt.preventDefault()
+
+    //     let auth = getAuth();
+    //     if(isPhoneNumberUsed) {
+    //         createUserWithEmailAndPassword(auth, emailOrPhone, emailOrPhone+'1234').then(res => {
+    //             console.log(res)
+    //             setVerificationDone(true)
+    //             window.open('/username/', '_parent')
+    //         }).catch(err => {
+    //             let errCode = err.code;
+    //             let errMsg = err.message;
+    //             console.log(errCode, errMsg)
+    //         })
+    //     } else {
+    //         phoneVerification(emailOrPhone)
+    //     //     auth.languageCode = 'it'
+
+    //     //     window.recaptchaVerifier = auth.RecaptchaVerifier('recaptcha-container')
+    //     //     // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
+    //     //     // window.recaptchaVerifier = new FirebaseApp.auth.RecaptchaVerifier('recaptcha-container')
+    //     //     // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
+
+    //     //     recaptchaVerifier.render().then(widgetId => {
+    //     //         window.recaptchaWidgetId = widgetId
+    //     //     });
+
+    //     //     let recaptchaResponse = grecaptcha.getResponse(recaptchaWidgetId)
+    //     //     let phoneNumber = getPhoneNumberFromUserInput();
+    //     //     let appVerifier = window.recaptchaVerifier;
+    //     //     signInWithPhoneNumber(phoneNumber, appVerifier).then(confirmationResult => window.confirmationResult = confirmationResult).catch(err=>console.log(err.code, err.message))
+
+    //     //     console.log('what what!!')
+    //     //     // createUserWithPhoneNumber(auth, emailOrPassword, name).then(res => {
+    //     //     //     console.log(res)
+    //     //     // }).catch(err => {
+    //     //     //     let errCode = err.code;
+    //     //     //     let errMsg = err.message;
+    //     //     //     console.log(errCode, errMsg)
+    //     //     // })
+    //     }
+    //     // verificationDone && window.open('/username/profile');
+    // }
+ */

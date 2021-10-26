@@ -7,7 +7,7 @@ let window = {
     recaptchaVerifier: undefined,
     confirmationResult: undefined,
     localStorage: undefined,
-    open: undefined,
+    // open: undefined,
     prompt: undefined
 }
 
@@ -19,6 +19,17 @@ let actionCodeSettings = {
     // url: 'https://prototyping-a-basic-twitter.web.app/username',
     url: 'http://localhost:8080/username',
     handleCodeInApp: true
+}
+
+export let authenticateUserWithFirebase = (userId, password) => {
+    console.log(userId, password, 'here!!')
+    createUserWithEmailAndPassword(auth, userId, password).then(res => {
+        console.log(res, 'authenticated....')
+    }).catch(err => {
+        let errCode = err.code;
+        let errMsg = err.message;
+        console.log(errCode, errMsg)
+    })
 }
 
 export let withoutEmailLinkSignup = (emailOrPhone) => {

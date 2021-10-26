@@ -241,10 +241,28 @@
 }
 
 #signup-completed-container  {
-    display: flex;
+    /* display: flex; */
     align-items: center;
     justify-content: space-evenly;
     margin-bottom: 20px;
+}
+
+#signup-completed-container #account-password {
+    width: 60%;
+    font-size: xx-large;
+    background-color: transparent;
+    border: solid;
+    margin-top: 6px;
+}
+
+#signup-completed-container button {
+    font-size: xx-large;
+    margin-top: 8px;
+    border: none;
+    background-color: aqua;
+    border-radius: 8px;
+    padding: 13px;
+    color: floralwhite;
 }
 
 #signup-completed-container #loader-spinner {
