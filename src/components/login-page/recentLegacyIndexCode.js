@@ -4,8 +4,78 @@ import "./styles/index.css";
 import { userLoginWithFirebase } from "./user-login-with-firebase";
 
 function LoginPage() {
+  let [idPlaceholder, setIdPlaceholder] = useState(null);
+  let [passwordPlaceholder, setPasswordPlaceholder] = useState(null);
+  let [userId, setUserId] = useState("");
+  let [userPassword, setUserPassword] = useState("");
+  let [bothPresent, setBothPresent] = useState(false)
   let announcementText =
     "The username and password you entered did not match our records. Please double-check and try again.";
+
+  // let onFocusInputElement = (evt) => {
+  //   console.log(evt.target.placeholder);
+  //   evt.target.placeholder = "";
+  //   if (evt.target.id == "email") {
+  //     setPasswordPlaceholder("");
+  //     setIdPlaceholder("Mobile, email or username");
+  //     // setUserId(evt.target.value);
+  //   }
+  //   if (evt.target.id == "password") {
+  //     setIdPlaceholder("");
+  //     setPasswordPlaceholder("Password");
+  //     // setUserPassword(evt.target.value);
+  //   }
+  // };
+
+  // // let handleChange = (evt) => {
+  // //   evt.target.id == "email"
+  // //     ? setUserId(evt.target.value)
+  // //     : setUserPassword(evt.target.value);
+  // // };
+
+  // // // let UserIdentification = returnAnInputElement(
+  // // //   "email",
+  // // //   userId,
+  // // //   onFocusInputElement,
+  // // //   handleChange
+  // // // );
+  // // // let UserPassword = returnAnInputElement(
+  // // //   "password",
+  // // //   userPassword,
+  // // //   onFocusInputElement,
+  // // //   handleChange
+  // // // );
+  // // // // let LoginButton = returnAnInputElement("submit", "Log In");
+
+  // // // // // let userIDWithPlaceholder = (
+  // // // // //   <div className="user-login">
+  // // // // //     <div className="placeholder-div">{idPlaceholder}</div>
+  // // // // //     {UserIdentification}
+  // // // // //   </div>
+  // // // // // );
+  // // // // // let userPasswordWithPlaceholder = (
+  // // // // //   <div className="user-login">
+  // // // // //     <div className="placeholder-div">{passwordPlaceholder}</div>
+  // // // // //     {UserPassword}
+  // // // // //   </div>
+  // // // // // );
+
+  // useEffect(() => {
+  //   let userID = document.querySelector("#user-id");
+  //   let userPassword = document.querySelector("#user-password");
+
+  //   if (userID.value && userPassword.value) {
+  //     // document.querySelector('#submit').classList.add('opaque');
+  //     // document.querySelector("#login-btn").style.opacity = 1;
+  //     setBothPresent(true)
+  //   } else {
+  //     // document.querySelector('#submit').classList.remove('opaque');
+  //     // document.querySelector("#login-btn").style.opacity = 0.5;
+  //     setBothPresent(false)
+  //   }
+
+  //   showAnnouncement();
+  // }, []);
 
   let showAnnouncement = () => {
     let divElem = document.querySelector("#announcement-div");
@@ -35,6 +105,20 @@ function LoginPage() {
 
       <UserLoginInfoComponent />
 
+      {/* <div id="login-info"> */}
+        {/* {UserIdentification} */}
+        {/* {userIDWithPlaceholder} */}
+
+        {/* {UserPassword} */}
+        {/* {userPasswordWithPlaceholder} */}
+
+        {/* <ReturnAnInputElement name='Mobile, email or username' elemID='user-id' />
+        <ReturnAnInputElement name='Password' elemID='user-password' /> */}
+
+        {/* <button style={{opacity: bothPresent ? 1 : .5}} id='login-btn'>Login</button> */}
+
+        {/* {LoginButton} */}
+      {/* </div> */}
       <div id="additional-info">
         <a href="/begin-password-reset" target="_blank">
           forgot password?
@@ -43,8 +127,11 @@ function LoginPage() {
         <Link to='/i/flow/signup'>
           sign up for twitter
         </Link>
-
+        {/* <a href="/" target="_blank">
+          sign up for twitter
+        </a> */}
       </div>
+      {userId} : {userPassword}
     </div>
   );
 }
@@ -103,5 +190,18 @@ let ReturnAnInputElement = ({ name, elemID, setID, setPassword }) => {
       </div>
   )
 }
+
+let returnAnInputElement = (type, value, focusEvent, changeHandler) => {
+  return (
+    <input
+      id={type}
+      type={type}
+      placeholder={type}
+      value={value}
+      onFocus={focusEvent}
+      onChange={changeHandler}
+    />
+  );
+};
 
 export default LoginPage;

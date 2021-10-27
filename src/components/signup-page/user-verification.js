@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, RecaptchaVerifier, getAuth, signInWithPhoneNumber, sendSignInLinkToEmail, isSignInWithEmailLink } from 'firebase/auth'
+import { createUserWithEmailAndPassword, RecaptchaVerifier, getAuth, signInWithPhoneNumber, sendSignInLinkToEmail, isSignInWithEmailLink, PhoneAuthProvider, signInWithCredential } from 'firebase/auth'
 
 let auth = getAuth();
 auth.languageCode = 'it';
@@ -23,13 +23,29 @@ let actionCodeSettings = {
 
 export let authenticateUserWithFirebase = (userId, password) => {
     console.log(userId, password, 'here!!')
-    createUserWithEmailAndPassword(auth, userId, password).then(res => {
-        console.log(res, 'authenticated....')
-    }).catch(err => {
-        let errCode = err.code;
-        let errMsg = err.message;
-        console.log(errCode, errMsg)
-    })
+    let regEx = /\w+@\w+.[a-z]{2,}/
+    let test = regEx.test(userId);
+    if(!test) userId = prompt('enter login email address, e.g. user@example.com')
+
+    if(test) {
+        createUserWithEmailAndPassword(auth, userId, password).then(res => {
+            console.log(res, 'authenticated....')
+        }).catch(err => {
+            let errCode = err.code;
+            let errMsg = err.message;
+            console.log(errCode, errMsg)
+        })
+    } else {
+        return
+    }
+
+    // createUserWithEmailAndPassword(auth, userId, password).then(res => {
+    //     console.log(res, 'authenticated....')
+    // }).catch(err => {
+    //     let errCode = err.code;
+    //     let errMsg = err.message;
+    //     console.log(errCode, errMsg)
+    // })
 }
 
 export let withoutEmailLinkSignup = (emailOrPhone) => {
@@ -47,27 +63,27 @@ export let withoutEmailLinkSignup = (emailOrPhone) => {
 export let withEmailLinkSignUp = (email) => {
     // console.log('before', auth, email, actionCodeSettings)
     sendSignInLinkToEmail(auth, email, actionCodeSettings)
-  .then(() => {
-    // The link was successfully sent. Inform the user.
-    // Save the email locally so you don't need to ask the user for it again
-    // if they open the link on the same device.
-    // window.localStorage.setItem('emailForSignIn', email);
-    localStorage.setItem('emailForSignIn', email);
-    console.log('checkpoint!!')
-    userEmailLinkVerification()
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(errorCode, errorMessage)
-  })
-//   .finally(() => userEmailLinkVerification())
+        .then(() => {
+            // The link was successfully sent. Inform the user.
+            // Save the email locally so you don't need to ask the user for it again
+            // if they open the link on the same device.
+            // window.localStorage.setItem('emailForSignIn', email);
+            localStorage.setItem('emailForSignIn', email);
+            console.log('checkpoint!!')
+            userEmailLinkVerification()
+            // ...
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage)
+        })
+    //   .finally(() => userEmailLinkVerification())
 }
 
 // Completing sign-in in a web page
 export let userEmailLinkVerification = () => {
-    
+
     // if(localStorage.getItem('emailForSignIn') !== null) {
     //     let email = window.localStorage.getItem('emailForSignIn');
     //     if (!email) {
@@ -77,23 +93,23 @@ export let userEmailLinkVerification = () => {
     //     }
     //     console.log('checkpoint 02') 
     // }
-    
+
     // to check whether a link is a sign-in with email link.
-    if(isSignInWithEmailLink(auth, actionCodeSettings.url)) {
+    if (isSignInWithEmailLink(auth, actionCodeSettings.url)) {
         // Additional state parameters can also be passed via URL.
         // This can be used to continue the user's intended action before triggering
         // the sign-in operation.
         // Get the email if available. This should be available if the user completes
         // the flow on the same device where they started it.
         // let email = localStorage.getItem('emailForSignIn');
-        if(localStorage.getItem('emailForSignIn')) {
+        if (localStorage.getItem('emailForSignIn')) {
             let email = window.localStorage.getItem('emailForSignIn');
             if (!email) {
                 // User opened the link on a different device. To prevent session fixation
                 // attacks, ask the user to provide the associated email again. For example:
                 email = window.prompt('Please provide your email for confirmation');
             }
-            console.log('checkpoint 02') 
+            console.log('checkpoint 02')
         }
         // let email = window.localStorage.getItem('emailForSignIn');
         // if (!email) {
@@ -134,17 +150,23 @@ export let phoneVerification = (number, recaptchaContainer) => {
 }
 
 export let verifyUserSmsCode = (code) => {
+    let loginCredential = PhoneAuthProvider.credential(window.confirmationResult.verificationId, code)
+    //sign in with user login credential
+    signInWithCredential(loginCredential).then(res=> console.log(res)).catch(err=>console.log(err.code, err.message))
+    
+    console.log(loginCredential, "loginCredential")
+
     window.confirmationResult.confirm(code).then((result) => {
         // User signed in successfully.
         const user = result.user;
         // ...
         console.log(user, 'user!!')
         window.open('/username/', '_parent')
-      }).catch((error) => {
+    }).catch((error) => {
         // User couldn't sign in (bad verification code?)
         // ...
         let code = error.code;
         let msg = error.message;
         console.log(code, msg, '<><>')
-      });
+    });
 }

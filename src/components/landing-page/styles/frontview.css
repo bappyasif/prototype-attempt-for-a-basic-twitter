@@ -10,13 +10,6 @@ a {
     color: whitesmoke;
 }
 
-p {
-    font-weight: lighter;
-    font-size: smaller;
-    max-width: 85%;
-    text-align: left;
-}
-
 .svg-elem {
     position: absolute;
     left: 17%;
@@ -29,16 +22,28 @@ p {
     position: absolute;
     top: 20%;
     left: 67%;
+    min-width: 256px;
     /* width: 22%; */
 }
 
+.login-elems p {
+    font-weight: lighter;
+    font-size: smaller;
+    max-width: 85%;
+    text-align: left;
+    padding: 2px;
+}
+
+
 .login-options {
-    max-width: 51%;
+    /* max-width: 51%; */
+    /* min-width: 50px; */
+    width: 227px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     /* margin: auto; */
-    /* border: solid .4vw silver; */
+    /* border: solid 0.4vw silver; */
     margin-bottom: 1.8vh;
     /* border-radius: 6%; */
     border-radius: 20px;
@@ -62,17 +67,19 @@ p {
 }
 
 .with-email p {
-    font-size: .81em;
+    /* font-size: .81em;  */
     padding: 4%;
-    padding-right: 2%;
-    max-width: 45.4%;
-    /* height: 1.7em; */
-    background: whitesmoke;
+    /* padding-right: 2%; */
+    /* max-width: 45.4%; */
+    max-height: 0.2em;
+    background: transparent;
     color: black;
     /* border-radius: 6%; */
-    border-radius: 20px;
-    text-align: center;
-    font-size: small;
+    /* border-radius: 20px; */
+    /* text-align: center; */
+    font-size: smaller;
+    display: flex;
+    align-items: center;
 }
 
 .sign-in {

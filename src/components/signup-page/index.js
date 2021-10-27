@@ -23,7 +23,7 @@ function SignupPage() {
     let birthDateRef = React.createRef();
     let birthRef = useRef();
 
-    testTwilio();
+    // testTwilio();
 
     let revampedAuthetications = () => {
         authenticateUserWithFirebase(emailOrPhone, userPassword);
@@ -170,7 +170,6 @@ function SignupPage() {
             }
 
             {
-                // step == 5 || (step == 3 && isPhoneNumberUsed)
                 step == 5
                 &&
                 <div id='signup-completed-container'>

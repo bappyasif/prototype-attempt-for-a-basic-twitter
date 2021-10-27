@@ -4,7 +4,7 @@ import LoginPageFrontView from "./frontview";
 
 function LandingPageUILogics() {
   return (
-    <div>
+    <div style={{width: '100%'}}>
       <LoginPageBackDrop />
       <LoginPageFrontView />
     </div>
