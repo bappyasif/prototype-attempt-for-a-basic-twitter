@@ -203,7 +203,8 @@
 
 #signup-confirmation-container, 
 #signup-verification-container, 
-#signup-completed-container {
+#signup-completed-container,
+#visit-user-profile-container {
     margin: 0px 27px 0px 27px;
 }
 
@@ -234,7 +235,7 @@
 #signup-verification-container input {
     border: .11em solid lightgrey;
     margin: 20px 2px 20px 2px;
-    max-width: fit-content;
+    max-width: -webkit-fill-available;
     font-size: -webkit-xxx-large;
     background-color: transparent;
     border-radius: 8px;
@@ -265,7 +266,7 @@
     color: floralwhite;
 }
 
-#signup-completed-container #loader-spinner {
+#visit-user-profile-container #loader-spinner {
     /* border: 16px solid #f3f3f3; Light grey
     border-top: 16px solid #3498db; Blue
     border-radius: 50%;
@@ -283,4 +284,13 @@
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  #visit-user-profile-container #visit-profile {
+      text-decoration: none;
+      cursor: pointer;
+      background-color: rgba(29, 155, 240, .6);
+      border-radius: 11px;
+      font-size: larger;
+      font-weight: bolder;
   }

@@ -3,6 +3,7 @@ import './styles.css'
 import FirebaseApp from '../firebase-configs';
 import { testTwilio } from './twilio-configs-for-signup';
 import { authenticateUserWithFirebase, phoneVerification, userEmailLinkVerification, verifyUserSignUp, verifyUserSmsCode, withEmailLinkSignUp, withEmailUserVerification, withoutEmailLinkSignup } from './user-verification';
+import { Link } from 'react-router-dom';
 
 function SignupPage() {
     let [isPhoneNumberUsed, setIsPhoneNumberUsed] = useState(false);
@@ -17,7 +18,8 @@ function SignupPage() {
     let [validated, setValidated] = useState(false)
     let [verificationDone, setVerificationDone] = useState(false)
     let [userPassword, setUserPassword] = useState('')
-    // let [error, setError] = useState('');
+    let [signupDone, setSignupDone] = useState('')
+    let [signupError, setSignupError] = useState(true);
     let nameRef = React.createRef();
     let epRef = React.createRef();
     let birthDateRef = React.createRef();
@@ -26,14 +28,15 @@ function SignupPage() {
     // testTwilio();
 
     let revampedAuthetications = () => {
-        authenticateUserWithFirebase(emailOrPhone, userPassword);
-        console.log(emailOrPhone, userPassword, 'is it?!')
+        authenticateUserWithFirebase(emailOrPhone, userPassword, setSignupDone);
+        // console.log(emailOrPhone, userPassword, 'is it?!')
+        handleGoNextButton();
     }
 
     let verifyUserSignUp = () => {
         let codeDiv = document.querySelector('#confirmation-code');
         let verificationCode = codeDiv.value;
-        console.log(verificationCode, 'here!!');
+        // console.log(verificationCode, 'here!!');
         !isPhoneNumberUsed && verifyUserSmsCode(verificationCode);
         handleGoNextButton();
     }
@@ -67,6 +70,11 @@ function SignupPage() {
         }
     }
 
+    let handleGoBack = () => {
+        setStep(step - 1);
+        setSignupDone('') // just to make sure when goes back in stte previous value isnt stored there already
+    }
+
     let handleGoNextButton = () => {
         if (validated) {
             if (step == 1) {
@@ -78,6 +86,8 @@ function SignupPage() {
                 setStep(4)
             } else if (step == 4) {
                 setStep(5)
+            } else if (step == 5) {
+                setStep(6)
             }
         } else {
             alert('please fillout values correctly!!')
@@ -103,7 +113,7 @@ function SignupPage() {
             <div id='top-div'>
                 {step == 1 && <div id='remove-modal'> {removeIcon()} </div>}
                 {/* <span>{step + ' of 5'}</span> */}
-                {step != 1 && <div id='remove-modal' onClick={() => setStep(step - 1)}> {backIcon()} </div>}
+                {step != 1 && <div id='remove-modal' onClick={handleGoBack}> {backIcon()} </div>}
                 <div id='twitter-logo'> {twitterLogo()} </div>
             </div>
             <div id='recaptcha-container'></div>
@@ -175,11 +185,42 @@ function SignupPage() {
                 <div id='signup-completed-container'>
                     <label htmlFor='account-password'>
                         Enter password for account:
-                        <input id='account-password' placeholder='Enter password for account' value={userPassword} onChange={(evt)=>setUserPassword(evt.target.value)} />
+                        <input id='account-password' placeholder='Enter password for account' value={userPassword} onChange={(evt) => setUserPassword(evt.target.value)} />
                     </label>
                     <button onClick={revampedAuthetications}>Create your account</button>
                     {/* <p>your profile page will load shortly, wait a moment please....</p>
                     <div id='loader-spinner'></div> */}
+                </div>
+            }
+
+            {
+                step == 6
+                &&
+                <div id='visit-user-profile-container'>
+                    {
+                        signupDone == ''
+                        &&
+                        <p>your profile page will load shortly, wait a moment please....</p>
+                    }
+
+                    <div id='loader-spinner'></div>
+                    
+                    {
+                        signupDone != 'done' && signupDone != ''
+                        &&
+                        <p>Please go back and choose a different user id, password for signup to continue....</p>
+                    }
+
+                    {
+                        signupDone == 'done'
+                        &&
+                        <Link id='visit-profile' to='/username'>Click to continue to your profile</Link>
+                    }
+                    {
+                        signupDone != 'done'
+                        &&
+                        <p id='error-announcement'>{signupDone}</p>
+                    }
                 </div>
             }
 
@@ -290,7 +331,7 @@ let ReturnAnInputElement = React.forwardRef((props, ref) => {
                 <div className='header-title' style={{ display: focused || value ? 'block' : 'none' }}>{name}</div>
                 {maxLength && <div className='word-counts' style={{ display: focused ? 'block' : 'none' }}>{value.length}/{maxLength}</div>}
             </div>
-            <input placeholder={focused ? '' : name} name={name} ref={ref} type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={handleChange} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
+            <input style={{ backgroundColor: 'transparent' }} placeholder={focused ? '' : name} name={name} ref={ref} type={type ? type : 'text'} maxLength={maxLength ? maxLength : null} value={value} onChange={handleChange} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
             {error && value && <span>{error}</span>}
         </div>
     )

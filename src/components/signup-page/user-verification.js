@@ -21,8 +21,8 @@ let actionCodeSettings = {
     handleCodeInApp: true
 }
 
-export let authenticateUserWithFirebase = (userId, password) => {
-    console.log(userId, password, 'here!!')
+export let authenticateUserWithFirebase = (userId, password, signupStatus) => {
+    // console.log(userId, password, 'here!!')
     let regEx = /\w+@\w+.[a-z]{2,}/
     let test = regEx.test(userId);
     if(!test) userId = prompt('enter login email address, e.g. user@example.com')
@@ -30,10 +30,12 @@ export let authenticateUserWithFirebase = (userId, password) => {
     if(test) {
         createUserWithEmailAndPassword(auth, userId, password).then(res => {
             console.log(res, 'authenticated....')
+            signupStatus('done')
         }).catch(err => {
             let errCode = err.code;
             let errMsg = err.message;
             console.log(errCode, errMsg)
+            signupStatus(errMsg)
         })
     } else {
         return

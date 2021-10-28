@@ -19,7 +19,7 @@ export let signUpWithGoogle = () => {
             // sign in user info
             let user = result.user
             console.log(user, 'with google')
-            window.open('/username')
+            window.open('/username', '_parent')
         }).catch(error => {
             // Handle Errors here.
             const errorCode = error.code;

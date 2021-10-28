@@ -23,17 +23,25 @@ let LeftSide = () => (
 
 let RightSide = () => {
   let [hasAccount, setHasAccount] = useState(false)
+  
   let handleSigninWithGoogle = (evt) => {
-    console.log(evt.target.id);
+    // console.log(evt.target.id);
     signUpWithGoogle();
   }
+
+  let handleSigninWithApple = (evt) => {
+    console.log(evt.target.id, 'apple sign in block');
+    
+  }
+  
   // let loginsOptions = loginsDomains.map(domain => <div key={domain.text} className='login-options'><svg path={domain.icon} width={domain.width} height={domain.height} /><p>{domain.text}</p></div>)
   let loginsOptions = loginsDomains.map((domain) => (
-    <div key={domain.id} className="login-options" onClick={domain.id == 'google' && handleSigninWithGoogle}>
+    <div key={domain.id} className="login-options" onClick={domain.id == 'google' ? handleSigninWithGoogle : handleSigninWithApple}>
       <img className="login-icons" src={domain.icon} />
       <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
     </div>
   ));
+  
   return (
     <div className="login-elems">
       <svg width='24px' height='24px' transform='scale(2.2)' fill="white">
