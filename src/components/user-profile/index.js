@@ -1,12 +1,20 @@
 import { Gif } from '@giphy/react-components';
 import React, { useEffect, useState } from 'react'
-import { testFirestore } from '../firestore-methods';
+import { writeDataIntoCollection } from '../firestore-methods';
+// import { listenToADocument, queryForDocuments, queryForDocumentsWithRealtimeListeners, testFirestore, testReadData, testReadSingleDocument, testWriteData } from '../firestore-methods';
+
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
 function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, handleCount, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
 
-    testFirestore();
+    // testFirestore();
+    // testReadData();
+    // testWriteData();
+    // testReadSingleDocument();
+    // listenToADocument();
+    // queryForDocuments();
+    // queryForDocumentsWithRealtimeListeners()
 
     useEffect(() => handleCount, [count])
 
@@ -15,6 +23,9 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
     useEffect(() => {
         newDataStatus && setTweetData([{ tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, ...tweetData])
         
+        // writing into firestore collection
+        writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile })
+
         setNewDataStatus(false)
 
         setSelectedFile('');

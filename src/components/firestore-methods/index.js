@@ -1,21 +1,23 @@
-import {getFirestore, collection, addDoc} from 'firebase/firestore'
+import { getFirestore, collection, addDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit } from 'firebase/firestore'
 import FirebaseApp from '../firebase-configs'
 
 // Initialize Cloud Firestore through Firebase
 let db = getFirestore();
 
-// Add data
-// Cloud Firestore stores data in Documents, which are stored in Collections.
-// Cloud Firestore creates collections and documents implicitly the first time you add data to the document. 
-// You do not need to explicitly create collections or documents, firestore does it for us
-
-export async function testFirestore() {
-    try {
-        let docRef = await addDoc(collection(db, 'tweet-data'), {
-            testData: 'testData'
-        });
-        console.log('data written into firestore with ID....', docRef.id)
-    } catch(err) {
-        console.log('Error while adding document....', err);
-    }
+// Add or write data into collection
+export let writeDataIntoCollection = (data) => {
+    let {tweetPoll, tweetMedia, tweetGif, tweetText, extraTweet, tweetPrivacy, imgFile, gifItem, count} = {...data}
+    // console.log(tweetPoll, tweetMedia, tweetGif, tweetText, extraTweet, tweetPrivacy, imgFile, gifItem, count, '::')
+    
+    // setDoc(doc(db, 'tweetData', 'dataModel'), data, {merge: true}).then(() => console.log('data is added successfully')).catch(err=>console.log('error while in writing into collection....', err.message))
+    //  unsupported: tweetMedia, tweetPrivacy, imgFile
+    let refinedData = {tweetPoll, tweetGif, tweetText, extraTweet, gifItem, count}
+    // setDoc(doc(db, 'tweetData', 'dataModel'), refinedData, {merge: true}).then(() => console.log('data is added successfully')).catch(err=>console.log('error while in writing into collection....', err.message))
+    addDoc(collection(db, 'tweetData'), refinedData).then(() => console.log('data is added successfully')).catch(err=>console.log('error while in writing into collection....', err.message))
+    
+    // try {
+    //     await setDoc(doc(db, 'tweetData', 'dataModel'), data, {merge: true})
+    // } catch (err) {
+    //     console.log('error while in writing into collection....', err)
+    // }
 }
