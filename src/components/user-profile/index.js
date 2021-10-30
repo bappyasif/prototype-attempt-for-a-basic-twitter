@@ -1,5 +1,6 @@
 import { Gif } from '@giphy/react-components';
 import React, { useEffect, useState } from 'react'
+import { testUploadBlobFile } from '../firebase-storage';
 import { writeDataIntoCollection } from '../firestore-methods';
 // import { listenToADocument, queryForDocuments, queryForDocumentsWithRealtimeListeners, testFirestore, testReadData, testReadSingleDocument, testWriteData } from '../firestore-methods';
 
@@ -15,6 +16,7 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
     // listenToADocument();
     // queryForDocuments();
     // queryForDocumentsWithRealtimeListeners()
+    // testUploadBlobFile()
 
     useEffect(() => handleCount, [count])
 
@@ -24,8 +26,15 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
         newDataStatus && setTweetData([{ tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, ...tweetData])
         
         // writing into firestore collection
-        writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile })
+        // writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile })
+        writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile })
 
+        // storing images into storage
+        // (selectedFile || gifFile) && testUploadBlobFile(selectedFile || gifFile)
+        console.log(gifFile, 'gifHere')
+        testUploadBlobFile((gifFile && gifFile) || showImg(selectedFile))
+        
+        
         setNewDataStatus(false)
 
         setSelectedFile('');

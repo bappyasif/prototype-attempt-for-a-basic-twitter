@@ -8,26 +8,7 @@ function ComponentsContainer() {
     let [countForTweetContainer, setCountForTweetContainer] = useState(0)
     let [changeLayout, setChangeLayout] = useState(false);
 
-    let handleCount = () => setCountForTweetContainer(countForTweetContainer + 1);
-
-    let db = getFirestore(FirebaseApp);
-
-    function accessDatabase() {
-        let dbCollection = collection(db, 'example');
-        console.log(dbCollection);
-    }
-
-    accessDatabase();
-
-    // example signup
-    let auth = getAuth()
-    
-    createUserWithEmailAndPassword(auth, 'test@test.com', 'test11').then(res=>console.log(res)).catch(err=> {
-        let errorCode = err.code;
-        let errorMsg = err.message;
-        console.log(errorCode, errorMsg)
-    })
-    
+    let handleCount = () => setCountForTweetContainer(countForTweetContainer + 1);   
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
@@ -38,3 +19,25 @@ function ComponentsContainer() {
 }
 
 export default ComponentsContainer
+
+/**
+ * 
+ * 
+  let db = getFirestore(FirebaseApp);
+
+    function accessDatabase() {
+        let dbCollection = collection(db, 'example');
+        // console.log(dbCollection);
+    }
+
+    accessDatabase();
+
+    // example signup
+    let auth = getAuth()
+    
+    // createUserWithEmailAndPassword(auth, 'test@test.com', 'test11').then(res=>console.log(res)).catch(err=> {
+    //     let errorCode = err.code;
+    //     let errorMsg = err.message;
+    //     console.log(errorCode, errorMsg)
+    // })
+ */
