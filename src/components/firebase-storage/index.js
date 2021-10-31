@@ -1,3 +1,4 @@
+import React from 'react'
 import { Gif } from '@giphy/react-components';
 import {getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import FirebaseApp from '../firebase-configs'
@@ -80,12 +81,17 @@ mountainsRef.fullPath === mountainImagesRef.fullPath;   // false
 // basically they are two different file references from two different file hierarchy
 
 // Upload from a Blob or File
-export let testUploadBlobFile = (file) => {
+export let testUploadBlobFile = (file, fileId) => {
     if (file) {
-        let storageRef = ref(storage, 'test/'+(file.name || file.id));
-        console.log(file, 'blob here')
+        let storageRef = ref(storage, 'test/'+(fileId));
+
+        // let storageRef = ref(storage, 'test/'+(file.name || file.id));
+        // let transformFileIntoGif = file.type == 'gif' && <Gif height='290px' width='96%' gif={file.url} className='style-gif-border-radius' />
+        // console.log(file, 'blob here', transformFileIntoGif && transformFileIntoGif)
+        console.log(file, 'blob here', fileId)
+        // uploadBytes(storageRef, transformFileIntoGif || file)
         uploadBytes(storageRef, file)
-        .then((snapshot) => console.log('uploaded a blob file into storage', snapshot))
+        .then((snapshot) => console.log('uploaded a blob file into storage', snapshot, ))
         .catch(err=>console.log('error while uploading a blob file into storage....', err.message))
     }
 }
@@ -97,32 +103,114 @@ export let testUploadBlobFile = (file) => {
 // to download a file, first create a Cloud Storage reference to the file you want to download.
 // we can create a reference by appending child paths to the root of our Cloud Storage bucket
 // or we can create a reference from an existing gs:// or https:// URL referencing an object in Cloud Storage
-
-export let testDownloadBlobFile = (filename) => {
+export let testDownloadBlobFile = (fileObject) => {
     // create a reference with an initial file path and name
-    let pathRef = ref(storage, 'test/undefined')
-
-    // create a reference from a Google Cloud Storage URI
-    let gsRef = ref(storage, 'gs://prototyping-a-basic-twitter.appspot.com/test/undefined');
+    let fileName = (fileObject.gifItem.id || fileObject.imgFile.name)
+    let pathRef = ref(storage, 'test/'+fileName)
 
     // we can get the download URL for a file by calling the getDownloadURL() method on a Cloud Storage reference
-    getDownloadURL(pathRef)
+    let elementReturned = pathRef && getDownloadURL(pathRef)
     .then(url => {
-        // url is downloadable url for this blob file and can be downloaded directly
-        let xhr = new XMLHttpRequest();
-        xhr.responseType = 'blob';
-        
-        xhr.onload = event => {
-            let blob = xhr.response;
-        }
-        
-        xhr.open('GET', url);
-        // xhr.setRequestHeader('Access-Control-Allow-Credentials', true)
-        // xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-        xhr.send()
+        // console.log(url, 'url!!', <a href={url}>{fileName}</a>)
+        return [<a href={url}>{fileName}</a>]
 
-        console.log(url, 'url!!')
-
-        // return <Gif height='290px' width='96%' gif={url} className='style-gif-border-radius' />
     }).catch(err => console.log('erro while downloding blob', err.message))
+    // console.log(elementReturned, 'is it?!')
+    let test;
+    elementReturned.then(el=> test = el[0]).catch(err=>conosle.log('could not return element', err.message))
+    return test && test
 }
+
+
+
+
+// export let testDownloadBlobFile = (fileObject) => {
+//     // create a reference with an initial file path and name
+//     let fileName = (fileObject.gifItem.id || fileObject.imgFile.name)
+//     let pathRef = ref(storage, 'test/'+fileName)
+//     // let pathRef = ref(storage, 'test/electronics.jpg')
+
+//     // console.log(fileName, 'testing....', fileObject)
+
+//     // we can get the download URL for a file by calling the getDownloadURL() method on a Cloud Storage reference
+//     let elementReturned = pathRef && getDownloadURL(pathRef)
+//     .then(url => {
+//         // console.log(url, 'url!!', <a href={url}>{fileName}</a>)
+//         // return url
+//         return [<a href={url}>{fileName}</a>]
+
+//     }).catch(err => console.log('erro while downloding blob', err.message))
+//     // console.log(elementReturned, 'is it?!')
+//     let test;
+//     elementReturned.then(el=> test = el[0]).catch(err=>conosle.log('could not return element', err.message))
+//     return test && test
+//     // let el = elementReturned.then(el=>el[0]).catch(err=>conosle.log('could not return element', err.message))
+//     // console.log(el, 'is it?!', fileObject)
+//     // el && console.log(el, 'el!!')
+//     // Promise.resolve(el) && console.log(el, 'el!!')
+//     // return Promise.resolve(el) && Promise.resolve(el)
+//     // return el && el
+//     // return <a href={url}>{fileName}</a>
+// }
+
+
+
+// export let testDownloadBlobFile = (fileObject) => {
+//     // create a reference with an initial file path and name
+//     let fileName = (fileObject.gifItem.id || fileObject.imgFile.name)
+//     let pathRef = ref(storage, 'test/'+fileName)
+//     // let pathRef = ref(storage, 'test/electronics.jpg')
+
+//     // console.log(fileName, 'testing....', fileObject)
+
+//     // we can get the download URL for a file by calling the getDownloadURL() method on a Cloud Storage reference
+//     let elementReturned = pathRef && getDownloadURL(pathRef)
+//     .then(url => {
+//         console.log(url, 'url!!', <a href={url}>filename</a>)
+//         // return url
+//         return [<a href={url}>filename</a>]
+
+//     }).catch(err => console.log('erro while downloding blob', err.message))
+//     // console.log(elementReturned, 'is it?!')
+//     let el = elementReturned.then(el=>el[0]).catch(err=>conosle.log('could not return element', err.message))
+//     console.log(el, 'is it?!', fileObject)
+//     return el && el
+// }
+
+
+
+// export let testDownloadBlobFile = (fileObject) => {
+//     // create a reference with an initial file path and name
+//     // let pathRef = ref(storage, 'test/undefined')
+
+//     let fileName = (fileObject.gifItem.id || fileObject.imgFile.name)
+//     let pathRef = ref(storage, 'test/'+fileName)
+
+//     // console.log(fileName, 'testing....', fileObject)
+
+//     // create a reference from a Google Cloud Storage URI
+//     // let gsRef = ref(storage, 'gs://prototyping-a-basic-twitter.appspot.com/test/undefined');
+
+//     // we can get the download URL for a file by calling the getDownloadURL() method on a Cloud Storage reference
+//     pathRef && getDownloadURL(pathRef)
+//     .then(url => {
+//         // // url is downloadable url for this blob file and can be downloaded directly
+//         // let xhr = new XMLHttpRequest();
+//         // xhr.responseType = 'blob';
+        
+//         // xhr.onload = event => {
+//         //     let blob = xhr.response;
+//         // }
+        
+//         // xhr.open('GET', url);
+//         // // xhr.setRequestHeader('Access-Control-Allow-Credentials', true)
+//         // // xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+//         // xhr.send()
+
+//         console.log(url, 'url!!', <a href={url}>filename</a>)
+//         // return url
+//         return <a href={url}>filename</a>
+
+//         // return <Gif height='290px' width='96%' gif={url} className='style-gif-border-radius' />
+//     }).catch(err => console.log('erro while downloding blob', err.message))
+// }

@@ -31,8 +31,9 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
 
         // storing images into storage
         // (selectedFile || gifFile) && testUploadBlobFile(selectedFile || gifFile)
-        console.log(gifFile, 'gifHere')
-        testUploadBlobFile((gifFile && gifFile) || showImg(selectedFile))
+        console.log(gifFile, 'mediaFileHere', selectedFile)
+        // testUploadBlobFile((gifFile && gifFile) || showImg(selectedFile))
+        testUploadBlobFile((gifFile && showGif(gifFile)) || showImg(selectedFile), (selectedFile && selectedFile.name  || gifFile && gifFile.id))
         
         
         setNewDataStatus(false)
