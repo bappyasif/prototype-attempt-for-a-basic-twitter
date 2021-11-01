@@ -1,7 +1,7 @@
 import { Gif } from '@giphy/react-components';
 import React, { useEffect, useState } from 'react'
 import { testUploadBlobFile } from '../firebase-storage';
-import { writeDataIntoCollection } from '../firestore-methods';
+import { updateUserDocWithMediaUrls, writeDataIntoCollection } from '../firestore-methods';
 // import { listenToADocument, queryForDocuments, queryForDocumentsWithRealtimeListeners, testFirestore, testReadData, testReadSingleDocument, testWriteData } from '../firestore-methods';
 
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
@@ -17,6 +17,12 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
     // queryForDocuments();
     // queryForDocumentsWithRealtimeListeners()
     // testUploadBlobFile()
+    let [testUrl, setTestUrl] = useState('')
+    let [testUserDoc, setTestUserDoc] = useState('');
+    let setUrl = (url) => setTestUrl(url);
+    let setUserDoc = userDoc => setTestUserDoc(userDoc)
+    // console.log(testUserDoc, 'userdoc')
+    testUrl && testUserDoc && updateUserDocWithMediaUrls(testUserDoc, testUrl)
 
     useEffect(() => handleCount, [count])
 
@@ -27,13 +33,17 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
         
         // writing into firestore collection
         // writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile })
-        writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile })
+        // writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile })
+        // setTestUrl(writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile }))
+        writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile }, setUrl, setUserDoc)
+        // testUserDoc && updateUserDocWithMediaUrls(testUserDoc)
 
         // storing images into storage
         // (selectedFile || gifFile) && testUploadBlobFile(selectedFile || gifFile)
-        console.log(gifFile, 'mediaFileHere', selectedFile)
+        // console.log(gifFile, 'mediaFilesHere', selectedFile)
         // testUploadBlobFile((gifFile && gifFile) || showImg(selectedFile))
-        testUploadBlobFile((gifFile && showGif(gifFile)) || showImg(selectedFile), (selectedFile && selectedFile.name  || gifFile && gifFile.id))
+        // testUploadBlobFile((gifFile && showGif(gifFile)) || showImg(selectedFile), (selectedFile && selectedFile.name  || gifFile && gifFile.id))
+        // testUploadBlobFile((gifFile && gifFile) || imgFile, data.id)
         
         
         setNewDataStatus(false)
@@ -76,11 +86,13 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
 
     return (
         <div id='user-profile-page-container'>
+            {/* {testUrl && <img src={testUrl} />} */}
             {tweetData && <AllTweetsPage
                 tweetData={tweetData}
                 handleCount={handleCount}
             />
             }
+            {/* {testUrl && console.log(testUrl, 'is it!!')} */}
         </div>
     )
 }
