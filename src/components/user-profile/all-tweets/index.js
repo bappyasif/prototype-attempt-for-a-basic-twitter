@@ -73,6 +73,7 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
                 <div className='tweet-media-on-profile' style={{ display: item.tweetMedia ? 'block' : 'none' }}>{item.tweetMedia}</div>
                 {/* <div className='tweet-media-on-profile' style={{ display: item.tweetMedia ? 'block' : 'none' }}>{testDownloadBlobFile(item) && testDownloadBlobFile(item)}</div> */}
                 <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{item.tweetGif}</div>
+                {/* <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{item.tweetGif}</div> */}
                 {/* <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{item.tweetGif} {testDownloadBlobFile(item)}</div> */}
                 {/* <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{testDownloadBlobFile(item)}</div> */}
                 <div className='tweet-poll-on-profile'>{renderPolls(item)}</div>

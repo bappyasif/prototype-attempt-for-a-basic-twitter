@@ -1,7 +1,8 @@
+import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 import React, { useEffect, useState } from 'react'
 import { testUploadBlobFile } from '../firebase-storage';
-import { updateUserDocWithMediaUrls, writeDataIntoCollection } from '../firestore-methods';
+import { testReadFirestoreData, updateUserDocWithMediaUrls, writeDataIntoCollection } from '../firestore-methods';
 // import { listenToADocument, queryForDocuments, queryForDocumentsWithRealtimeListeners, testFirestore, testReadData, testReadSingleDocument, testWriteData } from '../firestore-methods';
 
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
@@ -19,6 +20,10 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
     // testUploadBlobFile()
     let [testUrl, setTestUrl] = useState('')
     let [testUserDoc, setTestUserDoc] = useState('');
+    let [giphyObject, setGiphyObject] = useState({});
+    let [testGif, setTestGif] = useState('')
+    let testGifUpdater = (gifID) => setTestGif(gifID);
+    let giphyObjectUpdater = (obj) => setGiphyObject(obj)
     let setUrl = (url) => setTestUrl(url);
     let setUserDoc = userDoc => setTestUserDoc(userDoc)
     // console.log(testUserDoc, 'userdoc')
@@ -35,8 +40,10 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
         // writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile })
         // writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile })
         // setTestUrl(writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile }))
-        writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile }, setUrl, setUserDoc)
+        // writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, setUrl, setUserDoc, giphyObjectUpdater)
+        writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, setUrl, setUserDoc, testGifUpdater)
         // testUserDoc && updateUserDocWithMediaUrls(testUserDoc)
+        // gifFile && setTestGif(gifFile)
 
         // storing images into storage
         // (selectedFile || gifFile) && testUploadBlobFile(selectedFile || gifFile)
@@ -84,6 +91,15 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
         }
     }
 
+    let GifDemo = () => {
+        let getGif = async () => {
+            let {data} = await new GiphyFetch('"sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh"').gif(testGif)
+            setGiphyObject(data);
+        }
+        getGif();
+        return <Gif gif={giphyObject} height={200} width={209} />
+    }
+
     return (
         <div id='user-profile-page-container'>
             {/* {testUrl && <img src={testUrl} />} */}
@@ -91,6 +107,17 @@ function UserProfile({setChangeLayout, newDataStatus, setNewDataStatus, count, h
                 tweetData={tweetData}
                 handleCount={handleCount}
             />
+            }
+            {
+                // testGif && console.log(testGif)
+                testGif && <GifDemo />
+                // testGif && <Gif gif={testGif} height={200} width={209} />
+                // giphyObject && console.log(Object.keys(giphyObject).every(key=>giphyObject[key]===testGif[key]), testGif)
+                // giphyObject && console.log(giphyObject, '?>', gifFile)
+                // giphyObject != null && <Gif height='290px' width='96%' gif={giphyObject} className='style-gif-border-radius' />
+                // giphyObject && testUserDoc && <Gif height='290px' width='96%' gif={testReadFirestoreData(testUserDoc)['medias'].gif} className='style-gif-border-radius' />
+                // testUserDoc && testReadFirestoreData(testUserDoc)
+                // gifFile && <Gif height='290px' width='96%' gif={} className='style-gif-border-radius' />
             }
             {/* {testUrl && console.log(testUrl, 'is it!!')} */}
         </div>
