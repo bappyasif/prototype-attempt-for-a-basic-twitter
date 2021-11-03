@@ -2,9 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { moreIcon, tweetAdditionalIconsArray } from '../profile-page/svg-resources';
 import '../../user-profile/profile-page/index.css';
 import { testDownloadBlobFile } from '../../firebase-storage';
+import { getAllDocsOnce } from '../../firestore-methods';
 
 function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handleCount }) {
     let [hoveredID, setHoveredID] = useState('');
+    // let [userDocs, setUserDocs] = useState([]);
+    
+    // useEffect(()=> {
+    //     let data = getAllDocsOnce();
+    //     setUserDocs(data)
+    // } , [!userDocs])
 
     let findWhichIconId = evt => {
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;

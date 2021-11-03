@@ -16,6 +16,7 @@ import RightSideNavigationPanel from '../navigation-panels/right-side';
 import EditProfile from '../user-profile/profile-page/edit-profile';
 import LandingPageUILogics from '../landing-page/ui-logics';
 import SignupPage from '../signup-page';
+import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
 
 function AllRoutes({ count, handleCount, setChangeLayout }) {
     let [tweetData, setTweetData] = useState([]);
@@ -35,6 +36,16 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
     let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
     let [newDataStatus, setNewDataStatus] = useState(false)
     let [opacity, setOpacity] = useState(false)
+    let [userDocs, setUserDocs] = useState([]);
+    
+    useEffect(()=> {
+        let data = getAllDocsOnce();
+        setUserDocs(data)
+    } , [])
+
+    useEffect(() => {
+        readDataInRealtime();
+    }, [userDocs])
 
     // useEffect(() => console.log(scheduleStamp, '?!'), [scheduleStamp])
 
