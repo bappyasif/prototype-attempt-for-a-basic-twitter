@@ -93,29 +93,28 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
 
     // let renderingData = tweetData.map(item=>console.log(item, '?!'))
 
-    // let renderingData = tweetData && tweetData.map((item, idx) =>    
-    // (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: (item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? 'block' : 'none' }}>
+    let renderingData = tweetData && tweetData.map((item, idx) =>    
+    (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: (item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? 'block' : 'none' }}>
 
-    //     {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
+        {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
 
-    //     <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>
+        <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>
 
-    //     {item.extraTweet ? whenExtraTweetExists(item) : ''}
+        {item.extraTweet ? whenExtraTweetExists(item) : ''}
 
-    // </div>))
+    </div>))
 
-    // let renderMediaTweetsOnly = onlyMedias && onlyMedias.map((item, idx) => {
+    let renderMediaTweetsOnly = onlyMedias && onlyMedias.map((item, idx) => {
 
-    //     return <div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
+        return <div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
 
-    //         {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
+            {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
 
-    //     </div>
-    // })
+        </div>
+    })
 
     // return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData}</div>
-    // return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}</div>
-    return <div id='all-tweets-container'>{tweetData && tweetData.length}</div>
+    return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}</div>
 }
 
 export default AllTweetsPage

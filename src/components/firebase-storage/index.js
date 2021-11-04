@@ -19,7 +19,7 @@ export let testUploadBlobFileAsyncApproach = (file, fileId, urlUpdater) => {
         // mediaUrl = uploadAndDownloadUrl(file, fileId);
         uploadAndDownloadUrl(file, fileId).then((url) =>{ 
             mediaUrl = url;
-            console.log(mediaUrl, ':url here:', url)
+            // console.log(mediaUrl, ':url here:', url)
             urlUpdater(url)
         }).catch(err=>console.log('no url', err.message))
     }

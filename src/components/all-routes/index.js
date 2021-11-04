@@ -18,8 +18,8 @@ import LandingPageUILogics from '../landing-page/ui-logics';
 import SignupPage from '../signup-page';
 import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
 
-function AllRoutes({ count, handleCount, setChangeLayout }) {
-    let [tweetData, setTweetData] = useState([]);
+function AllRoutes({tweetData, newDataStatus, setNewDataStatus, count, handleCount, setChangeLayout }) {
+    // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
     let [extraTweetText, setExtraTweetText] = useState('');
@@ -34,20 +34,26 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
     let [scheduleStamp, setScheduleStamp] = useState('');
     let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(true)
     let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
-    let [newDataStatus, setNewDataStatus] = useState(false)
+    // let [newDataStatus, setNewDataStatus] = useState(false)
     let [opacity, setOpacity] = useState(false)
-    let [userDocs, setUserDocs] = useState([]);
+    // let [userDocs, setUserDocs] = useState([getAllDocsOnce()]);
     
-    useEffect(()=> {
-        let data = getAllDocsOnce();
-        setUserDocs(data)
-    } , [])
+    // let updateFirestoreUserDocsAdditionalEntries = (newData) => setUserDocs([[newData], ...userDocs])
 
-    useEffect(() => {
-        readDataInRealtime();
-    }, [userDocs])
+    // useEffect(()=> {
+    //     let data = getAllDocsOnce();
+    //     setUserDocs(data)
+    //     console.log(userDocs, 'data..');
+    // } , [newDataStatus])
+
+    // useEffect(() => {
+    //     readDataInRealtime();
+    // }, [userDocs])
+    // console.log(userDocs, 'data..');
 
     // useEffect(() => console.log(scheduleStamp, '?!'), [scheduleStamp])
+
+    // console.log(tweetData, '::::')
 
     let handleScheduleIconClicked = () => {
         setIsScheduleIconClicked(!isScheduleIconClicked);
@@ -112,6 +118,7 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
                     />
                     {/* <ProfilePageUpperView /> */}
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                    {/* <RightSideNavigationPanel tweetData={tweetData && tweetData} opacity={opacity} /> */}
                 </Route>
 
                 <Route exact path='/tweet/compose/schedule'>
@@ -149,7 +156,8 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
                         count={count}
                         handleCount={handleCount}
                         tweetData={tweetData}
-                        setTweetData={setTweetData}
+                        // tweetData={userDocs}
+                        // setTweetData={setTweetData}
                         primaryTweetText={primaryTweetText}
                         extraTweetText={extraTweetText}
                         tweetPrivacy={tweetPrivacy}
@@ -166,6 +174,7 @@ function AllRoutes({ count, handleCount, setChangeLayout }) {
                         setNewDataStatus={setNewDataStatus}
                         newDataStatus={newDataStatus}
                         setChangeLayout={setChangeLayout}
+                        // updateDocs={updateFirestoreUserDocsAdditionalEntries}
                     />
                 </Route>
 

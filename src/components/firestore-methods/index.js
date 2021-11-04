@@ -26,7 +26,8 @@ export let writeDataIntoCollection = (data, urlUpdater, userDocUpdater, giphyUpd
 }
 
 export let updateUserDocWithMediaUrls = (userDoc, mediaUrl) => {
-    let data = { picture: mediaUrl }
+    // let data = { picture: mediaUrl }
+    let data = { medias: {picture: mediaUrl, gif: ''} }
     let docRef = doc(db, 'tweetData', userDoc)
     updateDoc(docRef, data).then(() => console.log('data updated?!')).catch(err => console.log('couldnt updated', err.message))
 }
@@ -44,17 +45,61 @@ export let testReadFirestoreData = async (docID, giphyUpdater, gifId) => {
     }
 }
 
-export let getAllDocsOnce = () => {
+export let getAllDocsOnce = async () => {
     let data = []
     let collectionRef = collection(db, 'tweetData');
-    getDocs(collectionRef).then(docSnapshots => {
-        docSnapshots.forEach(doc => {
-            data = data.concat(doc.data())
-        })
-        console.log('all documents been read....')
-        console.log(data, 'data..')
-    }).catch(err=>console.log(err.message))
+
+    try {
+        let docSnapshots = await getDocs(collectionRef);
+        docSnapshots.forEach(doc=>{
+            data.push(doc.data())
+        });
+        console.log('....all documents been read and pushed to an array....', data)
+    } catch (err) {
+        console.log('error while reading data....', err)
+    }
+    console.log(data, 'HERE..')
+    return data && data   
 }
+
+
+// export let getAllDocsOnce = () => {
+//     let data = []
+//     let collectionRef = collection(db, 'tweetData');
+
+//     let allData = async () => {
+//         let test = []
+//         try {
+//             let docSnapshots = await getDocs(collectionRef);
+//             docSnapshots.forEach(doc=>{
+//                 // data.push(doc.data())
+//                 test.push(doc.data());
+//                 // console.log(data, 'inner')
+//             });
+//             // console.log(test,'....all documents been read and pushed to an array....', data)
+//             console.log('....all documents been read and pushed to an array....', data, test)
+//             return test
+//         } catch (err) {
+//             console.log('error while reading data....')
+//         }
+//     }
+//     // allData().then(res=>data=res);
+//     data = Promise.resolve(allData())
+
+//     // getDocs(collectionRef).then(docSnapshots => {
+//     //     docSnapshots.forEach(doc => {
+//     //         // data = data.concat(doc.data())
+//     //         data.push(doc.data())
+//     //     })
+//     //     console.log('all documents been read....')
+//     //     // console.log(data, 'data..')
+//     //     return data
+//     // }).catch(err=>console.log(err.message))
+    
+
+//     data && console.log(data, 'ready data..', )
+//     return data && data
+// }
 
 export let readDataInRealtime = () => {
     let collectionRef = collection(db, 'tweetData');
