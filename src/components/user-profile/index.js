@@ -8,7 +8,7 @@ import { testReadFirestoreData, updateUserDocWithMediaUrls, writeDataIntoCollect
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
-function UserProfile({updateDocs, setChangeLayout, newDataStatus, setNewDataStatus, count, handleCount, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
+function UserProfile({dataLoading, setChangeLayout, newDataStatus, setNewDataStatus, count, handleCount, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
     let [testUrl, setTestUrl] = useState('')
     let [testUserDoc, setTestUserDoc] = useState('');
     
@@ -34,7 +34,7 @@ function UserProfile({updateDocs, setChangeLayout, newDataStatus, setNewDataStat
         
         // newDataStatus && updateDocs({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile })
         
-        newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, setUrl, setUserDoc, testGifUpdater)
+        newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, setUrl, setUserDoc, testGifUpdater)
         
         setNewDataStatus(false)
 
@@ -48,19 +48,19 @@ function UserProfile({updateDocs, setChangeLayout, newDataStatus, setNewDataStat
         
     }, [tweetPublishReady])
 
-    let showGif = selectedGif => selectedGif && <Gif height='290px' width='96%' gif={selectedGif} className='style-gif-border-radius' />;
+    // let showGif = selectedGif => selectedGif && <Gif height='290px' width='96%' gif={selectedGif} className='style-gif-border-radius' />;
 
-    let showImg = (imgRR) => {
-        return imgRR && <img src={handleMediaFileChecks(imgRR)} />
-    }
+    // let showImg = (imgRR) => {
+    //     return imgRR && <img src={handleMediaFileChecks(imgRR)} />
+    // }
 
-    let handleMediaFileChecks = (mediaFile) => {
-        let mediaSrc = mediaFile;
-        if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
-            mediaSrc = URL.createObjectURL(mediaFile)
-        }
-        return mediaSrc;
-    }
+    // let handleMediaFileChecks = (mediaFile) => {
+    //     let mediaSrc = mediaFile;
+    //     if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
+    //         mediaSrc = URL.createObjectURL(mediaFile)
+    //     }
+    //     return mediaSrc;
+    // }
 
     let getPrivacySelectedElement = whichOption => {
         switch (whichOption) {
@@ -89,16 +89,31 @@ function UserProfile({updateDocs, setChangeLayout, newDataStatus, setNewDataStat
 }
 
 
-let GifDemo = ({testGif}) => {
+export let GifDemo = ({testGif}) => {
     let [giphyObject, setGiphyObject] = useState('');
+    console.log(testGif, 'id found')
     let getGif = async () => {
         let {data} = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(testGif)
         setGiphyObject(data);
         console.log(testGif, '<id found>', data)
     }
-    getGif();
+    getGif();    
     // console.log(testGif, 'id found', testUserDoc, data)
     return giphyObject && testGif && <Gif gif={giphyObject} height={200} width={209} />
+}
+
+let handleMediaFileChecks = (mediaFile) => {
+    let mediaSrc = mediaFile;
+    if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
+        mediaSrc = URL.createObjectURL(mediaFile)
+    }
+    return mediaSrc;
+}
+
+export let showGif = selectedGif => selectedGif && <Gif height='290px' width='96%' gif={selectedGif} className='style-gif-border-radius' />;
+
+export let showImg = (imgRR) => {
+    return imgRR && <img src={handleMediaFileChecks(imgRR)} />
 }
 
 export default UserProfile
