@@ -25,6 +25,7 @@ function ComponentsContainer() {
         });
         // setUserDocs(data)
         // data && console.log(userDocs, 'data..container', data);
+        readDataDescendingOrder();
         data && setDataLoading(false)
     } , [])
 
@@ -38,7 +39,7 @@ function ComponentsContainer() {
         getAllDocsOnce().then(res=>{
             setUserDocs(res)
         });
-        readDataDescendingOrder();
+        // readDataDescendingOrder();
         // console.log(userDocs, 'data..');
     } , [newDataStatus])
 

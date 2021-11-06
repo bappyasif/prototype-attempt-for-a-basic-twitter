@@ -1,4 +1,4 @@
-import { getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy } from 'firebase/firestore'
+import { Timestamp, getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy } from 'firebase/firestore'
 import FirebaseApp from '../firebase-configs'
 import { testUploadBlobFileAsyncApproach } from '../firebase-storage';
 
@@ -8,11 +8,20 @@ let db = getFirestore();
 // Add or write data into collection
 export let writeDataIntoCollection = (data, urlUpdater, userDocUpdater, giphyUpdater) => {
     let { tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, gifItem, count } = { ...data }
-    let date = new Date().getTime();
+    let date = new Date()
+    let refinedString = `${date.getFullYear()} ${date.getMonth()} ${date.getDate()} }`
+    // let dateString = Timestamp.fromDate(refinedString)
+    let dateString = String(date.getTime())
+    
+    // let dateString = Timestamp.fromDate(new Date("December 10, 1815"))
+    // let dateString = Timestamp.fromDate(new Date(refinedString))
+    // let dateString = date.getFullYear()+date.getMonth()+date.getDate()+date.getHours()+date.getMinutes()+date.getSeconds()+date.getMilliseconds()
+    // let dateString = `${date.getFullYear()} ${date.getMonth()} ${date.getDate()} ${date.getHours()} ${date.getMinutes()} ${date.getSeconds()} ${date.getMilliseconds()}`
+    console.log(dateString, '?!')
     // date = date.split('(')[0]
     // console.log(date.getUTCDate(), '??')
 
-    let refinedData = { tweetPoll, tweetText, extraTweet, count, medias: { picture: '', gif: gifItem ? gifItem.id : '' }, created: date }
+    let refinedData = { tweetPoll, tweetText, extraTweet, count, medias: { picture: '', gif: gifItem ? gifItem.id : '' }, created: dateString }
     // console.log(gifItem, 'files here', imgFile)
     
     // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
