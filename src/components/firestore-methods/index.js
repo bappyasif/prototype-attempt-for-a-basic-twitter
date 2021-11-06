@@ -8,9 +8,9 @@ let db = getFirestore();
 // Add or write data into collection
 export let writeDataIntoCollection = (data, urlUpdater, userDocUpdater, giphyUpdater) => {
     let { tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, gifItem, count } = { ...data }
+    
+    // using time string in millis as a created tiome stamp
     let date = new Date().getTime();
-    // date = date.split('(')[0]
-    // console.log(date.getUTCDate(), '??')
 
     let refinedData = { tweetPoll, tweetText, extraTweet, count, medias: { picture: '', gif: gifItem ? gifItem.id : '' }, created: date }
     // console.log(gifItem, 'files here', imgFile)
@@ -70,45 +70,6 @@ export let readDataDescendingOrder = () => {
     let dataQuery = query(collectionRef, orderBy('created', 'desc'))
     console.log(dataQuery, 'hows?!')
 }
-
-
-// export let getAllDocsOnce = () => {
-//     let data = []
-//     let collectionRef = collection(db, 'tweetData');
-
-//     let allData = async () => {
-//         let test = []
-//         try {
-//             let docSnapshots = await getDocs(collectionRef);
-//             docSnapshots.forEach(doc=>{
-//                 // data.push(doc.data())
-//                 test.push(doc.data());
-//                 // console.log(data, 'inner')
-//             });
-//             // console.log(test,'....all documents been read and pushed to an array....', data)
-//             console.log('....all documents been read and pushed to an array....', data, test)
-//             return test
-//         } catch (err) {
-//             console.log('error while reading data....')
-//         }
-//     }
-//     // allData().then(res=>data=res);
-//     data = Promise.resolve(allData())
-
-//     // getDocs(collectionRef).then(docSnapshots => {
-//     //     docSnapshots.forEach(doc => {
-//     //         // data = data.concat(doc.data())
-//     //         data.push(doc.data())
-//     //     })
-//     //     console.log('all documents been read....')
-//     //     // console.log(data, 'data..')
-//     //     return data
-//     // }).catch(err=>console.log(err.message))
-    
-
-//     data && console.log(data, 'ready data..', )
-//     return data && data
-// }
 
 export let readDataInRealtime = () => {
     let collectionRef = collection(db, 'tweetData');
