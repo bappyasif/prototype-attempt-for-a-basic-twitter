@@ -1,7 +1,7 @@
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 import React, { useEffect, useState } from 'react'
-import { testUploadBlobFile } from '../firebase-storage';
+import { downloadTweetPictureUrlFromStorage, testUploadBlobFile, uploadTweetPictureUrlToStorage } from '../firebase-storage';
 import { testReadFirestoreData, updateUserDocWithMediaUrls, writeDataIntoCollection } from '../firestore-methods';
 // import { listenToADocument, queryForDocuments, queryForDocumentsWithRealtimeListeners, testFirestore, testReadData, testReadSingleDocument, testWriteData } from '../firestore-methods';
 
@@ -14,16 +14,44 @@ function UserProfile({dataLoading, setChangeLayout, newDataStatus, setNewDataSta
     
     let [testGif, setTestGif] = useState('')
     let testGifUpdater = (gifID) => setTestGif(gifID);
+
+    let [doneUploading, setDoneUploading] = useState(false)
+    let [fileFound, setFileFound] = useState(false)
     
+    let updateFileFoundStatus = () => setFileFound(true)
+    let updatePictureUploadingStatus = () => setDoneUploading(true)
     let setUrl = (url) => setTestUrl(url);
     let setUserDoc = userDoc => setTestUserDoc(userDoc)
     
-    testUrl && testUserDoc && updateUserDocWithMediaUrls(testUserDoc, testUrl)
+    // testUrl && testUserDoc && updateUserDocWithMediaUrls(testUserDoc, testUrl)
     // reading testGif from firestore
-    testUserDoc && testReadFirestoreData(testUserDoc, testGifUpdater, 'gifId')
+    // testUserDoc && testReadFirestoreData(testUserDoc, testGifUpdater, 'gifId')
 
     // testUserDoc && selectedFile && testUploadBlobFileAsyncApproach(selectedFile, testUserDoc, setUrl)
     // testUserDoc && selectedFile && console.log(selectedFile, testUserDoc, testUrl, 'it is?!')
+    
+    useEffect(() => {
+        // upload imgFile to Storage
+        testUserDoc && selectedFile && uploadTweetPictureUrlToStorage(selectedFile, testUserDoc, updatePictureUploadingStatus)
+        // testUrl && testUserDoc && updateUserDocWithMediaUrls(testUserDoc, testUrl)
+
+        // update imgFile url from storage to firestore doc
+        // doneUploading && downloadTweetPictureUrlFromStorage(testUserDoc)
+        
+        // download gif
+        // gifFile && testReadFirestoreData(testUserDoc, testGifUpdater)
+    }, [testUserDoc])
+
+    useEffect(()=> {
+        console.log(doneUploading, 'uploading status')
+        downloadTweetPictureUrlFromStorage(testUserDoc, setUrl)
+    }, [doneUploading])
+
+    //  trying to figure out how to deal with picture and gif to generate wthout causing malfunctions on DOM
+    useEffect(() => {
+        console.log(testUrl, 'url found')
+        testUrl && updateUserDocWithMediaUrls(testUserDoc, testUrl)
+    }, [doneUploading, testUrl])
     
     useEffect(() => handleCount, [count])
 
