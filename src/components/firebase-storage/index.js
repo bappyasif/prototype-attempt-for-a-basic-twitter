@@ -40,6 +40,16 @@ export let uploadTweetPictureUrlToStorage = (imgFile, fileId, updateUploadingSta
     .catch(err=>console.log('<< could not uploaded picture to storage >>', err.message))
 }
 
+export let downloadTweetPictureUrlFromStorageAnotherVersion = async (fileId) => {
+    let storageRef = ref(storage, 'test/'+(fileId));
+    return getDownloadURL(storageRef).then(res=> {
+        console.log('<< tweet picture url downloaded >>', res)
+        // think of an alternative how this can be done, so that this gets easier and always gets run by update function when needed
+        return res
+        
+    }).catch(err=>console.log('<< couldnt found picture url >>', err.message))
+}
+
 export let downloadTweetPictureUrlFromStorage = (fileId, updateUrl) => {
     let storageRef = ref(storage, 'test/'+(fileId));
     getDownloadURL(storageRef).then(res=> {

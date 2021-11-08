@@ -1,15 +1,46 @@
 import { Timestamp, getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy } from 'firebase/firestore'
 import FirebaseApp from '../firebase-configs'
-import { testUploadBlobFileAsyncApproach, uploadTweetPictureUrlToStorage } from '../firebase-storage';
+import { downloadTweetPictureUrlFromStorage, downloadTweetPictureUrlFromStorageAnotherVersion, testUploadBlobFileAsyncApproach, uploadTweetPictureUrlToStorage } from '../firebase-storage';
 
 // Initialize Cloud Firestore through Firebase
 let db = getFirestore();
+
+
+// set data into firestore
+export let writeDataIntoCollectionAnotherVersion = (data, docID, imgUrl, imgReady) => {
+    let { tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, gifItem, count } = { ...data }
+    
+    // trying out firestore timestamp as createdDate, this works just fine
+    let dateCreated = Timestamp.now()
+    // console.log('<<<<<here>>>>>', imgUrl)
+
+    // imgReady && downloadTweetPictureUrlFromStorageAnotherVersion(docID).then(url => console.log(url, 'showing url'))
+
+    let refinedData = { tweetPoll, tweetText, extraTweet, count, medias: { picture: imgUrl ? imgUrl : '', gif: gifItem ? gifItem.id : '' }, created: dateCreated }
+    
+    // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
+    if (tweetText || imgFile || gifItem) {
+        console.log(docID, '<<<<<here>>>>>', imgUrl)
+        let docRef = doc(db, 'TweetsData', docID);
+
+        setDoc(docRef, refinedData)
+        .then((data) => {
+            console.log('data is added successfully', data)
+            // readDataDescendingOrder();
+        })
+        .catch(err => console.log('error while in writing into collection....', err.message))
+    }
+}
+
 
 // Add or write data into collection
 export let writeDataIntoCollection = (data, urlUpdater, userDocUpdater, giphyUpdater) => {
     let { tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, gifItem, count } = { ...data }
     
-    // trying out firestore timestamp as createdDate
+    // if there is any image element we're uploading it to storage
+
+
+    // trying out firestore timestamp as createdDate, this works just fine
     let dateString = Timestamp.now()
     
     console.log(dateString, '::timestamp')
@@ -69,7 +100,8 @@ export let getAllDocsOnce = async () => {
 
 export let readDataDescendingOrder = async () => {
     let data = []
-    let collectionRef = collection(db, 'tweetData');
+    // let collectionRef = collection(db, 'tweetData');
+    let collectionRef = collection(db, 'TweetsData');
     let dataQuery = query(collectionRef, orderBy('created', 'desc'))
     try {
         let querySnapshot = await getDocs(dataQuery);

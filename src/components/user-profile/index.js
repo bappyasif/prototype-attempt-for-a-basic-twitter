@@ -1,14 +1,16 @@
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 import React, { useEffect, useState } from 'react'
+import {v4 as uuid} from 'uuid'
+import { generateOneNewID } from '../componentsContainer';
 import { downloadTweetPictureUrlFromStorage, testUploadBlobFile, uploadTweetPictureUrlToStorage } from '../firebase-storage';
-import { testReadFirestoreData, updateUserDocWithMediaUrls, writeDataIntoCollection } from '../firestore-methods';
+import { testReadFirestoreData, updateUserDocWithMediaUrls, writeDataIntoCollection, writeDataIntoCollectionAnotherVersion } from '../firestore-methods';
 // import { listenToADocument, queryForDocuments, queryForDocumentsWithRealtimeListeners, testFirestore, testReadData, testReadSingleDocument, testWriteData } from '../firestore-methods';
 
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
-function UserProfile({dataLoading, setChangeLayout, newDataStatus, setNewDataStatus, count, handleCount, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
+function UserProfile({newID, updateDOM, uniqueID, dataLoading, setChangeLayout, newDataStatus, setNewDataStatus, count, handleCount, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
     let [testUrl, setTestUrl] = useState('')
     let [testUserDoc, setTestUserDoc] = useState('');
     
@@ -17,53 +19,73 @@ function UserProfile({dataLoading, setChangeLayout, newDataStatus, setNewDataSta
 
     let [doneUploading, setDoneUploading] = useState(false)
     let [fileFound, setFileFound] = useState(false)
+    // let [dateString, setDateString] = useState(String(new Date().getTime()))
+    // let [userDocUniqueId, setUserDocUniqueId] = useState(null)
     
     let updateFileFoundStatus = () => setFileFound(true)
     let updatePictureUploadingStatus = () => setDoneUploading(true)
     let setUrl = (url) => setTestUrl(url);
     let setUserDoc = userDoc => setTestUserDoc(userDoc)
-    
-    // testUrl && testUserDoc && updateUserDocWithMediaUrls(testUserDoc, testUrl)
-    // reading testGif from firestore
-    // testUserDoc && testReadFirestoreData(testUserDoc, testGifUpdater, 'gifId')
 
-    // testUserDoc && selectedFile && testUploadBlobFileAsyncApproach(selectedFile, testUserDoc, setUrl)
-    // testUserDoc && selectedFile && console.log(selectedFile, testUserDoc, testUrl, 'it is?!')
+    // let dateString = String(new Date().getTime())
+    // let userDocUniqueId = uuid();
+
+    // userDocUniqueId && selectedFile && uploadTweetPictureUrlToStorage(selectedFile, userDocUniqueId, updatePictureUploadingStatus)
     
+    // selectedFile && doneUploading && downloadTweetPictureUrlFromStorage(dateString, setUrl)
+    
+    // useEffect(() => {
+    //     selectedFile && uploadTweetPictureUrlToStorage(selectedFile, userDocUniqueId, updatePictureUploadingStatus)
+    // }, [userDocUniqueId])
+
     useEffect(() => {
-        // upload imgFile to Storage
-        testUserDoc && selectedFile && uploadTweetPictureUrlToStorage(selectedFile, testUserDoc, updatePictureUploadingStatus)
-        // testUrl && testUserDoc && updateUserDocWithMediaUrls(testUserDoc, testUrl)
-
-        // update imgFile url from storage to firestore doc
-        // doneUploading && downloadTweetPictureUrlFromStorage(testUserDoc)
-        
-        // download gif
-        // gifFile && testReadFirestoreData(testUserDoc, testGifUpdater)
-    }, [testUserDoc])
-
-    useEffect(()=> {
-        console.log(doneUploading, 'uploading status')
-        downloadTweetPictureUrlFromStorage(testUserDoc, setUrl)
+        // download imgFile url from firebase Storage
+        // selectedFile && doneUploading && downloadTweetPictureUrlFromStorage(dateString, setUrl)
+        // doneUploading && downloadTweetPictureUrlFromStorage(userDocUniqueId, setUrl)
+        doneUploading && downloadTweetPictureUrlFromStorage(uniqueID, setUrl)
+        // testUrl && console.log('checkpoint!!', testUrl)
     }, [doneUploading])
 
-    //  trying to figure out how to deal with picture and gif to generate wthout causing malfunctions on DOM
     useEffect(() => {
-        console.log(testUrl, 'url found')
-        testUrl && updateUserDocWithMediaUrls(testUserDoc, testUrl)
-    }, [doneUploading, testUrl])
+        testUrl && console.log('checkpoint!!', testUrl)
+        testUrl && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, dataLoading)
+        testUrl && updateDOM();
+        testUrl && newID()
+    }, [testUrl])
     
-    useEffect(() => handleCount, [count])
+    // useEffect(() => handleCount(), [count])
 
-    useEffect(() => setChangeLayout(false), [])
+    useEffect(() => {
+        setChangeLayout(false)
+        // setDateString(String(new Date().getTime()))
+        // setUserDocUniqueId(uuid())
+        selectedFile && uploadTweetPictureUrlToStorage(selectedFile, uniqueID, updatePictureUploadingStatus)
+    }, [])
+
 
     useEffect(() => {
         // newDataStatus && setTweetData([{ tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetGif: showGif(gifFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, ...tweetData])
         
         // newDataStatus && updateDocs({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetMedia: showImg(selectedFile), tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile })
         
-        newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, setUrl, setUserDoc, testGifUpdater)
+        // newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, setUrl, setUserDoc, testGifUpdater)
+
+        // newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, dateString)
         
+        if (selectedFile) {
+            // console.log(testUrl, '<< found url?! >>')
+            // testUrl && newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, userDocUniqueId, testUrl)
+            // doneUploading && newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, dataLoading)
+        } else {
+            newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID)
+            // newDataStatus && gifFile && updateDOM();
+            newDataStatus && newID();
+        }
+
+        // newDataStatus && handleCount(uuid())
+        // newDataStatus && generateOneNewID();
+        // newDataStatus && newID();
+
         setNewDataStatus(false)
 
         setSelectedFile('');

@@ -18,7 +18,7 @@ import LandingPageUILogics from '../landing-page/ui-logics';
 import SignupPage from '../signup-page';
 import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
 
-function AllRoutes({tweetData, newDataStatus, setNewDataStatus, count, handleCount, setChangeLayout }) {
+function AllRoutes({newID, updateDOM, uniqueID, tweetData, newDataStatus, setNewDataStatus, count, handleCount, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -176,6 +176,9 @@ function AllRoutes({tweetData, newDataStatus, setNewDataStatus, count, handleCou
                         setChangeLayout={setChangeLayout}
                         // updateDocs={updateFirestoreUserDocsAdditionalEntries}
                         // dataLoading={dataLoading}
+                        uniqueID={uniqueID}
+                        updateDOM={updateDOM}
+                        newID={newID}
                     />
                 </Route>
 
