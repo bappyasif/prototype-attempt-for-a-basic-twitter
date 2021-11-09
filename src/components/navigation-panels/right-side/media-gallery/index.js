@@ -7,7 +7,10 @@ function MediaGallery({ tweetData }) {
 
     // let allMediaTweets = [...tweetData].filter(elem => elem.imgFile || elem.gifItem)
     // let allMediaTweets = [...tweetData].filter(elem => elem['medias'].picture ? elem['medias'].picture : elem)
-    let allMediaTweets = tweetData && [...tweetData].filter(elem => elem['medias']['picture'] || elem['medias']['gif'])
+    // console.log('media tweets..', tweetData)
+    
+    // let allMediaTweets = tweetData && [...(tweetData || tweetData[0])].filter(elem => elem['medias']['picture'] && elem['medias']['picture'] || elem['medias']['gif'] && elem['medias']['gif'])
+    let allMediaTweets = tweetData && [...tweetData].filter(elem => elem['medias']['picture'] && elem['medias']['picture'] || elem['medias']['gif'] && elem['medias']['gif'])
     // console.log(allMediaTweets, 'media tweets..', tweetData)
     // making ready gif element
     // allMediaTweets.forEach(el => el['medias'].gif && getGifFromID(el['medias'].gif))

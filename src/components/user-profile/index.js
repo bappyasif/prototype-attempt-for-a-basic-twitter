@@ -10,7 +10,7 @@ import { testReadFirestoreData, updateUserDocWithMediaUrls, writeDataIntoCollect
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
-function UserProfile({newID, updateDOM, uniqueID, dataLoading, setChangeLayout, newDataStatus, setNewDataStatus, count, handleCount, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
+function UserProfile({updateData, newID, updateDOM, uniqueID, dataLoading, setChangeLayout, newDataStatus, setNewDataStatus, count, handleCount, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
     let [testUrl, setTestUrl] = useState('')
     let [testUserDoc, setTestUserDoc] = useState('');
     
@@ -48,10 +48,28 @@ function UserProfile({newID, updateDOM, uniqueID, dataLoading, setChangeLayout, 
 
     useEffect(() => {
         testUrl && console.log('checkpoint!!', testUrl)
-        testUrl && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, dataLoading)
-        testUrl && updateDOM();
-        testUrl && newID()
+        testUrl && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, updateData)
+        // testUrl && updateDOM('img effect');
+        newDataStatus && testUrl && newID()
+        testUrl && console.log('checkpoint2>>', testUrl)
+        // testUrl && setTestUrl('')
+        testUrl && resetUrlToNull()
     }, [testUrl])
+
+    // useEffect(() => {
+    //     // updateDOM('uniqueID effect')
+    //     // setTestUrl('')
+    //     // console.log(testUrl, uniqueID, 'uniqID effect')
+    // }, [uniqueID])
+
+    let resetUrlToNull = () => testUrl && setTestUrl('')
+
+    useEffect(() => {
+        gifFile && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, null, updateData)
+        gifFile && newID();
+        // gifFile && updateDOM();
+        gifFile && console.log('gif file....', gifFile)
+    }, [gifFile])
     
     // useEffect(() => handleCount(), [count])
 
@@ -72,15 +90,36 @@ function UserProfile({newID, updateDOM, uniqueID, dataLoading, setChangeLayout, 
 
         // newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, dateString)
         
-        if (selectedFile) {
+        if (selectedFile || gifFile) {
             // console.log(testUrl, '<< found url?! >>')
             // testUrl && newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, userDocUniqueId, testUrl)
             // doneUploading && newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, dataLoading)
+            // testUrl && newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, updateData)
         } else {
-            newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID)
+            // newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID)
             // newDataStatus && gifFile && updateDOM();
+            // newDataStatus && newID();
+            // updateDOM()
+            // newID()
+
+            newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, updateData)
+            // newDataStatus && setTestUrl(null)
+            newDataStatus && updateDOM('default effect');
             newDataStatus && newID();
         }
+
+        // (!selectedFile || !gifFile) && newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, updateData)
+
+        // updateDOM()
+
+        // newDataStatus && writeDataIntoCollectionAnotherVersion({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl)
+        // newDataStatus && testUrl && setTestUrl(null)
+        // newDataStatus && testUrl && updateDOM();
+        // newDataStatus && newID();
+
+        // !newDataStatus && setTestUrl('')
+        // !newDataStatus && updateDOM()
+        // !newDataStatus && newID()
 
         // newDataStatus && handleCount(uuid())
         // newDataStatus && generateOneNewID();

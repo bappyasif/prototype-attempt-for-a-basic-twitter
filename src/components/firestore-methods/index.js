@@ -7,7 +7,7 @@ let db = getFirestore();
 
 
 // set data into firestore
-export let writeDataIntoCollectionAnotherVersion = (data, docID, imgUrl, imgReady) => {
+export let writeDataIntoCollectionAnotherVersion = (data, docID, imgUrl, updateData) => {
     let { tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, gifItem, count } = { ...data }
     
     // trying out firestore timestamp as createdDate, this works just fine
@@ -18,14 +18,18 @@ export let writeDataIntoCollectionAnotherVersion = (data, docID, imgUrl, imgRead
 
     let refinedData = { tweetPoll, tweetText, extraTweet, count, medias: { picture: imgUrl ? imgUrl : '', gif: gifItem ? gifItem.id : '' }, created: dateCreated }
     
+    // trying updating data locally first and render data from that
+    updateData(refinedData)
+
     // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
-    if (tweetText || imgFile || gifItem) {
-        console.log(docID, '<<<<<here>>>>>', imgUrl)
+    if (imgFile || gifItem || tweetText) {
+        console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
         let docRef = doc(db, 'TweetsData', docID);
 
         setDoc(docRef, refinedData)
         .then((data) => {
             console.log('data is added successfully', data)
+            // updateData(refinedData)
             // readDataDescendingOrder();
         })
         .catch(err => console.log('error while in writing into collection....', err.message))
@@ -107,7 +111,7 @@ export let readDataDescendingOrder = async () => {
         let querySnapshot = await getDocs(dataQuery);
         querySnapshot.forEach(doc => {
             data.push(doc.data());
-            console.log('data sorted: ', doc.id +'=>'+doc.data().created)
+            console.log('data sorted: ', doc.id +' => '+doc.data().created)
         })
     } catch (err) {
         console.log('error while sorting data', err)
