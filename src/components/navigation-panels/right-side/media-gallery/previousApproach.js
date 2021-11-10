@@ -61,10 +61,7 @@ function MediaGallery({ tweetData }) {
                             className='gallery-view'
                             key={item.tweetText ? item.tweetText : idx}
                             // src={handleMediaFileChecks(item['medias'].picture ? item['medias'].picture : item['medias'].gif)}
-                            // src={ item['medias'].picture ? handleMediaFileChecks(item['medias'].picture) : getGifFromID(item['medias'].gif)}
-
-                            src={ item['medias'].picture ? handleMediaFileChecks(item['medias'].picture) : handleMediaFileChecks(item['medias'].gif)}
-
+                            src={ item['medias'].picture ? handleMediaFileChecks(item['medias'].picture) : getGifFromID(item['medias'].gif)}
                             // src={handleMediaFileChecks(item['medias'].picture ? item['medias'].picture : item['medias'].gif && getGifFromID(item['medias'].gif))}
                             // src={handleMediaFileChecks(item['medias'].picture ? item['medias'].picture : readyGif && getGifFromID(item['medias'].gif))}
                             // src={handleMediaFileChecks(item['medias'].picture ? item['medias'].picture : !readyGif ? getGifFromID(item['medias'].gif) : readyGif)}

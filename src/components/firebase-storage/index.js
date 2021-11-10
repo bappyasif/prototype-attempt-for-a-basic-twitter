@@ -40,6 +40,16 @@ export let uploadTweetPictureUrlToStorage = (imgFile, fileId, updateUploadingSta
     .catch(err=>console.log('<< could not uploaded picture to storage >>', err.message))
 }
 
+export let uploadTweetGiphyObjectToStorage = (gifFile, fileId, updateUploadingStatus) => {
+    let storageRef = ref(storage, 'gifs/'+(fileId));
+    uploadBytes(storageRef, gifFile)
+    .then(res => {
+        console.log('<< gif upoloaded to storage >>', res, res.metadata)
+        updateUploadingStatus();
+    })
+    .catch(err=>console.log('<< could not uploaded picture to storage >>', err.message))
+}
+
 export let downloadTweetPictureUrlFromStorageAnotherVersion = async (fileId) => {
     let storageRef = ref(storage, 'test/'+(fileId));
     return getDownloadURL(storageRef).then(res=> {
@@ -58,6 +68,16 @@ export let downloadTweetPictureUrlFromStorage = (fileId, updateUrl) => {
         updateUrl(res);
         // updateUserDocWithMediaUrls(fileId, res)
     }).catch(err=>console.log('<< couldnt found picture url >>', err.message))
+}
+
+export let downloadTweetGiphyUrlFromStorage = (fileId, updateUrl) => {
+    let storageRef = ref(storage, 'gifs/'+(fileId));
+    getDownloadURL(storageRef).then(res=> {
+        console.log('<< tweet Giphy url downloaded >>', res)
+        // think of an alternative how this can be done, so that this gets easier and always gets run by update function when needed
+        updateUrl(res);
+        // updateUserDocWithMediaUrls(fileId, res)
+    }).catch(err=>console.log('<< couldnt found Giphy url >>', err.message))
 }
 
 export let lookupTweetPictureUrl = (fileId, updateUrlFoundStatus) => {

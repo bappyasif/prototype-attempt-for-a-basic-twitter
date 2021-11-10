@@ -82,7 +82,15 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
                 <div className='tweet-media-on-profile' style={{ display: item.medias.picture ? 'block' : 'none' }}>{showImg(item.medias.picture)}</div>
                 {/* <div className='tweet-media-on-profile' style={{ display: item.tweetMedia ? 'block' : 'none' }}>{testDownloadBlobFile(item) && testDownloadBlobFile(item)}</div> */}
                 {/* <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{loadingDone && <MakeGifObjectAvailable gifId={item.medias.gif} seLoadingDone={updateLoadingStatus} />}</div> */}
-                <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ <MakeGifObjectAvailable gifId={item.medias.gif} />}</div>
+                
+                {/* <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ <MakeGifObjectAvailable gifId={item.medias.gif} />}</div> */}
+                
+                <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ <img src={item.medias.gif} />}</div>
+                
+                {/* <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ item.medias.gif }</div> */}
+
+                {/* <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ <Gif gif={item.medias.gif} height={200} /> }</div> */}
+                
                 {/* <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{item.tweetGif}</div> */}
                 {/* <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{item.tweetGif} {testDownloadBlobFile(item)}</div> */}
                 {/* <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{testDownloadBlobFile(item)}</div> */}
@@ -151,7 +159,7 @@ let MakeGifObjectAvailable = ({gifId, setLoadingDone}) => {
     let [gif, setGif] = useState(null)
     gifId && getGiphyGifObject(gifId).then(res=>{
         setGif(res);
-        // console.log('checkpoint01')
+        gif && console.log('checkpoint01', gif, res)
     }).catch(err=>console.log(err.message))
     // console.log('chekpoint02', gifId)
     // gif && console.log(gif, 'gif??!!')
@@ -162,9 +170,9 @@ let getGiphyGifObject = async (gifId) => {
     try {
         let {data} = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId)
         // console.log('checkoiint03', gifId)
-        return data
+        return data && data
     } catch (err) {
-        console.log(err)
+        console.log('gif resource could not be generated', err)
     }
 }
 

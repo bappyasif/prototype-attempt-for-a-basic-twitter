@@ -4,26 +4,27 @@ import { downloadTweetPictureUrlFromStorage, downloadTweetPictureUrlFromStorageA
 
 // Initialize Cloud Firestore through Firebase
 let db = getFirestore();
+// let db = getFirestore().settings({experimentalForceLongPolling: true})
+// db.settings({experimentalForceLongPolling: true})
 
 
 // set data into firestore
-export let writeDataIntoCollectionAnotherVersion = (data, docID, imgUrl, updateData) => {
+export let writeDataIntoCollectionAnotherVersion = (data, docID, imgUrl, updateData, gifUrl) => {
     let { tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, gifItem, count } = { ...data }
     
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
-    // console.log('<<<<<here>>>>>', imgUrl)
+    console.log('<<<<<here>>>>>', imgUrl, gifUrl)
 
-    // imgReady && downloadTweetPictureUrlFromStorageAnotherVersion(docID).then(url => console.log(url, 'showing url'))
-
-    let refinedData = { tweetPoll, tweetText, extraTweet, count, medias: { picture: imgUrl ? imgUrl : '', gif: gifItem ? gifItem.id : '' }, created: dateCreated }
+    // let refinedData = { tweetPoll, tweetText, extraTweet, count, medias: { picture: imgUrl ? imgUrl : '', gif: gifItem ? gifItem.id : '' }, created: dateCreated }
+    let refinedData = { tweetPoll, tweetText, extraTweet, count, medias: { picture: imgUrl ? imgUrl : '', gif: gifUrl ? gifUrl : '' }, created: dateCreated }
     
-    // trying updating data locally first and render data from that
+    // updating data locally first and render data from that, instead of async call for to fetch data from firestore and render
     updateData(refinedData)
 
     // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
     if (imgFile || gifItem || tweetText) {
-        console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
+        // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
         let docRef = doc(db, 'TweetsData', docID);
 
         setDoc(docRef, refinedData)
@@ -37,7 +38,7 @@ export let writeDataIntoCollectionAnotherVersion = (data, docID, imgUrl, updateD
 }
 
 
-// Add or write data into collection
+// Add or write data into collection (not using....)
 export let writeDataIntoCollection = (data, urlUpdater, userDocUpdater, giphyUpdater) => {
     let { tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, gifItem, count } = { ...data }
     
@@ -65,6 +66,7 @@ export let writeDataIntoCollection = (data, urlUpdater, userDocUpdater, giphyUpd
     }
 }
 
+// updating tweel media picture url to firestore doc
 export let updateUserDocWithMediaUrls = (userDoc, mediaUrl) => {
     // let data = { picture: mediaUrl }
     let data = { medias: {picture: mediaUrl, gif: ''} }
@@ -72,7 +74,7 @@ export let updateUserDocWithMediaUrls = (userDoc, mediaUrl) => {
     updateDoc(docRef, data).then(() => console.log('data updated?!')).catch(err => console.log('could not be updated', err.message))
 }
 
-
+// not using....
 export let testReadFirestoreData = async (docID, giphyUpdater, gifId) => {
     let docRef = doc(db, 'tweetData', docID)
     let docSnap = await getDoc(docRef)
@@ -85,6 +87,7 @@ export let testReadFirestoreData = async (docID, giphyUpdater, gifId) => {
     }
 }
 
+// not using....
 export let getAllDocsOnce = async () => {
     let data = []
     let collectionRef = collection(db, 'tweetData');
@@ -102,6 +105,7 @@ export let getAllDocsOnce = async () => {
     return data && data   
 }
 
+// gathering data from firestore in descending order and serving to user as data to render from on DOM
 export let readDataDescendingOrder = async () => {
     let data = []
     // let collectionRef = collection(db, 'tweetData');
@@ -120,6 +124,7 @@ export let readDataDescendingOrder = async () => {
     // console.log(dataQuery, 'hows?!')
 }
 
+// not using.... this could be an interesting wasy to deal with async calls to render data from, to DOM
 export let readDataInRealtime = () => {
     let collectionRef = collection(db, 'tweetData');
     onSnapshot(collectionRef, ()=> {console.log('data changed')})
