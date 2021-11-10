@@ -62,7 +62,6 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
                             onMouseOver={mouseHoveredIn}
                             onMouseOut={mouseHoveredOut}
                         >
-
                             <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + item.count + 'extra' ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span>
                         </div>
                     )}
@@ -78,14 +77,13 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
             <div className='right-portion'>
                 <div className='profile-details-on-tweet'><div className='user-info'>User Name Goes Here <span>@profile handle goes here</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div></div>
                 <div className='tweet-text-on-profile'>{item.tweetText}</div>
+
                 {/* <div className='tweet-media-on-profile' style={{ display: item.tweetMedia ? 'block' : 'none' }}>{item.tweetMedia}</div> */}
                 <div className='tweet-media-on-profile' style={{ display: item.medias.picture ? 'block' : 'none' }}>{showImg(item.medias.picture)}</div>
-                {/* <div className='tweet-media-on-profile' style={{ display: item.tweetMedia ? 'block' : 'none' }}>{testDownloadBlobFile(item) && testDownloadBlobFile(item)}</div> */}
-                {/* <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{loadingDone && <MakeGifObjectAvailable gifId={item.medias.gif} seLoadingDone={updateLoadingStatus} />}</div> */}
-                <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ <MakeGifObjectAvailable gifId={item.medias.gif} />}</div>
-                {/* <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{item.tweetGif}</div> */}
-                {/* <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{item.tweetGif} {testDownloadBlobFile(item)}</div> */}
-                {/* <div className='tweet-gif-on-profile' style={{ display: item.tweetGif ? 'block' : 'none' }}>{testDownloadBlobFile(item)}</div> */}
+                
+                {/* <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ <MakeGifObjectAvailable gifId={item.medias.gif} />}</div> */}
+                {item.medias.gif && <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ <MakeGifObjectAvailable gifId={item.medias.gif} />}</div>}
+
                 <div className='tweet-poll-on-profile'>{renderPolls(item)}</div>
                 <div className='tweet-privacy-on-profile'>{item.tweetPrivacy}</div>
 
@@ -112,17 +110,6 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
 
     </div>))
 
-    // let renderingData = tweetData && tweetData.map((item, idx) =>    
-    // (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: (item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? 'block' : 'none' }}>
-
-    //     {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
-
-    //     <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div>
-
-    //     {item.extraTweet ? whenExtraTweetExists(item) : ''}
-
-    // </div>))
-
     let renderMediaTweetsOnly = onlyMedias && onlyMedias.map((item, idx) => {
 
         return <div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
@@ -132,18 +119,7 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
         </div>
     })
 
-    // let renderMediaTweetsOnly = onlyMedias && onlyMedias.map((item, idx) => {
-
-    //     return <div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
-
-    //         {(item.tweetMedia || item.tweetGif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
-
-    //     </div>
-    // })
-
-    // return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData}</div>
     return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}</div>
-    // return <div id='all-tweets-container'>{tweetData && tweetData.length}</div>
 }
 
 
@@ -151,7 +127,7 @@ let MakeGifObjectAvailable = ({gifId, setLoadingDone}) => {
     let [gif, setGif] = useState(null)
     gifId && getGiphyGifObject(gifId).then(res=>{
         setGif(res);
-        // console.log('checkpoint01')
+        console.log('checkpoint01', gifId)
     }).catch(err=>console.log(err.message))
     // console.log('chekpoint02', gifId)
     // gif && console.log(gif, 'gif??!!')
@@ -161,7 +137,7 @@ let MakeGifObjectAvailable = ({gifId, setLoadingDone}) => {
 let getGiphyGifObject = async (gifId) => {
     try {
         let {data} = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId)
-        // console.log('checkoiint03', gifId)
+        console.log('checkoiint03', gifId)
         return data
     } catch (err) {
         console.log(err)
