@@ -9,8 +9,6 @@ import { Gif } from '@giphy/react-components';
 
 function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handleCount }) {
     let [hoveredID, setHoveredID] = useState('');
-    // let [loadingDone, setLoadingDone] = useState(false);
-    
 
     let findWhichIconId = evt => {
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
@@ -24,72 +22,25 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
 
     let mouseHoveredOut = (evt) => {
         setHoveredID('')
-    }
-    
-    // let updateLoadingStatus = () => setLoadingDone(true)
+    }    
 
-    let renderAdditionalTweetIcons = (item, extra) => {
+    let renderAdditionalTweetIcons = (idx) => {
         return <div className='additionals-icons'>
             {tweetAdditionalIconsArray.map((elem) => <div
                 key={elem.id}
 
-                id={extra ? elem.id + `${item.count}extra` : elem.id + `${item.count}tweet`}
+                // id={extra ? elem.id + `${item.count}-${extra}` : elem.id + `${item.count}-${noExtra}`}
+                id={idx}
                 className='hover-div'
 
                 onMouseOver={mouseHoveredIn}
                 onMouseOut={mouseHoveredOut}
             >
-                <span>{elem.icon}</span> <span style={{ display: extra && hoveredID == elem.id + item.count + 'extra' ? 'flex' : hoveredID == elem.id + item.count + 'tweet' ? 'flex' : 'none' }} className='tooltips-text'>{elem.id}</span>
+                {/* <span>{elem.icon}</span> <span style={{ display: extra && hoveredID == elem.id + item.count + extra ? 'flex' : hoveredID == elem.id + item.count + noExtra ? 'flex' : 'none' }} className='tooltips-text'>{elem.id}</span> */}
+                <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + item.count + extra ? 'flex' : hoveredID == elem.id + item.count + noExtra ? 'flex' : 'none' }} className='tooltips-text'>{elem.id}</span>
             </div>)}
         </div>
     }
-
-    let whenExtraTweetExists = (item) =>
-        <div id='extra-tweet-portion-container'>
-            <div className='left-portion'>
-                <img id='profile-pic' src='https://picsum.photos/200/300' />
-            </div>
-            <div className='right-portion'>
-                <div className='profile-details-on-tweet'><div className='user-info'>User Name Goes Here <span>@profile handle goes here</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div></div>
-                <div className='tweet-text-on-profile'>{item.extraTweet}</div>
-
-                <div className='additionals-icons'>
-                    {tweetAdditionalIconsArray.map((elem) =>
-                        <div
-                            key={elem.id}
-                            id={elem.id + `${item.count}extra`}
-                            className='hover-div'
-                            onMouseOver={mouseHoveredIn}
-                            onMouseOut={mouseHoveredOut}
-                        >
-                            <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + item.count + 'extra' ? 'inline-block' : 'none' }} className='tooltips-text'>{elem.id}</span>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
-
-    let whenNoExtraTweet = (item) =>
-        <div id='without-extra-tweet-container'>
-            <div className='left-portion'>
-                <img id='profile-pic' src='https://picsum.photos/200/300' />
-            </div>
-            <div className='right-portion'>
-                <div className='profile-details-on-tweet'><div className='user-info'>User Name Goes Here <span>@profile handle goes here</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div></div>
-                <div className='tweet-text-on-profile'>{item.tweetText}</div>
-
-                {/* <div className='tweet-media-on-profile' style={{ display: item.tweetMedia ? 'block' : 'none' }}>{item.tweetMedia}</div> */}
-                <div className='tweet-media-on-profile' style={{ display: item.medias.picture ? 'block' : 'none' }}>{showImg(item.medias.picture)}</div>
-                
-                {/* <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ <MakeGifObjectAvailable gifId={item.medias.gif} />}</div> */}
-                {item.medias.gif && <div className='tweet-gif-on-profile' style={{ display: item.medias.gif ? 'block' : 'none' }}>{ <MakeGifObjectAvailable gifId={item.medias.gif} />}</div>}
-
-                <div className='tweet-poll-on-profile'>{renderPolls(item)}</div>
-                <div className='tweet-privacy-on-profile'>{item.tweetPrivacy}</div>
-
-                {renderAdditionalTweetIcons(item)}
-            </div>
-        </div>
 
     let renderPolls = item => {
         return item.tweetPoll.map(choice => {
@@ -97,10 +48,26 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
         })
     }
 
+    let whenExtraTweetExists = (item) => {
+        console.log(item.id)
+        return <div>
+            {/* {renderAdditionalTweetIcons(item, 'extra', null)} */}
+            {item.id}
+        </div>
+    }
+
+    let whenNoExtraTweet = (item) => {
+        console.log(item.id)
+        return <div>
+            {/* {renderAdditionalTweetIcons(item, null, 'noExtra')} */}
+            {item.id}
+        </div>
+    }
+
     // let renderingData = tweetData.map(item=>console.log(item, '?!'))
 
     let renderingData = tweetData && tweetData.map((item, idx) =>    
-    (<div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: (item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? 'block' : 'none' }}>
+    (<div key={item.id} id='tweet-container' style={{ display: (item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? 'block' : 'none' }}>
 
         {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
 
@@ -122,15 +89,26 @@ function AllTweetsPage({ tweetData, onlyMedias, tweetPublishReady, count, handle
     return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}</div>
 }
 
+let RewriteShowGifElement = ({gifID, updateGifID}) => {
+    console.log(gifID, '<<gif ID>>')
+    // updateGif()
+    updateGifID(gifID)
+    return gifID && <div>{gifID}</div>
+}
 
-let MakeGifObjectAvailable = ({gifId, setLoadingDone}) => {
+
+let MakeGifObjectAvailable = ({gifId}) => {
     let [gif, setGif] = useState(null)
+    
+    gif && console.log(gifId, 'gif ID ??', gif.id)
+    
     gifId && getGiphyGifObject(gifId).then(res=>{
-        setGif(res);
+        setGif(res)
         console.log('checkpoint01', gifId)
     }).catch(err=>console.log(err.message))
-    // console.log('chekpoint02', gifId)
-    // gif && console.log(gif, 'gif??!!')
+    
+    gif && console.log('chekpoint02', gifId)
+    
     return gif && <Gif gif={gif} height='290px' width='96%' className='style-gif-border-radius' />
 }
 
