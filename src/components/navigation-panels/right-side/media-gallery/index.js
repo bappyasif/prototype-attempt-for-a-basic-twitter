@@ -1,9 +1,10 @@
 import React from 'react'
 import { GifDemo } from '../../../user-profile';
 import {GiphyFetch} from '@giphy/js-fetch-api'
+import {getGiphyGifObject} from '../../../user-profile/all-tweets'
 
 function MediaGallery({ tweetData }) {
-    let [readyGif, setReadyGif] = React.useState(null)
+    // let [readyGif, setReadyGif] = React.useState(null)
 
     // let allMediaTweets = [...tweetData].filter(elem => elem.imgFile || elem.gifItem)
     // let allMediaTweets = [...tweetData].filter(elem => elem['medias'].picture ? elem['medias'].picture : elem)
@@ -15,23 +16,23 @@ function MediaGallery({ tweetData }) {
     // making ready gif element
     // allMediaTweets.forEach(el => el['medias'].gif && getGifFromID(el['medias'].gif))
 
-    let handleMediaFileChecks = (mediaFile) => {
-        let mediaSrc = mediaFile;
-        if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
-            mediaSrc = URL.createObjectURL(mediaFile)
-        }
+    // let handleMediaFileChecks = (mediaFile) => {
+    //     let mediaSrc = mediaFile;
+    //     if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
+    //         mediaSrc = URL.createObjectURL(mediaFile)
+    //     }
         
-        // console.log(mediaSrc, 'here', mediaSrc.type)
+    //     // console.log(mediaSrc, 'here', mediaSrc.type)
 
-        return mediaSrc.type == 'gif' ? mediaSrc.images.downsized_still.url : mediaSrc
-    }
+    //     return mediaSrc.type == 'gif' ? mediaSrc.images.downsized_still.url : mediaSrc
+    // }
 
-    let getGifFromID = (gifId) => {
-        new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId).then(data=>{
-            setReadyGif(data.data)
-        })
-        return readyGif && handleMediaFileChecks(readyGif)
-    }
+    // let getGifFromID = (gifId) => {
+    //     new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId).then(data=>{
+    //         setReadyGif(data.data)
+    //     })
+    //     return readyGif && handleMediaFileChecks(readyGif)
+    // }
 
    
 
@@ -57,11 +58,19 @@ function MediaGallery({ tweetData }) {
                     allMediaTweets
                     ?
                     allMediaTweets.map((item, idx) =>
+                        item.medias.gif
+                        ?
+                        <MakeReadyGifPicture key={item.id} gifId={item.medias.gif} />
+                        :
                         <img
                             className='gallery-view'
-                            key={item.tweetText ? item.tweetText : idx}
+                            // key={item.id}
+                            key={item.id}
                             // src={handleMediaFileChecks(item['medias'].picture ? item['medias'].picture : item['medias'].gif)}
-                            src={ item['medias'].picture ? handleMediaFileChecks(item['medias'].picture) : getGifFromID(item['medias'].gif)}
+                            // src={ item['medias'].picture ? handleMediaFileChecks(item['medias'].picture) : getGifFromID(item['medias'].gif)}
+
+                            src={ handleMediaFileChecks(item['medias'].picture)}
+
                             // src={handleMediaFileChecks(item['medias'].picture ? item['medias'].picture : item['medias'].gif && getGifFromID(item['medias'].gif))}
                             // src={handleMediaFileChecks(item['medias'].picture ? item['medias'].picture : readyGif && getGifFromID(item['medias'].gif))}
                             // src={handleMediaFileChecks(item['medias'].picture ? item['medias'].picture : !readyGif ? getGifFromID(item['medias'].gif) : readyGif)}
@@ -88,6 +97,27 @@ function MediaGallery({ tweetData }) {
             </div>
         </div>
     )
+}
+
+let MakeReadyGifPicture = ({gifId}) => {
+    // let [gifPictureReady, setGifPicrureReady] = React.useState('');
+    let [gifData, setGifData] = React.useState('');
+    getGiphyGifObject(gifId)
+    .then(res => setGifData(res))
+    .catch(err=>console.log(err.message, 'from media-gallery giphy fetch'))
+
+    return gifData && <img key={gifId} className='gallery-view' src={handleMediaFileChecks(gifData)} />
+}
+
+let handleMediaFileChecks = (mediaFile) => {
+    let mediaSrc = mediaFile;
+    if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
+        mediaSrc = URL.createObjectURL(mediaFile)
+    }
+    
+    // console.log(mediaSrc, 'here', mediaSrc.type)
+
+    return mediaSrc.type == 'gif' ? mediaSrc.images.downsized_still.url : mediaSrc
 }
 
 // let getGifFromID = (gifId) => {

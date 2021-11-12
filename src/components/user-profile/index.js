@@ -26,17 +26,25 @@ function UserProfile({updateData, newID, updateDOM, uniqueID, dataLoading, setCh
 
     // usng for image element
     useEffect(() => {
-        testUrl && console.log('checkpoint!!', testUrl)
-        // if(newID() != uniqueID) {
-        //     testUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, updateData)
-        // }
         testUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, updateData)
-        // testUrl && updateDOM('img effect');
-        newDataStatus && testUrl && newID()
-        testUrl && console.log('checkpoint2>>', testUrl)
-        // testUrl && setTestUrl('')
-        testUrl && selectedFile && resetUrlToNull()
+        testUrl && newID()
+        resetUrlToNull() // resetting picture url back to null
     }, [testUrl])
+    
+    // useEffect(() => {
+    //     testUrl && console.log('checkpoint!!', testUrl)
+    //     // if(newID() != uniqueID) {
+    //     //     testUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, updateData)
+    //     // }
+    //     testUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, updateData)
+    //     // testUrl && updateDOM('img effect');
+    //     // newDataStatus && testUrl && newID()
+    //     // newDataStatus && newID()
+    //     testUrl && newID()
+    //     testUrl && console.log('checkpoint2>>', testUrl)
+    //     // testUrl && setTestUrl('')
+    //     resetUrlToNull()
+    // }, [testUrl])
 
     // useEffect(() => {
     //     // updateDOM('uniqueID effect')
@@ -49,13 +57,13 @@ function UserProfile({updateData, newID, updateDOM, uniqueID, dataLoading, setCh
     // // // // current situation is, gif rendering works for if there is only 1 or 2 of them in firestore or tweetData array (which is feeded from firestore and then upon each entry gets updated)
 
     // usng for gif element
-    useEffect(() => {
-        gifFile && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, null, updateData)
-        gifFile && newID();
-        // gifFile && updateDOM();
-        gifFile && console.log('gif file....', gifFile)
-        // gifFile && setGifFile('');
-    }, [gifFile])
+    // useEffect(() => {
+    //     gifFile && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, null, updateData)
+    //     gifFile && newID();
+    //     // gifFile && updateDOM();
+    //     gifFile && console.log('gif file....', gifFile)
+    //     // gifFile && setGifFile('');
+    // }, [gifFile])
     
     // useEffect(() => handleCount(), [count])
 
@@ -70,12 +78,15 @@ function UserProfile({updateData, newID, updateDOM, uniqueID, dataLoading, setCh
 
     // when there is new data to store in firestore and render on DOM
     useEffect(() => {        
-        if (!(selectedFile || gifFile)) {
+        if (!(selectedFile)) {
             newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), count: count, imgFile: selectedFile, gifItem: gifFile }, uniqueID, testUrl, updateData)
             // newDataStatus && setTestUrl(null)
             // newDataStatus && updateDOM('default effect');
             newDataStatus && newID();
         }
+
+        // newDataStatus && newID();
+        // newID()
 
         setNewDataStatus(false)
 

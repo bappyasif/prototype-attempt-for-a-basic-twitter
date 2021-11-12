@@ -257,3 +257,92 @@
   margin-right: 4px;
   line-height: 2em;
 }
+
+
+/* readjusted tweet display styling */
+.rendering-tweet-data-container,
+.rendering-tweet-data-container .right-side .tweet-top,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rendering-tweet-data-container .left-side {
+  width: 78px;
+  height: 78px;
+}
+
+.rendering-tweet-data-container .left-side .in-tweet-profile-pic {
+  border-radius: 56px;
+  margin: 4px 0px 0px 6px;
+}
+
+.rendering-tweet-data-container .right-side {
+  width: -webkit-fill-available;
+  text-align: left;
+  margin-left: 20px;
+  margin-top: 6px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top {
+  margin: 4px 4px 4px 0px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-media-file-content {
+  margin: 11px 18px 11px 0px;
+  width: 94.4%;
+}
+
+.rendering-tweet-data-container .right-side .tweet-media-file-content a div picture img, 
+.rendering-tweet-data-container .right-side .tweet-media-file-content img {
+  /* margin: 11px 0px 11px 0px; */
+  border-radius: 20px;
+  /* border-top-left-radius: 20px;
+  border-top-right-radius: 20px; */
+}
+
+.rendering-tweet-data-container .right-side .tweet-media-file-content a div div {
+  display: none;
+}
+
+.rendering-tweet-data-container .right-side .tweet-media-file-content a div:nth-child((2)) div:nth-child((1)) {
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons {
+  margin-bottom: 4px;
+  margin-right: 20px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons .hoverable-div {
+  position: relative;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons .hoverable-div .hoverable-div-tooltips-text {
+  position: absolute;
+  /* margin-top: 42px; */
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #reply .hoverable-div-tooltips-text {
+  transform: translate(-2px, -5px);
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #like .hoverable-div-tooltips-text {
+  transform: translate(0px, -5px);
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .hoverable-div-tooltips-text {
+  transform: translate(-10px, -5px);
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #share .hoverable-div-tooltips-text {
+  transform: translate(-5px, -5px);
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #analytics .hoverable-div-tooltips-text {
+  transform: translate(-17px, -5px);
+}
