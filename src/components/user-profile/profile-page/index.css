@@ -60,10 +60,10 @@
 }
 
 #tweet-container #show-connecting-line {
-  border-left: 2px solid silver;
+  border-left: .2px solid silver;
   position: absolute;
-  height: 101px;
-  transform: translate(65px, -82px);
+  height: 61px;
+  transform: translate(26px, -59px);
 }
 
 #extra-tweet-portion-container,
@@ -267,9 +267,9 @@
   justify-content: space-between;
 }
 
-.rendering-tweet-data-container .left-side {
-  width: 78px;
-  height: 78px;
+.rendering-tweet-data-container .left-side{
+  width: 42px;
+  height: 42px;
 }
 
 .rendering-tweet-data-container .left-side .in-tweet-profile-pic {
@@ -327,22 +327,46 @@
   /* margin-top: 42px; */
 }
 
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #reply .hoverable-div-tooltips-text {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #reply .hoverable-div-tooltips-text,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #reply-een .hoverable-div-tooltips-text,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #reply-twee .hoverable-div-tooltips-text {
   transform: translate(-2px, -5px);
 }
 
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #like .hoverable-div-tooltips-text {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #like .hoverable-div-tooltips-text,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #like-een .hoverable-div-tooltips-text,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #like-twee .hoverable-div-tooltips-text {
   transform: translate(0px, -5px);
 }
 
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .hoverable-div-tooltips-text {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .hoverable-div-tooltips-text,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet-een .hoverable-div-tooltips-text,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet-twee .hoverable-div-tooltips-text {
   transform: translate(-10px, -5px);
 }
 
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #share .hoverable-div-tooltips-text {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #share .hoverable-div-tooltips-text,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #share-een .hoverable-div-tooltips-text,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #share-twee .hoverable-div-tooltips-text {
   transform: translate(-5px, -5px);
 }
 
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #analytics .hoverable-div-tooltips-text {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #analytics .hoverable-div-tooltips-text, 
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #analytics-een .hoverable-div-tooltips-text,
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #analytics-twee .hoverable-div-tooltips-text {
   transform: translate(-17px, -5px);
+}
+
+/* some more styling adjustments with more improvised contexts */
+
+.rendering-tweet-data-container .when-has-extra-tweet {
+  /* display: flex;
+  flex-direction: column; */
+  width: -webkit-fill-available;
+}
+
+.rendering-tweet-data-container .when-has-extra-tweet .tweet-extra-info-een,
+.rendering-tweet-data-container .when-has-extra-tweet .tweet-extra-info-twee {
+  display: flex;
+  /* flex-direction: column; */
 }

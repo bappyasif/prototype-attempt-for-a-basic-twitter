@@ -18,7 +18,7 @@ import LandingPageUILogics from '../landing-page/ui-logics';
 import SignupPage from '../signup-page';
 import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
 
-function AllRoutes({updateData, newID, updateDOM, uniqueID, tweetData, newDataStatus, setNewDataStatus, count, handleCount, setChangeLayout }) {
+function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -36,24 +36,6 @@ function AllRoutes({updateData, newID, updateDOM, uniqueID, tweetData, newDataSt
     let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
     // let [newDataStatus, setNewDataStatus] = useState(false)
     let [opacity, setOpacity] = useState(false)
-    // let [userDocs, setUserDocs] = useState([getAllDocsOnce()]);
-    
-    // let updateFirestoreUserDocsAdditionalEntries = (newData) => setUserDocs([[newData], ...userDocs])
-
-    // useEffect(()=> {
-    //     let data = getAllDocsOnce();
-    //     setUserDocs(data)
-    //     console.log(userDocs, 'data..');
-    // } , [newDataStatus])
-
-    // useEffect(() => {
-    //     readDataInRealtime();
-    // }, [userDocs])
-    // console.log(userDocs, 'data..');
-
-    // useEffect(() => console.log(scheduleStamp, '?!'), [scheduleStamp])
-
-    // console.log(tweetData, '::::')
 
     let handleScheduleIconClicked = () => {
         setIsScheduleIconClicked(!isScheduleIconClicked);
@@ -153,11 +135,7 @@ function AllRoutes({updateData, newID, updateDOM, uniqueID, tweetData, newDataSt
                         setSelectedFile={setSelectedFile}
                         gifFile={gifFile}
                         setGifFile={setGifFile}
-                        count={count}
-                        handleCount={handleCount}
                         tweetData={tweetData}
-                        // tweetData={userDocs}
-                        // setTweetData={setTweetData}
                         primaryTweetText={primaryTweetText}
                         extraTweetText={extraTweetText}
                         tweetPrivacy={tweetPrivacy}
@@ -174,10 +152,7 @@ function AllRoutes({updateData, newID, updateDOM, uniqueID, tweetData, newDataSt
                         setNewDataStatus={setNewDataStatus}
                         newDataStatus={newDataStatus}
                         setChangeLayout={setChangeLayout}
-                        // updateDocs={updateFirestoreUserDocsAdditionalEntries}
-                        // dataLoading={dataLoading}
                         uniqueID={uniqueID}
-                        updateDOM={updateDOM}
                         newID={newID}
                         updateData={updateData}
                     />

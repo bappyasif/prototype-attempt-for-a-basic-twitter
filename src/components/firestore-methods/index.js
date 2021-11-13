@@ -1,6 +1,5 @@
 import { Timestamp, getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy } from 'firebase/firestore'
 import FirebaseApp from '../firebase-configs'
-import { downloadTweetPictureUrlFromStorage, downloadTweetPictureUrlFromStorageAnotherVersion, testUploadBlobFileAsyncApproach, uploadTweetPictureUrlToStorage } from '../firebase-storage';
 
 // Initialize Cloud Firestore through Firebase
 let db = getFirestore();
@@ -14,8 +13,6 @@ export let writeDataIntoCollection = (data, docID, imgUrl, updateData) => {
     let dateCreated = Timestamp.now()
     // console.log('<<<<<here>>>>>', imgUrl)
 
-    // imgReady && downloadTweetPictureUrlFromStorageAnotherVersion(docID).then(url => console.log(url, 'showing url'))
-
     let refinedData = {id: docID, tweetPoll, tweetText, extraTweet, medias: { picture: imgUrl ? imgUrl : '', gif: gifItem ? gifItem.id : '' }, created: dateCreated }
     
     // trying updating data locally first and render data from that
@@ -23,14 +20,12 @@ export let writeDataIntoCollection = (data, docID, imgUrl, updateData) => {
 
     // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
     if (imgFile || gifItem || tweetText) {
-        console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
+        // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
         let docRef = doc(db, 'tweets-data', docID);
 
         setDoc(docRef, refinedData)
         .then((data) => {
-            console.log('data is added successfully', data)
-            // updateData(refinedData)
-            // readDataDescendingOrder();
+            console.log('data is added successfully')
         })
         .catch(err => console.log('error while in writing into collection....', err.message))
     }
@@ -45,8 +40,9 @@ export let readDataDescendingOrder = async () => {
         let querySnapshot = await getDocs(dataQuery);
         querySnapshot.forEach(doc => {
             data.push(doc.data());
-            console.log('data sorted: ', doc.id +' => '+doc.data().created)
+            // console.log('data sorted: ', doc.id +' => '+doc.data().created)
         })
+        console.log('data sorted and ready')
     } catch (err) {
         console.log('error while sorting data', err)
     }
