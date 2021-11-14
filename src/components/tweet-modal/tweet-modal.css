@@ -14,6 +14,7 @@
   /* min-height: 258px; */
   border-radius: 11px;
   /* background-color: whitesmoke; */
+  height: fit-content;
 }
 
 .left-opaque {
@@ -136,6 +137,7 @@
 
 .privacy-spans {
   /* width: 191px; */
+  width: max-content;
   display: flex;
   justify-content: space-around;
   align-items: center;

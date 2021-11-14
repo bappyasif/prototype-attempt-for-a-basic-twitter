@@ -63,7 +63,7 @@
   border-left: .2px solid silver;
   position: absolute;
   height: 61px;
-  transform: translate(26px, -59px);
+  transform: translate(26px, -59.5px);
 }
 
 #extra-tweet-portion-container,
@@ -267,6 +267,10 @@
   justify-content: space-between;
 }
 
+.rendering-tweet-data-container {
+  padding-bottom: 9px;
+}
+
 .rendering-tweet-data-container .left-side{
   width: 42px;
   height: 42px;
@@ -286,6 +290,28 @@
 
 .rendering-tweet-data-container .right-side .tweet-top {
   margin: 4px 4px 4px 0px;
+}
+
+.rendering-tweet-data-container .right-side .privacy-spans {
+  margin-bottom: 9px;
+}
+
+.rendering-tweet-data-container .right-side .privacy-spans svg {
+  transform: scale(.69);
+  /* border-radius: 50%;
+  background-color: rgb(29, 155, 240); */
+}
+
+.rendering-tweet-data-container .right-side .privacy-spans .privacy-svg {
+  height: 26px;
+  border-radius: 50%;
+  background-color: rgb(29, 155, 240);
+}
+
+.rendering-tweet-data-container .right-side .privacy-spans .privacy-text {
+  color: silver;
+  font-size: smaller;
+  margin-left: 11px;
 }
 
 .rendering-tweet-data-container .right-side .tweet-media-file-content {
@@ -369,4 +395,9 @@
 .rendering-tweet-data-container .when-has-extra-tweet .tweet-extra-info-twee {
   display: flex;
   /* flex-direction: column; */
+}
+
+.rendering-tweet-data-container .when-has-extra-tweet .extnded-line-in-tweet {
+  height: 96.9px;
+  transform: translate(25px, -94.5px);
 }

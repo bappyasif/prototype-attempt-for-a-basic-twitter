@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { moreIcon, tweetAdditionalIconsArray } from '../profile-page/svg-resources';
 import '../../user-profile/profile-page/index.css';
-import { showGif, showImg } from '..';
+import { getPrivacySelectedElement, showGif, showImg } from '..';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 
@@ -21,29 +21,32 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
         </div>
     }
 
-    let whenNoExtraTweet = (item) => {
+    let renderTweet = (item) => {
         item.extraTweet && console.log(item.id, 'checkpoint 01', item.extraTweet)
         let ID = item.id
         let content
+
+        // item.privacy && console.log(item.privacy, 'found privacy!!')
 
         if (item.medias.gif || item.medias.picture) {
             content = {
                 tweetText: item.tweetText,
                 extraTweet: item.extraTweet,
                 gifFile: item.medias.gif,
-                pictureFile: item.medias.picture
+                pictureFile: item.medias.picture,
+                tweetPrivacy: item.privacy
             }
         } else {
-            content = { tweetText: item.tweetText, extraTweet: item.extraTweet }
+            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy }
         }
 
-        return <RenderTweetDataComponent id={ID} content={content} />
+        return <RenderTweetDataComponent content={content} />
     }
 
     let renderingData = tweetData && tweetData.map((item, idx) =>
     (<div key={item.id} id='tweet-container' style={{ display: (item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? 'block' : 'none' }}>
 
-        {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
+        {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
 
         {/* <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div> */}
 
@@ -63,11 +66,12 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
     return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}</div>
 }
 
-let RenderTweetDataComponent = ({ id, content }) => {
+let RenderTweetDataComponent = ({ content }) => {
     let [hoveredID, setHoveredID] = useState('')
-    let { tweetText, extraTweet, gifFile, pictureFile } = { ...content }
+    let { tweetText, extraTweet, gifFile, pictureFile, tweetPrivacy} = { ...content }
 
     // extraTweet && console.log(extraTweet, 'extraTweet??')
+    // console.log(tweetPrivacy, 'privacy!!', content)
 
     let readyMedia = gifFile ? <MakeGifObjectAvailable gifId={gifFile} /> : pictureFile ? showImg(pictureFile) : ''
 
@@ -79,7 +83,7 @@ let RenderTweetDataComponent = ({ id, content }) => {
     let mouseHoveredIn = evt => {
         // console.log('in', evt.target.id, evt.target.parentNode.id)
         let foundElement = findWhichIconId(evt)
-        console.log(foundElement, 'which?!')
+        // console.log(foundElement, 'which?!')
         setHoveredID(foundElement)
     }
     let mouseHoveredOut = evt => {
@@ -132,6 +136,9 @@ let RenderTweetDataComponent = ({ id, content }) => {
                 {/* {(pictureFile || gifFile) && <div className='tweet-media-file-content'>{readyMedia}</div>} */}
                 <div className='tweet-media-file-content'>{readyMedia}</div>
                 {/* <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons}</div> */}
+                
+                {getPrivacySelectedElement(tweetPrivacy, 'white')}
+
                 <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons()}</div>
             </div>
         </div>
@@ -158,12 +165,14 @@ let RenderTweetDataComponent = ({ id, content }) => {
 
                         <div className='tweet-media-file-content'>{readyMedia}</div>
 
+                        {getPrivacySelectedElement(tweetPrivacy, 'white')}
+
                         <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons('-een')}</div>
                     </div>
                     {/* <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons}</div> */}
                 </div>
 
-                <div id='show-connecting-line'></div>
+                <div id='show-connecting-line' className='extnded-line-in-tweet' style={{height: '96.9px', transform: 'translate(25px, -94.5px)'}}></div>
 
                 <div className='tweet-extra-info-twee'>
 
@@ -181,6 +190,8 @@ let RenderTweetDataComponent = ({ id, content }) => {
 
                         {/* {(pictureFile || gifFile) && <div className='tweet-media-file-content'>{readyMedia}</div>} */}
                         <div className='tweet-media-file-content'>{readyMedia}</div>
+
+                        {getPrivacySelectedElement(tweetPrivacy, 'white')}
 
                         <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons(null, '-twee')}</div>
 

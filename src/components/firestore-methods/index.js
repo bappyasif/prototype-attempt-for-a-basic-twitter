@@ -12,8 +12,9 @@ export let writeDataIntoCollection = (data, docID, imgUrl, updateData) => {
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
     // console.log('<<<<<here>>>>>', imgUrl)
+    console.log('<<<<<here>>>>>', tweetPrivacy)
 
-    let refinedData = {id: docID, tweetPoll, tweetText, extraTweet, medias: { picture: imgUrl ? imgUrl : '', gif: gifItem ? gifItem.id : '' }, created: dateCreated }
+    let refinedData = {id: docID, tweetPoll, tweetText, extraTweet, medias: { picture: imgUrl ? imgUrl : '', gif: gifItem ? gifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy }
     
     // trying updating data locally first and render data from that
     updateData(refinedData)

@@ -23,7 +23,8 @@ function UserProfile({updateData, newID, uniqueID, setChangeLayout, newDataStatu
 
     // usng for image element
     useEffect(() => {
-        pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
+        // pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
+        pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
         pictureUrl && newID()
         resetUrlToNull() // resetting picture url back to null, so that when next img resource is used this effect gets to run
     }, [pictureUrl])
@@ -40,7 +41,8 @@ function UserProfile({updateData, newID, uniqueID, setChangeLayout, newDataStatu
     // when there is new data to store in firestore and render on DOM
     useEffect(() => {        
         if (!(selectedFile)) {
-            newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
+            // newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
+            newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
             newDataStatus && newID();
         }
 
@@ -56,17 +58,17 @@ function UserProfile({updateData, newID, uniqueID, setChangeLayout, newDataStatu
         
     }, [tweetPublishReady])
 
-    let getPrivacySelectedElement = whichOption => {
-        switch (whichOption) {
-            case '01':
-                return tweetPrivacySelected01()
-            case '02':
-                return tweetPrivacySelected02()
-            case '03':
-                return tweetPrivacySelected03()
-            default: console.log('somethigs wrong!!')
-        }
-    }
+    // let getPrivacySelectedElement = whichOption => {
+    //     switch (whichOption) {
+    //         case '01':
+    //             return tweetPrivacySelected01()
+    //         case '02':
+    //             return tweetPrivacySelected02()
+    //         case '03':
+    //             return tweetPrivacySelected03()
+    //         default: console.log('somethigs wrong!!')
+    //     }
+    // }
 
     return (
         <div id='user-profile-page-container'>
@@ -111,6 +113,19 @@ export let showGif = selectedGif => {
 export let showImg = (imgRR) => {
     // console.log('visting here')
     return imgRR && <img src={handleMediaFileChecks(imgRR)} />
+}
+
+export let getPrivacySelectedElement = (whichOption, color) => {
+    // console.log(whichOption, '<<which option>>')
+    switch (whichOption) {
+        case '01':
+            return tweetPrivacySelected01(color)
+        case '02':
+            return tweetPrivacySelected02(color)
+        case '03':
+            return tweetPrivacySelected03(color)
+        default: console.log('somethigs wrong!!')
+    }
 }
 
 export default UserProfile
