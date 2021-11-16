@@ -230,7 +230,8 @@
 /* .line-extension-extended  */
 #line-extension-extended,
 #line-extension-with-media,
-#line-extension-extended-with-media-presence
+#line-extension-extended-with-media-presence,
+#line-extension-extended-with-media-presence-for-both-tweets
 {
   position: absolute;
   height: 42.02px;
@@ -243,6 +244,7 @@
 
 #line-extension {
   top: 76px;
+  height: 65.5px;
 }
 
 #line-extension-with-media{
@@ -261,9 +263,15 @@
     transform: translate(7px, -54px);
 }
 
-#line-extension-extended-with-media-presence {
+#line-extension-extended-with-media-presence,
+#line-extension-extended-with-media-presence-for-both-tweets {
   transform: translate(7px, -71px);
-  height: 529.4px;
+  /* height: 529.4px; */
+  height: 425.4px;
+}
+
+#line-extension-extended-with-media-presence-for-both-tweets {
+  height: 531px;
 }
 
 #image-icon,
