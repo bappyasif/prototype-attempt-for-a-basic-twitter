@@ -62,16 +62,6 @@ function TweetModal({ opacity, setOpacity, setNewDataStatus, isScheduleIconClick
 
     secondTweetHasMedia && console.log(secondTweetHasMedia, 'second tweet')
 
-    // useEffect(() => {
-    //     selectedFile && isPrimaryTweetClicked && !addExtraTweetClicked && setFirstTweetHasMedia(true)
-    //     console.log(firstTweetHasMedia, 'first tweet')
-    // }, [firstTweetHasMedia])
-
-    // useEffect(() => {
-    //     selectedFile && isExtraTweetClicked && setSecondTweetHasMedia(true);
-    //     console.log(secondTweetHasMedia, 'second tweet')
-    // }, [secondTweetHasMedia])
-
     useEffect(() => setExtraTweetText(''), [!readyTweetPublish])
 
     let fileUploadChangeHandler = (evt) => setSelectedFile(evt.target.files[0])
