@@ -28,6 +28,7 @@
 #tweet-container {
   flex-direction: column;
   width: 557px;
+  padding-top: 20px;
 }
 
 /* #profile-page-container  */
@@ -397,7 +398,11 @@
   /* flex-direction: column; */
 }
 
-.rendering-tweet-data-container .when-has-extra-tweet .extnded-line-in-tweet {
-  height: 96.9px;
-  transform: translate(25px, -94.5px);
+.rendering-tweet-data-container .when-has-extra-tweet .tweet-extra-info-een {
+  margin-bottom: 11px;
+}
+
+.rendering-tweet-data-container .when-has-extra-tweet .extended-line-in-tweet {
+  height: 107.9px;
+  transform: translate(25px, -105.5px);
 }

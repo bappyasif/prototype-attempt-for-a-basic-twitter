@@ -36,6 +36,8 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
     let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
     // let [newDataStatus, setNewDataStatus] = useState(false)
     let [opacity, setOpacity] = useState(false)
+    let [firstTweetHasMedia, setFirstTweetHasMedia] = useState(false)
+    let [secondTweetHasMedia, setSecondTweetHasMedia] = useState(false)
 
     let handleScheduleIconClicked = () => {
         setIsScheduleIconClicked(!isScheduleIconClicked);
@@ -97,6 +99,10 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
                         setChangeLayout={setChangeLayout}
                         setOpacity={setOpacity}
                         opacity={opacity}
+                        firstTweetHasMedia={firstTweetHasMedia}
+                        setFirstTweetHasMedia={setFirstTweetHasMedia}
+                        secondTweetHasMedia={secondTweetHasMedia}
+                        setSecondTweetHasMedia={setSecondTweetHasMedia}
                     />
                     {/* <ProfilePageUpperView /> */}
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
@@ -155,6 +161,10 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
                         uniqueID={uniqueID}
                         newID={newID}
                         updateData={updateData}
+                        firstTweetHasMedia={firstTweetHasMedia}
+                        setFirstTweetHasMedia={setFirstTweetHasMedia}
+                        secondTweetHasMedia={secondTweetHasMedia}
+                        setSecondTweetHasMedia={setSecondTweetHasMedia}
                     />
                 </Route>
 

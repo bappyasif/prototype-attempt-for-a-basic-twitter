@@ -7,22 +7,22 @@ import { Gif } from '@giphy/react-components';
 
 function AllTweetsPage({ tweetData, onlyMedias }) {
 
-    let renderPolls = item => {
-        return item.tweetPoll.map(choice => {
-            return Object.values(choice).map(value => value ? <div key={value} className='poll-info'><div className='left-view'><span className='poll-progress' style={{ minWidth: '500%' }}>[]</span><p>{value}</p></div><span className='poll-percentage'>50%</span></div> : null)
-        })
-    }
+    // let renderPolls = item => {
+    //     return item.tweetPoll.map(choice => {
+    //         return Object.values(choice).map(value => value ? <div key={value} className='poll-info'><div className='left-view'><span className='poll-progress' style={{ minWidth: '500%' }}>[]</span><p>{value}</p></div><span className='poll-percentage'>50%</span></div> : null)
+    //     })
+    // }
 
-    let whenExtraTweetExists = (item) => {
-        console.log(item.id)
-        return <div>
-            {/* {renderAdditionalTweetIcons(item, 'extra', null)} */}
-            {item.id}
-        </div>
-    }
+    // let whenExtraTweetExists = (item) => {
+    //     console.log(item.id)
+    //     return <div>
+    //         {/* {renderAdditionalTweetIcons(item, 'extra', null)} */}
+    //         {item.id}
+    //     </div>
+    // }
 
     let renderTweet = (item) => {
-        item.extraTweet && console.log(item.id, 'checkpoint 01', item.extraTweet)
+        // item.extraTweet && console.log(item.id, 'checkpoint 01', item.extraTweet)
         let ID = item.id
         let content
 
@@ -34,10 +34,13 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
                 extraTweet: item.extraTweet,
                 gifFile: item.medias.gif,
                 pictureFile: item.medias.picture,
-                tweetPrivacy: item.privacy
+                tweetPrivacy: item.privacy,
+                firstTweetHasMedia: item.firstTweetHasMedia,
+                secondTweetHasMedia: item.secondTweetHasMedia,
+                tweetPoll: item.tweetPoll
             }
         } else {
-            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy }
+            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll }
         }
 
         return <RenderTweetDataComponent content={content} />
@@ -58,7 +61,7 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
         return <div key={item.tweetText ? item.tweetText : idx} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
 
-            {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? whenNoExtraTweet(item) : null}
+            {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
 
         </div>
     })
@@ -68,10 +71,20 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
 let RenderTweetDataComponent = ({ content }) => {
     let [hoveredID, setHoveredID] = useState('')
-    let { tweetText, extraTweet, gifFile, pictureFile, tweetPrivacy} = { ...content }
+    let { tweetText, extraTweet, gifFile, pictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll} = { ...content }
+
+    let renderPolls = poll => {
+        // console.log(poll[0])
+        return poll.map(choice => {
+            return Object.values(choice).map(value => value ? <div key={value} className='poll-info'><div className='left-view'><span className='poll-progress' style={{ minWidth: '500%' }}>[]</span><p>{value}</p></div><span className='poll-percentage'>50%</span></div> : null)
+        })
+    }
 
     // extraTweet && console.log(extraTweet, 'extraTweet??')
     // console.log(tweetPrivacy, 'privacy!!', content)
+    // (firstTweetHasMedia && firstTweetHasMedia || secondTweetHasMedia && secondTweetHasMedia) && console.log(firstTweetHasMedia, secondTweetHasMedia, 'tweet medias')
+    // console.log(firstTweetHasMedia, secondTweetHasMedia, 'tweet medias')
+    tweetPoll.choice01 && console.log(tweetPoll, 'tweetpoll', tweetPoll['choice01'])
 
     let readyMedia = gifFile ? <MakeGifObjectAvailable gifId={gifFile} /> : pictureFile ? showImg(pictureFile) : ''
 
@@ -136,6 +149,8 @@ let RenderTweetDataComponent = ({ content }) => {
                 {/* {(pictureFile || gifFile) && <div className='tweet-media-file-content'>{readyMedia}</div>} */}
                 <div className='tweet-media-file-content'>{readyMedia}</div>
                 {/* <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons}</div> */}
+
+                {renderPolls(tweetPoll)}
                 
                 {getPrivacySelectedElement(tweetPrivacy, 'white')}
 
@@ -163,7 +178,9 @@ let RenderTweetDataComponent = ({ content }) => {
 
                         <div className='tweet-text'>{tweetText}</div>
 
-                        <div className='tweet-media-file-content'>{readyMedia}</div>
+                        {/* <div className='tweet-media-file-content'>{readyMedia}</div> */}
+                        {/* {<div className='tweet-media-file-content'>{firstTweetHasMedia && !secondTweetHasMedia ? readyMedia : readyMedia}</div>} */}
+                        {<div className='tweet-media-file-content'>{firstTweetHasMedia && readyMedia}</div>}
 
                         {getPrivacySelectedElement(tweetPrivacy, 'white')}
 
@@ -172,7 +189,11 @@ let RenderTweetDataComponent = ({ content }) => {
                     {/* <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons}</div> */}
                 </div>
 
-                <div id='show-connecting-line' className='extnded-line-in-tweet' style={{height: '96.9px', transform: 'translate(25px, -94.5px)'}}></div>
+                {/* <div id='show-connecting-line' className='extended-line-in-tweet' style={{height: '107.9px', transform: 'translate(25px, -105.5px)'}}></div> */}
+                {/* <div id='show-connecting-line' className='extended-line-in-tweet'></div> */}
+
+                {!firstTweetHasMedia && <div id='show-connecting-line' className='extended-line-in-tweet' style={{height: '107.9px', transform: 'translate(25px, -105.5px)'}}></div>}
+                {firstTweetHasMedia && <div id='show-connecting-line' className='extended-line-in-tweet' style={{height: '438.9px', transform: 'translate(25px, -435.5px)'}}></div>}
 
                 <div className='tweet-extra-info-twee'>
 
@@ -189,7 +210,8 @@ let RenderTweetDataComponent = ({ content }) => {
                         <div className='extra-tweet-text'>{extraTweet}</div>
 
                         {/* {(pictureFile || gifFile) && <div className='tweet-media-file-content'>{readyMedia}</div>} */}
-                        <div className='tweet-media-file-content'>{readyMedia}</div>
+                        {/* <div className='tweet-media-file-content'>{readyMedia}</div> */}
+                        {<div className='tweet-media-file-content'>{secondTweetHasMedia && readyMedia}</div>}
 
                         {getPrivacySelectedElement(tweetPrivacy, 'white')}
 

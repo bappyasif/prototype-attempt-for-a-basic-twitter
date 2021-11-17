@@ -3,7 +3,7 @@ import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivac
 import AllTweetsPage from '../user-profile/all-tweets';
 import './index.css';
 
-function ComposeTweet({opacity, setOpacity, setChangeLayout, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText, setNewDataStatus }) {
+function ComposeTweet({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, opacity, setOpacity, setChangeLayout, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText, setNewDataStatus }) {
 
     // setChangeLayout(true)
 
@@ -43,6 +43,10 @@ function ComposeTweet({opacity, setOpacity, setChangeLayout, selectedFile, setSe
                 setNewDataStatus={setNewDataStatus}
                 setOpacity={setOpacity}
                 opacity={opacity}
+                firstTweetHasMedia={firstTweetHasMedia}
+                setFirstTweetHasMedia={setFirstTweetHasMedia}
+                secondTweetHasMedia={secondTweetHasMedia}
+                setSecondTweetHasMedia={setSecondTweetHasMedia}
             />
         </div>
     )

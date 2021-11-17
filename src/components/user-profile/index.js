@@ -7,7 +7,7 @@ import { writeDataIntoCollection } from '../firestore-methods';
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
-function UserProfile({updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
+function UserProfile({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, setSelectedFile, gifFile, setGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
     let [pictureUrl, setPictureUrl] = useState('')
 
     let [doneUploading, setDoneUploading] = useState(false)
@@ -24,7 +24,8 @@ function UserProfile({updateData, newID, uniqueID, setChangeLayout, newDataStatu
     // usng for image element
     useEffect(() => {
         // pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
-        pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
+        // pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
+        pictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
         pictureUrl && newID()
         resetUrlToNull() // resetting picture url back to null, so that when next img resource is used this effect gets to run
     }, [pictureUrl])
@@ -42,11 +43,14 @@ function UserProfile({updateData, newID, uniqueID, setChangeLayout, newDataStatu
     useEffect(() => {        
         if (!(selectedFile)) {
             // newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
-            newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
+            newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
             newDataStatus && newID();
         }
 
         setNewDataStatus(false)
+
+        // setFirstTweetHasMedia(false)
+        // setSecondTweetHasMedia(false)
 
         setSelectedFile('');
         setGifFile('');
