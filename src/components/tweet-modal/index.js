@@ -150,9 +150,11 @@ function TweetModal({ opacity, setOpacity, setNewDataStatus, isScheduleIconClick
                 {selectedFile && <p id='line-extension-with-media' style={{ visibility: (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : 'hidden' }}></p>}
 
                 {/* changing extension connectine line from here, when other factor changes so does this extension cord */}
-                {!selectedFile && <p id='line-extension-extended' style={{ visibility: (isBothTextareaExist && isExtraTweetClicked) ? 'visible' : 'hidden' }}></p>}
+                {/* {!selectedFile && <p id='line-extension-extended' style={{ visibility: (isBothTextareaExist && isExtraTweetClicked) ? 'visible' : 'hidden' }}></p>} */}
+                {!selectedFile && <p id='line-extension-extended' style={{ visibility: (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : 'hidden' }}></p>}
                 {selectedFile && !isPrimaryTweetClicked && <p id='line-extension-extended-with-media-presence' style={{ visibility: (isBothTextareaExist && !isPrimaryTweetClicked) ? 'visible' : 'hidden' }}></p>}
-                {selectedFile && !isPrimaryTweetClicked && <p id='line-extension-extended-with-media-presence-for-both-tweets' style={{ visibility: (isBothTextareaExist && !isPrimaryTweetClicked) ? 'visible' : 'hidden' }}></p>}
+                {/* {selectedFile && !isPrimaryTweetClicked && <p id='line-extension-extended-with-media-presence-for-both-tweets' style={{ visibility: (isBothTextareaExist && !isPrimaryTweetClicked) ? 'visible' : 'hidden' }}></p>} */}
+                {selectedFile && !isPrimaryTweetClicked && <p id='line-extension-extended-with-media-presence-for-both-tweets' style={{ visibility: (isBothTextareaExist && isPrimaryTweetClicked) ? 'visible' : 'hidden' }}></p>}
 
                 {
 
@@ -162,7 +164,15 @@ function TweetModal({ opacity, setOpacity, setNewDataStatus, isScheduleIconClick
 
                     // (!firstTweetHasMedia && addExtraTweetClicked && !isExtraTweetClicked && !secondTweetHasMedia) || (secondTweetHasMedia && isPrimaryTweetClicked)
 
-                    (!firstTweetHasMedia && addExtraTweetClicked && !isExtraTweetClicked && !secondTweetHasMedia)
+                    // (!firstTweetHasMedia && addExtraTweetClicked && !isExtraTweetClicked && !secondTweetHasMedia)
+
+                    // (!firstTweetHasMedia && !addExtraTweetClicked && !isExtraTweetClicked && !isPrimaryTweetClicked) || (!secondTweetHasMedia && !firstTweetHasMedia && isExtraTweetClicked)
+
+                    // (!firstTweetHasMedia && !addExtraTweetClicked && !isExtraTweetClicked && !isPrimaryTweetClicked) || (!secondTweetHasMedia && !firstTweetHasMedia && isExtraTweetClicked)
+
+                    // (!firstTweetHasMedia && !addExtraTweetClicked && !isExtraTweetClicked && !isPrimaryTweetClicked) || (!secondTweetHasMedia && !firstTweetHasMedia && addExtraTweetClicked && isExtraTweetClicked)
+
+                    (!secondTweetHasMedia && !firstTweetHasMedia && addExtraTweetClicked && !isPrimaryTweetClicked)
 
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
@@ -260,7 +270,9 @@ function TweetModal({ opacity, setOpacity, setNewDataStatus, isScheduleIconClick
 
                     // (!secondTweetHasMedia && !firstTweetHasMedia && isExtraTweetClicked) || (!firstTweetHasMedia && isExtraTweetClicked && !secondTweetHasMedia) || (firstTweetHasMedia && isPrimaryTweetClicked && !secondTweetHasMedia)
 
-                    (!firstTweetHasMedia && isExtraTweetClicked && !secondTweetHasMedia) || (firstTweetHasMedia && isPrimaryTweetClicked && !secondTweetHasMedia)
+                    // (!firstTweetHasMedia && isExtraTweetClicked && !secondTweetHasMedia) || (firstTweetHasMedia && isPrimaryTweetClicked && !secondTweetHasMedia)
+
+                    (firstTweetHasMedia && isPrimaryTweetClicked && !secondTweetHasMedia)
 
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
@@ -284,7 +296,7 @@ function TweetModal({ opacity, setOpacity, setNewDataStatus, isScheduleIconClick
 
                 {
 
-                    (!secondTweetHasMedia && !firstTweetHasMedia && isExtraTweetClicked)
+                    (!secondTweetHasMedia && !firstTweetHasMedia && isPrimaryTweetClicked && addExtraTweetClicked)
 
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>

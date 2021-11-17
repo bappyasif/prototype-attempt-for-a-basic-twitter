@@ -249,7 +249,8 @@
 
 #line-extension-with-media{
   transform: translate(8px, -72px);
-  height: 63px;
+  /* height: 63px; */
+  height: 530px;
 }
 
 #line-extension-extended {
