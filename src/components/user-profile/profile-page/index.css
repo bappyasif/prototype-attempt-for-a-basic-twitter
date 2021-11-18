@@ -241,24 +241,53 @@
 }
 
 #tweet-container .tweet-poll-on-profile .poll-info,
-#tweet-container .tweet-poll-on-profile .poll-info .left-view {
+#tweet-container .tweet-poll-on-profile .poll-info .left-view,
+.rendering-tweet-data-container .right-side .tweet-info .poll-info,
+.rendering-tweet-data-container .right-side .tweet-info .poll-info .left-view {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-#tweet-container .tweet-poll-on-profile .poll-info {
-  padding: 0px 11px 0px 0px;
-  height: 2em;
+#tweet-container .tweet-poll-on-profile .poll-info,
+.rendering-tweet-data-container .right-side .tweet-info .poll-info {
+  padding: 0px 31px 0px 0px;
+  height: 1.7em;
+  margin-bottom: 13px;
 }
 
+.rendering-tweet-data-container .right-side .tweet-info .poll-info:nth-last-child() {
+  /* margin-bottom: 8px; */
+}
+
+/* .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress */
 #tweet-container .tweet-poll-on-profile .poll-info .poll-progress {
   min-width: 4px;
-  background-color: silver;
+  background-color: aqua;
   margin-right: 4px;
   line-height: 2em;
+  border-radius: 11px;
+  color: aqua;
+  max-width: 110px;
+  border: solid silver 1.1px;
 }
 
+.rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress {
+  width: 200px;
+  /* background-color: blanchedalmond; */
+  height: 1.7em;
+  /* border: solid silver 1.1px; */
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-bar {
+  /* height: 20px;
+  background-color: aqua; */
+  background: aqua;
+  color: aqua;
+  height: 100%;
+  min-width: 4px;
+  border-radius: 4px;
+}
 
 /* readjusted tweet display styling */
 .rendering-tweet-data-container,

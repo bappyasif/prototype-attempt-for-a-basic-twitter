@@ -71,14 +71,14 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
 let RenderTweetDataComponent = ({ content }) => {
     let [hoveredID, setHoveredID] = useState('')
-    let { tweetText, extraTweet, gifFile, pictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll} = { ...content }
+    let { tweetText, extraTweet, gifFile, pictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll } = { ...content }
 
-    let renderPolls = poll => {
-        // console.log(poll[0])
-        return poll.map(choice => {
-            return Object.values(choice).map(value => value ? <div key={value} className='poll-info'><div className='left-view'><span className='poll-progress' style={{ minWidth: '500%' }}>[]</span><p>{value}</p></div><span className='poll-percentage'>50%</span></div> : null)
-        })
-    }
+    // let renderPolls = poll => {
+    //     // console.log(poll[0])
+    //     return poll.map(choice => {
+    //         return Object.values(choice).map(value => value ? <div key={value} className='poll-info'><div className='left-view'><span className='poll-progress' style={{ maxWidth: '50%' }}>[]</span><p>{value}</p></div><span className='poll-percentage'>0%</span></div> : null)
+    //     })
+    // }
 
     // extraTweet && console.log(extraTweet, 'extraTweet??')
     // console.log(tweetPrivacy, 'privacy!!', content)
@@ -122,7 +122,7 @@ let RenderTweetDataComponent = ({ content }) => {
         <div
             key={elem.id}
 
-            id={extraTwee ? elem.id +'-twee' : extraEen ? elem.id +'-een' : elem.id}
+            id={extraTwee ? elem.id + '-twee' : extraEen ? elem.id + '-een' : elem.id}
 
             className='hoverable-div'
 
@@ -150,8 +150,9 @@ let RenderTweetDataComponent = ({ content }) => {
                 <div className='tweet-media-file-content'>{readyMedia}</div>
                 {/* <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons}</div> */}
 
-                {renderPolls(tweetPoll)}
-                
+                {/* {renderPolls(tweetPoll)} */}
+                {<RenderPolls poll={tweetPoll} />}
+
                 {getPrivacySelectedElement(tweetPrivacy, 'white')}
 
                 <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons()}</div>
@@ -182,6 +183,9 @@ let RenderTweetDataComponent = ({ content }) => {
                         {/* {<div className='tweet-media-file-content'>{firstTweetHasMedia && !secondTweetHasMedia ? readyMedia : readyMedia}</div>} */}
                         {<div className='tweet-media-file-content'>{firstTweetHasMedia && readyMedia}</div>}
 
+                        {/* deal with extra tweet */}
+                        {/* {<RenderPolls poll={tweetPoll} />} */}
+
                         {getPrivacySelectedElement(tweetPrivacy, 'white')}
 
                         <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons('-een')}</div>
@@ -192,8 +196,8 @@ let RenderTweetDataComponent = ({ content }) => {
                 {/* <div id='show-connecting-line' className='extended-line-in-tweet' style={{height: '107.9px', transform: 'translate(25px, -105.5px)'}}></div> */}
                 {/* <div id='show-connecting-line' className='extended-line-in-tweet'></div> */}
 
-                {!firstTweetHasMedia && <div id='show-connecting-line' className='extended-line-in-tweet' style={{height: '107.9px', transform: 'translate(25px, -105.5px)'}}></div>}
-                {firstTweetHasMedia && <div id='show-connecting-line' className='extended-line-in-tweet' style={{height: '438.9px', transform: 'translate(25px, -435.5px)'}}></div>}
+                {!firstTweetHasMedia && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '107.9px', transform: 'translate(25px, -105.5px)' }}></div>}
+                {firstTweetHasMedia && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '438.9px', transform: 'translate(25px, -435.5px)' }}></div>}
 
                 <div className='tweet-extra-info-twee'>
 
@@ -213,6 +217,9 @@ let RenderTweetDataComponent = ({ content }) => {
                         {/* <div className='tweet-media-file-content'>{readyMedia}</div> */}
                         {<div className='tweet-media-file-content'>{secondTweetHasMedia && readyMedia}</div>}
 
+                        {/* deal with extra tweet */}
+                        {/* {<RenderPolls poll={tweetPoll} />} */}
+
                         {getPrivacySelectedElement(tweetPrivacy, 'white')}
 
                         <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons(null, '-twee')}</div>
@@ -231,6 +238,79 @@ let RenderTweetDataComponent = ({ content }) => {
             whenWithoutExtraTweet()
     )
 }
+
+let RenderPolls = ({ poll }) => {
+    let [maxVotes, setMaxVotes] = useState(100)
+    // let [maxVotes, setMaxVotes] = useState(104)
+
+    let handleChange = () => setMaxVotes(maxVotes - 1 >= 0 ? maxVotes - 1 : maxVotes)
+    // let handleChange;
+
+    useEffect(() => {
+        // handleChange = () => setMaxVotes(maxVotes-1 >= 0 ? maxVotes-1 : maxVotes)
+        maxVotes == 0 && alert('votes limit has reached!!')
+    }, [maxVotes])
+
+    // maxVotes <= 0 && alert('votes limit has reached!!')
+
+    return poll.map(choice => {
+        // return Object.values(choice).map((value, idx) => value ? <div key={value} className='poll-info'><div className='left-view' onClick={handleVotes} id={idx}><span className='poll-progress' style={{ minwidth: `${(votes * 100) / 100}%` }}>[]</span><p>{value}</p></div><span className='poll-percentage'>{(votes * 100) / 100}%</span></div> : null)
+        // return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} /> : null)
+        return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} handleChange={handleChange} highestValue={maxVotes} /> : null)
+    })
+}
+
+let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
+    // let [votes, setvotes] = useState(4)
+    let [votes, setvotes] = useState(0)
+    // let [initialWidth, setInitialWidth] = useState(0)
+
+    let handleVotes = () => {
+        handleChange();
+        // console.log(highestValue, 'value check', votes + 1 <= (highestValue || 104), votes + 1)
+        // setvotes( (highestValue + votes) <= 100 ? votes + 1 : votes)
+        setvotes((highestValue > 0) ? votes + 1 : votes)
+    }
+
+    // useEffect(() => setInitialWidth(4), [])
+
+    return (
+        <div key={value} className='poll-info'>
+
+            <div className='left-view' onClick={handleVotes}>
+
+                <div className='poll-progress'>
+
+                    <div className='progress-bar' style={{ width: `${votes}%` }}></div>
+                    {/* <div className='progress-bar' style={{ width: `${votes + 8}%` }}></div> */}
+                </div>
+
+                <p>{value}</p>
+            </div>
+
+            <span className='poll-percentage'>{(votes * 100) / 100}%</span>
+        </div>
+    )
+}
+
+// let HandlePollOptionProgress = ({value}) => {
+//     let [votes, setvotes] = useState(0)
+//     let handleVotes = () => setvotes(votes + 1 <= 100 ? votes + 1 : votes)
+
+//     return (
+//         <div key={value} className='poll-info'>
+//             <div className='left-view' onClick={handleVotes}>
+//                 <div className='poll-progress'>
+//                     <div className='progress-bar' style={{ width: `${votes}%` }}></div>
+//                 </div>
+//                 {/* <span className='poll-progress' style={{ minWidth: `${votes}%` }}></span> */}
+//                 {/* <input className='poll-progress' type='range' step={handleVotes} max={100} min={0} value={votes} /> */}
+//                 <p>{value}</p>
+//             </div>
+//             <span className='poll-percentage'>{(votes * 100) / 100}%</span>
+//         </div>
+//     )
+// }
 
 let MakeGifObjectAvailable = ({ gifId }) => {
     let [gif, setGif] = useState(null)
