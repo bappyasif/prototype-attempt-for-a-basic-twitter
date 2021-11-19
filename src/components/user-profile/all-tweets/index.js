@@ -281,7 +281,9 @@ let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
 
                 <div className='poll-progress'>
 
-                    <div className='progress-bar' style={{ width: `${votes}%` }}></div>
+                    <div className='progress-initial'></div>
+
+                    <div className='progress-bar' style={{ width: `${votes}%`, borderTopLeftRadius: votes && '0px', borderBottomLeftRadius: votes && '0px' }}></div>
                     {/* <div className='progress-bar' style={{ width: `${votes + 8}%` }}></div> */}
                 </div>
 

@@ -270,6 +270,7 @@
   color: aqua;
   max-width: 110px;
   border: solid silver 1.1px;
+  /* display: flex; */
 }
 
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress {
@@ -277,16 +278,29 @@
   /* background-color: blanchedalmond; */
   height: 1.7em;
   /* border: solid silver 1.1px; */
+  display: flex;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-bar {
+.rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-initial {
+  width: 4px;
+  /* border-bottom-right-radius: 0px; */
+  /* border-top-right-radius: 0px; */
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-bar,
+.rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-initial {
   /* height: 20px;
   background-color: aqua; */
   background: aqua;
   color: aqua;
   height: 100%;
-  min-width: 4px;
+  /* min-width: 4px; */
   border-radius: 4px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-bar {
+  /* border-top-left-radius: 0px; */
+  /* border-bottom-left-radius: 0px; */
 }
 
 /* readjusted tweet display styling */
