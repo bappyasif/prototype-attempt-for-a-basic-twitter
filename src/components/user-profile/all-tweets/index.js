@@ -28,6 +28,8 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
         // item.privacy && console.log(item.privacy, 'found privacy!!')
 
+        console.log(item.extraPoll)
+
         if (item.medias.gif || item.medias.picture) {
             content = {
                 tweetText: item.tweetText,
@@ -37,10 +39,11 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
                 tweetPrivacy: item.privacy,
                 firstTweetHasMedia: item.firstTweetHasMedia,
                 secondTweetHasMedia: item.secondTweetHasMedia,
-                tweetPoll: item.tweetPoll
+                tweetPoll: item.tweetPoll,
+                extraPoll: item.extraPoll
             }
         } else {
-            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll }
+            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll }
         }
 
         return <RenderTweetDataComponent content={content} />
@@ -71,7 +74,7 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
 let RenderTweetDataComponent = ({ content }) => {
     let [hoveredID, setHoveredID] = useState('')
-    let { tweetText, extraTweet, gifFile, pictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll } = { ...content }
+    let { tweetText, extraTweet, gifFile, pictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
     // let renderPolls = poll => {
     //     // console.log(poll[0])
@@ -84,7 +87,8 @@ let RenderTweetDataComponent = ({ content }) => {
     // console.log(tweetPrivacy, 'privacy!!', content)
     // (firstTweetHasMedia && firstTweetHasMedia || secondTweetHasMedia && secondTweetHasMedia) && console.log(firstTweetHasMedia, secondTweetHasMedia, 'tweet medias')
     // console.log(firstTweetHasMedia, secondTweetHasMedia, 'tweet medias')
-    tweetPoll.choice01 && console.log(tweetPoll, 'tweetpoll', tweetPoll['choice01'])
+    // tweetPoll.choice01 && console.log(tweetPoll, 'tweetpoll', tweetPoll['choice01'])
+    extraPoll && console.log(extraPoll, 'extraPoll', extraPoll['choice01'], extraPoll[0]['choice01'])
 
     let readyMedia = gifFile ? <MakeGifObjectAvailable gifId={gifFile} /> : pictureFile ? showImg(pictureFile) : ''
 
@@ -184,7 +188,8 @@ let RenderTweetDataComponent = ({ content }) => {
                         {<div className='tweet-media-file-content'>{firstTweetHasMedia && readyMedia}</div>}
 
                         {/* deal with extra tweet */}
-                        {/* {<RenderPolls poll={tweetPoll} />} */}
+                        {/* {<RenderPolls poll={tweetPoll.choice01 && tweetPoll} />} */}
+                        {<RenderPolls poll={tweetPoll} />}
 
                         {getPrivacySelectedElement(tweetPrivacy, 'white')}
 
@@ -197,7 +202,16 @@ let RenderTweetDataComponent = ({ content }) => {
                 {/* <div id='show-connecting-line' className='extended-line-in-tweet'></div> */}
 
                 {!firstTweetHasMedia && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '107.9px', transform: 'translate(25px, -105.5px)' }}></div>}
+                {/* {!firstTweetHasMedia && !((extraPoll)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '107.9px', transform: 'translate(25px, -105.5px)' }}></div>} */}
+                {/* {!firstTweetHasMedia && !secondTweetHasMedia && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: (tweetPoll || extraPoll) ? '184.9px' : '107.9px', transform: (tweetPoll || extraPoll) ? 'translate(25px, -184.5px)' : 'translate(25px, -105.5px)' }}></div>} */}
                 {firstTweetHasMedia && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '438.9px', transform: 'translate(25px, -435.5px)' }}></div>}
+                {(!firstTweetHasMedia && secondTweetHasMedia) || (!firstTweetHasMedia && !secondTweetHasMedia) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '107.9px', transform: 'translate(25px, -105.5px)' }}></div>}
+                {/* {extraPoll && extraPoll.choice01 || tweetPoll && tweetPoll.choice01 && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px' , transform: 'translate(25px, -184.5px)' }}></div>} */}
+                {/* {!firstTweetHasMedia && !secondTweetHasMedia && (extraPoll || tweetPoll ) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px' , transform: 'translate(25px, -184.5px)' }}></div>} */}
+
+                {(!firstTweetHasMedia && !secondTweetHasMedia) && ((extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px' , transform: 'translate(25px, -184.5px)' }}></div>}
+                {(!firstTweetHasMedia && !secondTweetHasMedia) && (!(extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px' , transform: 'translate(25px, -184.5px)' }}></div>}
+                {(extraPoll && extraPoll[0].choice01 || tweetPoll.choice01 ) && console.log(extraPoll, '??', tweetPoll, tweetPoll[0].choice01)}
 
                 <div className='tweet-extra-info-twee'>
 
@@ -218,7 +232,10 @@ let RenderTweetDataComponent = ({ content }) => {
                         {<div className='tweet-media-file-content'>{secondTweetHasMedia && readyMedia}</div>}
 
                         {/* deal with extra tweet */}
-                        {/* {<RenderPolls poll={tweetPoll} />} */}
+                        {/* {<RenderPolls poll={extraPoll.choice01 && extraPoll} />} */}
+                        {/* {<RenderPolls poll={extraPoll && extraPoll} />} */}
+                        {/* {<RenderPolls poll={extraPoll[0]['choice01'] && extraPoll} />} */}
+                        { extraPoll && <RenderPolls poll={extraPoll && extraPoll} />}
 
                         {getPrivacySelectedElement(tweetPrivacy, 'white')}
 

@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
-function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
+function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -31,8 +31,8 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     let [isEmojiIconClicked, setIsEmojiIconClicked] = useState(false);
     // let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(false)
 
-    let [firstTweetHasPoll, setFirstTweetHasPoll] = useState(false)
-    let [secondTweetHasPoll, setSecondTweetHasPoll] = useState(false)
+    // let [firstTweetHasPoll, setFirstTweetHasPoll] = useState(false)
+    // let [secondTweetHasPoll, setSecondTweetHasPoll] = useState(false)
 
     useEffect(() => {
         let optionsDiv = document.querySelector('#options-selected');
@@ -65,20 +65,28 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
         isPollIconClicked && !addExtraTweetClicked && setFirstTweetHasPoll(true)
         // isPollIconClicked && isExtraTweetClicked && setSecondTweetHasPoll(true)
 
+        // isPollIconClicked && isExtraTweetClicked && setIsPollIconClickedForExtraTweet(true)
+
         // firstTweetHasPoll && addExtraTweetClicked && isPollIconClicked && setSecondTweetHasPoll(true)
         // addExtraTweetClicked && isPollIconClicked && setSecondTweetHasPoll(true)
 
-        addExtraTweetClicked && isPollIconClicked && console.log('<<here>>')
+        // addExtraTweetClicked && isPollIconClicked && console.log('<<here>>')
 
     }, [isPollIconClicked])
+
+    // useEffect(() => addExtraTweetClicked && isPollIconClicked && console.log('<<here>>'), [addExtraTweetClicked])
+
+    useEffect(() => addExtraTweetClicked && isPollIconClicked && setSecondTweetHasPoll(true), [addExtraTweetClicked])
 
     // useEffect(() => firstTweetHasPoll && isPollIconClicked && setSecondTweetHasPoll(true), [firstTweetHasPoll])
 
     // useEffect(() => secondTweetHasPoll && setIsPollIconClicked(false), [secondTweetHasPoll])
 
+    // useEffect(() => secondTweetHasPoll && a)
+
     firstTweetHasPoll && console.log(firstTweetHasPoll, 'first tweet', isPollIconClicked)
 
-    secondTweetHasPoll && console.log(secondTweetHasPoll, 'second tweet', isPollIconClicked)
+    secondTweetHasPoll && console.log(secondTweetHasPoll, 'second tweet', isPollIconClicked, isPollIconClickedForExtraTweet)
 
     useEffect(() => setExtraTweetText(''), [!readyTweetPublish])
 
@@ -109,7 +117,24 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     }
 
     // let handlePollIconClicked = () => setIsPollIconClicked(!isPollIconClicked);
-    let handlePollIconClicked = () => !firstTweetHasPoll ? setIsPollIconClicked(!isPollIconClicked) : setIsPollIconClickedForExtraTweet(!isPollIconClickedForExtraTweet);
+    // let handlePollIconClicked = () => firstTweetHasPoll ? setIsPollIconClicked(!isPollIconClicked) : setIsPollIconClickedForExtraTweet(!isPollIconClickedForExtraTweet);
+    let handlePollIconClicked = () => {
+        console.log('here!!');
+        
+        !firstTweetHasPoll && setIsPollIconClicked(!isPollIconClicked);
+
+        // firstTweetHasPoll && setIsPollIconClickedForExtraTweet(true)
+        (firstTweetHasPoll || addExtraTweetClicked) && setIsPollIconClickedForExtraTweet(true)
+
+        // (!firstTweetHasPoll && addExtraTweetClicked) && setIsPollIconClickedForExtraTweet(true)
+        
+        // console.log(isPollIconClicked, 'check!!', addExtraTweetClicked, isPollIconClickedForExtraTweet)
+    }
+
+    // isPollIconClickedForExtraTweet && console.log(isPollIconClicked, 'check!!', addExtraTweetClicked, isPollIconClickedForExtraTweet)
+    // console.log(inputTextChoice05, 'changing!!')
+
+    // isPollIconClickedForExtraTweet && console.log('<here>')
 
     let handlePublishTweetNow = evt => {
         readyTweetPublish(true);
@@ -142,6 +167,8 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     let handleAddExtraTweet = () => {
         setIsPrimaryTweetClicked(false)
         setAddExtraTweetClicked(!addExtraTweetClicked)
+        
+        // setIsPollIconClicked(false)
     }
 
     return (
@@ -193,7 +220,7 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                     </div>
                 }
 
-                {
+                {/* {
 
                     ((!secondTweetHasPoll) && (!firstTweetHasPoll) && addExtraTweetClicked && !isPrimaryTweetClicked)
 
@@ -203,7 +230,7 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                         {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
                         {console.log('checkpoint00-1')}
                     </div>
-                }
+                } */}
 
                 {/* it was a filler for those which didn't have this implemetation using firstTweet/secondTweetHasMedia and mostly for "Polls" */}
                 {/* {
@@ -235,7 +262,7 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                 {
                     // firstTweetHasMedia
 
-                    (firstTweetHasMedia || firstTweetHasPoll)
+                    (firstTweetHasMedia || firstTweetHasPoll || (gifFile && isPrimaryTweetClicked))
 
                     &&
 
@@ -269,7 +296,9 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
                         {(addExtraTweetClicked) && <img id='profile-pic' src='https://picsum.photos/200/300' />}
                         {/* {(addExtraTweetClicked) && <TweetTextInput height="81.6px" placeholderText="What's happening?" tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />} */}
-                        {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
+                        {/* {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />} */}
+                        {/* {(addExtraTweetClicked) && <TweetTextInput height={!firstTweetHasPoll && isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={!firstTweetHasPoll && isPollIconClicked ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />} */}
+                        {(addExtraTweetClicked) && <TweetTextInput height={!firstTweetHasPoll && isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={((!firstTweetHasPoll && isPollIconClicked) || (firstTweetHasPoll && isPollIconClickedForExtraTweet)) ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
                         {console.log('checkpoint01')}
                     </div>
                 }
@@ -277,6 +306,8 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                 {
 
                     (secondTweetHasMedia && !firstTweetHasMedia && !isPrimaryTweetClicked)
+
+                    // ((secondTweetHasMedia && !firstTweetHasMedia && !isPrimaryTweetClicked) || )
 
                     // ((secondTweetHasMedia || secondTweetHasPoll) && (!firstTweetHasMedia || !firstTweetHasPoll) && !isPrimaryTweetClicked)
 
@@ -294,7 +325,13 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
 
                     // secondTweetHasMedia && !isPrimaryTweetClicked
 
-                    (secondTweetHasMedia || secondTweetHasPoll) && !isPrimaryTweetClicked && isPollIconClicked
+                    // (secondTweetHasMedia || secondTweetHasPoll) && !isPrimaryTweetClicked && isPollIconClicked
+
+                    // (secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked
+
+                    // (((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || (secondTweetHasMedia && !isPrimaryTweetClicked))
+
+                    (((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || (secondTweetHasMedia && !isPrimaryTweetClicked) || (!isPrimaryTweetClicked && gifFile))
 
                     // (secondTweetHasMedia || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked
 
@@ -307,16 +344,18 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                         selectedFile={selectedFile}
                         removeImageHandler={removeImageHandler}
                         // isPollIconClicked={isPollIconClicked}
-                        isPollIconClicked={isPollIconClickedForExtraTweet || isPollIconClicked}
+                        // isPollIconClicked={isPollIconClickedForExtraTweet || isPollIconClicked}
+                        // isPollIconClicked={!secondTweetHasPoll ? isPollIconClicked : isPollIconClickedForExtraTweet}
+                        isPollIconClicked={isPollIconClickedForExtraTweet && isPollIconClickedForExtraTweet}
                         handlePollViewToggle={handlePollIconClicked}
-                        inputTextChoice01={inputTextChoice01}
-                        setInputTextChoice01={setInputTextChoice01}
-                        inputTextChoice02={inputTextChoice02}
-                        setInputTextChoice02={setInputTextChoice02}
-                        inputTextChoice03={inputTextChoice03}
-                        setInputTextChoice03={setInputTextChoice03}
-                        inputTextChoice04={inputTextChoice04}
-                        setInputTextChoice04={setInputTextChoice04}
+                        inputTextChoice01={inputTextChoice05}
+                        setInputTextChoice01={setInputTextChoice05}
+                        inputTextChoice02={inputTextChoice06}
+                        setInputTextChoice02={setInputTextChoice06}
+                        inputTextChoice03={inputTextChoice07}
+                        setInputTextChoice03={setInputTextChoice07}
+                        inputTextChoice04={inputTextChoice08}
+                        setInputTextChoice04={setInputTextChoice08}
                         mediaDescriptionText={mediaDescriptionText}
                         setMediaDescriptionText={setMediaDescriptionText}
                     />
@@ -387,7 +426,11 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                 }
 
                 {
-                    secondTweetHasMedia && isPrimaryTweetClicked
+                    // secondTweetHasMedia && isPrimaryTweetClicked
+
+                    // (secondTweetHasMedia || secondTweetHasPoll) && isPrimaryTweetClicked
+
+                    (secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && isPrimaryTweetClicked
 
                     // (secondTweetHasMedia || isPollIconClickedForExtraTweet) && isPrimaryTweetClicked && !firstTweetHasPoll
 
@@ -397,16 +440,17 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                         removeGifHandler={removeGifFileHandler}
                         selectedFile={selectedFile}
                         removeImageHandler={removeImageHandler}
-                        isPollIconClicked={isPollIconClicked}
+                        // isPollIconClicked={isPollIconClicked}
+                        isPollIconClicked={isPollIconClickedForExtraTweet}
                         handlePollViewToggle={handlePollIconClicked}
-                        inputTextChoice01={inputTextChoice01}
-                        setInputTextChoice01={setInputTextChoice01}
-                        inputTextChoice02={inputTextChoice02}
-                        setInputTextChoice02={setInputTextChoice02}
-                        inputTextChoice03={inputTextChoice03}
-                        setInputTextChoice03={setInputTextChoice03}
-                        inputTextChoice04={inputTextChoice04}
-                        setInputTextChoice04={setInputTextChoice04}
+                        inputTextChoice01={inputTextChoice05}
+                        setInputTextChoice01={setInputTextChoice05}
+                        inputTextChoice02={inputTextChoice06}
+                        setInputTextChoice02={setInputTextChoice06}
+                        inputTextChoice03={inputTextChoice07}
+                        setInputTextChoice03={setInputTextChoice07}
+                        inputTextChoice04={inputTextChoice08}
+                        setInputTextChoice04={setInputTextChoice08}
                         mediaDescriptionText={mediaDescriptionText}
                         setMediaDescriptionText={setMediaDescriptionText}
                     />

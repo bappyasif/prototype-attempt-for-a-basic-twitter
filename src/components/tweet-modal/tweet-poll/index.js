@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
 export default function TweetPoll({ isPollIconClicked, handleToggle, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
+    
+    // console.log(inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04, "showing values tweet poll")
+    
     return (
         <div id='poll-container' style={{ display: isPollIconClicked ? 'flex' : 'none' }}>
             <div id='top-layer'>
@@ -152,13 +155,33 @@ export let PollChoices = ({ inputTextChoice01, setInputTextChoice01, inputTextCh
         setWordCountChoice02('')
         setWordCountChoice03('')
         setWordCountChoice04('')
+
+        // setInputTextChoice01(inputTextChoice01 ? inputTextChoice01 : '')
+        // setInputTextChoice02(inputTextChoice02 ? inputTextChoice02 : '')
+        // setInputTextChoice03(inputTextChoice03 ? inputTextChoice03 : '')
+        // setInputTextChoice01(inputTextChoice04 ? inputTextChoice04 : '')
     }, [])
+
+    // useEffect(() => {
+    //     // setInputTextChoice01(inputTextChoice01 ? inputTextChoice01 : '')
+    //     // setInputTextChoice02(inputTextChoice02 ? inputTextChoice02 : '')
+    //     // setInputTextChoice03(inputTextChoice03 ? inputTextChoice03 : '')
+    //     // setInputTextChoice01(inputTextChoice04 ? inputTextChoice04 : '')
+        
+    //     // setInputTextChoice01(inputTextChoice01 && inputTextChoice01 )
+    //     // setInputTextChoice02(inputTextChoice02 && inputTextChoice02)
+    //     // setInputTextChoice03(inputTextChoice03 && inputTextChoice03 )
+    //     // setInputTextChoice01(inputTextChoice04 && inputTextChoice04 )
+        
+    //     console.log(inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04, "showing values")
+    // }, [inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04])
 
     let handleChanges = (evt) => {
         let choiceId = evt.target.id
         switch (choiceId) {
             case '01':
-                handleTextChangesForChoice01(evt.target.value)
+                // handleTextChangesForChoice01(evt.target.value)
+                handleTextChangesForChoice01(evt.target.value ? evt.target.value : inputTextChoice01)
                 setWordCountChoice01(evt.target.value.length + " / 25")
                 setWordCountChoice02('')
                 setWordCountChoice03('')
@@ -196,7 +219,8 @@ export let PollChoices = ({ inputTextChoice01, setInputTextChoice01, inputTextCh
                
                 <div className='word-count'>{choice.id == '01' ? wordCountChoice01 : choice.id == '02' ? wordCountChoice02 : choice.id == '03' ? wordCountChoice03 : wordCountChoice04}</div>
             </div>
-            <input className='poll-choices' id={choice.id} type='text' maxLength='25' onChange={handleChanges} onFocus={handleFocused} placeholder={choice.placeholderText} />
+            {/* <input className='poll-choices' id={choice.id} type='text' maxLength='25' onChange={handleChanges} onFocus={handleFocused} placeholder={choice.placeholderText} /> */}
+            <input className='poll-choices' id={choice.id} value={choice.id == '01' ? inputTextChoice01 : choice.id == '02' ? inputTextChoice02 : choice.id == '03' ? inputTextChoice03 : choice.id == '04' ? inputTextChoice04 : ''} type='text' maxLength='25' onChange={handleChanges} onFocus={handleFocused} placeholder={choice.placeholderText} />
         </div>
     })
 

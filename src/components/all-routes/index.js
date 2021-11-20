@@ -31,6 +31,10 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
     let [inputTextChoice02, setInputTextChoice02] = useState('');
     let [inputTextChoice03, setInputTextChoice03] = useState('');
     let [inputTextChoice04, setInputTextChoice04] = useState('');
+    let [inputTextChoice05, setInputTextChoice05] = useState('');
+    let [inputTextChoice06, setInputTextChoice06] = useState('');
+    let [inputTextChoice07, setInputTextChoice07] = useState('');
+    let [inputTextChoice08, setInputTextChoice08] = useState('');
     let [scheduleStamp, setScheduleStamp] = useState('');
     let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(true)
     let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
@@ -38,11 +42,15 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
     let [opacity, setOpacity] = useState(false)
     let [firstTweetHasMedia, setFirstTweetHasMedia] = useState(false)
     let [secondTweetHasMedia, setSecondTweetHasMedia] = useState(false)
+    let [firstTweetHasPoll, setFirstTweetHasPoll] = useState(false)
+    let [secondTweetHasPoll, setSecondTweetHasPoll] = useState(false)
 
     let handleScheduleIconClicked = () => {
         setIsScheduleIconClicked(!isScheduleIconClicked);
         // if (isPollIconClicked) handlePollIconClicked()
     }
+
+    // console.log(inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04, "showing values from routes")
 
 
     let handleTweetModalityToggle = () => setToggleModality(!toggleModality);
@@ -91,6 +99,14 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
                         setInputTextChoice03={setInputTextChoice03}
                         inputTextChoice04={inputTextChoice04}
                         setInputTextChoice04={setInputTextChoice04}
+                        inputTextChoice05={inputTextChoice05}
+                        setInputTextChoice05={setInputTextChoice05}
+                        inputTextChoice06={inputTextChoice06}
+                        setInputTextChoice06={setInputTextChoice06}
+                        inputTextChoice07={inputTextChoice07}
+                        setInputTextChoice07={setInputTextChoice07}
+                        inputTextChoice08={inputTextChoice08}
+                        setInputTextChoice08={setInputTextChoice08}
                         scheduleStamp={scheduleStamp}
                         setScheduleStamp={setScheduleStamp}
                         mediaDescriptionText={mediaFileDescriptionText}
@@ -103,6 +119,10 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
                         setFirstTweetHasMedia={setFirstTweetHasMedia}
                         secondTweetHasMedia={secondTweetHasMedia}
                         setSecondTweetHasMedia={setSecondTweetHasMedia}
+                        firstTweetHasPoll={firstTweetHasPoll}
+                        setFirstTweetHasPoll={setFirstTweetHasPoll}
+                        secondTweetHasPoll={secondTweetHasPoll}
+                        setSecondTweetHasPoll={setSecondTweetHasPoll}
                     />
                     {/* <ProfilePageUpperView /> */}
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
@@ -155,6 +175,14 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
                         setInputTextChoice03={setInputTextChoice03}
                         inputTextChoice04={inputTextChoice04}
                         setInputTextChoice04={setInputTextChoice04}
+                        inputTextChoice05={inputTextChoice05}
+                        setInputTextChoice05={setInputTextChoice05}
+                        inputTextChoice06={inputTextChoice06}
+                        setInputTextChoice06={setInputTextChoice06}
+                        inputTextChoice07={inputTextChoice07}
+                        setInputTextChoice07={setInputTextChoice07}
+                        inputTextChoice08={inputTextChoice08}
+                        setInputTextChoice08={setInputTextChoice08}
                         setNewDataStatus={setNewDataStatus}
                         newDataStatus={newDataStatus}
                         setChangeLayout={setChangeLayout}
@@ -165,6 +193,10 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
                         setFirstTweetHasMedia={setFirstTweetHasMedia}
                         secondTweetHasMedia={secondTweetHasMedia}
                         setSecondTweetHasMedia={setSecondTweetHasMedia}
+                        firstTweetHasPoll={firstTweetHasPoll}
+                        setFirstTweetHasPoll={setFirstTweetHasPoll}
+                        secondTweetHasPoll={secondTweetHasPoll}
+                        setSecondTweetHasPoll={setSecondTweetHasPoll}
                     />
                 </Route>
 
