@@ -40,6 +40,7 @@
 #middle-content {
   /* width: 551px; */
   width: 546px;
+  margin-top: 11px;
 }
 
 #middle-content #annnounce-schedule {
@@ -227,11 +228,16 @@
 }
 
 #line-extension,
+#line-extension-when-first-tweet-has-poll-and-second-is-none,
+#line-extension-when-first-tweet-has-poll-and-second-is-none-and-primary-tweet-is-selected
 /* .line-extension-extended  */
 #line-extension-extended,
 #line-extension-with-media,
 #line-extension-extended-with-media-presence,
-#line-extension-extended-with-media-presence-for-both-tweets
+#line-extension-extended-with-media-presence-for-both-tweets,
+#line-extension-with-poll,
+#line-extension-extended-with-poll-presence-for-both-tweets-and-primary-is-not-selected,
+#line-extension-with-two-gifs-and-not-primary-selected
 {
   position: absolute;
   height: 42.02px;
@@ -247,21 +253,53 @@
   height: 65.5px;
 }
 
+#line-extension-with-two-gifs-and-not-primary-selected {
+  top: 81px;
+  height: 433.5px;
+  position: absolute;
+  width: 2px;
+  background-color: silver;
+  transform: translate(7px, -4px);
+}
+
+#line-extension-when-first-tweet-has-poll-and-second-is-none-and-primary-tweet-is-selected {
+  height: 361.5px;
+}
+
+#line-extension-when-first-tweet-has-poll-and-second-is-none,
+#line-extension-extended-with-poll-presence-for-both-tweets-and-primary-is-not-selected {
+  height: 353.5px;
+  transform: translate(7px, -71px);
+}
+
 #line-extension-with-media{
   transform: translate(8px, -72px);
   /* height: 63px; */
   height: 530px;
 }
 
-#line-extension-extended {
+#line-extension-with-poll {
+  transform: translate(8px, -60px);
+  height: 446.5px;
+}
+
+#line-extension-extended,
+#line-extension-with-two-gifs-and-when-primary-is-selected {
   min-height: 168.6px;
   top: 126px;
+  position: absolute;
     /* position: absolute;
     width: 2px;
     left: 7.2%;
     background-color: silver;
     top: 31.4%; */
-    transform: translate(7px, -54px);
+    transform: translate(46px, -50px);
+    width: 2px;
+    background-color: silver;
+}
+
+#line-extension-with-two-gifs-and-when-primary-is-selected {
+  min-height: 538.6px;
 }
 
 #line-extension-extended-with-media-presence,
