@@ -7,8 +7,9 @@ import { updateUserDocWithMediaUrls } from '../firestore-methods';
 // Get a reference to the storage service, a.k.a. root reference
 let storage = getStorage(FirebaseApp);
 
-export let uploadTweetPictureUrlToStorage = (imgFile, fileId, updateUploadingStatus) => {
-    let storageRef = ref(storage, 'test/'+(fileId));
+export let uploadTweetPictureUrlToStorage = (imgFile, fileId, updateUploadingStatus, extra) => {
+    // let storageRef = ref(storage, 'test/'+(fileId));
+    let storageRef = ref(storage, extra ? 'test/'+ (fileId)+'extra' : 'test/'+ (fileId));
     uploadBytes(storageRef, imgFile)
     .then(res => {
         // console.log('<< picture upoloaded to storage >>', res, res.metadata)
@@ -19,6 +20,7 @@ export let uploadTweetPictureUrlToStorage = (imgFile, fileId, updateUploadingSta
 }
 
 export let downloadTweetPictureUrlFromStorage = (fileId, updateUrl) => {
+    console.log(fileId, '<<here>>')
     let storageRef = ref(storage, 'test/'+(fileId));
     getDownloadURL(storageRef).then(res=> {
         console.log('<< tweet picture url downloaded >>', res)

@@ -3,7 +3,7 @@ import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivac
 import AllTweetsPage from '../user-profile/all-tweets';
 import './index.css';
 
-function ComposeTweet({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setChangeLayout, selectedFile, setSelectedFile, gifFile, setGifFile, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText, setNewDataStatus }) {
+function ComposeTweet({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setChangeLayout, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, primaryTweetText, setPrimaryTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText, setNewDataStatus }) {
 
     // setChangeLayout(true)
 
@@ -16,9 +16,13 @@ function ComposeTweet({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHa
         <div id='compose-tweet-container'>
             <TweetModal
                 selectedFile={selectedFile}
+                extraSelectedFile={extraSelectedFile}
                 setSelectedFile={setSelectedFile}
+                setExtraSelectedFile={setExtraSelectedFile}
                 gifFile={gifFile}
+                extraGifFile={extraGifFile}
                 setGifFile={setGifFile}
+                setExtraGifFile={setExtraGifFile}
                 toggleModality={toggleModality}
                 handleTweetModalToggle={handleTweetModalToggle}
                 tweetText={primaryTweetText}

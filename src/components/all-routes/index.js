@@ -26,7 +26,9 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
     let [tweetPrivacy, setTweetPrivacy] = useState('01');
     let [tweetPublishReady, setTweetPublishReady] = useState(false);
     let [selectedFile, setSelectedFile] = useState();
+    let [selectedPictureFileForExtraTweet, setSelectedPictureFileForExtraTweet] = useState();
     let [gifFile, setGifFile] = useState('');
+    let [gifFileSelectedForExtraTweet, setGifFileSelectedForExtraTweet] = useState('');
     let [inputTextChoice01, setInputTextChoice01] = useState('');
     let [inputTextChoice02, setInputTextChoice02] = useState('');
     let [inputTextChoice03, setInputTextChoice03] = useState('');
@@ -78,9 +80,13 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
                     <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
                     <ComposeTweet
                         selectedFile={selectedFile}
+                        extraSelectedFile={selectedPictureFileForExtraTweet}
                         setSelectedFile={setSelectedFile}
+                        setExtraSelectedFile={setSelectedPictureFileForExtraTweet}
                         gifFile={gifFile}
+                        extraGifFile={gifFileSelectedForExtraTweet}
                         setGifFile={setGifFile}
+                        setExtraGifFile={setGifFileSelectedForExtraTweet}
                         toggleModality={toggleModality}
                         handleTweetModalToggle={handleTweetModalityToggle}
                         primaryTweetText={primaryTweetText}
@@ -158,9 +164,13 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
                     <RightSideNavigationPanel tweetData={tweetData} />
                     <UserProfile
                         selectedFile={selectedFile}
+                        extraSelectedFile={selectedPictureFileForExtraTweet}
                         setSelectedFile={setSelectedFile}
+                        setExtraSelectedFile={setSelectedPictureFileForExtraTweet}
                         gifFile={gifFile}
+                        extraGifFile={gifFileSelectedForExtraTweet}
                         setGifFile={setGifFile}
+                        setExtraGifFile={setGifFileSelectedForExtraTweet}
                         tweetData={tweetData}
                         primaryTweetText={primaryTweetText}
                         extraTweetText={extraTweetText}
