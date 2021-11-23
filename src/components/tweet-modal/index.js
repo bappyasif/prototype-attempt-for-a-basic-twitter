@@ -168,7 +168,7 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     }
 
     return (
-        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((firstTweetHasGif && extraGifFile) || extraSelectedFile) && isPrimaryTweetClicked) ? '1104px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >
+        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((extraGifFile && gifFile) || (selectedFile && extraSelectedFile)) && isPrimaryTweetClicked) ? '1104px' : ((extraGifFile || extraSelectedFile) && isPrimaryTweetClicked) ? '731px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >
             <div className='upper-content'>
                 {/* <span id='delete-icon' onClick={closeTweetModalHandler}>{deleteIcon()}</span> */}
                 <span id='delete-icon' onClick={closeTweetModalHandler}><Link to='/username'>{deleteIcon()}</Link></span>
@@ -279,7 +279,9 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
 
                     // ((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || (extraGifFile && !isPrimaryTweetClicked)
 
-                    ((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || (extraGifFile && !isPrimaryTweetClicked) || (extraSelectedFile && !isPrimaryTweetClicked)
+                    // ((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || (extraGifFile && !isPrimaryTweetClicked) || ((extraSelectedFile || extraGifFile) && !isPrimaryTweetClicked)
+
+                    ((extraSelectedFile || extraGifFile) && !isPrimaryTweetClicked)
 
                     &&
                     <ContentInComposeTweet

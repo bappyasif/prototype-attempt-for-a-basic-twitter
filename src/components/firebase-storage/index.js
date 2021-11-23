@@ -9,7 +9,11 @@ let storage = getStorage(FirebaseApp);
 
 export let uploadTweetPictureUrlToStorage = (imgFile, fileId, updateUploadingStatus, extra) => {
     // let storageRef = ref(storage, 'test/'+(fileId));
-    let storageRef = ref(storage, extra ? 'test/'+ (fileId)+'extra' : 'test/'+ (fileId));
+    // let storageRef = ref(storage, extra ? 'test/'+ (fileId)+'extra' : 'test/'+ (fileId));
+    
+    let route = extra == 'extra' ? 'test/extra/'+(fileId) : 'test/'+(fileId) 
+    let storageRef = ref(storage, route);
+
     uploadBytes(storageRef, imgFile)
     .then(res => {
         // console.log('<< picture upoloaded to storage >>', res, res.metadata)
@@ -19,9 +23,13 @@ export let uploadTweetPictureUrlToStorage = (imgFile, fileId, updateUploadingSta
     .catch(err=>console.log('<< could not uploaded picture to storage >>', err.message))
 }
 
-export let downloadTweetPictureUrlFromStorage = (fileId, updateUrl) => {
-    console.log(fileId, '<<here>>')
-    let storageRef = ref(storage, 'test/'+(fileId));
+export let downloadTweetPictureUrlFromStorage = (fileId, updateUrl, extra) => {
+    // console.log(fileId, '<<here>>')
+    // let storageRef = ref(storage, 'test/'+(fileId));
+
+    let route = extra == 'extra' ? 'test/extra/'+(fileId) : 'test/'+(fileId) 
+    let storageRef = ref(storage, route);
+
     getDownloadURL(storageRef).then(res=> {
         console.log('<< tweet picture url downloaded >>', res)
         // think of an alternative how this can be done, so that this gets easier and always gets run by update function when needed

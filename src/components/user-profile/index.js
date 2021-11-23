@@ -38,7 +38,8 @@ function UserProfile({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     }, [doneUploading])
 
     useEffect(() => {
-        doneExtraUrlUploading && downloadTweetPictureUrlFromStorage(uniqueID+'extra', setExtraUrl)
+        // doneExtraUrlUploading && downloadTweetPictureUrlFromStorage(uniqueID+'extra', setExtraUrl)
+        doneExtraUrlUploading && downloadTweetPictureUrlFromStorage(uniqueID, setExtraUrl, 'extra')
         // pictureUrl && console.log('checkpoint!!', pictureUrl)
     }, [doneExtraUrlUploading])
 
@@ -52,7 +53,7 @@ function UserProfile({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
         // writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
         // pictureUrl || extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
         
-        pictureUrl && newID();
+        // pictureUrl && newID();
         // pictureUrl || extraPictureUrl && newID()
         // extraPictureUrl && newID()
 
@@ -63,11 +64,11 @@ function UserProfile({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     }, [pictureUrl])
 
     // using effect for extra img element
-    // useEffect(() => {
-    //     extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
-    //     // extraPictureUrl && newID()
-    //     resetUrlToNull()
-    // }, [extraPictureUrl])
+    useEffect(() => {
+        extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        // extraPictureUrl && newID()
+        resetUrlToNull()
+    }, [extraPictureUrl])
 
     let resetUrlToNull = () => {
         // pictureUrl && setPictureUrl('')

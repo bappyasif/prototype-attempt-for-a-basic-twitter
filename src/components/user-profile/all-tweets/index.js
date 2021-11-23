@@ -30,7 +30,7 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
         // console.log(item.extraPoll)
 
-        if (item.medias.gif || item.medias.picture) {
+        if (item.medias.gif || item.medias.picture || item.medias.extraPicture || item.medias.extraGif) {
             content = {
                 tweetText: item.tweetText,
                 extraTweet: item.extraTweet,
@@ -96,7 +96,8 @@ let RenderTweetDataComponent = ({ content }) => {
     // extraPoll && console.log(extraPoll, 'extraPoll', extraPoll['choice01'], extraPoll[0]['choice01'])
 
     // let readyMedia = gifFile ? <MakeGifObjectAvailable gifId={gifFile} /> : pictureFile ? showImg(pictureFile) : ''
-    let readyMedia = (extra) => gifFile ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : pictureFile ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
+    // let readyMedia = (extra) => gifFile ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : pictureFile ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
+    let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
 
     let findWhichIconId = evt => {
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
