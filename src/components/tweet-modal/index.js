@@ -61,13 +61,17 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     // console.log(firstTweetHasGif, 'gif check', secondTweetHasGif)
 
     // when picture files aredded in tweets, deciding which part gets those added 'picture files'
-    useEffect(() => {
-        selectedFile && isPrimaryTweetClicked && !addExtraTweetClicked && setFirstTweetHasMedia(true)
-        // console.log(firstTweetHasMedia, 'first tweet')
+    // useEffect(() => {
+    // not using any effect, used only addExtraTweetClicked to decide whether its for first tweet or extra from fileUploadChyangeHandler
+    //   console.log('pictures in tweet modal')  
+    // })
+    // useEffect(() => {
+    //     selectedFile && isPrimaryTweetClicked && !addExtraTweetClicked && setFirstTweetHasMedia(true)
+    //     // console.log(firstTweetHasMedia, 'first tweet')
 
-        selectedFile && isExtraTweetClicked && setSecondTweetHasMedia(true);
-        // console.log(secondTweetHasMedia, 'second tweet')
-    }, [selectedFile])
+    //     selectedFile && isExtraTweetClicked && setSecondTweetHasMedia(true);
+    //     // console.log(secondTweetHasMedia, 'second tweet')
+    // }, [selectedFile])
 
     // when poll is added into tweets, deciding which tweet has it in it, so that proper rendering on modal and later on on profile page is done correctly
     useEffect(() => {
@@ -78,7 +82,11 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
 
     useEffect(() => setExtraTweetText(''), [!readyTweetPublish])
 
-    let fileUploadChangeHandler = (evt) => setSelectedFile(evt.target.files[0])
+    let fileUploadChangeHandler = (evt) => {
+        // setSelectedFile(evt.target.files[0])
+        !addExtraTweetClicked && setSelectedFile(evt.target.files[0])
+        addExtraTweetClicked && setExtraSelectedFile(evt.target.files[0])
+    }
 
     let removeImageHandler = () => {
         setSelectedFile('')
@@ -88,14 +96,6 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     let removeGifFileHandler = () => {
         setGifFile('');
         setExtraGifFile('')
-
-        // console.log('removing gif?!')
-        
-        // firstTweetHasGif && !secondTweetHasGif && setGifFile('');
-        // firstTweetHasGif && secondTweetHasGif && setExtraGifFile('')
-
-        // gifFile && setGifFile('');
-        // gifFile && firstTweetHasGif && setExtraGifFile('')
     }
 
     let closeTweetModalHandler = () => {
@@ -142,18 +142,17 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
 
     let onGifClick = (gif, evt) => {
         evt.preventDefault();
-        // setGifFile(gif);
-        // firstTweetHasGif ? setGifFile(gif) : secondTweetHasGif ? setExtraGifFile(gif) : ''
-        // gifFile && !addExtraTweetClicked && setGifFile(gif)
+
         !addExtraTweetClicked && setGifFile(gif)
-        // !addExtraTweetClicked && console.log('[][]')
-        // gifFile && addExtraTweetClicked && setExtraGifFile(gif)
-        // firstTweetHasGif && setExtraGifFile(gif)
+
         addExtraTweetClicked && setExtraGifFile(gif)
-        // addExtraTweetClicked && console.log('<><>')
+
+        // addExtraTweetClicked && gif && console.log('gif found')
+
         setIsGifIconClicked(false)
-        // setIsGifIconClickedForExtraTweet(false)
     }
+
+    // extraGifFile && console.log('gif found')
 
     let handleAddExtraTweet = () => {
         setIsPrimaryTweetClicked(false)
@@ -163,7 +162,7 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     }
 
     return (
-        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (firstTweetHasGif && extraGifFile && isPrimaryTweetClicked) ? '1104px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >
+        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile || extraSelectedFile || extraGifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((gifFile && extraGifFile) || (selectedFile && extraSelectedFile)) && isPrimaryTweetClicked) ? '1104px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked && (!extraGifFile || !extraSelectedFile)) ? 'extended-modal-view' : ''} >
             <div className='upper-content'>
                 {/* <span id='delete-icon' onClick={closeTweetModalHandler}>{deleteIcon()}</span> */}
                 <span id='delete-icon' onClick={closeTweetModalHandler}><Link to='/username'>{deleteIcon()}</Link></span>
@@ -199,7 +198,7 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
 
                 {
 
-                    (!secondTweetHasMedia && !firstTweetHasMedia && !secondTweetHasGif && !firstTweetHasGif && addExtraTweetClicked && !isPrimaryTweetClicked && !firstTweetHasPoll && !secondTweetHasPoll)
+                    (!secondTweetHasMedia && !firstTweetHasMedia && !secondTweetHasGif && !firstTweetHasGif && addExtraTweetClicked && !isPrimaryTweetClicked && !firstTweetHasPoll && !secondTweetHasPoll && !selectedFile)
 
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
@@ -213,7 +212,7 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                 {
                     // (firstTweetHasMedia || firstTweetHasPoll || (gifFile && isPrimaryTweetClicked))
 
-                    (firstTweetHasMedia || firstTweetHasPoll || firstTweetHasGif)
+                    (firstTweetHasMedia || firstTweetHasPoll || firstTweetHasGif || selectedFile)
 
                     &&
 
@@ -241,7 +240,7 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
 
                     // ((firstTweetHasMedia || firstTweetHasPoll) && addExtraTweetClicked && !isPrimaryTweetClicked)
 
-                    ((firstTweetHasMedia || firstTweetHasPoll || firstTweetHasGif) && addExtraTweetClicked && !isPrimaryTweetClicked)
+                    ((firstTweetHasMedia || firstTweetHasPoll || firstTweetHasGif || selectedFile) && addExtraTweetClicked && !isPrimaryTweetClicked)
 
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
@@ -265,19 +264,16 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                     </div>
                 }
 
-                {                    
-                    // ((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked)
-
-                    // ((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || (secondTweetHasGif && gifFile && !isPrimaryTweetClicked)
-
-                    // ((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || (secondTweetHasGif && !isPrimaryTweetClicked)
-
-                    ((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || (extraGifFile && !isPrimaryTweetClicked)
+                {
+                    // ((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || (extraGifFile && !isPrimaryTweetClicked) || (extraSelectedFile && !isPrimaryTweetClicked)
+                    // (extraGifFile && !isPrimaryTweetClicked) || (extraSelectedFile && !isPrimaryTweetClicked)
+                    // ((secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && !isPrimaryTweetClicked && isPollIconClicked) || 
+                    ((extraGifFile || extraSelectedFile) && !isPrimaryTweetClicked)
 
                     &&
                     <ContentInComposeTweet
                         // gifFile={gifFile}
-                        gifFile={extraGifFile && extraGifFile}
+                        gifFile={extraGifFile}
                         removeGifHandler={removeGifFileHandler}
                         // selectedFile={selectedFile}
                         selectedFile={extraSelectedFile}
@@ -362,20 +358,16 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
                 }
 
                 {
-                    // (secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet) && isPrimaryTweetClicked
-
                     // (secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet || secondTweetHasGif) && isPrimaryTweetClicked
 
-                    (secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet || extraGifFile) && isPrimaryTweetClicked
-
-                    // (secondTweetHasMedia || isPollIconClickedForExtraTweet) && isPrimaryTweetClicked && !firstTweetHasPoll
+                    (secondTweetHasMedia || secondTweetHasPoll || isPollIconClickedForExtraTweet || extraGifFile || extraSelectedFile) && isPrimaryTweetClicked
 
                     &&
                     <ContentInComposeTweet
                         // gifFile={gifFile}
                         gifFile={extraGifFile}
                         removeGifHandler={removeGifFileHandler}
-                        selectedFile={selectedFile}
+                        selectedFile={extraSelectedFile}
                         removeImageHandler={removeImageHandler}
                         isPollIconClicked={isPollIconClickedForExtraTweet}
                         handlePollViewToggle={handlePollIconClicked}

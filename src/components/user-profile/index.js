@@ -9,43 +9,67 @@ import AllTweetsPage from './all-tweets';
 
 function UserProfile({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08 }) {
     let [pictureUrl, setPictureUrl] = useState('')
+    let [extraPictureUrl, setExtraPictureUrl] = useState('')
 
     let [doneUploading, setDoneUploading] = useState(false)
+    let [doneUploadingExtraUrl, setDoneUploadingExtraUrl] = useState(false)
     
     let updatePictureUploadingStatus = () => setDoneUploading(true)
+    let updatePictureUploadingStatusForExtra = () => setDoneUploadingExtraUrl(true)
     
     let setUrl = (url) => setPictureUrl(url);
+    let setAnothereUrl = (url) => setExtraPictureUrl(url);
 
     useEffect(() => {
         doneUploading && downloadTweetPictureUrlFromStorage(uniqueID, setUrl)
         // pictureUrl && console.log('checkpoint!!', pictureUrl)
+        doneUploading && console.log('picture url downloaded here>>')
     }, [doneUploading])
 
-    // usng for image element
+    useEffect(() => {
+        doneUploadingExtraUrl && downloadTweetPictureUrlFromStorage(uniqueID, setAnothereUrl, 'extra')
+        doneUploadingExtraUrl && console.log('extra url downloaded here!!')
+    }, [doneUploadingExtraUrl])
+
+    // using for image element
     useEffect(() => {
         // pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
         // pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
-        pictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
-        pictureUrl && newID()
+        // pictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        pictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        // pictureUrl && newID()
         resetUrlToNull() // resetting picture url back to null, so that when next img resource is used this effect gets to run
     }, [pictureUrl])
 
     let resetUrlToNull = () => pictureUrl && setPictureUrl('')
 
+    // using for extra picture
+    useEffect(() => {
+        extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        // extraPictureUrl && newID()
+        extraPictureUrl && console.log('<<>>here<<>>')
+        extraPictureUrl && setExtraPictureUrl('')
+    }, [extraPictureUrl])
+
     // initlal calls
     useEffect(() => {
         setChangeLayout(false)
         selectedFile && uploadTweetPictureUrlToStorage(selectedFile, uniqueID, updatePictureUploadingStatus)
+        extraSelectedFile && uploadTweetPictureUrlToStorage(selectedFile, uniqueID, updatePictureUploadingStatusForExtra, 'extra')
     }, [])
 
 
     // when there is new data to store in firestore and render on DOM
     useEffect(() => {        
-        if (!(selectedFile)) {
+        if (!(selectedFile || extraSelectedFile)) {
             // newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
-            newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
-            newDataStatus && newID();
+            // newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+            newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+            // newDataStatus && newID();
         }
+
+        // newDataStatus && newID();
+
 
         setNewDataStatus(false)
 

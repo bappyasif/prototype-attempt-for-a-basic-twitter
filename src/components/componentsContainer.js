@@ -38,6 +38,7 @@ function ComponentsContainer() {
         userDocs.unshift(data)
         console.log(userDocs, ' ---- from update ---- ', data)
         setUserDocs(userDocs)
+        generateOneNewID();
     }
 
     let makingDataReadyInDescendingOrder = () => {

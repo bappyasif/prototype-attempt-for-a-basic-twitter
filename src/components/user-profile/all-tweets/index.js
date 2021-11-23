@@ -22,21 +22,22 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
     // }
 
     let renderTweet = (item) => {
-        item.extraTweet && console.log(item.id, 'checkpoint 01', item.extraGif)
+        // item.extraTweet && console.log(item.id, 'checkpoint 01', item.extraGif)
         let ID = item.id
         let content
 
         // item.privacy && console.log(item.privacy, 'found privacy!!')
 
-        console.log(item.extraPoll)
+        // console.log(item.extraPoll)
 
-        if (item.medias.gif || item.medias.picture) {
+        if (item.medias.gif || item.medias.picture || item.medias.extraGif || item.medias.extraPicture) {
             content = {
                 tweetText: item.tweetText,
                 extraTweet: item.extraTweet,
                 gifFile: item.medias.gif,
                 extraGifFile: item.medias.extraGif,
                 pictureFile: item.medias.picture,
+                extraPictureFile: item.medias.extraPicture,
                 tweetPrivacy: item.privacy,
                 firstTweetHasMedia: item.firstTweetHasMedia,
                 secondTweetHasMedia: item.secondTweetHasMedia,
@@ -75,10 +76,11 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
 let RenderTweetDataComponent = ({ content }) => {
     let [hoveredID, setHoveredID] = useState('')
-    let { tweetText, extraTweet, gifFile, extraGifFile, pictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
+    let { tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
-    extraGifFile && console.log(extraGifFile, '||here||')
-    
+    // extraGifFile && console.log(extraGifFile, '||here||')
+    extraPictureFile && console.log(extraPictureFile, '||here||')
+
     // let renderPolls = poll => {
     //     // console.log(poll[0])
     //     return poll.map(choice => {
@@ -94,7 +96,23 @@ let RenderTweetDataComponent = ({ content }) => {
     // extraPoll && console.log(extraPoll, 'extraPoll', extraPoll['choice01'], extraPoll[0]['choice01'])
 
     // let readyMedia = gifFile ? <MakeGifObjectAvailable gifId={gifFile} /> : pictureFile ? showImg(pictureFile) : ''
-    let readyMedia = (extra) => gifFile ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : pictureFile ? showImg(extra != 'extra' ? pictureFile : '') : ''
+    // let readyMedia = (extra) => gifFile ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : pictureFile ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
+    // let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
+    // let readyMedia = (extra) => {
+    //     // extraPictureFile && console.log(showImg(showImg(extra != 'extra' ? pictureFile : extraPictureFile)))
+    //     return (gifFile || extraGifFile)
+    //         ?
+    //         <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} />
+    //         :
+    //         (pictureFile || extraPictureFile)
+    //         ?
+    //         showImg(extra != 'extra' ? pictureFile : extraPictureFile)
+    //         :
+    //         ''
+    // }
+
+    let readyMedia = () => gifFile ? <MakeGifObjectAvailable gifId={gifFile} /> : pictureFile ? showImg(pictureFile) : ''
+    let readyMediaForExtra = () => extraGifFile ? <MakeGifObjectAvailable gifId={extraGifFile} /> : extraPictureFile ? showImg(extraPictureFile) : ''
 
     let findWhichIconId = evt => {
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
@@ -215,9 +233,9 @@ let RenderTweetDataComponent = ({ content }) => {
                 {/* {extraPoll && extraPoll.choice01 || tweetPoll && tweetPoll.choice01 && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px' , transform: 'translate(25px, -184.5px)' }}></div>} */}
                 {/* {!firstTweetHasMedia && !secondTweetHasMedia && (extraPoll || tweetPoll ) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px' , transform: 'translate(25px, -184.5px)' }}></div>} */}
 
-                {(!firstTweetHasMedia && !secondTweetHasMedia) && ((extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px' , transform: 'translate(25px, -184.5px)' }}></div>}
-                {(!firstTweetHasMedia && !secondTweetHasMedia) && (!(extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px' , transform: 'translate(25px, -184.5px)' }}></div>}
-                {(extraPoll && extraPoll[0].choice01 || tweetPoll.choice01 ) && console.log(extraPoll, '??', tweetPoll, tweetPoll[0].choice01)}
+                {(!firstTweetHasMedia && !secondTweetHasMedia) && ((extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px', transform: 'translate(25px, -184.5px)' }}></div>}
+                {(!firstTweetHasMedia && !secondTweetHasMedia) && (!(extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px', transform: 'translate(25px, -184.5px)' }}></div>}
+                {(extraPoll && extraPoll[0].choice01 || tweetPoll.choice01) && console.log(extraPoll, '??', tweetPoll, tweetPoll[0].choice01)}
 
                 <div className='tweet-extra-info-twee'>
 
@@ -236,13 +254,14 @@ let RenderTweetDataComponent = ({ content }) => {
                         {/* {(pictureFile || gifFile) && <div className='tweet-media-file-content'>{readyMedia}</div>} */}
                         {/* <div className='tweet-media-file-content'>{readyMedia}</div> */}
                         {/* {<div className='tweet-media-file-content'>{secondTweetHasMedia && readyMedia}</div>} */}
-                        {<div className='tweet-media-file-content'>{readyMedia('extra')}</div>}
+                        {/* {<div className='tweet-media-file-content'>{readyMedia('extra')}</div>} */}
+                        {<div className='tweet-media-file-content'>{readyMediaForExtra()}</div>}
 
                         {/* deal with extra tweet */}
                         {/* {<RenderPolls poll={extraPoll.choice01 && extraPoll} />} */}
                         {/* {<RenderPolls poll={extraPoll && extraPoll} />} */}
                         {/* {<RenderPolls poll={extraPoll[0]['choice01'] && extraPoll} />} */}
-                        { extraPoll && <RenderPolls poll={extraPoll && extraPoll} />}
+                        {extraPoll && <RenderPolls poll={extraPoll && extraPoll} />}
 
                         {getPrivacySelectedElement(tweetPrivacy, 'white')}
 
@@ -341,7 +360,7 @@ let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
 let MakeGifObjectAvailable = ({ gifId }) => {
     let [gif, setGif] = useState(null)
 
-    gif && console.log(gifId, 'gif ID ??', gif.id)
+    // gif && console.log(gifId, 'gif ID ??', gif.id)
 
     gifId && getGiphyGifObject(gifId).then(res => {
         setGif(res)
