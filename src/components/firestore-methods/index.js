@@ -15,20 +15,13 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
     // console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia)
     // newDataStatus && console.log(newDataStatus, 'data ready!!')
 
-    // let refinedData = {id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgUrl ? imgUrl : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
-    // let refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
-
     let refinedData;
     if (extraImgFile && imgFile) {
         refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
     } else {
         refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
-        console.log('here!!', refinedData)
+        // console.log('here!!', refinedData)
     }
-
-
-    // trying updating data locally first and render data from that
-    // updateData(refinedData)
 
     // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
     if (!extraImgFile && !imgFile && refinedData) {
@@ -37,26 +30,38 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
             let docRef = doc(db, 'tweets-data', docID);
 
             settingDataIntoFirestore(docRef, refinedData, updateData)
-            console.log('if block', refinedData)
+            // console.log('if block', refinedData)
             // updateData(refinedData)
         }
     } else {
-        if (extraImgFile && refinedData) {
+        if (extraImgFile && imgFile && refinedData) {
             if (extraImgFile && imgFile) {
                 // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
                 let docRef = doc(db, 'tweets-data', docID);
 
                 settingDataIntoFirestore(docRef, refinedData, updateData)
 
-                console.log('else block', extraImgFile)
-            } else if(extraImgFile) {
+                // console.log('else block', extraImgFile)
+            } else if (extraImgFile) {
                 let docRef = doc(db, 'tweets-data', docID);
 
                 settingDataIntoFirestore(docRef, refinedData, updateData)
 
-                console.log('else - else if block', extraImgFile)
-            }
-        }
+                // console.log('else - else if block', extraImgFile)
+            } 
+            // no effects, as this doesnt gets to run
+            // else if(imgFile) {
+            //     let docRef = doc(db, 'tweets-data', docID);
+
+            //     settingDataIntoFirestore(docRef, refinedData, updateData)
+            // }
+        } 
+        // this off switches gates for double entries when ther is two pictures involves
+        // else if(!extraImgFile && imgFile && refinedData) {
+        //     let docRef = doc(db, 'tweets-data', docID);
+
+        //     settingDataIntoFirestore(docRef, refinedData, updateData)
+        // }
     }
 }
 

@@ -16,9 +16,6 @@ function ComponentsContainer() {
     let [dataLoading, setDataLoading] = useState(true)
     let [uniqueID, setUniqueID] = useState()
     let [rerenderDOM, setRerenderDOM] = useState(false)
-    let [dataReadyForUpdate, setDataReadyForUpdate] = useState(false)
-
-    let handleUpdateStatus = () => setDataReadyForUpdate(true)
 
     let updateDOM = (frmWhr) => {
         setRerenderDOM(true);
@@ -44,31 +41,6 @@ function ComponentsContainer() {
         setUserDocs(userDocs)
 
         generateOneNewID();
-
-        // if (!newDataStatus) {
-
-        //     userDocs.unshift(data)
-        //     console.log(userDocs, ' ---- from update ---- top', data)
-        //     setUserDocs(userDocs)
-
-        //     // makingDataReadyInDescendingOrder();
-
-        //     generateOneNewID();
-        // } else {
-        //     userDocs.unshift(data)
-        //     console.log(userDocs, ' ---- from update ---- ', data)
-        //     setUserDocs(userDocs)
-    
-        //     generateOneNewID();
-        // }
-
-        // if (dataReadyForUpdate) {
-        //     userDocs.unshift(data)
-        //     console.log(userDocs, ' ---- from update ---- ', data)
-        //     setUserDocs(userDocs)
-
-        //     generateOneNewID();
-        // }
     }
 
     let makingDataReadyInDescendingOrder = () => {
@@ -100,7 +72,7 @@ function ComponentsContainer() {
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
-            {<AllRoutes handleUpdateStatus={handleUpdateStatus} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />}
+            {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )
