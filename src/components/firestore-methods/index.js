@@ -13,7 +13,7 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
     let dateCreated = Timestamp.now()
     // console.log('<<<<<here>>>>>', imgUrl)
     // console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia)
-    newDataStatus && console.log(newDataStatus, 'data ready!!')
+    // newDataStatus && console.log(newDataStatus, 'data ready!!')
 
     // let refinedData = {id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgUrl ? imgUrl : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
     // let refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
@@ -23,6 +23,7 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
         refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
     } else {
         refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+        console.log('here!!', refinedData)
     }
 
 
@@ -30,14 +31,14 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
     // updateData(refinedData)
 
     // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
-    if (!extraImgFile && refinedData) {
-        if (imgFile || gifItem || tweetText) {
+    if (!extraImgFile && !imgFile && refinedData) {
+        if (gifItem || tweetText) {
             // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
             let docRef = doc(db, 'tweets-data', docID);
 
             settingDataIntoFirestore(docRef, refinedData, updateData)
-            console.log('if block')
-            updateData(refinedData)
+            console.log('if block', refinedData)
+            // updateData(refinedData)
         }
     } else {
         if (extraImgFile && refinedData) {
@@ -48,6 +49,12 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
                 settingDataIntoFirestore(docRef, refinedData, updateData)
 
                 console.log('else block', extraImgFile)
+            } else if(extraImgFile) {
+                let docRef = doc(db, 'tweets-data', docID);
+
+                settingDataIntoFirestore(docRef, refinedData, updateData)
+
+                console.log('else - else if block', extraImgFile)
             }
         }
     }

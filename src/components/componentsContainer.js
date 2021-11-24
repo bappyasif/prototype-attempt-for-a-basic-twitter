@@ -39,20 +39,28 @@ function ComponentsContainer() {
         // console.log('from update ---- ', data)
         // setUserDocs([...data, userDocs])
 
-        // userDocs.unshift(data)
-        // console.log(userDocs, ' ---- from update ---- ', data)
-        // setUserDocs(userDocs)
+        userDocs.unshift(data)
+        console.log(userDocs, ' ---- from update ---- ', data)
+        setUserDocs(userDocs)
 
-        // generateOneNewID();
+        generateOneNewID();
 
-        if (!newDataStatus) {
+        // if (!newDataStatus) {
 
-            userDocs.unshift(data)
-            console.log(userDocs, ' ---- from update ---- ', data)
-            setUserDocs(userDocs)
+        //     userDocs.unshift(data)
+        //     console.log(userDocs, ' ---- from update ---- top', data)
+        //     setUserDocs(userDocs)
 
-            generateOneNewID();
-        }
+        //     // makingDataReadyInDescendingOrder();
+
+        //     generateOneNewID();
+        // } else {
+        //     userDocs.unshift(data)
+        //     console.log(userDocs, ' ---- from update ---- ', data)
+        //     setUserDocs(userDocs)
+    
+        //     generateOneNewID();
+        // }
 
         // if (dataReadyForUpdate) {
         //     userDocs.unshift(data)
