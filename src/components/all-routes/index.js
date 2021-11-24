@@ -18,7 +18,7 @@ import LandingPageUILogics from '../landing-page/ui-logics';
 import SignupPage from '../signup-page';
 import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
 
-function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -207,6 +207,7 @@ function AllRoutes({updateData, newID, uniqueID, tweetData, newDataStatus, setNe
                         setFirstTweetHasPoll={setFirstTweetHasPoll}
                         secondTweetHasPoll={secondTweetHasPoll}
                         setSecondTweetHasPoll={setSecondTweetHasPoll}
+                        handleUpdateStatus={handleUpdateStatus}
                     />
                 </Route>
 

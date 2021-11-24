@@ -7,7 +7,7 @@ import { writeDataIntoCollection } from '../firestore-methods';
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
-function UserProfile({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08 }) {
+function UserProfile({handleUpdateStatus, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08 }) {
     let [pictureUrl, setPictureUrl] = useState('')
 
     let [extraPictureUrl, setExtraPictureUrl] = useState('')
@@ -15,6 +15,10 @@ function UserProfile({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     let [doneUploading, setDoneUploading] = useState(false)
 
     let [doneExtraUrlUploading, setDoneExtraUrlUploading] = useState(false)
+
+    let [test, setTest] = useState(false);
+
+    let testUpdater = () => setTest(true);
     
     let updatePictureUploadingStatus = () => {
         setDoneUploading(true)
@@ -43,32 +47,61 @@ function UserProfile({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
         // pictureUrl && console.log('checkpoint!!', pictureUrl)
     }, [doneExtraUrlUploading])
 
+    // using for image elements
+    // useEffect(() => {
+    //     pictureUrl && !extraSelectedFile && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+    //     !selectedFile && extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        
+    //     // if(extraSelectedFile && !selectedFile) {
+    //     //     writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+    //     //     console.log('<<here>> ch 01')
+    //     // } else if(selectedFile && !extraSelectedFile) {
+    //     //     writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+    //     //     console.log('<<here>> ch 02')
+    //     // } else if(extraSelectedFile && selectedFile) {
+    //     //     writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+    //     //     console.log('<<here>> ch 03')
+    //     // }
+    //     // resetUrlToNull
+    // }, [pictureUrl, extraPictureUrl])
+
     // usng for image element
     useEffect(() => {
-        // pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
-        // pictureUrl && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
-        
-        pictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
-        // extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
-        // writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
-        // pictureUrl || extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
-        
-        // pictureUrl && newID();
-        // pictureUrl || extraPictureUrl && newID()
-        // extraPictureUrl && newID()
+        // pictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        // pictureUrl && !extraSelectedFile && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, newDataStatus, updateData)
 
-        // (pictureUrl || extraPictureUrl) && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
-        // (pictureUrl || extraPictureUrl) && newID()
+        pictureUrl && !extraSelectedFile && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, test, updateData)
         
-        resetUrlToNull() // resetting picture url back to null, so that when next img resource is used this effect gets to run
+        // pictureUrl && !extraSelectedFile && handleUpdateStatus()
+        // resetUrlToNull() // resetting picture url back to null, so that when next img resource is used this effect gets to run
     }, [pictureUrl])
 
     // using effect for extra img element
     useEffect(() => {
-        extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        // extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        
+        // extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl && pictureUrl, extraImgFile: extraPictureUrl && extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, newDataStatus, updateData)
+
+        extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl && pictureUrl, extraImgFile: extraPictureUrl && extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, test, updateData)
+
+        // !pictureUrl && extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl && pictureUrl, extraImgFile: extraPictureUrl && extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, newDataStatus, updateData)
+        // pictureUrl && extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl && pictureUrl, extraImgFile: extraPictureUrl && extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, newDataStatus, updateData)
+
+        // if(selectedFile) {
+        //     pictureUrl && extraPictureUrl && handleUpdateStatus()
+        // } else {
+        //     extraPictureUrl && handleUpdateStatus()
+        // }
+        // !selectedFile && extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        // selectedFile && pictureUrl && extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+        
         // extraPictureUrl && newID()
-        resetUrlToNull()
+        // resetUrlToNull()
     }, [extraPictureUrl])
+
+    // useEffect(() => {
+    //     extraPictureUrl && pictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+    // })
 
     let resetUrlToNull = () => {
         // pictureUrl && setPictureUrl('')
@@ -88,10 +121,27 @@ function UserProfile({firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
     useEffect(() => {        
         if (!(selectedFile || extraSelectedFile)) {
             // newDataStatus && writeDataIntoCollection({tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: getPrivacySelectedElement(tweetPrivacy), imgFile: selectedFile, gifItem: gifFile }, uniqueID, pictureUrl, updateData)
-            newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
-            newDataStatus && newID();
+            // newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: selectedFile, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+            // newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl && pictureUrl, extraImgFile: extraPictureUrl && extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+            // newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, newDataStatus, updateData)
+            newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, test, updateData)
+            // newDataStatus && newID();
             // newDataStatus && console.log('!!alert!!')
+            // handleUpdateStatus()
+        } else {
+            // if(extraSelectedFile && !selectedFile) {
+            //     extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+            //     extraPictureUrl && console.log('<<here>> ch 01')
+            // } else if(selectedFile && !extraSelectedFile) {
+            //     pictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+            //     pictureUrl && console.log('<<here>> ch 02')
+            // } else if(extraSelectedFile && selectedFile) {
+            //     extraPictureUrl && pictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
+            //     extraPictureUrl && pictureUrl && console.log('<<here>> ch 03')
+            // }
         }
+
+        // newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl && pictureUrl, extraImgFile: extraPictureUrl && extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile }, uniqueID, pictureUrl, updateData)
 
         // newDataStatus && newID();
 

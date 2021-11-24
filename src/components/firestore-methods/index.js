@@ -6,30 +6,63 @@ let db = getFirestore();
 
 
 // set data into firestore
-export let writeDataIntoCollection = (data, docID, imgUrl, updateData) => {
+export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) => {
     let { extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
-    
+
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
     // console.log('<<<<<here>>>>>', imgUrl)
-    console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia)
+    // console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia)
+    newDataStatus && console.log(newDataStatus, 'data ready!!')
 
-    let refinedData = {id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgUrl ? imgUrl : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
-    
+    // let refinedData = {id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgUrl ? imgUrl : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+    // let refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+
+    let refinedData;
+    if (extraImgFile && imgFile) {
+        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+    } else {
+        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+    }
+
+
     // trying updating data locally first and render data from that
-    updateData(refinedData)
+    // updateData(refinedData)
 
     // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
-    if (imgFile || gifItem || tweetText) {
-        // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
-        let docRef = doc(db, 'tweets-data', docID);
+    if (!extraImgFile && refinedData) {
+        if (imgFile || gifItem || tweetText) {
+            // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
+            let docRef = doc(db, 'tweets-data', docID);
 
-        setDoc(docRef, refinedData)
+            settingDataIntoFirestore(docRef, refinedData, updateData)
+            console.log('if block')
+            updateData(refinedData)
+        }
+    } else {
+        if (extraImgFile && refinedData) {
+            if (extraImgFile && imgFile) {
+                // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
+                let docRef = doc(db, 'tweets-data', docID);
+
+                settingDataIntoFirestore(docRef, refinedData, updateData)
+
+                console.log('else block', extraImgFile)
+            }
+        }
+    }
+}
+
+let settingDataIntoFirestore = (docRef, refinedData, dataUpdater) => {
+    setDoc(docRef, refinedData)
         .then((data) => {
             console.log('data is added successfully')
         })
         .catch(err => console.log('error while in writing into collection....', err.message))
-    }
+        .finally(() => {
+            dataUpdater(refinedData)
+            console.log('data updated..')
+        })
 }
 
 export let readDataDescendingOrder = async () => {
@@ -53,6 +86,6 @@ export let readDataDescendingOrder = async () => {
 
 export let readDataInRealtime = () => {
     let collectionRef = collection(db, 'tweetData');
-    onSnapshot(collectionRef, ()=> {console.log('data changed')})
+    onSnapshot(collectionRef, () => { console.log('data changed') })
 }
 
