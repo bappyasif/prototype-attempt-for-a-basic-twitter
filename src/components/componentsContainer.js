@@ -33,15 +33,31 @@ function ComponentsContainer() {
     }, [])
 
     let updateData = data => {
-        // console.log('from update ---- ', data)
-        // setUserDocs([...data, userDocs])
-        // console.log('<<both image file exist!!>>')
+        // when there is two picture files in a tweet, spanned over two tweets together, we had to do some cleanign up to do before rendering it on DOM, otherwise a duplicate node is getting rendered
+        let checkDuplicate = userDocs.filter(obj => {
+            // console.log(obj.id == data.id, 'found id!!')
+            return obj.id == data.id
+        })
 
-        userDocs.unshift(data)
+        // makinf sure when two picture exists, just insertn it in dataset but not rendering it
+        if (data.secondTweetHasMedia && checkDuplicate.length == 0) {
+            console.log('do nothing', checkDuplicate)
+            // setUserDocs(userDocs)
+            userDocs.unshift(data)
+        } else if(data.secondTweetHasMedia && checkDuplicate.length == 1) {
+            // when found duplicate entry, taking it out and rendering it on DOM
+            userDocs.splice(0, 1)
+            userDocs.unshift(data)
+            // console.log(userDocs, ' ---- from update ---- dd ', data)
+            setUserDocs(userDocs)
+        } else {
+            // for all other use cases add it on front and render it on DOM
+            userDocs.unshift(data)
+            setUserDocs(userDocs)
+        }
         console.log(userDocs, ' ---- from update ---- ', data)
-        setUserDocs(userDocs)
-
         generateOneNewID();
+        // console.log(checkDuplicate, 'checking duplicate')
     }
 
     let makingDataReadyInDescendingOrder = () => {

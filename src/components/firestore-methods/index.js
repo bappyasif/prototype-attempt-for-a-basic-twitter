@@ -11,69 +11,23 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
 
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
-    // console.log('<<<<<here>>>>>', imgUrl)
     // console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia)
-    // newDataStatus && console.log(newDataStatus, 'data ready!!')
 
     let refinedData;
     if (extraImgFile && imgFile) {
         refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
-    } else if(!extraImgFile && imgFile) {
+    } else if (!extraImgFile && imgFile) {
         refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
     } else {
         refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
-        // console.log('here!!', refinedData)
+        // console.log('here!!????', refinedData)
     }
 
-    // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
-    if (!extraImgFile && !imgFile && refinedData) {
-        if (gifItem || tweetText) {
-            // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
-            let docRef = doc(db, 'tweets-data', docID);
-
-            settingDataIntoFirestore(docRef, refinedData, updateData)
-            // console.log('if block', refinedData)
-            // updateData(refinedData)
-        }
-    } 
-    else if(imgFile && !extraImgFile) {
+    if(gifItem || imgFile || tweetText || extraTweet || extraImgFile || extraGifItem) {
         let docRef = doc(db, 'tweets-data', docID);
 
         settingDataIntoFirestore(docRef, refinedData, updateData)
     }
-    else {
-        if (extraImgFile && imgFile && refinedData) {
-            if (extraImgFile && imgFile) {
-                // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
-                let docRef = doc(db, 'tweets-data', docID);
-
-                settingDataIntoFirestore(docRef, refinedData, updateData)
-
-                // console.log('else block', extraImgFile)
-            } else if (extraImgFile) {
-                let docRef = doc(db, 'tweets-data', docID);
-
-                settingDataIntoFirestore(docRef, refinedData, updateData)
-
-                // console.log('else - else if block', extraImgFile)
-            } 
-            // no effects, as this doesnt gets to run
-            // else if(imgFile) {
-            //     let docRef = doc(db, 'tweets-data', docID);
-
-            //     settingDataIntoFirestore(docRef, refinedData, updateData)
-            // }
-        } 
-        // this off switches gates for double entries when ther is two pictures involves
-        // else if(!extraImgFile && imgFile && refinedData) {
-        //     let docRef = doc(db, 'tweets-data', docID);
-
-        //     settingDataIntoFirestore(docRef, refinedData, updateData)
-        // }
-    }
-}
-let tempWriteup = (data, updater) => {
-
 }
 
 let settingDataIntoFirestore = (docRef, refinedData, dataUpdater) => {
@@ -112,3 +66,73 @@ export let readDataInRealtime = () => {
     onSnapshot(collectionRef, () => { console.log('data changed') })
 }
 
+/**
+ *
+ *
+ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) => {
+    let { extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
+
+    // trying out firestore timestamp as createdDate, this works just fine
+    let dateCreated = Timestamp.now()
+    // console.log('<<<<<here>>>>>', imgUrl)
+    // console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia)
+    // newDataStatus && console.log(newDataStatus, 'data ready!!')
+
+    let refinedData;
+    if (extraImgFile && imgFile) {
+        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+    } else if(!extraImgFile && imgFile) {
+        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+    } else {
+        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+        // console.log('here!!', refinedData)
+    }
+
+    // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
+    if (!extraImgFile && !imgFile && refinedData) {
+        if (gifItem || tweetText) {
+            // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
+            let docRef = doc(db, 'tweets-data', docID);
+
+            settingDataIntoFirestore(docRef, refinedData, updateData)
+            // console.log('if block', refinedData)
+            // updateData(refinedData)
+        }
+    }
+    else if(imgFile && !extraImgFile) {
+        let docRef = doc(db, 'tweets-data', docID);
+
+        settingDataIntoFirestore(docRef, refinedData, updateData)
+    }
+    else {
+        if (extraImgFile && imgFile && refinedData) {
+            if (extraImgFile && imgFile) {
+                // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
+                let docRef = doc(db, 'tweets-data', docID);
+
+                settingDataIntoFirestore(docRef, refinedData, updateData)
+
+                // console.log('else block', extraImgFile)
+            } else if (extraImgFile) {
+                let docRef = doc(db, 'tweets-data', docID);
+
+                settingDataIntoFirestore(docRef, refinedData, updateData)
+
+                // console.log('else - else if block', extraImgFile)
+            }
+            // no effects, as this doesnt gets to run
+            // else if(imgFile) {
+            //     let docRef = doc(db, 'tweets-data', docID);
+
+            //     settingDataIntoFirestore(docRef, refinedData, updateData)
+            // }
+        }
+        // this off switches gates for double entries when ther is two pictures involves
+        // else if(!extraImgFile && imgFile && refinedData) {
+        //     let docRef = doc(db, 'tweets-data', docID);
+
+        //     settingDataIntoFirestore(docRef, refinedData, updateData)
+        // }
+    }
+}
+ */
