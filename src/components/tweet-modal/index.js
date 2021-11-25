@@ -65,7 +65,8 @@ function TweetModal({ firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasM
         selectedFile && isPrimaryTweetClicked && !addExtraTweetClicked && setFirstTweetHasMedia(true)
         // console.log(firstTweetHasMedia, 'first tweet')
 
-        selectedFile && isExtraTweetClicked && setSecondTweetHasMedia(true);
+        selectedFile && addExtraTweetClicked && setSecondTweetHasMedia(true);
+        
         // console.log(secondTweetHasMedia, 'second tweet')
     }, [selectedFile])
 

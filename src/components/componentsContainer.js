@@ -35,6 +35,7 @@ function ComponentsContainer() {
     let updateData = data => {
         // console.log('from update ---- ', data)
         // setUserDocs([...data, userDocs])
+        // console.log('<<both image file exist!!>>')
 
         userDocs.unshift(data)
         console.log(userDocs, ' ---- from update ---- ', data)

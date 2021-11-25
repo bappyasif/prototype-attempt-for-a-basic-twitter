@@ -18,6 +18,8 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
     let refinedData;
     if (extraImgFile && imgFile) {
         refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+    } else if(!extraImgFile && imgFile) {
+        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
     } else {
         refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
         // console.log('here!!', refinedData)
@@ -33,7 +35,13 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
             // console.log('if block', refinedData)
             // updateData(refinedData)
         }
-    } else {
+    } 
+    else if(imgFile && !extraImgFile) {
+        let docRef = doc(db, 'tweets-data', docID);
+
+        settingDataIntoFirestore(docRef, refinedData, updateData)
+    }
+    else {
         if (extraImgFile && imgFile && refinedData) {
             if (extraImgFile && imgFile) {
                 // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
@@ -63,6 +71,9 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
         //     settingDataIntoFirestore(docRef, refinedData, updateData)
         // }
     }
+}
+let tempWriteup = (data, updater) => {
+
 }
 
 let settingDataIntoFirestore = (docRef, refinedData, dataUpdater) => {
