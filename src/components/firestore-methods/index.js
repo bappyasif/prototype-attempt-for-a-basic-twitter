@@ -1,4 +1,6 @@
+import React from 'react';
 import { Timestamp, getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy } from 'firebase/firestore'
+import { Link, Route } from 'react-router-dom';
 import FirebaseApp from '../firebase-configs'
 
 // Initialize Cloud Firestore through Firebase
@@ -64,6 +66,103 @@ export let readDataDescendingOrder = async () => {
 export let readDataInRealtime = () => {
     let collectionRef = collection(db, 'tweetData');
     onSnapshot(collectionRef, () => { console.log('data changed') })
+}
+
+export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser) => {
+    let docRef = doc(db, 'tweets-user', userID);
+    
+    let userData = {userInfo: {uid: userID, name: name, userProfileCompleted: false},
+                    profileInfo: [
+                        {
+                            content: name,
+                            title: 'Name',
+                            maxLength: 50
+                        },
+                        {
+                            content: 'user bio',
+                            title: 'Bio',
+                            maxLength: 160
+                        },
+                        {
+                            content: 'capital, country',
+                            title: 'Location',
+                            maxLength: 13
+                        },
+                        {
+                            content: 'some.web.site.com',
+                            title: 'Website',
+                            maxLength: 100
+                        },
+                        {
+                            content: 'Month Day, Year',
+                            title: 'Birth date',
+                        }
+                    ]}
+
+    setDoc(docRef, userData)
+    .then(() =>{
+        console.log('user added on firestore');
+        // created a document with this user id, to distinguish it from data set
+        // within this document rest of this user 'tweets data' will be stored within a sub collection under this docID, which is unique to every user
+        handleCurrentUser(userID)
+
+        // now opening up user profile editable info section, to update their profile information section
+        window.open('/username/profile', '_parent')
+    })
+    .catch(err => console.log('user couldnt be added in firestore', err.message, err.code))
+}
+
+// writing data into a sub collection in firestore
+export let createSubCollectionForCurrentUser = (currentUserID, docID, data) => {
+    let subCollectionDocRef = doc(db, 'tweets-user', currentUserID, currentUserID, docID)
+    // let subCollectionDocRef = setDoc(db, 'tweets-user', currentUserID, docID)
+    // console.log(docID, 'here!! docID')
+    data = {'sampleData': 'sampleData'}
+    setDoc(subCollectionDocRef, data)
+    .then(() => console.log('sub collection added succesfully'))
+    .catch(err => console.log('sub collection could not be addeded', err.message))
+}
+
+// find user document from firestore collection
+export let findUserDocumentFromFirestore = (userID) => {
+    let docRef = doc(db, 'tweets-user', userID)
+    getDoc(docRef)
+    .then(docSnap => {
+        if(docSnap.exists) {
+            let userData = docSnap.data().userInfo
+            
+            if(userData.userProfileCompleted) {
+                // window.open('/username/', '_parent')
+                <Link to='/username/' />
+                // <Route to='/username/' />
+                console.log('/username')
+            } else {
+                // window.open('/username/profile', '_parent')
+                <Link to='/username/profile/' />
+                // <Route path='/username/profile/' component={} />
+                console.log('/username/profile')
+            }
+            
+            console.log('signin completed');
+        } else {
+            console.log('no such document found')
+        }
+    }).catch(err => console.log('could not complete user document search in firestore', err.message))
+}
+
+// get data from a user document
+export let getUserProfileData = (userID, dataLoader) => {
+    let docRef = doc(db, 'tweets-user', userID)
+    getDoc(docRef)
+    .then(docSnap => {
+        if(docSnap.exists) {
+            let userProfileData = docSnap.data().profileInfo;
+            dataLoader(userProfileData)
+            console.log('data is now loaded')
+        } else {
+            console.log('no such document found')
+        }
+    }).catch(err => console.log('could not extract data from given docuement', err.message))
 }
 
 /**

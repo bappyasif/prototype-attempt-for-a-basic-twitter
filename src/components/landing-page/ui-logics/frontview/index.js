@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/frontview.css";
-import { signUpWithGoogle } from './userSignupWithProviders';
+import { SignInWithGoogle, signUpWithGoogle } from './userSignupWithProviders';
 
-function LoginPageFrontView() {
+function LoginPageFrontView({currentUser, handleCurrentUser}) {
   return (
     <div className="front-view">
       <LeftSide />
-      <RightSide />
+      <RightSide currentUser={currentUser && currentUser} handleCurrentUser={handleCurrentUser} />
     </div>
   );
 }
@@ -21,13 +21,17 @@ let LeftSide = () => (
   </svg>
 );
 
-let RightSide = () => {
+let RightSide = ({currentUser, handleCurrentUser}) => {
   let [hasAccount, setHasAccount] = useState(false)
   
   let handleSigninWithGoogle = (evt) => {
     // console.log(evt.target.id);
-    signUpWithGoogle();
+    // signUpWithGoogle();
+    // signInWithGoogle(currentUser, handleCurrentUser);
+    SignInWithGoogle(currentUser)
   }
+
+  let handleSignUpWithGoogle = () => signUpWithGoogle(currentUser, handleCurrentUser);
 
   let handleSigninWithApple = (evt) => {
     console.log(evt.target.id, 'apple sign in block');
@@ -36,7 +40,7 @@ let RightSide = () => {
   
   // let loginsOptions = loginsDomains.map(domain => <div key={domain.text} className='login-options'><svg path={domain.icon} width={domain.width} height={domain.height} /><p>{domain.text}</p></div>)
   let loginsOptions = loginsDomains.map((domain) => (
-    <div key={domain.id} className="login-options" onClick={domain.id == 'google' ? handleSigninWithGoogle : handleSigninWithApple}>
+    <div key={domain.id} className="login-options" onClick={domain.id == 'google' && hasAccount ? handleSigninWithGoogle : domain.id == 'google' && !hasAccount ? handleSignUpWithGoogle : handleSigninWithApple}>
       <img className="login-icons" src={domain.icon} />
       <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
     </div>

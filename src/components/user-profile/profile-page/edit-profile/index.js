@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import {getUserProfileData} from '../../../firestore-methods'
 import './styles.css'
 
-function EditProfile({setOpacity}) {
+function EditProfile({currentUser, setOpacity}) {
     let [hovered, setHovered] = useState('')
     let [photoElement, setPhotoElement] = useState('https://picsum.photos/200/300')
     let inputRef = useRef();
@@ -77,7 +78,7 @@ function EditProfile({setOpacity}) {
                     </div>
                 </div>
                 <div id='profile-infos' style={{padding: '8px'}}>
-                    {returnAnEditableTextarea(hovered, setHovered)}
+                    {returnAnEditableTextarea(hovered, setHovered, currentUser)}
                     {/* {returnAnEditableTextarea()} */}
                     {/* <ReturnAnEditableTextarea /> */}
                     {/* <ReturnAnEditableTextarea test={test} setTest={setTest} /> */}
@@ -115,9 +116,15 @@ let userObject = [
 
 ]
 
-let returnAnEditableTextarea = (hovered, setHovered) => {
+let returnAnEditableTextarea = (hovered, setHovered, currentUserID) => {
     // let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} />)
-    let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} hovered={hovered} setHovered={setHovered} />)
+    let [profileData, setProfileData] = useState([])
+    let handleDataLoader = (data) => setProfileData(data)
+
+    getUserProfileData(currentUserID, handleDataLoader)
+
+    let generateProfileEditableInfos = profileData && profileData.map(item => <ReturnComponent key={item.title} item={item} hovered={hovered} setHovered={setHovered} />)
+    // let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} hovered={hovered} setHovered={setHovered} />)
     return generateProfileEditableInfos
 }
 
@@ -129,6 +136,7 @@ let ReturnComponent = ({ item, hovered, setHovered }) => {
     let handleChange = evt => {
         setTest(evt.target.value);
         // setLength(test.length || item.content.length)
+        item.content = evt.target.value;
     }
 
     useEffect(() => {
@@ -141,7 +149,7 @@ let ReturnComponent = ({ item, hovered, setHovered }) => {
                 <div className='editable-item-title' style={{ color: item.title == 'Birth date' ? 'gray' : show ? 'rgb(29, 155, 240)' : 'gray' }}>{item.title} {item.title == 'Birth date' && <span> - <span id='change-user-birth-date' style={{ color: 'rgb(29, 155, 240)' }}>Edit</span></span>}</div>
                 <div style={{ display: show ? 'block' : 'none' }} className='track-word-counts'>{item.title == 'Birth date' ? '' : length + '/'}{item.maxLength ? item.maxLength : ''}</div>
             </div>
-            <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} />
+            <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} id={item.title} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} />
         </div>
     )
 }

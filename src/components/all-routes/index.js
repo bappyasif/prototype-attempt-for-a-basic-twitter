@@ -18,7 +18,7 @@ import LandingPageUILogics from '../landing-page/ui-logics';
 import SignupPage from '../signup-page';
 import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
 
-function AllRoutes({handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -52,14 +52,26 @@ function AllRoutes({handleUpdateStatus, updateData, newID, uniqueID, tweetData, 
         // if (isPollIconClicked) handlePollIconClicked()
     }
 
+    // let [currentUser, setCurrentUser] = useState('')
+
+    // let handleCurrentUser = (userID) => setCurrentUser(userID)
+
     // console.log(inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04, "showing values from routes")
+
+    console.log('from routes', currentUser)
 
 
     let handleTweetModalityToggle = () => setToggleModality(!toggleModality);
     return (
         <Router>
             <Switch>
-                <Route exact path='/' component={LandingPageUILogics} />
+                {/* <Route exact path='/' component={LandingPageUILogics} /> */}
+                <Route exact path='/'>
+                    <LandingPageUILogics
+                        currentUser={currentUser} 
+                        handleCurrentUser={handleCurrentUser} 
+                    />
+                </Route>
 
                 <Route path='/login' component={LoginPage} />
 
@@ -213,7 +225,9 @@ function AllRoutes({handleUpdateStatus, updateData, newID, uniqueID, tweetData, 
 
                 <Route path='/username/profile'>
                     <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
-                    <EditProfile setOpacity={setOpacity} />
+                    {currentUser && <EditProfile currentUser={currentUser} setOpacity={setOpacity} />}
+                    {/* <EditProfile currentUser={currentUser} setOpacity={setOpacity} /> */}
+                    {/* { currentUserID && <EditProfile currentUser={currentUserID} setOpacity={setOpacity} />} */}
                     <ProfilePageUpperView opacity={opacity} />
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
