@@ -1,11 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import {getUserProfileData} from '../../../firestore-methods'
+import {getUserProfileData, updateDataInDocument, updateUserProfileDataInDocument} from '../../../firestore-methods'
 import './styles.css'
 
 function EditProfile({currentUser, setOpacity}) {
     let [hovered, setHovered] = useState('')
     let [photoElement, setPhotoElement] = useState('https://picsum.photos/200/300')
+    let [profileData, setProfileData] = useState([])
+    let handleDataLoader = (data) => setProfileData(data)
+
+    useEffect(() => getUserProfileData(currentUser, handleDataLoader), [])
+
+    console.log(profileData, 'profile data!!')
+
     let inputRef = useRef();
     let handleMouseEnter = evt => {
         let findWhich = evt.target.id || evt.target.parentNode.id
@@ -39,12 +46,16 @@ function EditProfile({currentUser, setOpacity}) {
     useEffect(() => setOpacity(true), [])
     // let decideSvgVisualsClassnames = () => photoElement ? '' : 'additive'
 
+    let handleData = () => {
+        profileData && updateUserProfileDataInDocument(currentUser, {profileInfo: profileData})
+    }
+
     return (
         <div id='edit-profile-container'>
             <div id='header-section'>
                 <Link id='remove-icon' to='/username'>{removeIcon()}</Link>
                 <div id='edit-profile-text'>Edit profile</div>
-                <Link id='save-edit-profile-changes' to='/username'>Save</Link>
+                <Link id='save-edit-profile-changes' to='/username' onClick={handleData}>Save</Link>
             </div>
             <div id='body-section'>
                 <div id='profile-visuals' style={{maxHeight: '249px'}}>
@@ -78,7 +89,7 @@ function EditProfile({currentUser, setOpacity}) {
                     </div>
                 </div>
                 <div id='profile-infos' style={{padding: '8px'}}>
-                    {returnAnEditableTextarea(hovered, setHovered, currentUser)}
+                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, )}
                     {/* {returnAnEditableTextarea()} */}
                     {/* <ReturnAnEditableTextarea /> */}
                     {/* <ReturnAnEditableTextarea test={test} setTest={setTest} /> */}
@@ -116,19 +127,19 @@ let userObject = [
 
 ]
 
-let returnAnEditableTextarea = (hovered, setHovered, currentUserID) => {
+let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData) => {
     // let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} />)
-    let [profileData, setProfileData] = useState([])
-    let handleDataLoader = (data) => setProfileData(data)
+    // let [profileData, setProfileData] = useState([])
+    // let handleDataLoader = (data) => setProfileData(data)
 
-    getUserProfileData(currentUserID, handleDataLoader)
+    // useEffect(() => getUserProfileData(currentUserID, handleDataLoader), [])
 
-    let generateProfileEditableInfos = profileData && profileData.map(item => <ReturnComponent key={item.title} item={item} hovered={hovered} setHovered={setHovered} />)
+    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} />)
     // let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} hovered={hovered} setHovered={setHovered} />)
     return generateProfileEditableInfos
 }
 
-let ReturnComponent = ({ item, hovered, setHovered }) => {
+let ReturnComponent = ({ index, currentUser, item, hovered, setHovered }) => {
     let [test, setTest] = useState('')
     let [length, setLength] = useState(item.content.length);
     let [show, setShow] = useState(false);
@@ -137,6 +148,12 @@ let ReturnComponent = ({ item, hovered, setHovered }) => {
         setTest(evt.target.value);
         // setLength(test.length || item.content.length)
         item.content = evt.target.value;
+        // let data = { profileInfo[index].content : evt.target.value }
+        // let data = () => profileInfo[index].content = evt.target.value 
+        // let dataRef = "profileInfo[index].content";
+        // let value = evt.target.value
+        // currentUser && updateUserProfileDataInDocument(currentUser, dataRef, value)
+        
     }
 
     useEffect(() => {

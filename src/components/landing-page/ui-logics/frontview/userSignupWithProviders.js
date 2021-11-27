@@ -37,14 +37,14 @@ export let signUpWithGoogle = (currentUser, handleCurrentUser) => {
         })
 }
 
-export let SignInWithGoogle = () => {
+export let SignInWithGoogle = (handleCurrentUser, handleIsUserProfileCompletedStatus) => {
     // as this would be anonymous action from users to begin with, we call on google popup service and ther we will collect that uid fom there
     // and search it in our database to check and see if this user already exists or not, if yes then we will also check on a prop to determine whether user updated their profile information or not, if not then show 'username/profile' route
     signInWithPopup(auth, provider)
     .then(result => {
         let user = result.user;
         console.log('user sign in progressing....')
-        findUserDocumentFromFirestore(user.uid)
+        findUserDocumentFromFirestore(user.uid, handleCurrentUser, handleIsUserProfileCompletedStatus)
     }).catch(error => {
         // Handle Errors here.
         const errorCode = error.code;

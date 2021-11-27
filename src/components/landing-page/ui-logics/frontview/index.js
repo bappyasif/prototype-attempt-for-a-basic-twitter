@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import "../../styles/frontview.css";
 import { SignInWithGoogle, signUpWithGoogle } from './userSignupWithProviders';
 
@@ -23,12 +23,14 @@ let LeftSide = () => (
 
 let RightSide = ({currentUser, handleCurrentUser}) => {
   let [hasAccount, setHasAccount] = useState(false)
+  let [profileCompleted, setProfileCompleted] = useState(false);
   
   let handleSigninWithGoogle = (evt) => {
     // console.log(evt.target.id);
     // signUpWithGoogle();
     // signInWithGoogle(currentUser, handleCurrentUser);
-    SignInWithGoogle(currentUser)
+    SignInWithGoogle(handleCurrentUser, handleUserProfileCompleted)
+    // currentUser && 
   }
 
   let handleSignUpWithGoogle = () => signUpWithGoogle(currentUser, handleCurrentUser);
@@ -37,13 +39,23 @@ let RightSide = ({currentUser, handleCurrentUser}) => {
     console.log(evt.target.id, 'apple sign in block');
     
   }
+
+  let handleUserProfileCompleted = () => setProfileCompleted(true)
+
+  console.log(currentUser, 'from landingpage')
   
   // let loginsOptions = loginsDomains.map(domain => <div key={domain.text} className='login-options'><svg path={domain.icon} width={domain.width} height={domain.height} /><p>{domain.text}</p></div>)
   let loginsOptions = loginsDomains.map((domain) => (
     <div key={domain.id} className="login-options" onClick={domain.id == 'google' && hasAccount ? handleSigninWithGoogle : domain.id == 'google' && !hasAccount ? handleSignUpWithGoogle : handleSigninWithApple}>
       <img className="login-icons" src={domain.icon} />
       <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
+      <Redirect to={((currentUser && !profileCompleted) && '/username/profile/') || ((currentUser && profileCompleted) && '/username/')} />
     </div>
+
+    // <Link key={domain.id} className="login-options" to={currentUser && '/username/profile/'} onClick={domain.id == 'google' && hasAccount ? handleSigninWithGoogle : domain.id == 'google' && !hasAccount ? handleSignUpWithGoogle : handleSigninWithApple}>
+    //   <img className="login-icons" src={domain.icon} />
+    //   <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
+    // </Link>
   ));
   
   return (

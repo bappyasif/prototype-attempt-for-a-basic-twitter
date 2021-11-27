@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { Component, useEffect, useState } from 'react'
 import AllRoutes from './all-routes'
 import FirebaseApp from './firebase-configs';
-import { createSubCollectionForCurrentUser, getAllDocsOnce, readDataDescendingOrder, readDataInRealtime } from './firestore-methods';
+import { createSubCollectionForCurrentUser, getAllDocsOnce, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime } from './firestore-methods';
 import { v4 as uuid } from 'uuid'
 import LandingPageUILogics from './landing-page/ui-logics';
 
@@ -39,12 +39,14 @@ function ComponentsContainer() {
     // useEffect(() => rerenderDOM && makingDataReadyInDescendingOrder(), [rerenderDOM])
 
     useEffect(() => {
-        makingDataReadyInDescendingOrder();
+        // currentUser && makingDataReadyInDescendingOrder(currentUser);
         setUniqueID(uuid())
         // setRerenderDOM(false)
         // setCountForTweetContainer(uuid())
         // setCountForTweetContainer(String(new Date().getTime()))
     }, [])
+
+    useEffect(() => currentUser && makingDataReadyFromSubCollectionInDescendingOrder(currentUser), [currentUser])
 
     let updateData = data => {
         // when there is two picture files in a tweet, spanned over two tweets together, we had to do some cleanign up to do before rendering it on DOM, otherwise a duplicate node is getting rendered
@@ -75,7 +77,7 @@ function ComponentsContainer() {
     }
 
     let makingDataReadyInDescendingOrder = () => {
-        uniqueID && console.log(uniqueID, 'is it?!')
+        // uniqueID && console.log(uniqueID, 'is it?!')
         readDataDescendingOrder().then(res => {
             console.log(res, 'sorted?!')
             setUserDocs(res)
@@ -84,6 +86,10 @@ function ComponentsContainer() {
     }
 
     // useEffect(() => generateOneNewID(), [userDocs])
+
+    let makingDataReadyFromSubCollectionInDescendingOrder = (currentUser) => {
+        readDataInDescendingORderFromSubCollection(currentUser, setUserDocs)
+    }
 
     useEffect(() => {
         newDataStatus && console.log('it running!!')

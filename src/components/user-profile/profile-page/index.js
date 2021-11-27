@@ -3,11 +3,11 @@ import "./index.css";
 import ProfilePageTopView from './profile-top-view-section';
 import ProfilePageTopNavigationMenuBar from './top-menu-navigation';
 
-function ProfilePageUpperView({opacity}) {
+function ProfilePageUpperView({opacity,  currentUser}) {
 
     return (
         <div id='profile-page-upperview-container' style={{opacity: opacity ? '.2' : 1}}>
-            <ProfilePageTopView />
+            <ProfilePageTopView  currentUser={currentUser} />
             <ProfilePageTopNavigationMenuBar />
         </div>
     )

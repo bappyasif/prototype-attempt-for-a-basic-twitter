@@ -172,7 +172,7 @@ function AllRoutes({currentUser, handleCurrentUser, handleUpdateStatus, updateDa
                 <Route exact path='/username'>
                     {/* {setChangeLayout(false)} */}
                     <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
-                    <ProfilePageUpperView />
+                    <ProfilePageUpperView currentUser={currentUser} />
                     <RightSideNavigationPanel tweetData={tweetData} />
                     <UserProfile
                         selectedFile={selectedFile}
@@ -220,6 +220,7 @@ function AllRoutes({currentUser, handleCurrentUser, handleUpdateStatus, updateDa
                         secondTweetHasPoll={secondTweetHasPoll}
                         setSecondTweetHasPoll={setSecondTweetHasPoll}
                         handleUpdateStatus={handleUpdateStatus}
+                        currentUser={currentUser && currentUser}
                     />
                 </Route>
 
@@ -228,7 +229,7 @@ function AllRoutes({currentUser, handleCurrentUser, handleUpdateStatus, updateDa
                     {currentUser && <EditProfile currentUser={currentUser} setOpacity={setOpacity} />}
                     {/* <EditProfile currentUser={currentUser} setOpacity={setOpacity} /> */}
                     {/* { currentUserID && <EditProfile currentUser={currentUserID} setOpacity={setOpacity} />} */}
-                    <ProfilePageUpperView opacity={opacity} />
+                    <ProfilePageUpperView opacity={opacity}  currentUser={currentUser} />
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 

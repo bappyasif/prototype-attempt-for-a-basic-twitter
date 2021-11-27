@@ -2,13 +2,14 @@ import React from 'react';
 import { Timestamp, getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy } from 'firebase/firestore'
 import { Link, Route } from 'react-router-dom';
 import FirebaseApp from '../firebase-configs'
+import { merge } from 'lodash';
 
 // Initialize Cloud Firestore through Firebase
 let db = getFirestore();
 
 
 // set data into firestore
-export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) => {
+export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, userID) => {
     let { extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
 
     // trying out firestore timestamp as createdDate, this works just fine
@@ -26,7 +27,8 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) =>
     }
 
     if(gifItem || imgFile || tweetText || extraTweet || extraImgFile || extraGifItem) {
-        let docRef = doc(db, 'tweets-data', docID);
+        // let docRef = doc(db, 'tweets-data/', docID);
+        let docRef = doc(db, 'tweets-user', userID, userID, docID)
 
         settingDataIntoFirestore(docRef, refinedData, updateData)
     }
@@ -48,6 +50,7 @@ export let readDataDescendingOrder = async () => {
     let data = []
     // let collectionRef = collection(db, 'tweetData');
     let collectionRef = collection(db, 'tweets-data');
+    // let collectionRef = doc(db, 'tweets-user', userID, userID)
     let dataQuery = query(collectionRef, orderBy('created', 'desc'))
     try {
         let querySnapshot = await getDocs(dataQuery);
@@ -66,6 +69,19 @@ export let readDataDescendingOrder = async () => {
 export let readDataInRealtime = () => {
     let collectionRef = collection(db, 'tweetData');
     onSnapshot(collectionRef, () => { console.log('data changed') })
+}
+
+export let readDataInDescendingORderFromSubCollection = (userID, updateData) => {
+    let data = []
+    let collectionRef = collection(db, `tweets-user/${userID}/${userID}`);
+    let dataQuery = query(collectionRef, orderBy('created', 'desc'))
+    getDocs(dataQuery)
+    .then(docs => docs.forEach(doc => data.push(doc.data())))
+    .catch(err => console.log('error while sorting data', err.message))
+    .finally(() => {
+        data && console.log(data, 'here!!')
+        data && updateData(data)
+    })
 }
 
 export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser) => {
@@ -107,7 +123,7 @@ export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser)
         handleCurrentUser(userID)
 
         // now opening up user profile editable info section, to update their profile information section
-        window.open('/username/profile', '_parent')
+        // window.open('/username/profile', '_parent')
     })
     .catch(err => console.log('user couldnt be added in firestore', err.message, err.code))
 }
@@ -124,7 +140,7 @@ export let createSubCollectionForCurrentUser = (currentUserID, docID, data) => {
 }
 
 // find user document from firestore collection
-export let findUserDocumentFromFirestore = (userID) => {
+export let findUserDocumentFromFirestore = (userID, handleCurrentUser, updateUserProfileCompletionStatus) => {
     let docRef = doc(db, 'tweets-user', userID)
     getDoc(docRef)
     .then(docSnap => {
@@ -133,16 +149,18 @@ export let findUserDocumentFromFirestore = (userID) => {
             
             if(userData.userProfileCompleted) {
                 // window.open('/username/', '_parent')
-                <Link to='/username/' />
+                // <Link to='/username/' />
                 // <Route to='/username/' />
+                updateUserProfileCompletionStatus()
                 console.log('/username')
             } else {
                 // window.open('/username/profile', '_parent')
-                <Link to='/username/profile/' />
+                // <Link to='/username/profile/' />
                 // <Route path='/username/profile/' component={} />
                 console.log('/username/profile')
             }
             
+            handleCurrentUser(userID)
             console.log('signin completed');
         } else {
             console.log('no such document found')
@@ -163,6 +181,28 @@ export let getUserProfileData = (userID, dataLoader) => {
             console.log('no such document found')
         }
     }).catch(err => console.log('could not extract data from given docuement', err.message))
+}
+
+// update data in document
+export let updateUserProfileDataInDocument = (docID, data) => {
+    let docRef = doc(db, 'tweets-user', docID)
+    // let data = { profileInfo[index].content : evt.target.value }
+    // data = () => profileInfo[index].content = evt.target.value
+    // let data = { [dataRef]: value}
+    // let data = profileInfo[0].content : 'data'
+    
+    updateDoc(docRef,  data)
+    .then(() => console.log('data updated', data))
+    .catch(err => console.log('data update was failed', err.message))
+    .finally(() => userProfileDataIsNowCompleted(docID))
+}
+
+export let userProfileDataIsNowCompleted = (docID) => {
+    let docRef = doc(db, 'tweets-user', docID);
+    let data = {userInfo: {userProfileCompleted: true}}
+    setDoc(docRef, data, {merge: true})
+    .then(() => console.log('userInfo data merge completed'))
+    .catch(err => console.log('userInfo data merge failed', err.message))
 }
 
 /**
