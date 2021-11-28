@@ -230,3 +230,16 @@
   resize: none;
   outline: none;
 }
+
+
+/* all edit birthdate styles */
+#birthdate-edit-container #date-component-container #select-components-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#birthdate-edit-container #date-component-container #select-components-container .select-component-wrapper {
+  border: solid;
+  margin: .2em;
+}

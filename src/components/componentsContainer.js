@@ -17,7 +17,7 @@ function ComponentsContainer() {
     let [dataLoading, setDataLoading] = useState(true)
     let [uniqueID, setUniqueID] = useState()
     let [rerenderDOM, setRerenderDOM] = useState(false)
-    let [currentUser, setCurrentUser] = useState('')
+    let [currentUser, setCurrentUser] = useState('vnxOMhbaq8ObeFIE56GNPDQanig1')
 
     let handleCurrentUser = (userID) => setCurrentUser(userID)
 
@@ -65,12 +65,13 @@ function ComponentsContainer() {
             userDocs.splice(0, 1)
             userDocs.unshift(data)
             // console.log(userDocs, ' ---- from update ---- dd ', data)
-            setUserDocs(userDocs)
+            // setUserDocs(userDocs)
         } else {
             // for all other use cases add it on front and render it on DOM
             userDocs.unshift(data)
-            setUserDocs(userDocs)
+            // setUserDocs(userDocs)
         }
+        setUserDocs(userDocs)
         console.log(userDocs, ' ---- from update ---- ', data)
         generateOneNewID();
         // console.log(checkDuplicate, 'checking duplicate')

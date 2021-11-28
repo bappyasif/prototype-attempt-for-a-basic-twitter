@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {getUserProfileData, updateDataInDocument, updateUserProfileDataInDocument} from '../../../firestore-methods'
+import EditBirthdate from './edit-birthdate'
 import './styles.css'
 
 function EditProfile({currentUser, setOpacity}) {
@@ -143,6 +144,7 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered }) => {
     let [test, setTest] = useState('')
     let [length, setLength] = useState(item.content.length);
     let [show, setShow] = useState(false);
+    let [showCalendar, setShowCalendar] = useState(false);
 
     let handleChange = evt => {
         setTest(evt.target.value);
@@ -160,13 +162,37 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered }) => {
         setLength(test.length || item.content.length)
     }, [test])
 
+    let handleCalendar = () => {
+        console.log('show calendar!!')
+        setShowCalendar(true)
+    }
+
+    let convertDateIntoString = data => {
+        let dateString = ''
+        let dateTokens = data.split('-');
+        let months = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'semptember', 'oktober', 'november', 'december']
+        let getMonthName = months[dateTokens[1]-1]
+        dateString = `${getMonthName} ${dateTokens[2]}, ${dateTokens[0]}`
+        console.log(data, 'convert it', dateTokens, getMonthName, dateString)
+        // return dateString
+    }
+
     return (
         <div key={item.title} className='editable-text-area-container'>
             <div className='top-fragment'>
-                <div className='editable-item-title' style={{ color: item.title == 'Birth date' ? 'gray' : show ? 'rgb(29, 155, 240)' : 'gray' }}>{item.title} {item.title == 'Birth date' && <span> - <span id='change-user-birth-date' style={{ color: 'rgb(29, 155, 240)' }}>Edit</span></span>}</div>
+                {/* {showCalendar && item.title == 'Birth date' && <input type='date' />} */}
+                <div className='editable-item-title' style={{ color: item.title == 'Birth date' ? 'gray' : show ? 'rgb(29, 155, 240)' : 'gray' }}>{item.title} {item.title == 'Birth date' && <span> - <span id='change-user-birth-date' style={{ color: 'rgb(29, 155, 240)' }} onClick={item.title == 'Birth date' && handleCalendar}>Edit</span></span>}</div>
                 <div style={{ display: show ? 'block' : 'none' }} className='track-word-counts'>{item.title == 'Birth date' ? '' : length + '/'}{item.maxLength ? item.maxLength : ''}</div>
             </div>
+            {/* <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} id={item.title} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} /> */}
+            {/* <textarea readOnly={item.title == 'Birth date' && !showCalendar ? true : false} maxLength={item.maxLength} id={item.title} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} /> */}
+            {(!showCalendar)
+            ?
             <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} id={item.title} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} />
+            :
+            // <input type='date' onChange={handleChange} value={convertDateIntoString(test)} />
+            <EditBirthdate />
+            }
         </div>
     )
 }
