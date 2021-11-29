@@ -183,6 +183,23 @@ export let getUserProfileData = (userID, dataLoader) => {
     }).catch(err => console.log('could not extract data from given docuement', err.message))
 }
 
+// get only Birth date
+export let getUserBirthDate = async (userID) => {
+    let data;
+    let docRef = doc(db, 'tweets-user', userID)
+    getDoc(docRef)
+    .then(docSnap => {
+        if(docSnap.exists) {
+            let userBirthdate = docSnap.data().profileInfo[4];
+            console.log(userBirthdate, '??')
+            data = userBirthdate
+        } else {
+            console.log('no such document found')
+        }
+    }).catch(err => console.log('could not extract birthdate from given docuement', err.message))
+    .finally(() => data && data)
+}
+
 // update data in document
 export let updateUserProfileDataInDocument = (docID, data) => {
     let docRef = doc(db, 'tweets-user', docID)

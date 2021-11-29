@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import {getUserProfileData, updateDataInDocument, updateUserProfileDataInDocument} from '../../../firestore-methods'
+import {getUserBirthDate, getUserProfileData, updateDataInDocument, updateUserProfileDataInDocument} from '../../../firestore-methods'
 import EditBirthdate from './edit-birthdate'
 import './styles.css'
 
@@ -8,11 +8,29 @@ function EditProfile({currentUser, setOpacity}) {
     let [hovered, setHovered] = useState('')
     let [photoElement, setPhotoElement] = useState('https://picsum.photos/200/300')
     let [profileData, setProfileData] = useState([])
-    let handleDataLoader = (data) => setProfileData(data)
+    let [birthDate, setBirthDate] = useState()
+    // let handleDataLoader = (data) => setProfileData(data)
+    let handleDataLoader = (data) => {
+        setProfileData(data);
+        setBirthDate(data[4])
+    }
+
+    // let [keepOriginalBirthDate, setKeepOriginalBirthdate] = useState()
+
+    birthDate && console.log(birthDate, 'chaninging!!')
 
     useEffect(() => getUserProfileData(currentUser, handleDataLoader), [])
+    // useEffect(() => {
+    //     // profileData && (keepOriginalBirthDate = profileData[4])
+    //     // keepOriginalBirthDate = profileData[4]
+    //     setKeepOriginalBirthdate(profileData[4])
+    //     // console.log(keepOriginalBirthDate, 'original!!');
 
-    console.log(profileData, 'profile data!!')
+    // }, [profileData])
+
+    // keepOriginalBirthDate && console.log(keepOriginalBirthDate, 'original!!');
+
+    // console.log(profileData, 'profile data!!')
 
     let inputRef = useRef();
     let handleMouseEnter = evt => {
@@ -49,6 +67,7 @@ function EditProfile({currentUser, setOpacity}) {
 
     let handleData = () => {
         profileData && updateUserProfileDataInDocument(currentUser, {profileInfo: profileData})
+        profileData && 'running update?!'
     }
 
     return (
@@ -90,7 +109,7 @@ function EditProfile({currentUser, setOpacity}) {
                     </div>
                 </div>
                 <div id='profile-infos' style={{padding: '8px'}}>
-                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, )}
+                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, handleDataLoader, birthDate)}
                     {/* {returnAnEditableTextarea()} */}
                     {/* <ReturnAnEditableTextarea /> */}
                     {/* <ReturnAnEditableTextarea test={test} setTest={setTest} /> */}
@@ -128,23 +147,37 @@ let userObject = [
 
 ]
 
-let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData) => {
+let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData, handleDataLoader, birthDate) => {
     // let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} />)
     // let [profileData, setProfileData] = useState([])
     // let handleDataLoader = (data) => setProfileData(data)
 
     // useEffect(() => getUserProfileData(currentUserID, handleDataLoader), [])
 
-    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} />)
+    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} profileData={profileData} handleDataLoader={handleDataLoader} birthDate={birthDate} />)
     // let generateProfileEditableInfos = userObject.map(item => <ReturnComponent key={item.title} item={item} hovered={hovered} setHovered={setHovered} />)
     return generateProfileEditableInfos
 }
 
-let ReturnComponent = ({ index, currentUser, item, hovered, setHovered }) => {
+let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileData, handleDataLoader, birthDate }) => {
     let [test, setTest] = useState('')
     let [length, setLength] = useState(item.content.length);
     let [show, setShow] = useState(false);
     let [showCalendar, setShowCalendar] = useState(false);
+    
+    // let [editClicked, setEditClicked] = useState(false)
+    // let keepOriginal = item.title == 'Birth date' && Object.assign({}, item);
+    // let keepOriginal;
+
+    // useEffect(() => keepOriginal = item.title == 'Birth date' && Object.assign({}, item), [])
+
+    // useEffect(() => (item.title == 'Birth date') && (!showCalendar) && (item = keepOriginal), [!showCalendar])
+    // item.title == 'Birth date' && console.log(keepOriginal, item, 'check')
+
+    // useEffect(() => {
+    //     showCalendar && item.title == 'Birth date' && console.log('show original')
+    //     // showCalendar && 
+    // }, [showCalendar])
 
     let handleChange = evt => {
         setTest(evt.target.value);
@@ -163,17 +196,48 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered }) => {
     }, [test])
 
     let handleCalendar = () => {
-        console.log('show calendar!!')
+        // console.log('show calendar!!')
         setShowCalendar(true)
+        // setShowCalendar(!showCalendar)
+        // setEditClicked(!editClicked)
     }
+
+    let handleCancel = () => {
+        item = profileData[4]
+        setShowCalendar(false)
+        // console.log(profileData, 'cancel!!', showCalendar)
+    }
+
+    useEffect(() => {
+        !showCalendar && console.log(profileData, 'cancel!!', showCalendar)
+        !showCalendar && getUserProfileData(currentUser, handleDataLoader) // this re renders data, not ideal but works somewhat!!
+        // !showCalendar && getUserBirthDate(currentUser).then(data => {
+        //     data && console.log(data, 'here!!')
+        // })
+    }, [showCalendar])
+
+    // let convertDateIntoString = data => {
+    //     let dateString = ''
+    //     let dateTokens = data.split('-');
+    //     let months = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'semptember', 'oktober', 'november', 'december']
+    //     let getMonthName = months[dateTokens[1]-1]
+    //     dateString = `${getMonthName} ${dateTokens[2]}, ${dateTokens[0]}`
+    //     console.log(data, 'convert it', dateTokens, getMonthName, dateString)
+    //     // return dateString
+    // }
 
     let convertDateIntoString = data => {
         let dateString = ''
+        // let keepOriginal = Object.assign({}, item.content);
+
         let dateTokens = data.split('-');
-        let months = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'semptember', 'oktober', 'november', 'december']
-        let getMonthName = months[dateTokens[1]-1]
-        dateString = `${getMonthName} ${dateTokens[2]}, ${dateTokens[0]}`
-        console.log(data, 'convert it', dateTokens, getMonthName, dateString)
+        dateString = `${dateTokens[0]} ${dateTokens[1]}, ${dateTokens[2]}`
+        console.log(data, 'convert it', dateString, 'original', profileData, showCalendar)
+        item.content = dateString;
+        // showCalendar && (item.content = dateString);
+        // !showCalendar && (item.content = dateString)
+        // !showCalendar ? item.content : (item.content = dateString)
+        // item.content = !showCalendar ? keepOriginalBirthDate.content : dateString
         // return dateString
     }
 
@@ -181,7 +245,7 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered }) => {
         <div key={item.title} className='editable-text-area-container'>
             <div className='top-fragment'>
                 {/* {showCalendar && item.title == 'Birth date' && <input type='date' />} */}
-                <div className='editable-item-title' style={{ color: item.title == 'Birth date' ? 'gray' : show ? 'rgb(29, 155, 240)' : 'gray' }}>{item.title} {item.title == 'Birth date' && <span> - <span id='change-user-birth-date' style={{ color: 'rgb(29, 155, 240)' }} onClick={item.title == 'Birth date' && handleCalendar}>Edit</span></span>}</div>
+                <div className='editable-item-title' style={{ color: item.title == 'Birth date' ? 'gray' : show ? 'rgb(29, 155, 240)' : 'gray' }}>{item.title} {item.title == 'Birth date' && <span> - <span id='change-user-birth-date' style={{ color: 'rgb(29, 155, 240)' }}>{showCalendar ? <div onClick={handleCancel}>Cancel</div> : <div onClick={item.title == 'Birth date' && handleCalendar}>Edit</div>}</span></span>}</div>
                 <div style={{ display: show ? 'block' : 'none' }} className='track-word-counts'>{item.title == 'Birth date' ? '' : length + '/'}{item.maxLength ? item.maxLength : ''}</div>
             </div>
             {/* <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} id={item.title} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} /> */}
@@ -191,7 +255,8 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered }) => {
             <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} id={item.title} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} />
             :
             // <input type='date' onChange={handleChange} value={convertDateIntoString(test)} />
-            <EditBirthdate />
+            <EditBirthdate item={item} convertDateIntoString={convertDateIntoString} showCalendar={showCalendar}/>
+            // <EditBirthdate item={!showCalendar ? item : keepOriginalBirthDate} convertDateIntoString={convertDateIntoString}/>
             }
         </div>
     )
