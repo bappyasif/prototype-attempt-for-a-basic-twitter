@@ -21,20 +21,12 @@ function ComponentsContainer() {
 
     let handleCurrentUser = (userID) => setCurrentUser(userID)
 
-    currentUser && console.log(currentUser, '<<current user>>')
+    // currentUser && console.log(currentUser, '<<current user>>')
 
-    // useEffect(() => {
-    //     try {
-    //         currentUser && createSubCollectionForCurrentUser(currentUser, uniqueID, { test: 'test' })
-    //     } catch (err) {
-    //         console.log(err, '!!')
-    //     }
-    // }, [currentUser])
-
-    let updateDOM = (frmWhr) => {
-        setRerenderDOM(true);
-        console.log('<< ::fromWhere:: >>', frmWhr)
-    }
+    // let updateDOM = (frmWhr) => {
+    //     setRerenderDOM(true);
+    //     console.log('<< ::fromWhere:: >>', frmWhr)
+    // }
 
     // useEffect(() => rerenderDOM && makingDataReadyInDescendingOrder(), [rerenderDOM])
 
@@ -77,14 +69,14 @@ function ComponentsContainer() {
         // console.log(checkDuplicate, 'checking duplicate')
     }
 
-    let makingDataReadyInDescendingOrder = () => {
-        // uniqueID && console.log(uniqueID, 'is it?!')
-        readDataDescendingOrder().then(res => {
-            console.log(res, 'sorted?!')
-            setUserDocs(res)
-            // setDataLoading(false)
-        }).catch(err => console.log('error in useEffect fetching', err.message))
-    }
+    // let makingDataReadyInDescendingOrder = () => {
+    //     // uniqueID && console.log(uniqueID, 'is it?!')
+    //     readDataDescendingOrder().then(res => {
+    //         console.log(res, 'sorted?!')
+    //         setUserDocs(res)
+    //         // setDataLoading(false)
+    //     }).catch(err => console.log('error in useEffect fetching', err.message))
+    // }
 
     // useEffect(() => generateOneNewID(), [userDocs])
 

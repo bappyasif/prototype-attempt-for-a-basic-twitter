@@ -8,7 +8,11 @@ function EditProfile({currentUser, setOpacity}) {
     let [hovered, setHovered] = useState('')
     let [photoElement, setPhotoElement] = useState('https://picsum.photos/200/300')
     let [profileData, setProfileData] = useState([])
-    let handleDataLoader = (data) => setProfileData(data)
+    let [check, setCheck] = useState(null)
+    let handleDataLoader = (data) => {
+        setProfileData(data)
+        setCheck(data)
+    }
 
     useEffect(() => getUserProfileData(currentUser, handleDataLoader), [])
 
@@ -91,19 +95,19 @@ function EditProfile({currentUser, setOpacity}) {
                     </div>
                 </div>
                 <div id='profile-infos' style={{padding: '8px'}}>
-                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, handleDataLoader)}
+                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, handleDataLoader, check)}
                 </div>
             </div>
         </div>
     )
 }
 
-let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData, handleDataLoader) => {
-    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} profileData={profileData} handleDataLoader={handleDataLoader} />)
+let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData, handleDataLoader, check) => {
+    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} profileData={profileData} handleDataLoader={handleDataLoader} check={check} />)
     return generateProfileEditableInfos
 }
 
-let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileData, handleDataLoader, birthDate }) => {
+let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileData, handleDataLoader, check }) => {
     let [test, setTest] = useState('')
     let [length, setLength] = useState(item.content.length);
     let [show, setShow] = useState(false);
@@ -130,8 +134,9 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
     }
 
     useEffect(() => {
-        !showCalendar && console.log(profileData, 'cancel!!', showCalendar)
-        !showCalendar && getUserProfileData(currentUser, handleDataLoader) // this re renders data, not ideal but works somewhat!!
+        !showCalendar && console.log(profileData, 'cancel!!', showCalendar, check)
+        // this re renders data from firestore once again, not ideal but works somewhat!!
+        // !showCalendar && getUserProfileData(currentUser, handleDataLoader)
     }, [showCalendar])
 
     let convertDateIntoString = data => {
@@ -141,7 +146,7 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
         let dateTokens = data.split('-');
         dateString = `${dateTokens[0]} ${dateTokens[1]}, ${dateTokens[2]}`
         console.log(data, 'convert it', dateString, 'original', profileData, showCalendar)
-        item.content = dateString;
+        item.content = dateString;   // if i uncomment here, this would change data set at hand
     }
 
     return (
@@ -167,27 +172,3 @@ let cameraIcon = () => <svg width='24px' height='24px' stroke='whiteSmoke' fill=
 let removeIcon = (fill) => <svg width='24px' height='24px' fill={fill ? 'whiteSmoke' : ''}><g><path opacity={fill ? '.6' : ''} d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path></g></svg>
 
 export default EditProfile
-
-
-/**
- *
- *
- <div key={item.title} className='editable-text-area-container'>
-            <div className='top-fragment'>
-                <div className='editable-item-title' style={{color: show && !item.title == 'Birth date' ? 'rgb(29, 155, 240)' : 'gray'}}>{item.title} {item.title == 'Birth date' && <span> - <span id='change-user-birth-date' style={{color: 'rgb(29, 155, 240)'}}>Edit</span></span>}</div>
-                <div style={{ display: show || item.title == 'Birth date' ? 'block' : 'none' }} className='track-word-counts'>{item.title == 'Birth date' ? '' : length+'/'}{item.maxLength ? item.maxLength : ''}</div>
-            </div>
-            <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} />
-        </div>
- *
- *
- let ReturnAnEditableTextarea = () => {
-    let [test, setTest] = useState('')
-    let handleChange = evt => setTest(evt.target);
-    let generateProfileEditableInfos = userObject.map(item => <div key={item.title} className='editable-text-area-container'>
-        <div className='textarea-title'>{item.title}</div>
-        <textarea value={test ? test : item.content} onChange={handleChange} />
-    </div>)
-    return generateProfileEditableInfos
-}
- */
