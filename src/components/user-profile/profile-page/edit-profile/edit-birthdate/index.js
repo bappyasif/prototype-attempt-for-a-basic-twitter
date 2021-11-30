@@ -2,13 +2,19 @@ import React, { useEffect, useState } from 'react'
 import '../../edit-profile/styles.css'
 
 function EditBirthdate({item, convertDateIntoString}) {
+    let handleDelete = (evt) => console.log('here!!')
     return (
         <div id='birthdate-edit-container'>
             <p id='birthdate-info'>This should be your date of birth, whether this account is for your business, event, or even your cat.</p>
             <DateComponent item={item} convertDateIntoString={convertDateIntoString} />
+            <div id='remove-birthdate' onClick={handleDelete}>Remove Birthdate</div>
         </div>
     )
 }
+
+// let DeleteBirthdate = (evt) => {
+//     console.log('delete birthdate!!', evt)
+// }
 
 let DateComponent = ({item, convertDateIntoString, showCalendar}) => {
     let [month, setMonth] = useState('')
@@ -57,8 +63,12 @@ let DateComponent = ({item, convertDateIntoString, showCalendar}) => {
 
 let MakeVisualsForDateSelectCompoennts = ({ selectContent, title }) => {
     return (
-        <div className='select-component-wrapper' style={{width: title == 'Month' ? '233px' : title == 'Day' ? '99px' : '137px'}}>
-            <div className='top'>{title}</div>
+        <div className='select-component-wrapper' style={{width: title == 'Month' ? '233px' : title == 'Day' ? '99px' : '137px', textAlign: 'left', paddingLeft: '4px'}}>
+            <div className='top'>
+                <div className='title-header' style={{color: 'silver', fontSize: 'small'}}>{title}</div>
+                {/* <div className='dropdown-svg' style={{position: 'absolute', right: '2px', top: '15px'}}>{dropDownSvg()}</div> */}
+                {/* <div className='dropdown-svg' style={{position: 'absolute', right: '2px', top: '15px', content: `${dropDownSvg()}`}}></div> */}
+            </div>
             <div className='bottom'>{selectContent}</div>
         </div>
     )
@@ -71,7 +81,7 @@ let MonthComponentForDate = ({ handleChanges, value, monthsAndDays }) => {
 }
 
 let DaysComponentForDate = ({ days, handleChanges, value }) => {
-    let daysOptions = Array.from(Array(days + 1).keys()).map(val => <option key={val} value={val}>{val ? val : ' '}</option>)
+    let daysOptions = Array.from(Array(days + 1).keys()).map(val => <option key={val} value={val} disabled={val == ' '}>{val ? val : ' '}</option>)
     return <select id='days' onChange={handleChanges} value={value ? value : ' '}>{daysOptions}</select>
 }
 
@@ -79,9 +89,11 @@ let YearsComponentForDate = ({ handleChanges, value }) => {
     let getCurrentYear = new Date().getFullYear()
     let yearsRange = (start, end) => Array((end - start) + 1).fill().map((_, idx) => start + idx)
     let allYears = yearsRange(1900, getCurrentYear)
-    let yearsOptions = allYears.map(val => <option key={val} value={val}>{val != '1900' ? val : ' '}</option>)
+    let yearsOptions = allYears.map(val => <option key={val} value={val} disabled={val == '1900'}>{val != '1900' ? val : ' '}</option>)
 
     return <select id='years' onChange={handleChanges} value={value}>{yearsOptions}</select>
 }
+
+let dropDownSvg = () => <svg width='24px' height='24px'><g><path d="M20.207 8.147c-.39-.39-1.023-.39-1.414 0L12 14.94 5.207 8.147c-.39-.39-1.023-.39-1.414 0-.39.39-.39 1.023 0 1.414l7.5 7.5c.195.196.45.294.707.294s.512-.098.707-.293l7.5-7.5c.39-.39.39-1.022 0-1.413z"></path></g></svg>
 
 export default EditBirthdate

@@ -239,7 +239,60 @@
   align-items: center;
 }
 
+#birthdate-edit-container #remove-birthdate {
+  height: 3.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-left: 2px; */
+  width: 99%;
+  margin: 4px 0px 8px 2px;
+}
+
+#birthdate-edit-container #remove-birthdate:hover {
+  background-color: rgba(244, 33, 46, 0.2);
+}
+
 #birthdate-edit-container #date-component-container #select-components-container .select-component-wrapper {
-  border: solid;
+  border: solid 1px rgb(29, 155, 240);
   margin: .2em;
+  border-bottom: solid 2px rgba(29, 155, 240, .56);
+  position: relative;
+}
+
+#birthdate-edit-container #date-component-container #select-components-container .select-component-wrapper .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin: 4px;
+  margin-bottom: 1.1px;
+}
+
+#birthdate-edit-container #date-component-container #select-components-container .select-component-wrapper .top .dropdown-svg::after {
+  position: absolute;
+  right: 2px;
+  top: 15px;
+  /* content: url('data:image/svg+xml; utf8, <svg><g><path d="M20.207 8.147c-.39-.39-1.023-.39-1.414 0L12 14.94 5.207 8.147c-.39-.39-1.023-.39-1.414 0-.39.39-.39 1.023 0 1.414l7.5 7.5c.195.196.45.294.707.294s.512-.098.707-.293l7.5-7.5c.39-.39.39-1.022 0-1.413z"></path></g></svg>'); */
+  /* content: '::))'; */
+}
+
+#birthdate-edit-container #date-component-container #select-components-container .select-component-wrapper .bottom select {
+  width: -webkit-fill-available;
+  font-size: x-large;
+  margin-left: -5.3px;
+  appearance: none;
+  padding-left: 8px;
+  height: 40px;
+}
+
+/* #birthdate-edit-container #date-component-container #select-components-container .select-component-wrapper .bottom select::after, */
+#birthdate-edit-container #date-component-container #select-components-container .select-component-wrapper .bottom::after {
+  /* content: url("data:image/svg+xml;charset=UTF-8, <svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='100' width='100'><circle cx='50' cy='50' r='40' stroke='black' stroke-width='3' fill='red' /></svg>"); */
+  content: url("data:image/svg+xml;charset=UTF-8, <svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='24' width='24'><g><path d='M20.207 8.147c-.39-.39-1.023-.39-1.414 0L12 14.94 5.207 8.147c-.39-.39-1.023-.39-1.414 0-.39.39-.39 1.023 0 1.414l7.5 7.5c.195.196.45.294.707.294s.512-.098.707-.293l7.5-7.5c.39-.39.39-1.022 0-1.413z'></path></g></svg>");
+  position: absolute;
+  /* right: 2px; */
+  right: 4px;
+  top: 24px;
+  pointer-events: none;
 }

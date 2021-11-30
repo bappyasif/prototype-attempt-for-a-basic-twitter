@@ -14,6 +14,38 @@ function EditProfile({currentUser, setOpacity}) {
         setCheck(data)
     }
 
+    // just adds one more to existing data set
+    // let mergeData = (data) => setProfileData([...profileData, data])
+
+    // there is no longer that problem, but data in duplicate still gets mutated fue to push and pop
+    // let mergeData = (data) => {
+    //     profileData.pop();
+    //     profileData.push(data)
+    //     setProfileData(profileData)
+    // }
+
+    // though solves that issue, but still causing mutation in duplicate data set which i intend to avert
+    // let mergeData = (data) => {
+    //     profileData.slice(0, 4);
+    //     profileData.concat(data)
+    //     setProfileData(profileData)
+    // }
+
+    // causes no more mutation in duplicate
+    let mergeData = (data) => {
+        setProfileData(prevData => prevData.slice(0, -1).concat(data))
+    }
+
+    // more sophisticated approach when data needs to be updated without mutation, somewhere other than on edges in data set
+    let changeDataInsideDatasetWithoutMutationInDuplicate = (data, idx) => {
+        setProfileData(prevData => {
+            // let idx = prevData.findIndex(entry => entry.id == id);
+            console.log(idx, 'which index', data)
+            return prevData.slice(0, idx).concat([data], prevData.slice(idx+1))
+        })
+    }
+
+
     useEffect(() => getUserProfileData(currentUser, handleDataLoader), [])
 
     // console.log(profileData, 'profile data!!')
@@ -95,19 +127,19 @@ function EditProfile({currentUser, setOpacity}) {
                     </div>
                 </div>
                 <div id='profile-infos' style={{padding: '8px'}}>
-                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, handleDataLoader, check)}
+                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, handleDataLoader, check, mergeData, changeDataInsideDatasetWithoutMutationInDuplicate)}
                 </div>
             </div>
         </div>
     )
 }
 
-let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData, handleDataLoader, check) => {
-    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} profileData={profileData} handleDataLoader={handleDataLoader} check={check} />)
+let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData, handleDataLoader, check, mergeData, changeData) => {
+    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} profileData={profileData} handleDataLoader={handleDataLoader} check={check} mergeData={mergeData} changeData={changeData} />)
     return generateProfileEditableInfos
 }
 
-let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileData, handleDataLoader, check }) => {
+let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileData, handleDataLoader, check, mergeData, changeData }) => {
     let [test, setTest] = useState('')
     let [length, setLength] = useState(item.content.length);
     let [show, setShow] = useState(false);
@@ -115,7 +147,9 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
 
     let handleChange = evt => {
         setTest(evt.target.value);
-        item.content = evt.target.value;        
+        // item.content = evt.target.value; // this causes unwanted mutation
+        // rather using safe mutation
+        changeData({content: evt.target.value, title: item.title}, index)
     }
 
     useEffect(() => {
@@ -135,8 +169,14 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
 
     useEffect(() => {
         !showCalendar && console.log(profileData, 'cancel!!', showCalendar, check)
-        // this re renders data from firestore once again, not ideal but works somewhat!!
+        // this re renders data from firestore once again, not ideal but works somewhat!! and also know as pessimistic update
         // !showCalendar && getUserProfileData(currentUser, handleDataLoader)
+
+        // using optimistic way to update data, from an mirror image of original before any data mutation by user after loading
+        // check && !showCalendar && mergeData({content: check[4].content, title: 'Birth date'})
+
+        // using optimistic way to update data, from an mirror image of original before any data mutation by user after loading, with using changeData, as it is more uniform way of doing this than split edges
+        check && !showCalendar && changeData({content: check[4].content, title: 'Birth date'}, index)
     }, [showCalendar])
 
     let convertDateIntoString = data => {
@@ -146,14 +186,17 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
         let dateTokens = data.split('-');
         dateString = `${dateTokens[0]} ${dateTokens[1]}, ${dateTokens[2]}`
         console.log(data, 'convert it', dateString, 'original', profileData, showCalendar)
-        item.content = dateString;   // if i uncomment here, this would change data set at hand
+        // item.content = dateString;   // if i uncomment here, this would change data set at hand
+        // mergeData({content: dateString, title: 'Birth date'}) // this simply adds one more to data set but keeps duplicate unmutated!!
+        // mergeData({content: dateString, title: 'Birth date'})  // this works just fine, but specific to edges in data set
+        changeData({content: dateString, title: item.title}, index) // this should also work as this is more uniform approach, regardless of data position in dataset
     }
 
     return (
         <div key={item.title} className='editable-text-area-container'>
             <div className='top-fragment'>
                 {/* {showCalendar && item.title == 'Birth date' && <input type='date' />} */}
-                <div className='editable-item-title' style={{ color: item.title == 'Birth date' ? 'gray' : show ? 'rgb(29, 155, 240)' : 'gray' }}>{item.title} {item.title == 'Birth date' && <span> - <span id='change-user-birth-date' style={{ color: 'rgb(29, 155, 240)' }}>{showCalendar ? <div onClick={handleCancel}>Cancel</div> : <div onClick={item.title == 'Birth date' && handleCalendar}>Edit</div>}</span></span>}</div>
+                <div className='editable-item-title' style={{ color: item.title == 'Birth date' ? 'gray' : show ? 'rgb(29, 155, 240)' : 'gray', display: 'flex' }}>{item.title} {item.title == 'Birth date' && <span style={{display: 'flex', marginLeft: '4px'}}> - <span id='change-user-birth-date' style={{ color: 'rgb(29, 155, 240)' }}>{showCalendar ? <div onClick={handleCancel} style={{marginLeft: '4px'}}>Cancel</div> : <div onClick={item.title == 'Birth date' && handleCalendar} style={{marginLeft: '4px'}}>Edit</div>}</span></span>}</div>
                 <div style={{ display: show ? 'block' : 'none' }} className='track-word-counts'>{item.title == 'Birth date' ? '' : length + '/'}{item.maxLength ? item.maxLength : ''}</div>
             </div>
 
