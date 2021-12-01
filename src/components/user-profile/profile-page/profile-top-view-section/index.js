@@ -47,7 +47,7 @@ function ProfilePageTopView({currentUser}) {
                     </div>
                     <div id='joined-info'>
                         <span id='calendar-svg'>{calendarIcon()}</span>
-                        <span>Joined {filteredData && filteredData[4].content || 'A.B'}</span>
+                        <span>Joined {filteredData && filteredData[5].content || 'A.B'}</span>
                     </div>
                 </div>
                 <div id='profile-reach-info'>

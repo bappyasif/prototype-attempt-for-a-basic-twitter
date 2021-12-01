@@ -45,6 +45,16 @@ function EditProfile({currentUser, setOpacity}) {
         })
     }
 
+    let deleteData = idx => {
+        setProfileData(prevData => prevData.slice(0, idx))
+        // updateUserProfileDataInDocument(currentUser, {profileInfo: profileData})
+    }
+
+    useEffect(() => {
+        // not deleting from server, but its here to show that it could have been done!!
+        // profileData.length == 4 && updateUserProfileDataInDocument(currentUser, {profileInfo: profileData})
+    }, [profileData])
+
 
     useEffect(() => getUserProfileData(currentUser, handleDataLoader), [])
 
@@ -127,19 +137,19 @@ function EditProfile({currentUser, setOpacity}) {
                     </div>
                 </div>
                 <div id='profile-infos' style={{padding: '8px'}}>
-                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, handleDataLoader, check, mergeData, changeDataInsideDatasetWithoutMutationInDuplicate)}
+                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, handleDataLoader, check, mergeData, changeDataInsideDatasetWithoutMutationInDuplicate, deleteData)}
                 </div>
             </div>
         </div>
     )
 }
 
-let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData, handleDataLoader, check, mergeData, changeData) => {
-    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} profileData={profileData} handleDataLoader={handleDataLoader} check={check} mergeData={mergeData} changeData={changeData} />)
+let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData, handleDataLoader, check, mergeData, changeData, deleteData) => {
+    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => idx < 5 && <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} profileData={profileData} handleDataLoader={handleDataLoader} check={check} mergeData={mergeData} changeData={changeData} deleteData={deleteData} />)
     return generateProfileEditableInfos
 }
 
-let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileData, handleDataLoader, check, mergeData, changeData }) => {
+let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileData, handleDataLoader, check, mergeData, changeData, deleteData }) => {
     let [test, setTest] = useState('')
     let [length, setLength] = useState(item.content.length);
     let [show, setShow] = useState(false);
@@ -200,11 +210,11 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
                 <div style={{ display: show ? 'block' : 'none' }} className='track-word-counts'>{item.title == 'Birth date' ? '' : length + '/'}{item.maxLength ? item.maxLength : ''}</div>
             </div>
 
-            {(!showCalendar)
+            {(!showCalendar && item.content)
             ?
             <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} id={item.title} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} />
             :
-            <EditBirthdate item={item} convertDateIntoString={convertDateIntoString} showCalendar={showCalendar}/>
+            <EditBirthdate item={item} convertDateIntoString={convertDateIntoString} showCalendar={showCalendar} changeData={changeData} currentUser={currentUser} deleteData={deleteData} />
             }
         </div>
     )

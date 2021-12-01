@@ -1,5 +1,5 @@
 import React from 'react';
-import { Timestamp, getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy } from 'firebase/firestore'
+import { Timestamp, getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy, deleteField, FieldValue } from 'firebase/firestore'
 import { Link, Route } from 'react-router-dom';
 import FirebaseApp from '../firebase-configs'
 import { merge } from 'lodash';
@@ -86,6 +86,12 @@ export let readDataInDescendingORderFromSubCollection = (userID, updateData) => 
 
 export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser) => {
     let docRef = doc(db, 'tweets-user', userID);
+    let date = new Date()
+    let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    let day = date.getDay()
+    let month = months[date.getMonth()];
+    let year = date.getFullYear()
+    // console.log(day, month, year)
     
     let userData = {userInfo: {uid: userID, name: name, userProfileCompleted: false},
                     profileInfo: [
@@ -110,8 +116,12 @@ export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser)
                             maxLength: 100
                         },
                         {
-                            content: 'Month Day, Year',
+                            content: `${month} ${day}, ${year}`,
                             title: 'Birth date',
+                        },
+                        {
+                            content: `${month} ${day}, ${year}`,
+                            title: 'Joining date',
                         }
                     ]}
 
@@ -153,6 +163,7 @@ export let findUserDocumentFromFirestore = (userID, handleCurrentUser, updateUse
                 // <Route to='/username/' />
                 updateUserProfileCompletionStatus()
                 console.log('/username')
+                // handleSinginCompleted(true)
             } else {
                 // window.open('/username/profile', '_parent')
                 // <Link to='/username/profile/' />
@@ -222,73 +233,17 @@ export let userProfileDataIsNowCompleted = (docID) => {
     .catch(err => console.log('userInfo data merge failed', err.message))
 }
 
-/**
- *
- *
- export let writeDataIntoCollection = (data, docID, newDataStatus, updateData) => {
-    let { extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
+// delete user birthdate field from, firestore
+// export let deleteBirthdate = (docID) => {
+//     let docRef = doc(db, 'tweets-user', docID);
+//     updateDoc(docRef, {'profileInfo[4]': {content: deleteField(), title: deleteField()}})
+//     .then(() => console.log('birthdate removed'))
+//     .catch(err => console.log('birthdate removal was failed', err.message))
+// }
 
-    // trying out firestore timestamp as createdDate, this works just fine
-    let dateCreated = Timestamp.now()
-    // console.log('<<<<<here>>>>>', imgUrl)
-    // console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia)
-    // newDataStatus && console.log(newDataStatus, 'data ready!!')
-
-    let refinedData;
-    if (extraImgFile && imgFile) {
-        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
-    } else if(!extraImgFile && imgFile) {
-        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
-    } else {
-        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
-        // console.log('here!!', refinedData)
-    }
-
-    // using a logical gate to make sure only valid data is going through to firestore, not just empty entries
-    if (!extraImgFile && !imgFile && refinedData) {
-        if (gifItem || tweetText) {
-            // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
-            let docRef = doc(db, 'tweets-data', docID);
-
-            settingDataIntoFirestore(docRef, refinedData, updateData)
-            // console.log('if block', refinedData)
-            // updateData(refinedData)
-        }
-    }
-    else if(imgFile && !extraImgFile) {
-        let docRef = doc(db, 'tweets-data', docID);
-
-        settingDataIntoFirestore(docRef, refinedData, updateData)
-    }
-    else {
-        if (extraImgFile && imgFile && refinedData) {
-            if (extraImgFile && imgFile) {
-                // console.log(docID, '<<<<<here>>>>>', imgUrl, gifItem.id)
-                let docRef = doc(db, 'tweets-data', docID);
-
-                settingDataIntoFirestore(docRef, refinedData, updateData)
-
-                // console.log('else block', extraImgFile)
-            } else if (extraImgFile) {
-                let docRef = doc(db, 'tweets-data', docID);
-
-                settingDataIntoFirestore(docRef, refinedData, updateData)
-
-                // console.log('else - else if block', extraImgFile)
-            }
-            // no effects, as this doesnt gets to run
-            // else if(imgFile) {
-            //     let docRef = doc(db, 'tweets-data', docID);
-
-            //     settingDataIntoFirestore(docRef, refinedData, updateData)
-            // }
-        }
-        // this off switches gates for double entries when ther is two pictures involves
-        // else if(!extraImgFile && imgFile && refinedData) {
-        //     let docRef = doc(db, 'tweets-data', docID);
-
-        //     settingDataIntoFirestore(docRef, refinedData, updateData)
-        // }
-    }
+export let deleteBirthdate = (docID) => {
+    let docRef = doc(db, 'tweets-user', docID);
+    updateDoc(docRef, {profileInfo: FieldValue.arrayRemove(docID.profileInfo[4])})
+    .then(() => console.log('birthdate removed'))
+    .catch(err => console.log('birthdate removal was failed', err.message))
 }
- */

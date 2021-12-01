@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
+import { useEffect } from "react/cjs/react.development";
 import "../../styles/frontview.css";
 import { SignInWithGoogle, signUpWithGoogle } from './userSignupWithProviders';
 
-function LoginPageFrontView({currentUser, handleCurrentUser}) {
+function LoginPageFrontView({ currentUser, handleCurrentUser }) {
   return (
     <div className="front-view">
       <LeftSide />
@@ -21,35 +22,124 @@ let LeftSide = () => (
   </svg>
 );
 
-let RightSide = ({currentUser, handleCurrentUser}) => {
+let RightSide = ({ currentUser, handleCurrentUser }) => {
   let [hasAccount, setHasAccount] = useState(false)
   let [profileCompleted, setProfileCompleted] = useState(false);
-  
+  let [redirectJustOnce, setRedirectJustOnce] = useState(0)
+  let [usingSignin, setUsingSignin] = useState(false)
+  let [signInCompleted, setSignInCompleted] = useState(false);
+
+  let handleAlreadyVisitedCount = () => setRedirectJustOnce(redirectJustOnce + 1)
+
+  let handleSinginCompleted = () => setSignInCompleted(true)
+
   let handleSigninWithGoogle = (evt) => {
     // console.log(evt.target.id);
     // signUpWithGoogle();
     // signInWithGoogle(currentUser, handleCurrentUser);
-    SignInWithGoogle(handleCurrentUser, handleUserProfileCompleted)
+    SignInWithGoogle(handleCurrentUser, handleUserProfileCompleted, handleSinginCompleted)
     // currentUser && 
+
+    // incrementing counter so that, whnever this route is visited redirect should only be activated when cunter is just 1
+    handleAlreadyVisitedCount()
+
+    // setting a gate to make sure that whenever user uses signin option, it waits to make sure which route to go
+    // setUsingSignin(true);
   }
 
-  let handleSignUpWithGoogle = () => signUpWithGoogle(currentUser, handleCurrentUser);
+  // useEffect(() => {
+  //   // setting a gate to make sure that whenever user uses signin option, it waits to make sure which route to go
+  //   handleSinginCompleted()
+  // }, [profileCompleted])
+
+  let handleSignUpWithGoogle = () => {
+    signUpWithGoogle(currentUser, handleCurrentUser);
+    handleAlreadyVisitedCount()
+  }
 
   let handleSigninWithApple = (evt) => {
     console.log(evt.target.id, 'apple sign in block');
-    
+
   }
 
   let handleUserProfileCompleted = () => setProfileCompleted(true)
 
-  console.log(currentUser, 'from landingpage')
-  
+  console.log(currentUser, 'from landingpage', redirectJustOnce, 'completed', profileCompleted, 'signindone', signInCompleted)
+
+  let handleChange = () => {
+    setHasAccount(!hasAccount)
+    // setting a gate to make sure that whenever user uses signin option, it waits to make sure which route to go
+    setUsingSignin(!usingSignin);
+  }
+
   // let loginsOptions = loginsDomains.map(domain => <div key={domain.text} className='login-options'><svg path={domain.icon} width={domain.width} height={domain.height} /><p>{domain.text}</p></div>)
   let loginsOptions = loginsDomains.map((domain) => (
     <div key={domain.id} className="login-options" onClick={domain.id == 'google' && hasAccount ? handleSigninWithGoogle : domain.id == 'google' && !hasAccount ? handleSignUpWithGoogle : handleSigninWithApple}>
       <img className="login-icons" src={domain.icon} />
       <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
-      <Redirect to={((currentUser && !profileCompleted) && '/username/profile/') || ((currentUser && profileCompleted) && '/username/')} />
+      {/* <Redirect to={((currentUser && !profileCompleted) && '/username/profile/') || ((currentUser && profileCompleted && redirectJustOnce == 1) && '/username/')} /> */}
+      {/* <Redirect to={((currentUser && !profileCompleted && redirectJustOnce == 1) && '/username/profile/') || ((currentUser && profileCompleted && redirectJustOnce == 1) && '/username/')} /> */}
+
+      {/* {currentUser && !profileCompleted && redirectJustOnce == 1 && <Redirect to='/username/profile/'/>}
+      {currentUser && profileCompleted && redirectJustOnce == 1 && <Redirect to='/username/'/>} */}
+
+      {/* {
+        !usingSignin
+          ?
+          currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
+          :
+          <Redirect to={currentUser && profileCompleted && redirectJustOnce == 1 && '/username/' || currentUser && !profileCompleted && redirectJustOnce == 1 && '/username/profile'} />
+      } */}
+
+      {/* {
+        !usingSignin
+          ?
+          currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
+          :
+          currentUser && profileCompleted && redirectJustOnce == 1 && <Redirect to='/username/' />
+      } */}
+
+      {
+        !usingSignin
+        ?
+        currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
+        :
+        signInCompleted
+        ?
+        profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
+        :
+        currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
+      }
+
+      {/* {
+        !usingSignin
+          ?
+          currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
+          :
+          profileCompleted
+            ?
+            <Redirect to='/username/' />
+            :
+            signInCompleted && !profileCompleted
+            ?
+            // <Redirect to='/username/profile/' />
+            console.log('alert!!')
+            :
+            console.log('do nothing!!')
+
+      } */}
+
+      {/* {
+        !usingSignin
+          ?
+          currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
+          :
+          profileCompleted
+            ?
+            currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
+            :
+            currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
+      } */}
     </div>
 
     // <Link key={domain.id} className="login-options" to={currentUser && '/username/profile/'} onClick={domain.id == 'google' && hasAccount ? handleSigninWithGoogle : domain.id == 'google' && !hasAccount ? handleSignUpWithGoogle : handleSigninWithApple}>
@@ -57,7 +147,7 @@ let RightSide = ({currentUser, handleCurrentUser}) => {
     //   <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
     // </Link>
   ));
-  
+
   return (
     <div className="login-elems">
       <svg width='24px' height='24px' transform='scale(2.2)' fill="white">
@@ -108,15 +198,15 @@ let RightSide = ({currentUser, handleCurrentUser}) => {
       <h6 className='sign-in'>
         {
           !hasAccount
-          ?
-          "Already have an account? "
-          :
-          "Dont have an account? "
+            ?
+            "Already have an account? "
+            :
+            "Dont have an account? "
         }
         {/* <a href="/login" target="_blank">
           Sign In
         </a> */}
-        <Link onClick={() => setHasAccount(!hasAccount)} to="/">Sign {!hasAccount ? 'in' : 'up'}</Link>
+        <Link onClick={handleChange} to="/">Sign {!hasAccount ? 'in' : 'up'}</Link>
       </h6>
     </div>
   );

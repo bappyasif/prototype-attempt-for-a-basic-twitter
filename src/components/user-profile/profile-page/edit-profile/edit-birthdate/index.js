@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { deleteBirthdate } from '../../../../firestore-methods'
 import '../../edit-profile/styles.css'
 
-function EditBirthdate({item, convertDateIntoString}) {
-    let handleDelete = (evt) => console.log('here!!')
+function EditBirthdate({item, convertDateIntoString, changeData, currentUser, deleteData}) {
+    let handleDelete = (evt) => {
+        // changeData({content: '', title: ''}, 4)
+        // changeData({}, 4)
+        deleteData(4);
+        // deleteBirthdate(currentUser)
+    }
     return (
         <div id='birthdate-edit-container'>
             <p id='birthdate-info'>This should be your date of birth, whether this account is for your business, event, or even your cat.</p>
