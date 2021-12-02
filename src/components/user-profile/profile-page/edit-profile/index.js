@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {getUserBirthDate, getUserProfileData, updateDataInDocument, updateUserProfileDataInDocument} from '../../../firestore-methods'
 import EditBirthdate from './edit-birthdate'
+import ReuseableModal from './reuseable-modal'
 import './styles.css'
 
 function EditProfile({currentUser, setOpacity}) {
@@ -9,10 +10,18 @@ function EditProfile({currentUser, setOpacity}) {
     let [photoElement, setPhotoElement] = useState('https://picsum.photos/200/300')
     let [profileData, setProfileData] = useState([])
     let [check, setCheck] = useState(null)
+    let [dimModal, setDimModal] = useState(false)
+
     let handleDataLoader = (data) => {
         setProfileData(data)
         setCheck(data)
     }
+
+    // let handleDimLuminosityInEditProfile = () => setDimModal(true)
+
+    // let handleReviveLuminosityInEditProfile = () => setDimModal(false)
+
+    let toggleEditProfileLuminosity = () => setDimModal(!dimModal)
 
     // just adds one more to existing data set
     // let mergeData = (data) => setProfileData([...profileData, data])
@@ -98,8 +107,10 @@ function EditProfile({currentUser, setOpacity}) {
         profileData && 'running update?!'
     }
 
+    // style={{backgroundColor: dimModal && 'rgba(0, 0, 0, 0.11)'}}
+
     return (
-        <div id='edit-profile-container'>
+        <div id='edit-profile-container' >
             <div id='header-section'>
                 <Link id='remove-icon' to='/username'>{removeIcon()}</Link>
                 <div id='edit-profile-text'>Edit profile</div>
@@ -136,24 +147,25 @@ function EditProfile({currentUser, setOpacity}) {
                         </div>
                     </div>
                 </div>
-                <div id='profile-infos' style={{padding: '8px'}}>
-                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, handleDataLoader, check, mergeData, changeDataInsideDatasetWithoutMutationInDuplicate, deleteData)}
+                <div id='profile-infos' style={{padding: '8px', position: 'relative'}}>
+                    {returnAnEditableTextarea(hovered, setHovered, currentUser, profileData, handleDataLoader, check, mergeData, changeDataInsideDatasetWithoutMutationInDuplicate, deleteData, toggleEditProfileLuminosity)}
                 </div>
             </div>
         </div>
     )
 }
 
-let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData, handleDataLoader, check, mergeData, changeData, deleteData) => {
-    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => idx < 5 && <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} profileData={profileData} handleDataLoader={handleDataLoader} check={check} mergeData={mergeData} changeData={changeData} deleteData={deleteData} />)
+let returnAnEditableTextarea = (hovered, setHovered, currentUserID, profileData, handleDataLoader, check, mergeData, changeData, deleteData, toggleEditProfileLuminosity) => {
+    let generateProfileEditableInfos = profileData && profileData.map((item, idx) => idx < 5 && <ReturnComponent key={item.title} index={idx} currentUser={currentUserID} item={item} hovered={hovered} setHovered={setHovered} profileData={profileData} handleDataLoader={handleDataLoader} check={check} mergeData={mergeData} changeData={changeData} deleteData={deleteData} toggleLuminosity={toggleEditProfileLuminosity} />)
     return generateProfileEditableInfos
 }
 
-let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileData, handleDataLoader, check, mergeData, changeData, deleteData }) => {
+let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileData, handleDataLoader, check, mergeData, changeData, deleteData, toggleLuminosity }) => {
     let [test, setTest] = useState('')
     let [length, setLength] = useState(item.content.length);
     let [show, setShow] = useState(false);
-    let [showCalendar, setShowCalendar] = useState(false);
+    let [startEditBirthdate, setStartEditBirthdate] = useState(false);
+    let [showDateComponent, setShowDateComponent] = useState(false);
 
     let handleChange = evt => {
         setTest(evt.target.value);
@@ -166,19 +178,30 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
         setLength(test.length || item.content.length)
     }, [test])
 
-    let handleCalendar = () => {
+    let handleShowModal = () => {
         // console.log('show calendar!!')
-        setShowCalendar(true)
+        setStartEditBirthdate(true)
+        toggleLuminosity()
     }
 
-    let handleCancel = () => {
+    let handleShowDateComponent = () => setShowDateComponent(true);
+
+    let handleCancelDateComponent = () => {
+        setShowDateComponent(false)
         item = profileData[4]
-        setShowCalendar(false)
+        setStartEditBirthdate(false)
+    }
+
+    let handleCancelModal = () => {
+        // item = profileData[4]
+        setStartEditBirthdate(false)
         // console.log(profileData, 'cancel!!', showCalendar)
+        toggleLuminosity()
+        
     }
 
     useEffect(() => {
-        !showCalendar && console.log(profileData, 'cancel!!', showCalendar, check)
+        !startEditBirthdate && console.log(profileData, 'cancel!!', startEditBirthdate, check)
         // this re renders data from firestore once again, not ideal but works somewhat!! and also know as pessimistic update
         // !showCalendar && getUserProfileData(currentUser, handleDataLoader)
 
@@ -186,8 +209,8 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
         // check && !showCalendar && mergeData({content: check[4].content, title: 'Birth date'})
 
         // using optimistic way to update data, from an mirror image of original before any data mutation by user after loading, with using changeData, as it is more uniform way of doing this than split edges
-        check && !showCalendar && changeData({content: check[4].content, title: 'Birth date'}, index)
-    }, [showCalendar])
+        check && !startEditBirthdate && changeData({content: check[4].content, title: 'Birth date'}, index)
+    }, [startEditBirthdate])
 
     let convertDateIntoString = data => {
         let dateString = ''
@@ -195,7 +218,7 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
 
         let dateTokens = data.split('-');
         dateString = `${dateTokens[0]} ${dateTokens[1]}, ${dateTokens[2]}`
-        console.log(data, 'convert it', dateString, 'original', profileData, showCalendar)
+        console.log(data, 'convert it', dateString, 'original', profileData, startEditBirthdate)
         // item.content = dateString;   // if i uncomment here, this would change data set at hand
         // mergeData({content: dateString, title: 'Birth date'}) // this simply adds one more to data set but keeps duplicate unmutated!!
         // mergeData({content: dateString, title: 'Birth date'})  // this works just fine, but specific to edges in data set
@@ -203,18 +226,23 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
     }
 
     return (
-        <div key={item.title} className='editable-text-area-container'>
+        <div key={item.title} className='editable-text-area-container' style={{minHeight: '53px'}}>
             <div className='top-fragment'>
                 {/* {showCalendar && item.title == 'Birth date' && <input type='date' />} */}
-                <div className='editable-item-title' style={{ color: item.title == 'Birth date' ? 'gray' : show ? 'rgb(29, 155, 240)' : 'gray', display: 'flex' }}>{item.title} {item.title == 'Birth date' && <span style={{display: 'flex', marginLeft: '4px'}}> - <span id='change-user-birth-date' style={{ color: 'rgb(29, 155, 240)' }}>{showCalendar ? <div onClick={handleCancel} style={{marginLeft: '4px'}}>Cancel</div> : <div onClick={item.title == 'Birth date' && handleCalendar} style={{marginLeft: '4px'}}>Edit</div>}</span></span>}</div>
+                <div className='editable-item-title' style={{ color: item.title == 'Birth date' ? 'gray' : show ? 'rgb(29, 155, 240)' : 'gray', display: 'flex' }}>{item.title} {item.title == 'Birth date' && <span style={{display: 'flex', marginLeft: '4px'}}> - <span id='change-user-birth-date' style={{ color: 'rgb(29, 155, 240)' }}>{showDateComponent ? <div onClick={handleCancelDateComponent} style={{marginLeft: '4px'}}>Cancel</div> : <div onClick={item.title == 'Birth date' && handleShowModal} style={{marginLeft: '4px'}}>Edit</div>}</span></span>}</div>
                 <div style={{ display: show ? 'block' : 'none' }} className='track-word-counts'>{item.title == 'Birth date' ? '' : length + '/'}{item.maxLength ? item.maxLength : ''}</div>
             </div>
 
-            {(!showCalendar && item.content)
+            {(!startEditBirthdate && item.content)
             ?
             <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} id={item.title} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} />
             :
-            <EditBirthdate item={item} convertDateIntoString={convertDateIntoString} showCalendar={showCalendar} changeData={changeData} currentUser={currentUser} deleteData={deleteData} />
+            // <EditBirthdate item={item} convertDateIntoString={convertDateIntoString} startEditBirthdate={startEditBirthdate} changeData={changeData} currentUser={currentUser} deleteData={deleteData} />
+            showDateComponent
+            ?
+            <EditBirthdate item={item} convertDateIntoString={convertDateIntoString} startEditBirthdate={startEditBirthdate} changeData={changeData} currentUser={currentUser} deleteData={deleteData} />
+            :
+            startEditBirthdate  && !showDateComponent && <ReuseableModal title='Edit date of birth?' description='This can only be changed a few times.' handleCancelModal={handleCancelModal} handleAction={handleShowDateComponent} />
             }
         </div>
     )

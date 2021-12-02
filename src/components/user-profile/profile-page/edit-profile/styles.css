@@ -8,6 +8,10 @@
   border-radius: 11px;
 }
 
+/* #edit-profile-container::after {
+  opacity: .4;
+} */
+
 #edit-profile-container #body-section {
     max-height: 493px;
     overflow-y: scroll;
@@ -229,6 +233,7 @@
   border: none;
   resize: none;
   outline: none;
+  background: transparent;
 }
 
 
@@ -295,4 +300,37 @@
   right: 4px;
   top: 24px;
   pointer-events: none;
+}
+
+/* all reuseable modal styles */
+#edit-profile-container #body-section #profile-infos .reuseable-modal-container {
+  width: 254px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: auto;
+  height: 231px;
+  padding: 22px;
+  position: absolute;
+  right: 121px;
+  top: 69px;
+  background: rgba(245,245,245, 1);
+  border-radius: 18px;
+}
+
+#edit-profile-container #body-section #profile-infos .reuseable-modal-container .modal-title {
+  font-size: 29px;
+  font-weight: 600;
+}
+
+#edit-profile-container #body-section #profile-infos .reuseable-modal-container .modal-description {
+  color: slategrey;
+}
+
+#edit-profile-container #body-section #profile-infos .reuseable-modal-container .clickable-component-container {
+  background-color: black;
+  color: white;
+  line-height: 3.1em;
+  border-radius: 24px;
+  font-weight: bold;
 }

@@ -17,7 +17,8 @@ function ComponentsContainer() {
     let [dataLoading, setDataLoading] = useState(true)
     let [uniqueID, setUniqueID] = useState()
     let [rerenderDOM, setRerenderDOM] = useState(false)
-    let [currentUser, setCurrentUser] = useState('vnxOMhbaq8ObeFIE56GNPDQanig1')
+    let [currentUser, setCurrentUser] = useState('')
+    // vnxOMhbaq8ObeFIE56GNPDQanig1
 
     let handleCurrentUser = (userID) => setCurrentUser(userID)
 

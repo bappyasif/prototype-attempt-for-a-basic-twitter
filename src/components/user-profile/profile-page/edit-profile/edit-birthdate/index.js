@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { deleteBirthdate } from '../../../../firestore-methods'
+import ReuseableModal from '../reuseable-modal'
 import '../../edit-profile/styles.css'
 
 function EditBirthdate({item, convertDateIntoString, changeData, currentUser, deleteData}) {
+    let [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)
+
+    let handleModalVisibility = () => setShowConfirmDeleteModal(true);
+    
     let handleDelete = (evt) => {
         // changeData({content: '', title: ''}, 4)
         // changeData({}, 4)
         deleteData(4);
         // deleteBirthdate(currentUser)
     }
+    
     return (
         <div id='birthdate-edit-container'>
             <p id='birthdate-info'>This should be your date of birth, whether this account is for your business, event, or even your cat.</p>
             <DateComponent item={item} convertDateIntoString={convertDateIntoString} />
-            <div id='remove-birthdate' onClick={handleDelete}>Remove Birthdate</div>
+            {/* <div id='remove-birthdate' onClick={handleDelete}>Remove Birthdate</div> */}
+            <div id='remove-birthdate' onClick={handleModalVisibility}>Remove Birthdate</div>
+            {showConfirmDeleteModal && <ReuseableModal title='Remove birth date?' description='This will remove it from your profile.' handleAction={handleDelete} handleCancelModal={() => setShowConfirmDeleteModal(false)} /> }
         </div>
     )
 }

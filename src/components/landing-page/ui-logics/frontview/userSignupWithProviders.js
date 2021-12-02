@@ -37,7 +37,7 @@ export let signUpWithGoogle = (currentUser, handleCurrentUser) => {
         })
 }
 
-export let SignInWithGoogle = (handleCurrentUser, handleIsUserProfileCompletedStatus, handleSinginCompleted) => {
+export let SignInWithGoogle = (handleCurrentUser, handleIsUserProfileCompletedStatus) => {
     // as this would be anonymous action from users to begin with, we call on google popup service and ther we will collect that uid fom there
     // and search it in our database to check and see if this user already exists or not, if yes then we will also check on a prop to determine whether user updated their profile information or not, if not then show 'username/profile' route
     signInWithPopup(auth, provider)
@@ -54,7 +54,8 @@ export let SignInWithGoogle = (handleCurrentUser, handleIsUserProfileCompletedSt
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log(errorCode, errorMessage, email, credential, 'error logs')
-    }).finally(() => handleSinginCompleted())
+    })
+    // .finally(() => handleSinginCompleted())
 
 
     // this is basic idea for sign in concept, at least how am i seeing it currently

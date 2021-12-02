@@ -27,7 +27,7 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
   let [profileCompleted, setProfileCompleted] = useState(false);
   let [redirectJustOnce, setRedirectJustOnce] = useState(0)
   let [usingSignin, setUsingSignin] = useState(false)
-  let [signInCompleted, setSignInCompleted] = useState(false);
+  // let [signInCompleted, setSignInCompleted] = useState(false);
 
   let handleAlreadyVisitedCount = () => setRedirectJustOnce(redirectJustOnce + 1)
 
@@ -37,7 +37,8 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
     // console.log(evt.target.id);
     // signUpWithGoogle();
     // signInWithGoogle(currentUser, handleCurrentUser);
-    SignInWithGoogle(handleCurrentUser, handleUserProfileCompleted, handleSinginCompleted)
+    // SignInWithGoogle(handleCurrentUser, handleUserProfileCompleted, handleSinginCompleted)
+    SignInWithGoogle(handleCurrentUser, handleUserProfileCompleted)
     // currentUser && 
 
     // incrementing counter so that, whnever this route is visited redirect should only be activated when cunter is just 1
@@ -64,7 +65,8 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
 
   let handleUserProfileCompleted = () => setProfileCompleted(true)
 
-  console.log(currentUser, 'from landingpage', redirectJustOnce, 'completed', profileCompleted, 'signindone', signInCompleted)
+  // console.log(currentUser, 'from landingpage', redirectJustOnce, 'completed', profileCompleted, 'signindone', signInCompleted)
+  console.log(currentUser, 'from landingpage', redirectJustOnce, 'profile completed', profileCompleted,)
 
   let handleChange = () => {
     setHasAccount(!hasAccount)
@@ -100,6 +102,17 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
       } */}
 
       {
+        !usingSignin && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile' />
+      }
+      {
+        profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
+      }
+
+      {
+        !profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile' />
+      }
+
+      {/* {
         !usingSignin
         ?
         currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
@@ -108,8 +121,8 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
         ?
         profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
         :
-        currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
-      }
+        !profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
+      } */}
 
       {/* {
         !usingSignin
