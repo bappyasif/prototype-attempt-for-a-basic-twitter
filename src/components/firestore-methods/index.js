@@ -96,7 +96,7 @@ export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser)
     let userData = {userInfo: {uid: userID, name: name, userProfileCompleted: false},
                     profileInfo: [
                         {
-                            content: name,
+                            content: name != 'name' ? name : 'enter name',
                             title: 'Name',
                             maxLength: 50
                         },

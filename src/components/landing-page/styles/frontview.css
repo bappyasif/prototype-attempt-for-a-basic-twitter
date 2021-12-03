@@ -64,6 +64,12 @@ a {
 
 .with-email {
     margin-top: 1em;
+    line-height: 3.1em;
+}
+
+.with-email a {
+    text-decoration: none;
+    color: black;
 }
 
 .with-email p {

@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import './styles.css'
 import FirebaseApp from '../firebase-configs';
 import { testTwilio } from './twilio-configs-for-signup';
-import { authenticateUserWithFirebase, phoneVerification, userEmailLinkVerification, verifyUserSignUp, verifyUserSmsCode, withEmailLinkSignUp, withEmailUserVerification, withoutEmailLinkSignup } from './user-verification';
-import { Link } from 'react-router-dom';
+import { authenticateUserWithFirebase, fakePhoneVerification, phoneVerification, userEmailLinkVerification, verifyUserSignUp, verifyUserSmsCode, withEmailLinkSignUp, withEmailUserVerification, withoutEmailLinkSignup } from './user-verification';
+import { Link, Redirect } from 'react-router-dom';
 
-function SignupPage() {
+function SignupPage({currentUser, handleCurrentUser}) {
     let [isPhoneNumberUsed, setIsPhoneNumberUsed] = useState(false);
     let [month, setMonth] = useState('');
     let [date, setDate] = useState('');
@@ -28,7 +28,7 @@ function SignupPage() {
     // testTwilio();
 
     let revampedAuthetications = () => {
-        authenticateUserWithFirebase(emailOrPhone, userPassword, setSignupDone);
+        authenticateUserWithFirebase(name, emailOrPhone, userPassword, setSignupDone, handleCurrentUser);
         // console.log(emailOrPhone, userPassword, 'is it?!')
         handleGoNextButton();
     }
@@ -38,6 +38,11 @@ function SignupPage() {
         let verificationCode = codeDiv.value;
         // console.log(verificationCode, 'here!!');
         !isPhoneNumberUsed && verifyUserSmsCode(verificationCode);
+
+        // if(!isPhoneNumberUsed) {
+        //     let recaptchaContainer = document.querySelector('#recaptcha-container')
+        //     fakePhoneVerification(recaptchaContainer)
+        // }
         handleGoNextButton();
     }
 
@@ -49,9 +54,12 @@ function SignupPage() {
             // userEmailLinkVerification();
 
             // withoutEmailLinkSignup(emailOrPhone)
+            // console.log('if block!!')
         } else {
             let recaptchaContainer = document.querySelector('#recaptcha-container')
             phoneVerification(emailOrPhone, recaptchaContainer)
+            // console.log('else block!!')
+            // fakePhoneVerification(recaptchaContainer)
         }
         handleGoNextButton();
     }
@@ -100,6 +108,10 @@ function SignupPage() {
         setFocusedWhich(whichElement)
     }
 
+    let handleSignup = () => {
+        console.log(name, '!!')
+    }
+
     useEffect(() => {
         step == 1 && focusedWhich == 'Name' && nameRef.current.focus()
 
@@ -108,10 +120,13 @@ function SignupPage() {
         step == 1 && focusedWhich == 'Birth date' && birthRef.current.focus()
     }, [step])
 
+    console.log(step, 'which step')
+
     return (
         <div id='signup-page-container' onSubmit={(evt) => evt.preventDefault()}>
             <div id='top-div'>
-                {step == 1 && <div id='remove-modal'> {removeIcon()} </div>}
+                {/* {step == 1 && <div id='remove-modal'> {removeIcon()} </div>} */}
+                {step == 1 && <Link id='remove-modal' to='/'> {removeIcon()} </Link>}
                 {/* <span>{step + ' of 5'}</span> */}
                 {step != 1 && <div id='remove-modal' onClick={handleGoBack}> {backIcon()} </div>}
                 <div id='twitter-logo'> {twitterLogo()} </div>
@@ -168,8 +183,8 @@ function SignupPage() {
             }
 
             {
-                // step == 4 && !isPhoneNumberUsed
-                step == 4
+                step == 4 && !isPhoneNumberUsed
+                // step == 4
                 &&
                 <div id='signup-verification-container'>
                     <label htmlFor='confirmation-code'>
@@ -180,7 +195,8 @@ function SignupPage() {
             }
 
             {
-                step == 5
+               ( step == 5) || (step == 4 && isPhoneNumberUsed)
+                // step == 5
                 &&
                 <div id='signup-completed-container'>
                     <label htmlFor='account-password'>
@@ -194,7 +210,8 @@ function SignupPage() {
             }
 
             {
-                step == 6
+                step == 6 || (step == 5 && isPhoneNumberUsed)
+                // step == 6
                 &&
                 <div id='visit-user-profile-container'>
                     {
@@ -202,8 +219,10 @@ function SignupPage() {
                         &&
                         <p>your profile page will load shortly, wait a moment please....</p>
                     }
-
-                    <div id='loader-spinner'></div>
+                    
+                    {/* <div id='loader-spinner'></div> */}
+                    {/* {signupDone != 'done' && <div id='loader-spinner'></div>} */}
+                    {signupDone == 'done' && <div id='loader-spinner'></div>}
                     
                     {
                         signupDone != 'done' && signupDone != ''
@@ -214,7 +233,9 @@ function SignupPage() {
                     {
                         signupDone == 'done'
                         &&
-                        <Link id='visit-profile' to='/username'>Click to continue to your profile</Link>
+                        // <Link id='visit-profile' to='/username'>Click to continue to your profile</Link>
+                        // <Link id='visit-profile' to='/username' onClick={handleSignup}>Click to continue to your profile</Link>
+                        currentUser && <Redirect to='/username/profile'/>
                     }
                     {
                         signupDone != 'done'
@@ -236,7 +257,8 @@ function SignupPage() {
                 <button style={{ backgroundColor: step == 3 && 'black', cursor: 'pointer' }} onClick={confirmUserSignUp} id='bottom-div'>Signup</button>
             }
             {
-                step == 4
+                step == 4 && !isPhoneNumberUsed
+                // step == 4
                 &&
                 <button style={{ cursor: 'pointer' }} className='ready' onClick={verifyUserSignUp} id='bottom-div'>Verify</button>
             }

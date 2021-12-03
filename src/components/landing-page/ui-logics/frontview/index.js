@@ -31,7 +31,7 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
 
   let handleAlreadyVisitedCount = () => setRedirectJustOnce(redirectJustOnce + 1)
 
-  let handleSinginCompleted = () => setSignInCompleted(true)
+  // let handleSinginCompleted = () => setSignInCompleted(true)
 
   let handleSigninWithGoogle = (evt) => {
     // console.log(evt.target.id);
@@ -43,15 +43,7 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
 
     // incrementing counter so that, whnever this route is visited redirect should only be activated when cunter is just 1
     handleAlreadyVisitedCount()
-
-    // setting a gate to make sure that whenever user uses signin option, it waits to make sure which route to go
-    // setUsingSignin(true);
   }
-
-  // useEffect(() => {
-  //   // setting a gate to make sure that whenever user uses signin option, it waits to make sure which route to go
-  //   handleSinginCompleted()
-  // }, [profileCompleted])
 
   let handleSignUpWithGoogle = () => {
     signUpWithGoogle(currentUser, handleCurrentUser);
@@ -79,27 +71,6 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
     <div key={domain.id} className="login-options" onClick={domain.id == 'google' && hasAccount ? handleSigninWithGoogle : domain.id == 'google' && !hasAccount ? handleSignUpWithGoogle : handleSigninWithApple}>
       <img className="login-icons" src={domain.icon} />
       <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
-      {/* <Redirect to={((currentUser && !profileCompleted) && '/username/profile/') || ((currentUser && profileCompleted && redirectJustOnce == 1) && '/username/')} /> */}
-      {/* <Redirect to={((currentUser && !profileCompleted && redirectJustOnce == 1) && '/username/profile/') || ((currentUser && profileCompleted && redirectJustOnce == 1) && '/username/')} /> */}
-
-      {/* {currentUser && !profileCompleted && redirectJustOnce == 1 && <Redirect to='/username/profile/'/>}
-      {currentUser && profileCompleted && redirectJustOnce == 1 && <Redirect to='/username/'/>} */}
-
-      {/* {
-        !usingSignin
-          ?
-          currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
-          :
-          <Redirect to={currentUser && profileCompleted && redirectJustOnce == 1 && '/username/' || currentUser && !profileCompleted && redirectJustOnce == 1 && '/username/profile'} />
-      } */}
-
-      {/* {
-        !usingSignin
-          ?
-          currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
-          :
-          currentUser && profileCompleted && redirectJustOnce == 1 && <Redirect to='/username/' />
-      } */}
 
       {
         !usingSignin && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile' />
@@ -112,53 +83,7 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
         !profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile' />
       }
 
-      {/* {
-        !usingSignin
-        ?
-        currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
-        :
-        signInCompleted
-        ?
-        profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
-        :
-        !profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
-      } */}
-
-      {/* {
-        !usingSignin
-          ?
-          currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
-          :
-          profileCompleted
-            ?
-            <Redirect to='/username/' />
-            :
-            signInCompleted && !profileCompleted
-            ?
-            // <Redirect to='/username/profile/' />
-            console.log('alert!!')
-            :
-            console.log('do nothing!!')
-
-      } */}
-
-      {/* {
-        !usingSignin
-          ?
-          currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile/' />
-          :
-          profileCompleted
-            ?
-            currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
-            :
-            currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
-      } */}
     </div>
-
-    // <Link key={domain.id} className="login-options" to={currentUser && '/username/profile/'} onClick={domain.id == 'google' && hasAccount ? handleSigninWithGoogle : domain.id == 'google' && !hasAccount ? handleSignUpWithGoogle : handleSigninWithApple}>
-    //   <img className="login-icons" src={domain.icon} />
-    //   <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
-    // </Link>
   ));
 
   return (
@@ -184,7 +109,14 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
       }
       {loginsOptions}
       <div className="with-email login-options">
-        {!hasAccount ? <p>Sign up with email ur phone</p> : <p>Use phone, email or username</p>}
+        {/* {!hasAccount ? <p>Sign up with email ur phone</p> : <p>Use phone, email or username</p>} */}
+        {
+          !hasAccount
+            ?
+            <Link style={{ color: 'black', textDecoration: 'none' }} to='/i/flow/signup/'>Sign up with email ur phone</Link>
+            :
+            <Link to='/login/'>Use phone, email or username</Link>
+        }
       </div>
       {
         !hasAccount
@@ -243,20 +175,3 @@ let loginsDomains = [
 ];
 
 export default LoginPageFrontView;
-
-
-// let LeftSide = () => (
-//     <svg className="svg-elem" fill='silver'>
-//       <img src='src/components/twitter.svg' />
-//     </svg>
-//   );
-
-// let returnSvg = (width, height) => {
-//   return (
-//     <svg className="svg-elem" viewBox="0 0 49 31" fill="silver">
-//       <g>
-//         <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path>
-//       </g>
-//     </svg>
-//   );
-// };

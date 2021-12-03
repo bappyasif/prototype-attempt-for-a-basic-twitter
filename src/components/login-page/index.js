@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import "./styles/index.css";
 import { userLoginWithFirebase } from "./user-login-with-firebase";
 
-function LoginPage() {
+function LoginPage({ currentUser, handleCurrentUser }) {
   let announcementText =
     "The username and password you entered did not match our records. Please double-check and try again.";
 
@@ -33,7 +33,7 @@ function LoginPage() {
       </div>
       <div id="announcement-div"></div>
 
-      <UserLoginInfoComponent />
+      <UserLoginInfoComponent currentUser={currentUser} handleCurrentUser={handleCurrentUser} />
 
       <div id="additional-info">
         <a href="/begin-password-reset" target="_blank">
@@ -57,10 +57,16 @@ let TwitterLogo = () => (
   </svg>
 );
 
-let UserLoginInfoComponent = () => {
+let UserLoginInfoComponent = ({ currentUser, handleCurrentUser }) => {
   let [userID, setUserID] = useState(false)
   let [userPassword, setUserPassword] = useState(false)
   let [bothPresent, setBothPresent] = useState(false)
+  let [signinDone, setIsSigninDone] = useState(false)
+  let [profileCompleted, setIsProfileCompleted] = useState(false);
+
+  let handleSigninStatus = () => setIsSigninDone(true);
+
+  let handleProfileCompletion = () => setIsProfileCompleted(true);
 
   useEffect(() => {
     if (userID && userPassword) {
@@ -71,13 +77,35 @@ let UserLoginInfoComponent = () => {
     // showAnnouncement();
   }, [userID, userPassword]);
 
-  let confirmLogin = () => userLoginWithFirebase(userID, userPassword)
+  // let confirmLogin = () => userLoginWithFirebase(userID, userPassword)
+  let confirmLogin = () => userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
 
   return (
     <div id="login-info">
       <ReturnAnInputElement name='Mobile, email or username' elemID='user-id' setID={setUserID} />
       <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} />
-      <button onClick={confirmLogin} style={{opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none'}} id='login-btn'>Login</button>
+      <button onClick={confirmLogin} style={{ opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none' }} id='login-btn'>Login</button>
+      {/* <Link onClick={confirmLogin} style={{opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none'}} id='login-btn'>Login</Link> */}
+
+      {
+        currentUser && signinDone && profileCompleted && <Redirect to='/username/' />
+      }
+
+      {
+        currentUser && signinDone && !profileCompleted && <Redirect to='/username/profile/' />
+      }
+
+      {/* {
+        signinDone
+        ?
+        profileCompleted
+        ?
+        <Redirect to='/username' />
+        :
+        <Redirect to='/username/profile' />
+        : 
+        ''
+      } */}
     </div>
   )
 
@@ -97,10 +125,10 @@ let ReturnAnInputElement = ({ name, elemID, setID, setPassword }) => {
   let handleBlur = () => setFocused(false)
 
   return (
-      <div className="user-login">
-        <div className="placeholder-div" style={{ display: focused || value ? 'block' : 'none' }}>{name}</div>
-        <input id={elemID} placeholder={focused ? '' : name} value={value} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} />
-      </div>
+    <div className="user-login">
+      <div className="placeholder-div" style={{ display: focused || value ? 'block' : 'none' }}>{name}</div>
+      <input id={elemID} placeholder={focused ? '' : name} value={value} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} />
+    </div>
   )
 }
 

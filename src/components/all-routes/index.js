@@ -18,7 +18,7 @@ import LandingPageUILogics from '../landing-page/ui-logics';
 import SignupPage from '../signup-page';
 import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
 
-function AllRoutes({currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -68,14 +68,26 @@ function AllRoutes({currentUser, handleCurrentUser, handleUpdateStatus, updateDa
                 {/* <Route exact path='/' component={LandingPageUILogics} /> */}
                 <Route exact path='/'>
                     <LandingPageUILogics
-                        currentUser={currentUser} 
-                        handleCurrentUser={handleCurrentUser} 
+                        currentUser={currentUser}
+                        handleCurrentUser={handleCurrentUser}
                     />
                 </Route>
 
-                <Route path='/login' component={LoginPage} />
+                {/* <Route path='/login' component={LoginPage} /> */}
+                <Route path='/login'>
+                    <LoginPage
+                        currentUser={currentUser}
+                        handleCurrentUser={handleCurrentUser}
+                    />
+                </Route>
 
-                <Route path='/i/flow/signup' component={SignupPage} />
+                {/* <Route path='/i/flow/signup' component={SignupPage} /> */}
+                <Route path='/i/flow/signup'>
+                    <SignupPage
+                        currentUser={currentUser}
+                        handleCurrentUser={handleCurrentUser}
+                    />
+                </Route>
 
                 <Route path='/begin-password-reset'>
                     <TopNavigation />
@@ -229,7 +241,7 @@ function AllRoutes({currentUser, handleCurrentUser, handleUpdateStatus, updateDa
                     {currentUser && <EditProfile currentUser={currentUser} setOpacity={setOpacity} />}
                     {/* <EditProfile currentUser={currentUser} setOpacity={setOpacity} /> */}
                     {/* { currentUserID && <EditProfile currentUser={currentUserID} setOpacity={setOpacity} />} */}
-                    <ProfilePageUpperView opacity={opacity}  currentUser={currentUser} />
+                    <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
