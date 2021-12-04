@@ -40,26 +40,12 @@ export let authenticateUserWithFirebase = (name, userId, password, signupStatus,
             signupStatus(errMsg)
         })
     } else {
+        return
         // making signup with phonenumber
-        const phoneNumber = userId;
-        const appVerifier = window.recaptchaVerifier;
-
-        signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-            .then((confirmationResult) => {
-                // SMS sent. Prompt user to type the code from the message, then sign the
-                // user in with confirmationResult.confirm(code).
-                window.confirmationResult = confirmationResult;
-                console.log(window.confirmationResult, confirmationResult, "done")
-                signupStatus('done')
-                createFirestoreCollectionDocument(res.user.uid, name, handleCurrentUser)
-                // ...
-            }).catch((err) => {
-                // Error; SMS not sent
-                // ...
-                console.log(err.code, err.message)
-            });
-
-        console.log('here!!')
+        // let codeDiv = document.querySelector('#confirmation-code');
+        // let verificationCode = codeDiv.value;
+        // verifyUserSmsCode(verificationCode);
+        // console.log('here!!')
     }
 
     // createUserWithEmailAndPassword(auth, userId, password).then(res => {
@@ -200,10 +186,10 @@ export let fakePhoneVerification = (recaptchaContainer) => {
         });
 }
 
-export let verifyUserSmsCode = (code) => {
+export let verifyUserSmsCode = (code, name, handleCurrentUser) => {
     let loginCredential = PhoneAuthProvider.credential(window.confirmationResult.verificationId, code)
     //sign in with user login credential
-    signInWithCredential(loginCredential).then(res => console.log(res)).catch(err => console.log(err.code, err.message))
+    signInWithCredential(loginCredential).then(res => console.log(res, 'with AuthCredential')).catch(err => console.log(err.code, err.message, 'from AuthCredential'))
 
     console.log(loginCredential, "loginCredential")
 
@@ -213,6 +199,9 @@ export let verifyUserSmsCode = (code) => {
         // ...
         console.log(user, 'user!!')
         // window.open('/username/', '_parent')
+
+        // create a firestore document with all initial info
+        createFirestoreCollectionDocument(user.uid, name, handleCurrentUser)
     }).catch((error) => {
         // User couldn't sign in (bad verification code?)
         // ...

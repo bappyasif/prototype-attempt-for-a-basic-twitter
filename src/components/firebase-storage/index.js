@@ -37,3 +37,24 @@ export let downloadTweetPictureUrlFromStorage = (fileId, updateUrl, extra) => {
         // updateUserDocWithMediaUrls(fileId, res)
     }).catch(err=>console.log('<< couldnt found picture url >>', err.message))
 }
+
+export let uploadUserProfilePictureToStorage = (imgFile, fileId, updateUploadingStatus, coverPhoto) => {
+    let route = `profiles/${fileId}/${coverPhoto ? 'coverPhoto' : 'profilePhoto'}/`
+    let storageRef = ref(storage, route)
+    uploadBytes(storageRef, imgFile)
+    .then(res => {
+        console.log(`${coverPhoto ? 'coverPhoto' : 'profilePhoto'} is now uploaded`)
+        updateUploadingStatus();
+    }).catch(err => console.log('picture resource upload into storage from profile module is failed', err.code, err.message))
+}
+
+export let downloadProfilePictureUrlFromStorage = (fileId, updateUrl, coverPhoto) => {
+    let route = `profiles/${fileId}/${coverPhoto ? 'coverPhoto' : 'profilePhoto'}/`
+    let storageRef = ref(storage, route)
+
+    getDownloadURL(storageRef)
+    .then(res => {
+        console.log(`${coverPhoto ? 'coverPhoto' : 'profilePhoto'} is now downloaded`)
+        updateUrl(res);
+    }).catch(err => console.log('picture resource/s download from storage is failed', err.code, err.message))
+}

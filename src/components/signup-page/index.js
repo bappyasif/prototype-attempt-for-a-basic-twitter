@@ -37,7 +37,8 @@ function SignupPage({currentUser, handleCurrentUser}) {
         let codeDiv = document.querySelector('#confirmation-code');
         let verificationCode = codeDiv.value;
         // console.log(verificationCode, 'here!!');
-        !isPhoneNumberUsed && verifyUserSmsCode(verificationCode);
+        // !isPhoneNumberUsed && verifyUserSmsCode(verificationCode);
+        !isPhoneNumberUsed && verifyUserSmsCode(verificationCode, name, handleCurrentUser);
 
         // if(!isPhoneNumberUsed) {
         //     let recaptchaContainer = document.querySelector('#recaptcha-container')
@@ -195,8 +196,9 @@ function SignupPage({currentUser, handleCurrentUser}) {
             }
 
             {
-               ( step == 5) || (step == 4 && isPhoneNumberUsed)
+            //    ( step == 5) || (step == 4 && isPhoneNumberUsed)
                 // step == 5
+                (step == 4 && isPhoneNumberUsed)
                 &&
                 <div id='signup-completed-container'>
                     <label htmlFor='account-password'>

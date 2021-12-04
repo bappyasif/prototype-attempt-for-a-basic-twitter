@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { downloadProfilePictureUrlFromStorage, uploadUserProfilePictureToStorage } from '../../../firebase-storage'
 import {getUserBirthDate, getUserProfileData, updateDataInDocument, updateUserProfileDataInDocument} from '../../../firestore-methods'
 import EditBirthdate from './edit-birthdate'
 import ReuseableModal from './reuseable-modal'
@@ -7,15 +8,44 @@ import './styles.css'
 
 function EditProfile({currentUser, setOpacity}) {
     let [hovered, setHovered] = useState('')
-    let [photoElement, setPhotoElement] = useState('https://picsum.photos/200/300')
+    let [photoElementForCover, setPhotoElementForCover] = useState('https://picsum.photos/200/300')
+    let [photoElementForProfile, setPhotoElementForProfile] = useState('https://picsum.photos/200/300')
     let [profileData, setProfileData] = useState([])
     let [check, setCheck] = useState(null)
     let [dimModal, setDimModal] = useState(false)
+    let [profilePictureUploaded, setIsProfilePictureUploaded] = useState(false);
+    let [coverPictureUploaded, setIsCoverPictureUploaded] = useState(false);
+    let [profilePictureUrl, setProfilePictureUrl] = useState('')
+    let [coverPictureUrl, setCoverPictureUrl] = useState('')
+
+    let coverPictureInputRef = useRef();
+    let profilePictureInputRef = useRef();
 
     let handleDataLoader = (data) => {
         setProfileData(data)
         setCheck(data)
     }
+
+    let updateProfilePictureUrl = (url) => {
+        setProfilePictureUrl(url)
+        // setProfileData(prevData => prevData.concat({content: url, title: 'profilePicture'}))
+        changeDataInsideDatasetWithoutMutationInDuplicate({content: url, title: 'profilePicture'}, 6)
+    }
+
+    let updateCoverPictureUrl = (url) => {
+        setCoverPictureUrl(url)
+        // setProfileData(prevData => prevData.concat({content: url, title: 'coverPicture'}))
+        changeDataInsideDatasetWithoutMutationInDuplicate({content: url, title: 'coverPicture'}, 7)
+    }
+
+    profilePictureUrl && console.log(profilePictureUrl, profileData)
+    coverPictureUrl && console.log(coverPictureUrl, profileData)
+
+    useEffect(() => {
+        profilePictureUploaded && downloadProfilePictureUrlFromStorage(currentUser, updateProfilePictureUrl)
+    }, [profilePictureUploaded])
+
+    useEffect(() => coverPictureUploaded && downloadProfilePictureUrlFromStorage(currentUser, updateCoverPictureUrl, 'coverPhoto'), [coverPictureUploaded])
 
     // let handleDimLuminosityInEditProfile = () => setDimModal(true)
 
@@ -62,14 +92,16 @@ function EditProfile({currentUser, setOpacity}) {
     useEffect(() => {
         // not deleting from server, but its here to show that it could have been done!!
         // profileData.length == 4 && updateUserProfileDataInDocument(currentUser, {profileInfo: profileData})
+        // profileData && setPhotoElementForProfile(profileData[7])
+        // profileData[7] && console.log(profileData[7].coverPicture)
+        profileData[7] && setPhotoElementForCover(profileData[7].content)
+        profileData[6] && setPhotoElementForProfile(profileData[6].content)
     }, [profileData])
 
 
     useEffect(() => getUserProfileData(currentUser, handleDataLoader), [])
 
     // console.log(profileData, 'profile data!!')
-
-    let inputRef = useRef();
     
     let handleMouseEnter = evt => {
         let findWhich = evt.target.id || evt.target.parentNode.id
@@ -82,13 +114,26 @@ function EditProfile({currentUser, setOpacity}) {
     }
 
     let handleClick = evt => {
-        inputRef.current.click();
+        coverPictureInputRef.current.click();
     }
+
+    let handlePictureForProfile = () => profilePictureInputRef.current.click()
+
+    let handleProfilePictureUploaded = () => setIsProfilePictureUploaded(true)
+
+    let handleCoverPictureUploaded = () => setIsCoverPictureUploaded(true)
 
     let handleChange = evt => {
         let fileSelected = evt.target.files[0]
-        setPhotoElement(fileSelected)
+        setPhotoElementForCover(fileSelected)
         // console.log(fileSelected)
+        uploadUserProfilePictureToStorage(fileSelected, currentUser, handleCoverPictureUploaded, 'coverPhoto')
+    }
+
+    let handleChangeforProfile = evt => {
+        let fileSelected = evt.target.files[0];
+        setPhotoElementForProfile(fileSelected)
+        uploadUserProfilePictureToStorage(fileSelected, currentUser, handleProfilePictureUploaded)
     }
 
     let handleMediaFileFormats = (mediaFile) => {
@@ -105,6 +150,7 @@ function EditProfile({currentUser, setOpacity}) {
     let handleData = () => {
         profileData && updateUserProfileDataInDocument(currentUser, {profileInfo: profileData})
         profileData && 'running update?!'
+        // profilePictureUrl && updateUserProfileDataInDocument(currentUser, {})
     }
 
     // style={{backgroundColor: dimModal && 'rgba(0, 0, 0, 0.11)'}}
@@ -118,30 +164,34 @@ function EditProfile({currentUser, setOpacity}) {
             </div>
             <div id='body-section'>
                 <div id='profile-visuals' style={{maxHeight: '249px'}}>
-                    <div id='profile-cover-photo' style={{backgroundColor: photoElement == '' && 'darkslategray'}}>
+                    <div id='profile-cover-photo' style={{backgroundColor: photoElementForCover == '' && 'darkslategray'}}>
                         {/* <img id='cover-photo' src='https://picsum.photos/200/300' /> */}
-                        <input type='file' onChange={handleChange} name='image-file' ref={inputRef} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
+                        <input type='file' onChange={handleChange} name='image-file' ref={coverPictureInputRef} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
 
-                        {photoElement && <img id='cover-photo' src={handleMediaFileFormats(photoElement)} />}
+                        {/* {photoElementForCover && <img id='cover-photo' src={handleMediaFileFormats((profileData && profileData[7].coverPicture) || photoElementForCover)} />} */}
+                        {photoElementForCover && <img id='cover-photo' src={handleMediaFileFormats(photoElementForCover)} />}
                         {/* <img id='cover-photo' src={handleMediaFileFormats(photoElement ? photoElement : 'https://picsum.photos/200/300')} /> */}
 
-                        <div id='svg-visuals' style={{ transform: photoElement == '' && 'translate(10px, 76px)' }}>
+                        <div id='svg-visuals' style={{ transform: photoElementForCover == '' && 'translate(10px, 76px)' }}>
                             {/* <div className='camera-icon'>{cameraIcon()}</div>
                             <div className='remove-icon-svg'>{removeIcon(true)}</div> */}
                             <div id='cover-camera' className='camera-icon' onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                                 {cameraIcon()}
                                 <div id='cover-camera-icon-tooltips' style={{ display: hovered == 'cover-camera' ? 'block' : 'none' }}>Add Photo</div>
                             </div>
-                            <div id='cover-remove' className='remove-icon-svg' onClick={() => setPhotoElement('')} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                            <div id='cover-remove' className='remove-icon-svg' onClick={() => setPhotoElementForCover('')} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                                 {removeIcon(true)}
                                 <div id='cover-remove-icon-tooltips' style={{ display: hovered == 'cover-remove' ? 'block' : 'none' }}>Remove Photo</div>
                             </div>
                         </div>
                     </div>
-                    <div id='profile-photo-div' style={{backgroundColor: photoElement == '' && 'darkslategray'}}>
+                    
+                    <input type='file' onChange={handleChangeforProfile} name='image-file' ref={profilePictureInputRef} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
+                    {/* {photoElementForProfile && <img id='profile-photo' src={handleMediaFileFormats(photoElementForProfile)} />} */}
+                    <div id='profile-photo-div' style={{backgroundColor: photoElementForProfile == '' && 'darkslategray'}}>
                         {/* <img id='profile-photo' src='https://picsum.photos/200/300' /> */}
-                        {photoElement && <img id='profile-photo' src={handleMediaFileFormats(photoElement)} />}
-                        <div id='profile-camera' className='camera-icon' style={{ transform: photoElement == '' && 'translate(0px, 42px)' }} onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                        {photoElementForProfile && <img id='profile-photo' src={handleMediaFileFormats(photoElementForProfile)} />}
+                        <div id='profile-camera' className='camera-icon' style={{ transform: photoElementForProfile == '' && 'translate(0px, 42px)' }} onClick={handlePictureForProfile} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                             {cameraIcon()}
                             <div id='profile-camera-icon-tooltips' style={{ display: hovered == 'profile-camera' ? 'block' : 'none' }}>Add Photo</div>
                         </div>

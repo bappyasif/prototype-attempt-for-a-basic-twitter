@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import "./styles/index.css";
 import { userLoginWithFirebase } from "./user-login-with-firebase";
+import { userLoginWithPhone } from "./user-login-with-phone";
 
 function LoginPage({ currentUser, handleCurrentUser }) {
   let announcementText =
@@ -63,10 +64,13 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser }) => {
   let [bothPresent, setBothPresent] = useState(false)
   let [signinDone, setIsSigninDone] = useState(false)
   let [profileCompleted, setIsProfileCompleted] = useState(false);
+  let [loginWithPhoneNumber, setIsLoginWithPhoneNumber] = useState(false)
 
   let handleSigninStatus = () => setIsSigninDone(true);
 
   let handleProfileCompletion = () => setIsProfileCompleted(true);
+
+  let handleLoginWithPhone = (val) => setIsLoginWithPhoneNumber(val);
 
   useEffect(() => {
     if (userID && userPassword) {
@@ -78,13 +82,20 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser }) => {
   }, [userID, userPassword]);
 
   // let confirmLogin = () => userLoginWithFirebase(userID, userPassword)
-  let confirmLogin = () => userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
+  // let confirmLogin = () => userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
+  let confirmLogin = (evt) => {
+    !loginWithPhoneNumber && userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
+    // console.log(evt.target, '??')
+    loginWithPhoneNumber && userLoginWithPhone(userID, evt.target)
+  }
 
   return (
     <div id="login-info">
-      <ReturnAnInputElement name='Mobile, email or username' elemID='user-id' setID={setUserID} />
-      <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} />
-      <button onClick={confirmLogin} style={{ opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none' }} id='login-btn'>Login</button>
+      <ReturnAnInputElement name='Mobile, email or username' elemID='user-id' setID={setUserID} updateIfItsNumber={handleLoginWithPhone} />
+      {/* <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} /> */}
+      {!loginWithPhoneNumber && <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} />}
+      <button onClick={confirmLogin} style={{ opacity: (loginWithPhoneNumber || bothPresent) ? 1 : .5, cursor: (!loginWithPhoneNumber && !bothPresent) && 'pointer', pointerEvents: (!loginWithPhoneNumber && !bothPresent) && 'none' }} id='login-btn'>Login</button>
+      {/* <button onClick={confirmLogin} style={{ opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent  && 'none' }} id='login-btn'>Login</button> */}
       {/* <Link onClick={confirmLogin} style={{opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none'}} id='login-btn'>Login</Link> */}
 
       {
@@ -113,13 +124,21 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser }) => {
 
 }
 
-let ReturnAnInputElement = ({ name, elemID, setID, setPassword }) => {
+let ReturnAnInputElement = ({ name, elemID, setID, setPassword, updateIfItsNumber }) => {
   let [value, setValue] = useState('')
   let [focused, setFocused] = useState(false);
 
   let handleChange = evt => {
     setValue(evt.target.value)
     elemID == 'user-id' ? setID(evt.target.value) : setPassword(evt.target.value)
+    if (elemID == 'user-id' && value.length >= 11) {
+      let regEx = /(\+)|([0-9]{3}(-){0,1}){2}[0-9]{4,}/
+      let test = regEx.test(value)
+      test && updateIfItsNumber(true)
+      console.log('here!!')
+    } else if(value.length == 10) {
+      updateIfItsNumber(false)
+    }
   }
   let handleFocus = () => setFocused(true)
   let handleBlur = () => setFocused(false)
