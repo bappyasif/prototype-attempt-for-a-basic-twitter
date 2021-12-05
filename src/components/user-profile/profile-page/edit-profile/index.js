@@ -17,6 +17,8 @@ function EditProfile({currentUser, setOpacity}) {
     let [coverPictureUploaded, setIsCoverPictureUploaded] = useState(false);
     let [profilePictureUrl, setProfilePictureUrl] = useState('')
     let [coverPictureUrl, setCoverPictureUrl] = useState('')
+    let [activateOpacityForProfile, setActivateOpacityForProfile] = useState(false)
+    let [activateOpacityForCover, setActivateOpacityForCover] = useState(false)
 
     let coverPictureInputRef = useRef();
     let profilePictureInputRef = useRef();
@@ -41,8 +43,13 @@ function EditProfile({currentUser, setOpacity}) {
     profilePictureUrl && console.log(profilePictureUrl, profileData)
     coverPictureUrl && console.log(coverPictureUrl, profileData)
 
+    useEffect(() => profilePictureUrl && setActivateOpacityForProfile(false), [profilePictureUrl])
+
+    useEffect(() => coverPictureUrl && setActivateOpacityForCover(false), [coverPictureUrl])
+
     useEffect(() => {
         profilePictureUploaded && downloadProfilePictureUrlFromStorage(currentUser, updateProfilePictureUrl)
+
     }, [profilePictureUploaded])
 
     useEffect(() => coverPictureUploaded && downloadProfilePictureUrlFromStorage(currentUser, updateCoverPictureUrl, 'coverPhoto'), [coverPictureUploaded])
@@ -128,12 +135,14 @@ function EditProfile({currentUser, setOpacity}) {
         setPhotoElementForCover(fileSelected)
         // console.log(fileSelected)
         uploadUserProfilePictureToStorage(fileSelected, currentUser, handleCoverPictureUploaded, 'coverPhoto')
+        setActivateOpacityForCover(true)
     }
 
     let handleChangeforProfile = evt => {
         let fileSelected = evt.target.files[0];
         setPhotoElementForProfile(fileSelected)
         uploadUserProfilePictureToStorage(fileSelected, currentUser, handleProfilePictureUploaded)
+        setActivateOpacityForProfile(true)
     }
 
     let handleMediaFileFormats = (mediaFile) => {
@@ -160,7 +169,7 @@ function EditProfile({currentUser, setOpacity}) {
             <div id='header-section'>
                 <Link id='remove-icon' to='/username'>{removeIcon()}</Link>
                 <div id='edit-profile-text'>Edit profile</div>
-                <Link id='save-edit-profile-changes' to='/username' onClick={handleData}>Save</Link>
+                <Link id='save-edit-profile-changes' to='/username' onClick={handleData} style={{opacity: (activateOpacityForProfile || activateOpacityForCover) &&  .5, pointerEvents: (activateOpacityForProfile || activateOpacityForCover) && 'none'}}>Save</Link>
             </div>
             <div id='body-section'>
                 <div id='profile-visuals' style={{maxHeight: '249px'}}>
@@ -175,7 +184,7 @@ function EditProfile({currentUser, setOpacity}) {
                         <div id='svg-visuals' style={{ transform: photoElementForCover == '' && 'translate(10px, 76px)' }}>
                             {/* <div className='camera-icon'>{cameraIcon()}</div>
                             <div className='remove-icon-svg'>{removeIcon(true)}</div> */}
-                            <div id='cover-camera' className='camera-icon' onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                            <div id='cover-camera' className='camera-icon' onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} style={{pointerEvents: activateOpacityForCover && 'none'}}>
                                 {cameraIcon()}
                                 <div id='cover-camera-icon-tooltips' style={{ display: hovered == 'cover-camera' ? 'block' : 'none' }}>Add Photo</div>
                             </div>
@@ -188,7 +197,7 @@ function EditProfile({currentUser, setOpacity}) {
                     
                     <input type='file' onChange={handleChangeforProfile} name='image-file' ref={profilePictureInputRef} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
                     {/* {photoElementForProfile && <img id='profile-photo' src={handleMediaFileFormats(photoElementForProfile)} />} */}
-                    <div id='profile-photo-div' style={{backgroundColor: photoElementForProfile == '' && 'darkslategray'}}>
+                    <div id='profile-photo-div' style={{backgroundColor: photoElementForProfile == '' && 'darkslategray', pointerEvents: activateOpacityForProfile && 'none'}}>
                         {/* <img id='profile-photo' src='https://picsum.photos/200/300' /> */}
                         {photoElementForProfile && <img id='profile-photo' src={handleMediaFileFormats(photoElementForProfile)} />}
                         <div id='profile-camera' className='camera-icon' style={{ transform: photoElementForProfile == '' && 'translate(0px, 42px)' }} onClick={handlePictureForProfile} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
