@@ -17,6 +17,7 @@ import EditProfile from '../user-profile/profile-page/edit-profile';
 import LandingPageUILogics from '../landing-page/ui-logics';
 import SignupPage from '../signup-page';
 import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
+import TopicsPicker from '../topics-picker';
 
 function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
@@ -97,6 +98,12 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 <Route path='/verify-user-info'>
                     <TopNavigation />
                     <VerifyUserInfo />
+                </Route>
+
+                <Route exact path='/i/topics/picker/home'>
+                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <TopicsPicker />
+                    <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
                 <Route exact path='/tweet/compose'>

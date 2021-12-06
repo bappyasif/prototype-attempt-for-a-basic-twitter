@@ -1,0 +1,95 @@
+#categories-wrapper, 
+.category-wrapper-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 650px;
+}
+
+#categories-wrapper .category-card {
+    height: 92px;
+    width: 192px;
+    margin: 7.1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: larger;
+    font-weight: bolder;
+    background-color: rgb(29, 155, 240);
+    border-radius: 11px;
+    color: white;
+}
+
+#container-for-all-categories #more-cards {
+    height: 47px;
+    border: floralwhite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(29, 155, 240);
+    font-weight: bolder;
+}
+
+#container-for-all-categories #more-cards:hover {
+    background-color: rgba(29, 155, 240, .2);
+}
+
+.category-wrapper-container {
+    /* justify-content: space-between; */
+    overflow-x: auto;
+    height: 200px;
+    flex-direction: column;
+}
+
+.category-wrapper-container::-webkit-scrollbar {
+    display: none;
+}
+
+.category-wrapper-container .category-wrapper {
+    display: flex;
+    width: 193px;
+    justify-content: space-between;
+    align-items: center;
+    border: solid 0.1px;
+    margin: 4px;
+    border-radius: 20px;
+    padding: 7px;
+}
+
+.category-wrapper-container .category-wrapper .category-name {
+    padding-left: 17px;
+}
+
+.category-wrapper-container .category-wrapper .svg-item {
+    transform: scale(.8);
+    fill: rgb(29, 155, 240);
+}
+
+.add-more-to-category .categories-options {
+    position: relative;
+}
+
+.add-more-to-category .categories-options .show-more-on-left,
+.add-more-to-category .categories-options .show-more-on-right {
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    top: 81px;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.add-more-to-category .categories-options .show-more-on-left:hover,
+.add-more-to-category .categories-options .show-more-on-right:hover {
+    background-color: rgba(29, 40, 20, .6);
+    fill: white;
+}
+
+.add-more-to-category .categories-options .show-more-on-left {
+    left: 4px;
+    padding-right: 3.5px;
+    margin-left: 6px;
+}
+
+.add-more-to-category .categories-options .show-more-on-right {
+    right: 4px;
+}
