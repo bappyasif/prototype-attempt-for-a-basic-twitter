@@ -1,81 +1,100 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './style.css'
 
 function TopicsPicker() {
     return (
         <div id='container-for-topics-picker'>
             <AllCategories />
-            <CategoriesPicks />
+            {/* <CategoriesPicks /> */}
+            {<AddMoreToCategories />}
         </div>
     )
 }
 
-let CategoriesPicks = () => {
-    let [showArrow, setShowArrow] = useState(false)
-    let [totalScrollAmount, setTotalScrollAmount] = useState()
-    let [scrollAmount, setScrollAmount] = useState(0)
-
-    let handleArrowVisibility = () => setShowArrow(true)
-    let handleScrolls = amount => setScrollAmount(amount)
-
-    useEffect(() => setTotalScrollAmount(document.querySelector('.category-wrapper-container').scrollWidth - 650), [])
-
-    let handleRightArrowClick = () => {
-        console.log('right arrow', totalScrollAmount, scrollAmount+200)
-        handleArrowVisibility()
-        // handleScrolls(scrollAmount+600 <= totalScrollAmount ? scrollAmount+600 : totalScrollAmount-scrollAmount)
-        handleScrolls(scrollAmount+650 <= totalScrollAmount ? scrollAmount+650 : totalScrollAmount)
-        // handleScrolls(scrollAmount+100 <= totalScrollAmount ? scrollAmount+100 : totalScrollAmount-scrollAmount)
-        // scrollAmount+650 <= totalScrollAmount ? 
-    }
-    
-    let handleLeftArrowClick = () => {
-        console.log('left arrow', scrollAmount)
-        handleArrowVisibility()
-        // handleScrolls(scrollAmount-200 >= 0 ? scrollAmount-200 : 0)
-        handleScrolls(scrollAmount-650 >= 0 ? scrollAmount-650 : 0)
-    }
-    
-    let markup = (key, item, idx) => {
-        return (
-            <div className='categories-options'>
-                <div className='category-name'>{key}</div>
-                <div className='show-more-on-left' onClick={handleLeftArrowClick} style={{visibility: showArrow ? 'visible' : 'hidden'}}>{leftArrowSvg()}</div>
-                <ShowExtraCategoriesList key={key + idx} items={item[key]} scrollingTo={scrollAmount} />
-                <div className='show-more-on-right' onClick={handleRightArrowClick}>{rightArrowSvg()}</div>
-            </div>
-        )
-    }
-
-    let eachCategories = categoryNames.map((item, idx) => {
-        for (let key in item) {
-            return item[key] && markup(key, item, idx)
+let AddMoreToCategories = () => {
+    let renderEachAvailableCategory = categoryNames.map(category => {
+        for (let key in category) {
+            return <RenderSubcategories key={key} name={key} items={category[key]}/>
         }
     })
+    return <div className='category-wrapper-container'>{renderEachAvailableCategory}</div>
+}
 
+let RenderSubcategories = ({ name, items, classExtension }) => {
+    let [showArrowJustOnce, setShowArrowJustOnce] = useState(false)
+    let [totalScrollAmount, setTotalScrollAmount] = useState()
+    let [scrollAmount, setScrollAmount] = useState(0)
+    let [showBoth, setShowBoth] = useState(false)
+    let ref = useRef();
+
+    let handleScrollsWithRef = amount => {
+        setScrollAmount(ref.current.scrollLeft = amount)
+    }
+
+    useEffect(() => setTotalScrollAmount(document.querySelector('.subcategories-container')?.scrollWidth - 650), [])
+
+    let handleRightArrowClick = () => {
+        handleScrollsWithRef(scrollAmount + 650 <= totalScrollAmount ? scrollAmount + 650 : totalScrollAmount)
+    }
+
+    let handleLeftArrowClick = () => {
+        handleScrollsWithRef(scrollAmount - 650 >= 0 ? scrollAmount - 650 : 0)
+    }
+
+    useEffect(() => {
+        scrollAmount && setShowBoth(true)
+        scrollAmount == totalScrollAmount &&  setShowArrowJustOnce(false)
+    }, [scrollAmount])
+
+    let handleMouseOnEnter = () => {
+        // console.log(evt.target)
+        scrollAmount && setShowBoth(true)
+        // !scrollAmount && setShowArrowJustOnce(true)
+        !scrollAmount && setShowArrowJustOnce(true)
+    }
+
+    let handleMouseOnLeave = () => {
+        setShowBoth(false)
+        !scrollAmount && setShowArrowJustOnce(false)
+        scrollAmount == totalScrollAmount && setShowArrowJustOnce(false)
+    }
+
+    // console.log(ref.current, name, name.split(' ').join(''))
+
+    console.log(showArrowJustOnce, ':once:', showBoth, ':both:')
+
+    let renderSubcategories = items.map(item => <RenderCategoryAsItems key={item} item={item} />)
     return (
-        <div className='add-more-to-category'>
-            {eachCategories}
+        <div className='categories-options' id={name.split(' ').join('')} style={{scrollBehavior: 'smooth'}} onMouseEnter={handleMouseOnEnter} onMouseLeave={handleMouseOnLeave}>
+            <div className='category-title'>{name}</div>
+            
+            {showBoth && <div id='hovered-left' className='highlight-both-arrow-svg' onClick={handleLeftArrowClick} style={{ visibility: scrollAmount ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div>}
+            
+            <div className='subcategories-container' ref={ref}>{renderSubcategories}</div>
+            
+            {showArrowJustOnce && !showBoth && !scrollAmount && <div id='hovered-right' className='highlight-both-arrow-svg' onClick={handleRightArrowClick}>{rightArrowSvg()}</div>}
+            
+            {showBoth && <div id='hovered-right' className='highlight-both-arrow-svg' onClick={handleRightArrowClick} style={{visibility: (scrollAmount < totalScrollAmount)? 'visible' : 'hidden' }}>{rightArrowSvg()}</div>}
         </div>
     )
 }
 
-let ShowExtraCategoriesList = ({ items, scrollingTo, scrollingBack }) => {
-    let renderOptions = items.map(item => <div className='category-wrapper' key={item}><div className='category-name'>{item}</div><div className='svg-item'>{plusSvg()}</div></div>)
+let RenderCategoryAsItems = ({ item }) => {
+    let [checked, setChecked] = useState(false)
     
-    // useEffect(() => document.querySelector('.category-wrapper-container').scrollLeft += scrollingTo, [scrollingTo])
+    let markUp;
 
-    useEffect(() => document.querySelector('.category-wrapper-container').scrollLeft = scrollingTo, [scrollingTo])
+    let handleClick = () => setChecked(!checked)
 
-    // useEffect(() => document.querySelector('.category-wrapper-container').scrollBy((document.querySelector('.category-wrapper-container').scrollLeft += scrollingTo ), 0), [scrollingTo])
+    checked
+    ?
+    markUp = <div className='category-wrapper' onClick={handleClick} style={{backgroundColor: 'rgb(29, 155, 240)'}}><div className='category-name'>{item}</div><div className='svg-item' style={{fill: 'white'}}>{checkMarkSvg()}</div></div>
+    :
+    markUp = <div className='category-wrapper' onClick={handleClick}><div className='category-name'>{item}</div><div className='svg-item'>{plusSvg()}</div></div>
 
-    // console.log(scrollingTo, '??')
-
-    // useEffect(() => console.log(document.querySelector('.category-wrapper-container').scrollWidth), [scrollingTo])
+    // let markup = <div className='category-wrapper'><div className='category-name'>{item}</div><div className='svg-item'>{plusSvg()}</div></div>
     
-    return <div className='category-wrapper-container'>
-        {renderOptions}
-    </div>
+    return markUp;
 }
 
 let AllCategories = () => {
@@ -118,9 +137,149 @@ let rightArrowSvg = () => <svg><g><path d="M19.707 11.293l-6-6c-.39-.39-1.023-.3
 
 let leftArrowSvg = () => <svg><g><path d="M20 11H7.414l4.293-4.293c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0l-6 6c-.39.39-.39 1.023 0 1.414l6 6c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L7.414 13H20c.553 0 1-.447 1-1s-.447-1-1-1z"></path></g></svg>
 
+let checkMarkSvg = () => <svg width='24px' height='24px'><g><path d="M9 20c-.264 0-.52-.104-.707-.293l-4.785-4.785c-.39-.39-.39-1.023 0-1.414s1.023-.39 1.414 0l3.946 3.945L18.075 4.41c.32-.45.94-.558 1.395-.24.45.318.56.942.24 1.394L9.817 19.577c-.17.24-.438.395-.732.42-.028.002-.057.003-.085.003z"></path></g></svg>
+
 let categoryNames = [
     { 'Fashion & beauty': ['Fashion business', 'Beauty', "Men's style", "Fashion models", 'Jewelry', 'Shoes', 'Gigi hadid', 'Adidas', 'Jeffree star', 'Beauty influencers', 'Fashion', 'Tattoos', 'Makeup', 'Sneakers', 'Shopping', 'PUMA', 'Streetwear', "Women's style", 'Barbara palvin', 'SNKRS', 'Skin care', 'Watches', 'Everyday style', 'Hair care', 'Athletic apparel', 'Handbags', 'Nike', 'Fashion magazines', 'Perfumes & fragrances', 'James charles'] },
     { 'Outdoors': ['Nature', 'Dogs', 'Horses', 'Cats', 'Sailing', 'Sharks', 'Reptiles', 'Beach life', 'Otters', 'Orangutans', 'Environmentalism', 'Birdwatching', 'Fishing', 'Rock climbing', 'Surfing', 'Rabbits', 'Hiking', 'Outdoor brands', 'Mountain biking', 'Scuba diving', 'National parks', 'Pets', 'Animals', 'Dinosaurs', 'Marine life', 'Camping', 'Mountain climbing', 'RVing', 'Gorillas'] }
 ]
 
 export default TopicsPicker
+
+
+/**
+ * 
+ * 
+ let RenderSubcategories = ({ name, items, classExtension }) => {
+    let [showArrow, setShowArrow] = useState(false)
+    let [showArrowJustOnce, setShowArrowJustOnce] = useState(false)
+    let [totalScrollAmount, setTotalScrollAmount] = useState()
+    let [scrollAmount, setScrollAmount] = useState(0)
+    let [showBoth, setShowBoth] = useState(false)
+    let ref = useRef();
+
+    // let handleArrowVisibility = () => setShowArrow(true)
+    // let handleScrolls = amount => setScrollAmount(amount)
+
+    let handleScrollsWithRef = amount => {
+        // ref.current.scrollLeft += amount;
+        setScrollAmount(ref.current.scrollLeft = amount)
+    }
+
+    useEffect(() => setTotalScrollAmount(document.querySelector('.subcategories-container')?.scrollWidth - 650), [])
+
+    // useEffect(() => document.querySelector('.subcategories-container').scrollLeft = scrollAmount, [scrollAmount])
+
+    let handleRightArrowClick = () => {
+        // console.log('right arrow', totalScrollAmount, scrollAmount + 650, scrollAmount)
+        // handleArrowVisibility()
+        // handleScrolls(scrollAmount + 650 <= totalScrollAmount ? scrollAmount + 650 : totalScrollAmount)
+        handleScrollsWithRef(scrollAmount + 650 <= totalScrollAmount ? scrollAmount + 650 : totalScrollAmount)
+    }
+
+    let handleLeftArrowClick = () => {
+        // console.log('left arrow', scrollAmount, showBoth)
+        // handleArrowVisibility()
+        // scrollAmount >= 650 && handleArrowVisibility()
+        // handleScrolls(scrollAmount - 650 >= 0 ? scrollAmount - 650 : 0)
+        handleScrollsWithRef(scrollAmount - 650 >= 0 ? scrollAmount - 650 : 0)
+    }
+
+    let handleMouseOnEnter = () => {
+        // console.log('mouse enter')
+        scrollAmount && setShowBoth(true)
+        // setShowBoth(true)
+        !scrollAmount && setShowArrowJustOnce(true)
+    }
+
+    let handleMouseOnLeave = () => {
+        // console.log('mouse leave')
+        setShowBoth(false)
+        !scrollAmount && setShowArrowJustOnce(false)
+    }
+
+    let renderSubcategories = items.map(item => <RenderCategoryAsItems key={item} item={item} />)
+    return (
+        <div className='categories-options' style={{scrollBehavior: 'smooth'}} onMouseEnter={handleMouseOnEnter} onMouseLeave={handleMouseOnLeave}>
+            <div className='category-name'>{name}</div>
+            {/* <div className='show-more-on-left' onClick={handleLeftArrowClick} style={{ visibility: showArrow ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div> *}
+            
+            {/* {!showBoth && <div className='show-more-on-left' onClick={handleLeftArrowClick} style={{ visibility: showArrow && scrollAmount ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div>} *}
+            {/* {showBoth && <div id='hovered-left' className='highlight-both-arrow-svg' onClick={handleLeftArrowClick} style={{ visibility: showArrow && scrollAmount ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div>} *}
+            {showBoth && <div id='hovered-left' className='highlight-both-arrow-svg' onClick={handleLeftArrowClick} style={{ visibility: scrollAmount ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div>}
+            {/* {showBoth && <div id='hovered-left' className='highlight-both-arrow-svg' onClick={handleLeftArrowClick} style={{ visibility: showArrow && (scrollAmount <= totalScrollAmount) ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div>} *}
+            
+            {/* <div className='show-more-on-left' onClick={handleLeftArrowClick} style={{ visibility: (showArrow || showBoth) ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div> *}
+            {/* <div className={'show-more-on-left'+' '+showBoth && 'highlight-both-arrow-svg'} onClick={handleLeftArrowClick} style={{ visibility: showArrow ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div> *}
+            
+            <div className='subcategories-container' ref={ref}>{renderSubcategories}</div>
+            {/* <div className={'subcategories-container-'+classExtension}>{renderSubcategories}</div> *}
+            {/* <div className='show-more-on-right' onClick={handleRightArrowClick}>{rightArrowSvg()}</div> *}
+            
+            {/* {!showBoth && !scrollAmount && <div className='show-more-on-right' onClick={handleRightArrowClick}>{rightArrowSvg()}</div>} *}
+            {/* {!showBoth && <div className='show-more-on-right' onClick={handleRightArrowClick}>{rightArrowSvg()}</div>} *}
+            {showArrowJustOnce && !showBoth && <div id='hovered-right' className='highlight-both-arrow-svg' onClick={handleRightArrowClick}>{rightArrowSvg()}</div>}
+            {/* {showBoth && <div id='hovered-right' className='highlight-both-arrow-svg' onClick={handleRightArrowClick}>{rightArrowSvg()}</div>} *}
+            {showBoth && <div id='hovered-right' className='highlight-both-arrow-svg' onClick={handleRightArrowClick} style={{visibility: (scrollAmount < totalScrollAmount)? 'visible' : 'hidden' }}>{rightArrowSvg()}</div>}
+            {/* <div className={'show-more-on-right'+' '+showBoth && 'highlight-both-arrow-svg'} onClick={handleRightArrowClick}>{rightArrowSvg()}</div> *}
+        </div>
+    )
+}
+ * 
+ * 
+ let CategoriesPicks = () => {
+    let [showArrow, setShowArrow] = useState(false)
+    let [totalScrollAmount, setTotalScrollAmount] = useState()
+    let [scrollAmount, setScrollAmount] = useState(0)
+
+    let handleArrowVisibility = () => setShowArrow(true)
+    let handleScrolls = amount => setScrollAmount(amount)
+
+    useEffect(() => setTotalScrollAmount(document.querySelector('.category-wrapper-container').scrollWidth - 650), [])
+
+    let handleRightArrowClick = () => {
+        console.log('right arrow', totalScrollAmount, scrollAmount + 200)
+        handleArrowVisibility()
+        handleScrolls(scrollAmount + 650 <= totalScrollAmount ? scrollAmount + 650 : totalScrollAmount)
+    }
+
+    let handleLeftArrowClick = () => {
+        console.log('left arrow', scrollAmount)
+        handleArrowVisibility()
+        handleScrolls(scrollAmount - 650 >= 0 ? scrollAmount - 650 : 0)
+    }
+
+    let markup = (key, item, idx) => {
+        return (
+            <div className='categories-options'>
+                <div className='category-name'>{key}</div>
+                <div className='show-more-on-left' onClick={handleLeftArrowClick} style={{ visibility: showArrow ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div>
+                <ShowExtraCategoriesList key={key + idx} items={item[key]} scrollingTo={scrollAmount} />
+                <div className='show-more-on-right' onClick={handleRightArrowClick}>{rightArrowSvg()}</div>
+            </div>
+        )
+    }
+
+    let eachCategories = categoryNames.map((item, idx) => {
+        for (let key in item) {
+            return item[key] && markup(key, item, idx)
+        }
+    })
+
+    return (
+        <div className='add-more-to-category'>
+            {eachCategories}
+        </div>
+    )
+}
+
+let ShowExtraCategoriesList = ({ items, scrollingTo }) => {
+    let renderOptions = items.map(item => <div className='category-wrapper' key={item}><div className='category-name'>{item}</div><div className='svg-item'>{plusSvg()}</div></div>)
+
+    useEffect(() => document.querySelector('.category-wrapper-container').scrollLeft = scrollingTo, [scrollingTo])
+
+    return <div className='category-wrapper-container'>
+        {renderOptions}
+    </div>
+}
+ */
