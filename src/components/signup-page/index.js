@@ -4,6 +4,7 @@ import FirebaseApp from '../firebase-configs';
 import { testTwilio } from './twilio-configs-for-signup';
 import { authenticateUserWithFirebase, fakePhoneVerification, phoneVerification, userEmailLinkVerification, verifyUserSignUp, verifyUserSmsCode, withEmailLinkSignUp, withEmailUserVerification, withoutEmailLinkSignup } from './user-verification';
 import { Link, Redirect } from 'react-router-dom';
+import CategorySelections from './category-selections';
 
 function SignupPage({currentUser, handleCurrentUser}) {
     let [isPhoneNumberUsed, setIsPhoneNumberUsed] = useState(false);
@@ -136,24 +137,25 @@ function SignupPage({currentUser, handleCurrentUser}) {
             {
                 step == 1
                 &&
-                <div id='user-info-div'>
-                    <h2>Create your account</h2>
-                    <div id='first-half'>
-                        <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
-                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPhone} value={emailOrPhone} ref={epRef} type={isPhoneNumberUsed ? 'email' : 'tel'} setValidated={setValidated} />
-                        <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
-                    </div>
-                    <div id='second-half'>
-                        <h2>Date of birth</h2>
-                        <p>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
-                        <div id='birth-date-selection-container'>
-                            {/* <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthDateRef} /> */}
-                            <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthRef} month={month} />
-                            <ReturnASelectElement name='Date' handleChnage={handleSelectElementChanges} whichMonth={month} date={date} />
-                            <ReturnASelectElement name='Year' handleChnage={handleSelectElementChanges} year={year} />
-                        </div>
-                    </div>
-                </div>
+                <CategorySelections />
+                // <div id='user-info-div'>
+                //     <h2>Create your account</h2>
+                //     <div id='first-half'>
+                //         <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
+                //         <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPhone} value={emailOrPhone} ref={epRef} type={isPhoneNumberUsed ? 'email' : 'tel'} setValidated={setValidated} />
+                //         <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
+                //     </div>
+                //     <div id='second-half'>
+                //         <h2>Date of birth</h2>
+                //         <p>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
+                //         <div id='birth-date-selection-container'>
+                //             {/* <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthDateRef} /> */}
+                //             <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthRef} month={month} />
+                //             <ReturnASelectElement name='Date' handleChnage={handleSelectElementChanges} whichMonth={month} date={date} />
+                //             <ReturnASelectElement name='Year' handleChnage={handleSelectElementChanges} year={year} />
+                //         </div>
+                //     </div>
+                // </div>
             }
             {
                 step == 2
@@ -237,7 +239,10 @@ function SignupPage({currentUser, handleCurrentUser}) {
                         &&
                         // <Link id='visit-profile' to='/username'>Click to continue to your profile</Link>
                         // <Link id='visit-profile' to='/username' onClick={handleSignup}>Click to continue to your profile</Link>
+                        
                         currentUser && <Redirect to='/username/profile'/>
+                        // choose more added interests for profile
+                        // currentUser && <CategorySelections />
                     }
                     {
                         signupDone != 'done'
@@ -247,11 +252,12 @@ function SignupPage({currentUser, handleCurrentUser}) {
                 </div>
             }
 
-            {
+            {/* temporarily commenting this out, uncomment this back for next functiolaity */}
+            {/* {
                 (step < 3)
                 &&
                 <button style={{ cursor: 'pointer' }} id='bottom-div' className={(name && emailOrPhone && month && date && year) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
-            }
+            } */}
 
             {
                 step == 3

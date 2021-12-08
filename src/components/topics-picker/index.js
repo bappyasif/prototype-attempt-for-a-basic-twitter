@@ -6,39 +6,65 @@ function TopicsPicker() {
         <div id='container-for-topics-picker'>
             <AllCategories />
             {/* <CategoriesPicks /> */}
-            {<AddMoreToCategories />}
+            {<AddMoreToCategories scrollBy={650} />}
         </div>
     )
 }
 
-let AddMoreToCategories = () => {
+export let AddMoreToCategories = ({scrollBy}) => {
+    let [data, setData] = useState([]);
+    let handleData = (data) => setData(prevData=>prevData.concat(data))
+    let removeData = () => setData(prevData => prevData.slice(0, data.length-1))
+
+    // data && console.log(data, 'data!!')
+
     let renderEachAvailableCategory = categoryNames.map(category => {
         for (let key in category) {
-            return <RenderSubcategories key={key} name={key} items={category[key]}/>
+            return <RenderSubcategories key={key} name={key} items={category[key]} handleData={handleData} removeData={removeData} scrollBy={scrollBy} />
         }
     })
-    return <div className='category-wrapper-container'>{renderEachAvailableCategory}</div>
+
+    return <div className='category-wrapper-container' style={{width: scrollBy+'px'}}>{renderEachAvailableCategory}</div>
 }
 
-let RenderSubcategories = ({ name, items, classExtension }) => {
+let RenderSubcategories = ({ name, items, handleData, removeData, scrollBy }) => {
     let [showArrowJustOnce, setShowArrowJustOnce] = useState(false)
     let [totalScrollAmount, setTotalScrollAmount] = useState()
     let [scrollAmount, setScrollAmount] = useState(0)
     let [showBoth, setShowBoth] = useState(false)
+    let [currentRoute, setCurrentRoute] = useState('')
     let ref = useRef();
 
     let handleScrollsWithRef = amount => {
         setScrollAmount(ref.current.scrollLeft = amount)
+        // console.log()
+        // setTotalScrollAmount(totalScrollAmount - amount)
     }
 
-    useEffect(() => setTotalScrollAmount(document.querySelector('.subcategories-container')?.scrollWidth - 650), [])
+    console.log(scrollBy, '??', scrollAmount, ':scrollAmount:', totalScrollAmount, ':totalScroll', currentRoute)
+
+    useEffect(() => setCurrentRoute(window.location.href), [])
+
+    useEffect(() => {
+        name.split(' ').join('')
+        // console.log(document.querySelector('.categories-options').querySelector(`$${name.split(' ').join('')}`).scrollWidth)
+        console.log(document.getElementById(name.split(' ').join('')).querySelector('.subcategories-container')?.scrollWidth - scrollBy)
+
+        currentRoute == 'http://localhost:8080/i/flow/signup/'
+        ?
+        // alert('here!!')
+        currentRoute && setTotalScrollAmount(document.querySelector('.subcategories-container')?.scrollWidth - scrollBy)
+        :
+        currentRoute && setTotalScrollAmount(document.querySelector('.subcategories-container')?.scrollWidth - scrollBy)
+    }, [currentRoute])
 
     let handleRightArrowClick = () => {
-        handleScrollsWithRef(scrollAmount + 650 <= totalScrollAmount ? scrollAmount + 650 : totalScrollAmount)
+        handleScrollsWithRef(scrollAmount + scrollBy <= totalScrollAmount ? scrollAmount + scrollBy : totalScrollAmount);
+        // handleScrollsWithRef(scrollAmount + scrollBy <= totalScrollAmount ? scrollAmount + scrollBy : totalScrollAmount - scrollAmount)
     }
 
     let handleLeftArrowClick = () => {
-        handleScrollsWithRef(scrollAmount - 650 >= 0 ? scrollAmount - 650 : 0)
+        handleScrollsWithRef(scrollAmount - scrollBy >= 0 ? scrollAmount - scrollBy : 0)
     }
 
     useEffect(() => {
@@ -61,16 +87,16 @@ let RenderSubcategories = ({ name, items, classExtension }) => {
 
     // console.log(ref.current, name, name.split(' ').join(''))
 
-    console.log(showArrowJustOnce, ':once:', showBoth, ':both:')
+    // console.log(showArrowJustOnce, ':once:', showBoth, ':both:')
 
-    let renderSubcategories = items.map(item => <RenderCategoryAsItems key={item} item={item} />)
+    let renderSubcategories = items.map(item => <RenderCategoryAsItems key={item} item={item} handleData={handleData} removeData={removeData} currentRoute={currentRoute} />)
     return (
-        <div className='categories-options' id={name.split(' ').join('')} style={{scrollBehavior: 'smooth'}} onMouseEnter={handleMouseOnEnter} onMouseLeave={handleMouseOnLeave}>
+        <div className='categories-options' id={name.split(' ').join('')} style={{scrollBehavior: 'smooth', width: scrollBy+'px'}} onMouseEnter={handleMouseOnEnter} onMouseLeave={handleMouseOnLeave}>
             <div className='category-title'>{name}</div>
             
             {showBoth && <div id='hovered-left' className='highlight-both-arrow-svg' onClick={handleLeftArrowClick} style={{ visibility: scrollAmount ? 'visible' : 'hidden' }}>{leftArrowSvg()}</div>}
             
-            <div className='subcategories-container' ref={ref}>{renderSubcategories}</div>
+            <div className='subcategories-container' ref={ref} style={{width: scrollBy+'px'}}>{renderSubcategories}</div>
             
             {showArrowJustOnce && !showBoth && !scrollAmount && <div id='hovered-right' className='highlight-both-arrow-svg' onClick={handleRightArrowClick}>{rightArrowSvg()}</div>}
             
@@ -79,18 +105,30 @@ let RenderSubcategories = ({ name, items, classExtension }) => {
     )
 }
 
-let RenderCategoryAsItems = ({ item }) => {
+let RenderCategoryAsItems = ({ item, handleData, removeData, currentRoute }) => {
     let [checked, setChecked] = useState(false)
+    // let [currentRoute, setCurrentRoute] = useState('')
+
+    // useEffect(() => setCurrentRoute(window.location.href), [])
+
+    // currentRoute && console.log('location: ', window.location.href, currentRoute, currentRoute == 'http://localhost:8080/i/flow/signup/')
     
     let markUp;
 
-    let handleClick = () => setChecked(!checked)
+    let handleClick = () => {
+        setChecked(!checked)
+    }
+
+    useEffect(() => {
+        checked && handleData(item)
+        !checked && removeData()
+    }, [checked])
 
     checked
     ?
-    markUp = <div className='category-wrapper' onClick={handleClick} style={{backgroundColor: 'rgb(29, 155, 240)'}}><div className='category-name'>{item}</div><div className='svg-item' style={{fill: 'white'}}>{checkMarkSvg()}</div></div>
+    markUp = <div className='category-wrapper' onClick={handleClick} style={{backgroundColor: 'rgb(29, 155, 240)', width: currentRoute == 'http://localhost:8080/i/flow/signup/' && 'auto'}}><div className='category-name'>{item}</div><div className='svg-item' style={{fill: 'white', display: currentRoute == 'http://localhost:8080/i/flow/signup/' && 'none'}}>{checkMarkSvg()}</div></div>
     :
-    markUp = <div className='category-wrapper' onClick={handleClick}><div className='category-name'>{item}</div><div className='svg-item'>{plusSvg()}</div></div>
+    markUp = <div className='category-wrapper' onClick={handleClick} style={{width: currentRoute == 'http://localhost:8080/i/flow/signup/' && 'auto'}} ><div className='category-name'>{item}</div><div className='svg-item' style={{display: currentRoute == 'http://localhost:8080/i/flow/signup/' && 'none'}}>{plusSvg()}</div></div>
 
     // let markup = <div className='category-wrapper'><div className='category-name'>{item}</div><div className='svg-item'>{plusSvg()}</div></div>
     
@@ -108,6 +146,7 @@ let AllCategories = () => {
     let handleClick = () => handleShowMore(showMore + 6)
 
     let renderCategories = categoriesList.map((category, idx) => idx < showMore && <CategoryCard key={category.name} item={category.name} />)
+
     return (
         <div id='container-for-all-categories'>
             <header>Categories</header>
@@ -125,7 +164,7 @@ let CategoryCard = ({ item, handleShowMore }) => {
     )
 }
 
-let categoriesList = [
+export let categoriesList = [
     { name: 'Fashion & beauty' }, { name: 'Outdoors' }, { name: 'Arts & culture' }, { name: 'Anime & manga' }, { name: 'Business & finance' },
     { name: 'Food' }, { name: 'Travel' }, { name: 'Entertainment' }, { name: 'Music' }, { name: 'Gaming' }, { name: 'Careers' }, { name: 'Home & family' },
     { name: 'Fitness' }, { name: 'Sports' }, { name: 'Technology' }, { name: 'Science' }

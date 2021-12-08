@@ -53,7 +53,7 @@
 .subcategories-container {
     /* justify-content: space-between; */
     overflow-x: auto;
-    height: 200px;
+    height: 171px;
     flex-direction: column;
 }
 

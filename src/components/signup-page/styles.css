@@ -294,3 +294,46 @@
       font-size: larger;
       font-weight: bolder;
   }
+
+/* styles for category selctions after signup */
+#container-for-category-selections #categories-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    height: 400px;
+    overflow-y: auto;
+  }
+
+#container-for-category-selections #categories-wrapper .card-container {
+    width: 146px;
+    height: 92px;
+    border: solid;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+#container-for-category-selections #bottom-div {
+    width: -webkit-fill-available;
+    justify-content: space-between;
+}
+
+#container-for-category-selections #bottom-div #selection-count {
+      color: white;
+      background: silver;
+  }
+
+#container-for-category-selections #bottom-div #next-btn {
+    line-height: 2em;
+    width: 92px;
+    display: flex;
+    justify-content: center;
+    background-color: silver;
+    color: white;
+    border-radius: 20px;
+}
