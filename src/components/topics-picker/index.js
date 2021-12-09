@@ -41,22 +41,24 @@ let RenderSubcategories = ({ name, items, handleData, removeData, scrollBy }) =>
         // setTotalScrollAmount(totalScrollAmount - amount)
     }
 
-    console.log(scrollBy, '??', scrollAmount, ':scrollAmount:', totalScrollAmount, ':totalScroll', currentRoute)
+    // console.log(scrollBy, '??', scrollAmount, ':scrollAmount:', totalScrollAmount, ':totalScroll', currentRoute)
 
     useEffect(() => setCurrentRoute(window.location.href), [])
 
-    useEffect(() => {
-        name.split(' ').join('')
-        // console.log(document.querySelector('.categories-options').querySelector(`$${name.split(' ').join('')}`).scrollWidth)
-        console.log(document.getElementById(name.split(' ').join('')).querySelector('.subcategories-container')?.scrollWidth - scrollBy)
+    useEffect(() => setTotalScrollAmount(document.getElementById(name.split(' ').join('')).querySelector('.subcategories-container')?.scrollWidth - scrollBy), [currentRoute])
 
-        currentRoute == 'http://localhost:8080/i/flow/signup/'
-        ?
-        // alert('here!!')
-        currentRoute && setTotalScrollAmount(document.querySelector('.subcategories-container')?.scrollWidth - scrollBy)
-        :
-        currentRoute && setTotalScrollAmount(document.querySelector('.subcategories-container')?.scrollWidth - scrollBy)
-    }, [currentRoute])
+    // useEffect(() => {
+    //     name.split(' ').join('')
+    //     // console.log(document.querySelector('.categories-options').querySelector(`$${name.split(' ').join('')}`).scrollWidth)
+    //     console.log(document.getElementById(name.split(' ').join('')).querySelector('.subcategories-container')?.scrollWidth - scrollBy)
+
+    //     currentRoute == 'http://localhost:8080/i/flow/signup/'
+    //     ?
+    //     // alert('here!!')
+    //     currentRoute && setTotalScrollAmount(document.querySelector('.subcategories-container')?.scrollWidth - scrollBy)
+    //     :
+    //     currentRoute && setTotalScrollAmount(document.querySelector('.subcategories-container')?.scrollWidth - scrollBy)
+    // }, [currentRoute])
 
     let handleRightArrowClick = () => {
         handleScrollsWithRef(scrollAmount + scrollBy <= totalScrollAmount ? scrollAmount + scrollBy : totalScrollAmount);
@@ -180,7 +182,9 @@ let checkMarkSvg = () => <svg width='24px' height='24px'><g><path d="M9 20c-.264
 
 let categoryNames = [
     { 'Fashion & beauty': ['Fashion business', 'Beauty', "Men's style", "Fashion models", 'Jewelry', 'Shoes', 'Gigi hadid', 'Adidas', 'Jeffree star', 'Beauty influencers', 'Fashion', 'Tattoos', 'Makeup', 'Sneakers', 'Shopping', 'PUMA', 'Streetwear', "Women's style", 'Barbara palvin', 'SNKRS', 'Skin care', 'Watches', 'Everyday style', 'Hair care', 'Athletic apparel', 'Handbags', 'Nike', 'Fashion magazines', 'Perfumes & fragrances', 'James charles'] },
-    { 'Outdoors': ['Nature', 'Dogs', 'Horses', 'Cats', 'Sailing', 'Sharks', 'Reptiles', 'Beach life', 'Otters', 'Orangutans', 'Environmentalism', 'Birdwatching', 'Fishing', 'Rock climbing', 'Surfing', 'Rabbits', 'Hiking', 'Outdoor brands', 'Mountain biking', 'Scuba diving', 'National parks', 'Pets', 'Animals', 'Dinosaurs', 'Marine life', 'Camping', 'Mountain climbing', 'RVing', 'Gorillas'] }
+    { 'Outdoors': ['Nature', 'Dogs', 'Horses', 'Cats', 'Sailing', 'Sharks', 'Reptiles', 'Beach life', 'Otters', 'Orangutans', 'Environmentalism', 'Birdwatching', 'Fishing', 'Rock climbing', 'Surfing', 'Rabbits', 'Hiking', 'Outdoor brands', 'Mountain biking', 'Scuba diving', 'National parks', 'Pets', 'Animals', 'Dinosaurs', 'Marine life', 'Camping', 'Mountain climbing', 'RVing', 'Gorillas'] },
+    { 'Arts & culture': ['Inspirational quotes', 'Horoscope', 'Astrophotography', 'Interior design', 'Screenwriting', 'Aquarius', 'Arts & crafts', 'Taurus', 'Cancer', 'Phototgraphy', 'Books', 'Astrology', 'Scorpio', 'Popular illustrators', 'Animation', 'Art', 'Graphic design', 'Virgo', 'Pisces', 'Libra', 'Anime', 'Famous quotes', 'Comics', 'Health & wellness books', 'Gemini', 'Leo', 'Capricorn', 'Aries', 'Sci-fi & fantasy films', 'Sci-fi & fantasy']},
+    { 'Business & finance': ['Elon Mask', 'Venture capital', 'Marketing', 'Vitcoin cryptocurrency', '$BTC', '$TSLA', 'Chainlink cryptocurrency', 'Litecoin cryptocurrency', 'Dash cryptocurrency', 'Investing', 'Small business', 'Etherium cryptocurrency', 'Business personalities', 'FinTech', 'Ada cryptocurrency', 'Startups', 'Financial services', '$ETH', 'Matic Network cryptocurrency', 'Business News', 'Accounting', 'Business Media', 'Advertising', 'Telecom', 'TRON cryptocurrency', 'Ripple cryptocurrency', 'Tether cryptocurrency', 'Tim Cook', 'Non profit']}
 ]
 
 export default TopicsPicker

@@ -102,7 +102,7 @@
     width: 22px;
     top: 123px;
     border-radius: 50%;
-    padding: 2px;
+    padding: 2px;background-color: rgba(29, 40, 20, .6);
 }
 
 .category-wrapper-container .categories-options .highlight-both-arrow-svg 
@@ -112,7 +112,7 @@
 .category-wrapper-container .categories-options .show-more-on-right:hover,
 .category-wrapper-container .categories-options #hovered-left:hover,
 .category-wrapper-container .categories-options #hovered-right:hover{
-    background-color: rgba(29, 40, 20, .6);
+    background-color: rgba(29, 40, 20, .89);
     fill: white;
 }
 
