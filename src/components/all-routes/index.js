@@ -47,6 +47,31 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
     let [secondTweetHasMedia, setSecondTweetHasMedia] = useState(false)
     let [firstTweetHasPoll, setFirstTweetHasPoll] = useState(false)
     let [secondTweetHasPoll, setSecondTweetHasPoll] = useState(false)
+    let [userInterests, setUserInterests] = useState([])
+    let [sanitizedInterestsData, setSanitizedInterestsData] = useState([])
+
+    let handleUserInterestsData = (data, name) => {
+        setUserInterests(prevData => prevData.concat(data))
+    }
+
+    useEffect(() => {
+        userInterests && userInterests.forEach((item, idx, arr) => {
+            let test = {}
+            for (let key in item) {
+                arr.forEach(it => {
+                    for (let k in it) {
+                        if (test.hasOwnProperty(k)) {
+                            test[k] = it[k]
+                        } else {
+                            test[k] = it[k]
+                        }
+                    }
+                })
+                console.log(test)
+                setSanitizedInterestsData({ interests: test })
+            }
+        })
+    }, [userInterests])
 
     let handleScheduleIconClicked = () => {
         setIsScheduleIconClicked(!isScheduleIconClicked);
@@ -87,6 +112,8 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                     <SignupPage
                         currentUser={currentUser}
                         handleCurrentUser={handleCurrentUser}
+                        handleData={handleUserInterestsData} 
+                        sanitizedData={sanitizedInterestsData}
                     />
                 </Route>
 
@@ -102,7 +129,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
 
                 <Route exact path='/i/topics/picker/home'>
                     <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
-                    <TopicsPicker />
+                    <TopicsPicker handleData={handleUserInterestsData} sanitizedData={sanitizedInterestsData} />
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 

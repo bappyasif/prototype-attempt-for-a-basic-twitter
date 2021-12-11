@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
+import { updateUserInterestsSelection } from '../../firestore-methods';
 import { AddMoreToCategories, categoriesList } from '../../topics-picker'
 
-function CategorySelections() {
+function CategorySelections({handleData, sanitizedData, updateComlpetionStatus, currentUser}) {
     let [categories, setCategories] = useState([]);
     let [level, setLevel] = useState(0);
     let handleLevel = () => setLevel(prevLevel => prevLevel + 1)
     let handleCategories = (data) => setCategories(prevData => prevData.concat(data))
     let removeCategory = () => setCategories(prevData => prevData.slice(0, categories.length - 1))
     // categories && console.log(categories)
+    let updateInterestsInFirestore = () => {
+        updateUserInterestsSelection(sanitizedData, currentUser, updateComlpetionStatus )
+    }
+    console.log(sanitizedData, 'from signup')
     let showText = () => {
         let text;
         categories.length <= 3
@@ -32,7 +37,8 @@ function CategorySelections() {
         </div>
         :
         <div id='container-for-category-selections'>
-            <AddMoreToCategories scrollBy={560} />
+            <AddMoreToCategories scrollBy={560} handleData={handleData} />
+            <div id='done-selecting' onClick={updateInterestsInFirestore}>Next</div>
         </div>
 
         // <div id='container-for-category-selections'>

@@ -92,6 +92,7 @@ export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser)
     let month = months[date.getMonth()];
     let year = date.getFullYear()
     // console.log(day, month, year)
+    console.log(name, '<>')
     
     let userData = {userInfo: {uid: userID, name: name, userProfileCompleted: false},
                     profileInfo: [
@@ -246,4 +247,13 @@ export let deleteBirthdate = (docID) => {
     updateDoc(docRef, {profileInfo: FieldValue.arrayRemove(docID.profileInfo[4])})
     .then(() => console.log('birthdate removed'))
     .catch(err => console.log('birthdate removal was failed', err.message))
+}
+
+export let updateUserInterestsSelection = (data, docID, completionStatus) => {
+    let docRef = doc(db, 'tweets-user', docID)
+    updateDoc(docRef, data)
+    .then(() => {
+        console.log('interests updated or added')
+    }).catch(err=>console.log('interests could not be updated or added', err.message))
+    .finally(() => completionStatus())
 }

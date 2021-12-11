@@ -1,80 +1,40 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './style.css'
 
-function TopicsPicker() {
-    let [dataset, setDataset] = useState([])
-    let [distil, setDistill] = useState([])
-    let [tempSame, setTempSame] = useState([])
-    let [test, setTest] = useState(false)
-    let [flag, setFlag] = useState(false)
-    let [sanitizedData, setSanitizedData] = useState([])
-    let [category, setCategory] = useState('')
+function TopicsPicker({handleData, sanitizedData}) {
+    // let [dataset, setDataset] = useState([])
+    // let [sanitizedData, setSanitizedData] = useState([])
+
     // let [category, setCategory] = useState(false)
     let handleCategory = (value) => setCategory(value)
 
-    let handleData = (data, name) => {
-        setDataset(prevData => prevData.concat(data))
-        // name != category && handleCategory(category)
-        handleCategory(name)
-        name != category && setTest(true)
-    }
-
-    useEffect(() => {
-        test && setSanitizedData(prevData => prevData.concat(tempSame))
-        test && setTest(false)
-        // test && console.log('how many time runs!!')
-    }, [test])
+    // let handleData = (data, name) => {
+    //     setDataset(prevData => prevData.concat(data))
+    //     // name != category && handleCategory(category)
+    //     // handleCategory(name)
+    //     // name != category && setTest(true)
+    // }
 
     // useEffect(() => {
-    //     test && setSanitizedData(distil)
-    //     test && setTest(false)
-    //     distil && setDistill([])
+    //     dataset && dataset.forEach((item, idx, arr) => {
+    //         let test = {}
+    //         for (let key in item) {
+    //             arr.forEach(it => {
+    //                 for (let k in it) {
+    //                     if (test.hasOwnProperty(k)) {
+    //                         test[k] = it[k]
+    //                     } else {
+    //                         test[k] = it[k]
+    //                     }
+    //                 }
+    //             })
+    //             console.log(test)
+    //             setSanitizedData({ interests: test })
+    //         }
+    //     })
     // }, [dataset])
 
-    useEffect(() => {
-        flag && distil && console.log('distil', distil, 'set:', new Set(distil))
-        // flag && distil && console.log('distil', distil, 'set:', new Set(distil).entries().next().value)
-        // flag && distil && setSanitizedData(prevData => prevData.concat(distil))
-        flag && distil && setSanitizedData(distil)
-        // flag  && distil && setFlag(false)
-        // flag && distil && setDistill([])
-    }, [flag])
-
-    useEffect(() => {
-        let distilled = sanitizedData && !flag && sanitizedData.map(item => {
-            for(let key in item) {
-                if(key == category) {
-                    console.log('found!!', category)
-                    setFlag(true)
-                    return tempSame
-                } else {
-                    return item
-                }
-            }
-        }).filter(item=> item)
-        console.log(distilled, 'distilled!!', category)
-        distilled && setDistill(distilled)
-        // setFlag(false)
-        // distil && setSanitizedData(prevData => prevData.slice(0,0).concat(distil))
-        // distil && setSanitizedData(distil)
-    }, [sanitizedData])
-
-    useEffect(() => {
-        category && setTempSame(dataset.filter(item => {
-            for(let key in item) {
-                 if(key == category) {
-                     return item
-                 }
-            }
-        }).reverse()[0])
-        // console.log(category, 'runs!!')
-        flag && setFlag(false)
-        distil && setDistill([])
-    }, [dataset])
-
-    // useEffect(() => tempSame && setTest(prevData => prevData.concat(tempSame)), [tempSame])
-
-    sanitizedData && console.log(sanitizedData, 'sanitized?!', dataset, 'current category existing selection::', tempSame)
+    console.log(sanitizedData, 'sanitized!!')
 
     return (
         <div id='container-for-topics-picker'>
@@ -85,7 +45,7 @@ function TopicsPicker() {
     )
 }
 
-export let AddMoreToCategories = ({ scrollBy, handleData}) => {
+export let AddMoreToCategories = ({ scrollBy, handleData }) => {
     // let [data, setData] = useState([]);
     // let handleData = (data) => setData(prevData=>prevData.concat(data))
     // let removeData = () => setData(prevData => prevData.slice(0, data.length-1))
@@ -304,6 +264,389 @@ export default TopicsPicker
  * 
  function TopicsPicker() {
     let [dataset, setDataset] = useState([])
+    let [sanitizedData, setSanitizedData] = useState([])
+
+    // let [category, setCategory] = useState(false)
+    let handleCategory = (value) => setCategory(value)
+
+    let handleData = (data, name) => {
+        setDataset(prevData => prevData.concat(data))
+        // name != category && handleCategory(category)
+        // handleCategory(name)
+        // name != category && setTest(true)
+    }
+
+    useEffect(() => {
+        dataset && dataset.forEach((item, idx, arr) => {
+            let test = {}
+            for (let key in item) {
+                arr.forEach(it => {
+                    for (let k in it) {
+                        if (test.hasOwnProperty(k)) {
+                            test[k] = it[k]
+                        } else {
+                            test[k] = it[k]
+                        }
+                    }
+                })
+                console.log(test)
+                setSanitizedData({ interests: test })
+            }
+        })
+    }, [dataset])
+
+    console.log(sanitizedData, 'sanitized!!')
+
+    return (
+        <div id='container-for-topics-picker'>
+            <AllCategories />
+            {/* <CategoriesPicks /> *}
+            {<AddMoreToCategories scrollBy={650} handleData={handleData} />}
+        </div>
+    )
+}
+ * 
+ * 
+ function TopicsPicker() {
+    let [dataset, setDataset] = useState([])
+    let [distil, setDistill] = useState([])
+    let [tempSame, setTempSame] = useState([])
+    let [tempDifferent, setTempDifferent] = useState([])
+    let [test, setTest] = useState(false)
+    let [flag, setFlag] = useState(false)
+    let [sanitizedData, setSanitizedData] = useState([])
+    let [category, setCategory] = useState('')
+
+    // let [category, setCategory] = useState(false)
+    let handleCategory = (value) => setCategory(value)
+
+    let handleData = (data, name) => {
+        setDataset(prevData => prevData.concat(data))
+        // name != category && handleCategory(category)
+        handleCategory(name)
+        // name != category && setTest(true)
+    }
+
+    useEffect(() => {
+        dataset && dataset.forEach((item, idx, arr) => {
+            let test = {}
+            for (let key in item) {
+                arr.forEach(it => {
+                    for (let k in it) {
+                        if (test.hasOwnProperty(k)) {
+                            test[k] = it[k]
+                        } else {
+                            test[k] = it[k]
+                        }
+                    }
+                })
+                console.log(test)
+                setSanitizedData({ interests: test })
+            }
+        })
+    }, [dataset])
+
+    // useEffect(() => {
+    //     dataset && dataset.forEach((item, idx, arr) => {
+    //         for(let key in item) {
+    //             if(key == category) setTempSame(item)
+    //             else {
+    //                 let test = {}
+    //                 arr.forEach(it => {
+    //                     for(let k in it) {
+    //                         if(test.hasOwnProperty(k)) {
+    //                             test[k] = it[k]
+    //                         } else {
+    //                             test[k] = it[k]
+    //                         }
+    //                     }
+    //                 })
+    //                 console.log(test)
+    //                 setSanitizedData({interests: test})
+    //             }
+    //         }
+    //     })
+    // }, [dataset])
+
+    console.log(sanitizedData, 'sanitized!!')
+
+    // useEffect(() => {
+    //     dataset && dataset.forEach((item, idx, arr) => {
+    //         for(let key in item) {
+    //             if(key == category) setTempSame(item)
+    //             else {
+    //                 let test = arr.filter(it => {
+    //                     for(let k in it) {
+    //                         if(k == category) return it;
+    //                         else setTempDifferent(prevData => prevData.concat(item))
+    //                     }
+    //                 })
+    //                 test && setTempDifferent(prevData => prevData.concat(test[test.length-1]))
+    //             }
+    //         }
+    //     })
+    // }, [dataset])
+
+    // useEffect(() => {
+    //     dataset && dataset.forEach((item, idx) => {
+    //         for(let key in item) {
+    //             if(key == category) setTempSame(item)
+    //             if(idx < 2) {
+    //                 setTempDifferent(prevData => prevData.concat(item))
+    //             } else {
+    //                 setTempDifferent(prevData => prevData.slice(2).concat(item))
+    //             }
+    //         }
+    //     })
+    // }, [dataset])
+
+    // useEffect(() => {
+    //     let test = sanitizedData.findIndex(item => {
+
+    //     })
+    // }, [tempSame])
+
+    console.log(tempSame, tempDifferent, '<<checks>>', dataset)
+
+    return (
+        <div id='container-for-topics-picker'>
+            <AllCategories />
+            {/* <CategoriesPicks /> *}
+            {<AddMoreToCategories scrollBy={650} handleData={handleData} />}
+        </div>
+    )
+}
+ *
+ *
+ function TopicsPicker() {
+    let [dataset, setDataset] = useState([])
+    let [distil, setDistill] = useState([])
+    let [tempSame, setTempSame] = useState([])
+    let [tempDifferent, setTempDifferent] = useState([])
+    let [test, setTest] = useState(false)
+    let [flag, setFlag] = useState(false)
+    let [sanitizedData, setSanitizedData] = useState([])
+    let [category, setCategory] = useState('')
+    let [fliteredList1, setFilteredList1] = useState([])
+    let [fliteredList2, setFilteredList2] = useState([])
+    let [fliteredList3, setFilteredList3] = useState([])
+    let [fliteredList4, setFilteredList4] = useState([])
+    // let [category, setCategory] = useState(false)
+    let handleCategory = (value) => setCategory(value)
+
+    let handleData = (data, name) => {
+        setDataset(prevData => prevData.concat(data))
+        // name != category && handleCategory(category)
+        handleCategory(name)
+        // name != category && setTest(true)
+    }
+    useEffect(() => {
+        dataset.filter((item) => {
+            let keys = Object.keys(item)
+            console.log(keys, 'keys')
+            for(let key in item) {
+                if(key == 'Fashion&beauty') setFilteredList1(prevData => prevData.concat(item))
+                if(key == 'Outdoors') setFilteredList2(prevData => prevData.concat(item))
+                if(key == 'Business&finance') setFilteredList3(prevData => prevData.concat(item))
+                if(key == 'Arts&culture') setFilteredList4(prevData => prevData.concat(item))
+            }
+        })
+    }, [dataset])
+
+    console.log(fliteredList1, fliteredList2, fliteredList3, fliteredList4, '<<filtered>>')
+
+    // this stays true for first two or three cycles
+    // useEffect(() => {
+    //     let filtered = dataset && dataset.filter(item => {
+    //         for(let key in item) {
+    //             if(key != category) {
+    //                 return item
+    //             } else {
+    //                 tempSame.push(item)
+    //             }
+    //         }
+    //     })
+    //     console.log('filtered', filtered)
+    //     setDistill(filtered.concat(tempSame[tempSame.length-1]))
+    // }, [dataset])
+
+    // useEffect(() => {
+    //     dataset && dataset.map((item, idx, arr) => {
+    //         for(let key in item) {
+    //             idx == 0 && setDistill(item)
+    //             let test = arr.filter(item2 => {
+    //                 for(let key2 in item2) {
+    //                     console.log('check01')
+    //                     let findIdx = arr.findIndex(item3 => {
+    //                         for(let key3 in item3) {
+    //                             if(key3 == category)
+    //                         }
+    //                     })
+    //                     if(key2 != category) {
+    //                         console.log('check02')
+    //                         return item2
+    //                     }
+    //                 }
+    //             })
+    //             console.log(test, '?!', distil)
+    //         }
+    //     })
+    // }, [dataset])
+
+    // useEffect(() => {
+    //     dataset && dataset.map((item, idx) => {
+    //         for (let key in item) {
+    //             let findSameInTemp = distil.findIndex((data, index) => {
+    //                 for (let key2 in data) {
+    //                     if(key2 == category) {
+    //                         console.log(category, key2, 'check01')
+    //                         return index
+    //                     }
+    //                 }
+    //             })
+    //             // setDistill(prevData => prevData.concat(item))
+    //             findSameInTemp ? setDistill(prevData => prevData.slice(findSameInTemp).concat(item)) : setDistill(prevData => prevData.concat(item))
+    //             console.log(findSameInTemp, 'check02', distil)
+    //         }
+    //     })
+    // }, [dataset])
+
+    // useEffect(() => {
+    //     dataset && test && dataset.forEach((item, idx, arr) => {
+    //         for(let key in item) {
+    //             if(key == category) {
+    //                 // setTempSame(prevData => prevData.concat(item))
+    //                 setTempSame(item)
+    //                 // console.log('check 01')
+    //             } else {
+    //                 setTempDifferent(prevData => prevData.slice(prevData.length).concat(item))
+    //                 // setTempDifferent(prevData => prevData.filter(item => {
+    //                 //     for(let key in item) {
+    //                 //         console.log('check01')
+    //                 //         if(key != category) return item
+    //                 //     }
+    //                 //     console.log('check02')
+    //                 // }))
+    //                 // setTempDifferent(prevData => prevData.concat(item))
+    //                 // setTempDifferent(prevData => prevData.slice(0,0).concat(item))
+    //                 // setTempDifferent(prevData => prevData.map(item => {
+    //                 //     for(let key in item) {
+    //                 //         if(key == category) {
+    //                 //             console.log('found!!')
+    //                 //         } else {
+    //                 //             return item
+    //                 //         }
+    //                 //     }
+    //                 // }))
+    //                 // console.log('check 02', key)
+    //             }
+    //             // console.log('check 03')
+    //         }
+    //         // console.log('check 04')
+    //     })
+    // }, [dataset])
+
+    // sanitizedData && console.log(sanitizedData, 'sanitized?!', dataset, 'current category existing selection::', tempSame, 'other ctaegories', tempDifferent, 'distilled', distil)
+
+    return (
+        <div id='container-for-topics-picker'>
+            <AllCategories />
+            {/* <CategoriesPicks /> *}
+            {<AddMoreToCategories scrollBy={650} handleData={handleData} />}
+        </div>
+    )
+}
+ *
+ *
+ function TopicsPicker() {
+    let [dataset, setDataset] = useState([])
+    let [distil, setDistill] = useState([])
+    let [tempSame, setTempSame] = useState([])
+    let [test, setTest] = useState(false)
+    let [flag, setFlag] = useState(false)
+    let [sanitizedData, setSanitizedData] = useState([])
+    let [category, setCategory] = useState('')
+    // let [category, setCategory] = useState(false)
+    let handleCategory = (value) => setCategory(value)
+
+    let handleData = (data, name) => {
+        setDataset(prevData => prevData.concat(data))
+        // name != category && handleCategory(category)
+        handleCategory(name)
+        name != category && setTest(true)
+    }
+
+    useEffect(() => {
+        test && setSanitizedData(prevData => prevData.concat(tempSame))
+        test && setTest(false)
+        // test && console.log('how many time runs!!')
+    }, [test])
+
+    // useEffect(() => {
+    //     test && setSanitizedData(distil)
+    //     test && setTest(false)
+    //     distil && setDistill([])
+    // }, [dataset])
+
+    useEffect(() => {
+        // let uniques = flag && distil && distil.filter((key, idx, arr) => arr.findIndex(item => item.))
+        flag && distil && console.log('distil', distil, 'set:', new Set(distil))
+        // flag && distil && console.log('distil', distil, 'set:', new Set(distil).entries().next().value)
+        // flag && distil && setSanitizedData(prevData => prevData.concat(distil))
+        flag && distil && setSanitizedData(distil)
+        // flag  && distil && setFlag(false)
+        // flag && distil && setDistill([])
+    }, [flag])
+
+    useEffect(() => {
+        let distilled = sanitizedData && !flag && sanitizedData.map(item => {
+            for(let key in item) {
+                if(key == category) {
+                    console.log('found!!', category)
+                    setFlag(true)
+                    return tempSame
+                } else {
+                    return item
+                }
+            }
+        }).filter(item=> item).filter((item, idx, arr) => idx < arr.length && item)
+        console.log(distilled, 'distilled!!', category, sanitizedData)
+        distilled && setDistill(distilled)
+        // setFlag(false)
+        // distil && setSanitizedData(prevData => prevData.slice(0,0).concat(distil))
+        // distil && setSanitizedData(distil)
+    }, [sanitizedData])
+
+    useEffect(() => {
+        category && setTempSame(dataset.filter(item => {
+            for(let key in item) {
+                 if(key == category) {
+                     return item
+                 }
+            }
+        }).reverse()[0])
+        // console.log(category, 'runs!!')
+        flag && setFlag(false)
+        // distil && setDistill([])
+        // sanitizedData && setSanitizedData([])
+    }, [dataset])
+
+    // useEffect(() => tempSame && setTest(prevData => prevData.concat(tempSame)), [tempSame])
+
+    sanitizedData && console.log(sanitizedData, 'sanitized?!', dataset, 'current category existing selection::', tempSame)
+
+    return (
+        <div id='container-for-topics-picker'>
+            <AllCategories />
+            {/* <CategoriesPicks /> *}
+            {<AddMoreToCategories scrollBy={650} handleData={handleData} />}
+        </div>
+    )
+}
+ *
+ *
+ function TopicsPicker() {
+    let [dataset, setDataset] = useState([])
     let [distil, setDistill] = useState([])
     let [tempSame, setTempSame] = useState([])
     let [test, setTest] = useState(false)
@@ -429,8 +772,8 @@ export default TopicsPicker
         </div>
     )
 }
- * 
- * 
+ *
+ *
  function TopicsPicker() {
     let [dataset, setDataset] = useState([])
     let [tempDifferent, setTempDifferent] = useState([])
@@ -482,8 +825,8 @@ export default TopicsPicker
         </div>
     )
 }
- * 
- * 
+ *
+ *
  function TopicsPicker() {
     let [dataset, setDataset] = useState([])
     let [tempDifferent, setTempDifferent] = useState([])
@@ -529,7 +872,7 @@ export default TopicsPicker
 
     // useEffect(() => tempSame && console.log(tempSame, 'samesies'), [tempSame])
     useEffect(() => tempSame && setTest(prevData => prevData.concat(tempSame)), [tempSame])
-    
+
     // let handleData = (data, name) => {
     //     setDataset(prevData => prevData.concat(data))
     //     // name != category && handleCategory(category)
@@ -573,15 +916,15 @@ export default TopicsPicker
         </div>
     )
 }
- * 
- * 
+ *
+ *
  function TopicsPicker() {
     let [dataset, setDataset] = useState([])
     let [sanitizedData, setSanitizedData] = useState([])
     let [category, setCategory] = useState('')
     // let [category, setCategory] = useState(false)
     let handleCategory = (value) => setCategory(value)
-    
+
     let handleData = (data, category) => {
         setDataset(prevData => prevData.concat(data))
         handleCategory(category)
