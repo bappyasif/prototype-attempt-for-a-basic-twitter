@@ -251,9 +251,27 @@ export let deleteBirthdate = (docID) => {
 
 export let updateUserInterestsSelection = (data, docID, completionStatus) => {
     let docRef = doc(db, 'tweets-user', docID)
+    console.log('checkpoint-01')
     updateDoc(docRef, data)
     .then(() => {
         console.log('interests updated or added')
     }).catch(err=>console.log('interests could not be updated or added', err.message))
-    .finally(() => completionStatus())
+    .finally(() => {
+        completionStatus()
+        console.log('checkpoint-02')
+    })
+}
+
+export let getSomeDataFromUserMainDocument = (userID, dataLoader, whichData) => {
+    let docRef = doc(db, 'tweets-user', userID)
+    getDoc(docRef)
+    .then(docSnap => {
+        if(docSnap.exists) {
+            let queriedData = docSnap.data()[whichData];
+            dataLoader(queriedData)
+            console.log('data is now loaded')
+        } else {
+            console.log('no such document found')
+        }
+    }).catch(err => console.log('could not extract data from given docuement', err.message))
 }

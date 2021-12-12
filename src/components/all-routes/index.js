@@ -129,7 +129,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
 
                 <Route exact path='/i/topics/picker/home'>
                     <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
-                    <TopicsPicker handleData={handleUserInterestsData} sanitizedData={sanitizedInterestsData} />
+                    <TopicsPicker handleData={handleUserInterestsData} sanitizedData={sanitizedInterestsData} currentUser={currentUser} />
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
