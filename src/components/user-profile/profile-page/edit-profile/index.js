@@ -167,9 +167,11 @@ function EditProfile({currentUser, setOpacity}) {
     return (
         <div id='edit-profile-container' >
             <div id='header-section'>
-                <Link id='remove-icon' to='/username'>{removeIcon()}</Link>
+                {/* <Link id='remove-icon' to='/username'>{removeIcon()}</Link> */}
+                <Link id='remove-icon' to={`/${currentUser}`}>{removeIcon()}</Link>
                 <div id='edit-profile-text'>Edit profile</div>
-                <Link id='save-edit-profile-changes' to='/username' onClick={handleData} style={{opacity: (activateOpacityForProfile || activateOpacityForCover) &&  .5, pointerEvents: (activateOpacityForProfile || activateOpacityForCover) && 'none'}}>Save</Link>
+                {/* <Link id='save-edit-profile-changes' to='/username' onClick={handleData} style={{opacity: (activateOpacityForProfile || activateOpacityForCover) &&  .5, pointerEvents: (activateOpacityForProfile || activateOpacityForCover) && 'none'}}>Save</Link> */}
+                <Link id='save-edit-profile-changes' to={`/${currentUser}`} onClick={handleData} style={{opacity: (activateOpacityForProfile || activateOpacityForCover) &&  .5, pointerEvents: (activateOpacityForProfile || activateOpacityForCover) && 'none'}}>Save</Link>
             </div>
             <div id='body-section'>
                 <div id='profile-visuals' style={{maxHeight: '249px'}}>

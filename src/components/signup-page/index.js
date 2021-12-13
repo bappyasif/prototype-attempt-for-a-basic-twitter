@@ -140,25 +140,25 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
             {
                 step == 1
                 &&
-                // <CategorySelections handleData={handleData} sanitizedData={sanitizedData} />
-                <div id='user-info-div'>
-                    <h2>Create your account</h2>
-                    <div id='first-half'>
-                        <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
-                        <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPhone} value={emailOrPhone} ref={epRef} type={isPhoneNumberUsed ? 'email' : 'tel'} setValidated={setValidated} />
-                        <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
-                    </div>
-                    <div id='second-half'>
-                        <h2>Date of birth</h2>
-                        <p>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
-                        <div id='birth-date-selection-container'>
-                            {/* <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthDateRef} /> */}
-                            <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthRef} month={month} />
-                            <ReturnASelectElement name='Date' handleChnage={handleSelectElementChanges} whichMonth={month} date={date} />
-                            <ReturnASelectElement name='Year' handleChnage={handleSelectElementChanges} year={year} />
-                        </div>
-                    </div>
-                </div>
+                <CategorySelections handleData={handleData} sanitizedData={sanitizedData} />
+                // <div id='user-info-div'>
+                //     <h2>Create your account</h2>
+                //     <div id='first-half'>
+                //         <ReturnAnInputElement name="Name" maxLength={50} updateValue={setname} value={name} ref={nameRef} />
+                //         <ReturnAnInputElement name={isPhoneNumberUsed ? "Email address" : "Phone number"} updateValue={setEmailOrPhone} value={emailOrPhone} ref={epRef} type={isPhoneNumberUsed ? 'email' : 'tel'} setValidated={setValidated} />
+                //         <h4 onClick={() => setIsPhoneNumberUsed(!isPhoneNumberUsed)}>{isPhoneNumberUsed ? 'Use phone number instead' : 'Use email address instead'}</h4>
+                //     </div>
+                //     <div id='second-half'>
+                //         <h2>Date of birth</h2>
+                //         <p>This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.</p>
+                //         <div id='birth-date-selection-container'>
+                //             {/* <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthDateRef} /> */}
+                //             <ReturnASelectElement name='Month' handleChnage={handleSelectElementChanges} ref={birthRef} month={month} />
+                //             <ReturnASelectElement name='Date' handleChnage={handleSelectElementChanges} whichMonth={month} date={date} />
+                //             <ReturnASelectElement name='Year' handleChnage={handleSelectElementChanges} year={year} />
+                //         </div>
+                //     </div>
+                // </div>
             }
             {
                 step == 2
@@ -251,7 +251,8 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
                     {
                         signupDone == 'done' && isInterestsSelectionDone
                         &&
-                        <Redirect to='/username/profile'/>
+                        // <Redirect to='/username/profile'/>
+                        <Redirect to={`/${currentUser}/profile`} />
                     }
                     
                     {
@@ -263,11 +264,11 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
             }
 
             {/* temporarily commenting this out, uncomment this back for effective 'next' functiolaity */}
-            {
+            {/* {
                 (step < 3)
                 &&
                 <button style={{ cursor: 'pointer' }} id='bottom-div' className={(name && emailOrPhone && month && date && year) ? 'ready' : 'not-ready'} onClick={handleGoNextButton}>Next</button>
-            }
+            } */}
 
             {
                 step == 3

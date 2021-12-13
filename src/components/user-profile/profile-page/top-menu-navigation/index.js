@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import './index.css'
 
-function ProfilePageTopNavigationMenuBar() {
+function ProfilePageTopNavigationMenuBar({currentUser}) {
     let [navID, setNavID] = useState('');
+    // let [route, setRoute] = useState();
     let handleClicks = (evt) => {
         let menuClicked = evt.target.id;
         setNavID(menuClicked)
     }
+
+    // useEffect(() => setRoute(currentUser), [])
 
     useEffect(() => {
         
@@ -21,7 +24,8 @@ function ProfilePageTopNavigationMenuBar() {
 
     let renderNavigations = navigationArray.map((item, idx) => <Link
         key={item.id}
-        to={item.id == 'tweets' ? '/username' : '/username/' + item.id}
+        // to={item.id == 'tweets' ? '/username' : '/username/' + item.id}
+        to={item.id == 'tweets' ? "/"+currentUser+'/' : "/"+currentUser+'/' + item.id}
         id={item.id}
         className={navID == item.id ? 'menu-active' : 'menu-default-view'}
         onClick={handleClicks}

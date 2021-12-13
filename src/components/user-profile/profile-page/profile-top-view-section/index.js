@@ -109,7 +109,8 @@ function ProfilePageTopView({currentUser}) {
                 {/* <img id='profile-pic' src='https://picsum.photos/200/300' /> */}
                 {<img id='profile-pic' src={(filteredData[6] && filteredData[6].content)} /> || <img id='profile-pic' src='https://picsum.photos/200/300' />}
                 {/* <div id='edit-profile'>Edit profile</div> */}
-                <Link id='edit-profile' to='/username/profile'>Edit profile</Link>
+                {/* <Link id='edit-profile' to='/username/profile'>Edit profile</Link> */}
+                <Link id='edit-profile' to={`/${currentUser}/profile`}>Edit profile</Link>
             </div>
             {/* {renderUserData()} */}
             <div id='profile-info-section'>

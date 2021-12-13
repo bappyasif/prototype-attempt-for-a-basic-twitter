@@ -8,7 +8,7 @@ function ProfilePageUpperView({opacity,  currentUser}) {
     return (
         <div id='profile-page-upperview-container' style={{opacity: opacity ? '.2' : 1}}>
             <ProfilePageTopView  currentUser={currentUser} />
-            <ProfilePageTopNavigationMenuBar />
+            <ProfilePageTopNavigationMenuBar currentUser={currentUser}/>
         </div>
     )
 }

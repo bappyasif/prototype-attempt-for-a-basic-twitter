@@ -99,11 +99,13 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser }) => {
       {/* <Link onClick={confirmLogin} style={{opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none'}} id='login-btn'>Login</Link> */}
 
       {
-        currentUser && signinDone && profileCompleted && <Redirect to='/username/' />
+        // currentUser && signinDone && profileCompleted && <Redirect to='/username/' />
+        currentUser && signinDone && profileCompleted && <Redirect to={`/${currentUser}`} />
       }
 
       {
-        currentUser && signinDone && !profileCompleted && <Redirect to='/username/profile/' />
+        // currentUser && signinDone && !profileCompleted && <Redirect to='/username/profile/' />
+        currentUser && signinDone && !profileCompleted && <Redirect to={`/${currentUser}/profile`} />
       }
 
       {/* {

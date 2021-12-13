@@ -83,7 +83,7 @@ let PickerCard = ({ item, removeCategory, addCategory }) => {
     }, [selected])
 
     return (
-        <div className='card-container' onClick={handleSelected}>{item}</div>
+        <div className='card-container' onClick={handleSelected} style={{backgroundColor: selected && 'rgba(29, 155, 240, 1)', color: selected && 'white'}}>{item}</div>
     )
 }
 

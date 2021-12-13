@@ -73,14 +73,17 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
       <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
 
       {
-        !usingSignin && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile' />
+        // !usingSignin && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile' />
+        !usingSignin && currentUser && redirectJustOnce == 1 && <Redirect to={`/${currentUser}/profile`} />
       }
       {
-        profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
+        // profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/' />
+        profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to={`/${currentUser}/`} />
       }
 
       {
-        !profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile' />
+        // !profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile' />
+        !profileCompleted && currentUser && redirectJustOnce == 1 && <Redirect to={`/${currentUser}/profile`} />
       }
 
     </div>

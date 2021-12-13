@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import "../styles/left-panel.css";
 import { deleteIcon, iconsArray } from "./svg-resources";
 
-function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle, opacity}) {
+function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle, opacity, currentUser}) {
 
   let clickHandler = () => handleTweetModalToggle()
 
   let panelDivs = iconsArray.map((icon) => (
     <div key={icon.id} id={icon.id} onClick={icon.id == 'Tweet' ? clickHandler : null}>
-      <Link className="item-divs" to={icon.id == 'Tweet' ? '/tweet/compose' : icon.id == 'Profile' ? '/username' : '/'}>
+      <Link className="item-divs" to={icon.id == 'Tweet' ? '/tweet/compose' : icon.id == 'Profile' ? '/'+currentUser : '/'}>
         <span className="icons-span" style={{display: icon.id == 'Tweet' ? 'none': 'block'}}>{icon.svg}</span>
         <span className="names-span">{icon.id == "Twitter" ? "" : icon.id}</span>
       </Link>

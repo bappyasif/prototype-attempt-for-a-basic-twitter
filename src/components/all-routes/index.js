@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams } from 'react-router-dom';
 import LoginPage from '../login-page';
 import LeftSideNavigationPanel from '../navigation-panels/left-side';
 import BeginReset from '../password-reset-page/begin-reset';
@@ -49,6 +49,9 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
     let [secondTweetHasPoll, setSecondTweetHasPoll] = useState(false)
     let [userInterests, setUserInterests] = useState([])
     let [sanitizedInterestsData, setSanitizedInterestsData] = useState([])
+
+    // let {url} = useRouteMatch()
+    // let {id} = useParams()
 
     let handleUserInterestsData = (data, name) => {
         setUserInterests(prevData => prevData.concat(data))
@@ -128,14 +131,14 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 </Route>
 
                 <Route exact path='/i/topics/picker/home'>
-                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser}/>
                     <TopicsPicker handleData={handleUserInterestsData} sanitizedData={sanitizedInterestsData} currentUser={currentUser} />
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
                 <Route exact path='/tweet/compose'>
                     {/* {setChangeLayout(true)} */}
-                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser}/>
                     <ComposeTweet
                         selectedFile={selectedFile}
                         extraSelectedFile={selectedPictureFileForExtraTweet}
@@ -187,6 +190,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                         setFirstTweetHasPoll={setFirstTweetHasPoll}
                         secondTweetHasPoll={secondTweetHasPoll}
                         setSecondTweetHasPoll={setSecondTweetHasPoll}
+                        currentUser={currentUser}
                     />
                     {/* <ProfilePageUpperView /> */}
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
@@ -194,7 +198,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 </Route>
 
                 <Route exact path='/tweet/compose/schedule'>
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser}/>
                     <TweetScheduler
                         isScheduleIconClicked={isScheduleIconClicked}
                         handleToggle={handleScheduleIconClicked}
@@ -204,7 +208,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 </Route>
 
                 <Route exact path='/tweet/compose/media'>
-                    <LeftSideNavigationPanel />
+                <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser}/>
                     <EditTweetMediaContents
                         mediaFile={selectedFile}
                         updateMediaFile={setSelectedFile}
@@ -215,9 +219,9 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                     <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
-                <Route exact path='/username'>
+                <Route exact path={`/${currentUser}`}>
                     {/* {setChangeLayout(false)} */}
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <ProfilePageUpperView currentUser={currentUser} />
                     <RightSideNavigationPanel tweetData={tweetData} />
                     <UserProfile
@@ -270,31 +274,31 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                     />
                 </Route>
 
-                <Route path='/username/profile'>
-                    <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
+                <Route path={`/${currentUser}/profile`}>
+                    <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     {currentUser && <EditProfile currentUser={currentUser} setOpacity={setOpacity} />}
                     {/* <EditProfile currentUser={currentUser} setOpacity={setOpacity} /> */}
                     {/* { currentUserID && <EditProfile currentUser={currentUserID} setOpacity={setOpacity} />} */}
-                    <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />
+                    {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
-                <Route path='/username/tweets-and-replies'>
+                <Route path={`/${currentUser}/tweets-and-replies`}>
                     {/* {tweetPublishReady && setTweetPublishReady(false)} */}
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
-                    <ProfilePageUpperView />
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                    {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
                     <TweetsAndRepliesPage tweetData={tweetData} />
                     <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
-                <Route path='/username/media'>
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} />
-                    <ProfilePageUpperView />
+                <Route path={`/${currentUser}/media`}>
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle}  currentUser={currentUser}/>
+                    {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
                     <AllMedias tweetData={tweetData} />
                     <RightSideNavigationPanel tweetData={tweetData} />
                 </Route>
 
-                <Route path='/username/likes'>
+                <Route path={`/${currentUser}/likes`}>
 
                 </Route>
             </Switch>
