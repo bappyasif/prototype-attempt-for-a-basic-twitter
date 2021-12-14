@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useEffect } from "react/cjs/react.development";
+import { signInWithGoogle, signUpWithGoogle } from "../../../firebase-auths";
 import "../../styles/frontview.css";
-import { SignInWithGoogle, signUpWithGoogle } from './userSignupWithProviders';
+// import { SignInWithGoogle, signUpWithGoogle } from './userSignupWithProviders';
 
 function LoginPageFrontView({ currentUser, handleCurrentUser }) {
   return (
@@ -38,7 +39,7 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
     // signUpWithGoogle();
     // signInWithGoogle(currentUser, handleCurrentUser);
     // SignInWithGoogle(handleCurrentUser, handleUserProfileCompleted, handleSinginCompleted)
-    SignInWithGoogle(handleCurrentUser, handleUserProfileCompleted)
+    signInWithGoogle(handleCurrentUser, handleUserProfileCompleted)
     // currentUser && 
 
     // incrementing counter so that, whnever this route is visited redirect should only be activated when cunter is just 1

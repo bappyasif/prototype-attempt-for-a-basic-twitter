@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
+import { userLoginWithFirebase, userLoginWithPhone } from "../firebase-auths";
 import "./styles/index.css";
-import { userLoginWithFirebase } from "./user-login-with-firebase";
-import { userLoginWithPhone } from "./user-login-with-phone";
+// import { userLoginWithFirebase } from "./user-login-with-firebase";
+// import { userLoginWithPhone } from "./user-login-with-phone";
 
 function LoginPage({ currentUser, handleCurrentUser }) {
   let announcementText =
@@ -26,20 +27,30 @@ function LoginPage({ currentUser, handleCurrentUser }) {
     });
   };
 
+  let [announcement, setAnnouncement] = useState('')
+
+  let handleAnnouncement = message => {
+    console.log(message, '<here>', message.split(':')[1])
+    setAnnouncement(message.split(':')[1])
+  }
+
   return (
     <div id="login-container">
       <div id="twitter-info">
         <TwitterLogo />
         <h2 style={{ fontWeight: "bolder" }}>Log in to Twitter</h2>
       </div>
-      <div id="announcement-div"></div>
+      {announcement && <div id="announcement-div">{announcement}</div>}
 
-      <UserLoginInfoComponent currentUser={currentUser} handleCurrentUser={handleCurrentUser} />
+      <UserLoginInfoComponent currentUser={currentUser} handleCurrentUser={handleCurrentUser} handleAnnouncement={handleAnnouncement} />
 
       <div id="additional-info">
-        <a href="/begin-password-reset" target="_blank">
+        {/* <a href="/begin-password-reset" target="_blank">
           forgot password?
-        </a>
+        </a> */}
+        <Link to='/begin-password-reset'>
+          forgot password?
+        </Link>
         .
         <Link to='/i/flow/signup'>
           sign up for twitter
@@ -58,7 +69,7 @@ let TwitterLogo = () => (
   </svg>
 );
 
-let UserLoginInfoComponent = ({ currentUser, handleCurrentUser }) => {
+let UserLoginInfoComponent = ({ currentUser, handleCurrentUser, handleAnnouncement }) => {
   let [userID, setUserID] = useState(false)
   let [userPassword, setUserPassword] = useState(false)
   let [bothPresent, setBothPresent] = useState(false)
@@ -84,7 +95,7 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser }) => {
   // let confirmLogin = () => userLoginWithFirebase(userID, userPassword)
   // let confirmLogin = () => userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
   let confirmLogin = (evt) => {
-    !loginWithPhoneNumber && userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
+    !loginWithPhoneNumber && userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser, handleAnnouncement)
     // console.log(evt.target, '??')
     loginWithPhoneNumber && userLoginWithPhone(userID, evt.target)
   }
@@ -93,7 +104,7 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser }) => {
     <div id="login-info">
       <ReturnAnInputElement name='Mobile, email or username' elemID='user-id' setID={setUserID} updateIfItsNumber={handleLoginWithPhone} />
       {/* <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} /> */}
-      {!loginWithPhoneNumber && <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} />}
+      {!loginWithPhoneNumber && <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} updateIfItsNumber={handleLoginWithPhone}/>}
       <button onClick={confirmLogin} style={{ opacity: (loginWithPhoneNumber || bothPresent) ? 1 : .5, cursor: (!loginWithPhoneNumber && !bothPresent) && 'pointer', pointerEvents: (!loginWithPhoneNumber && !bothPresent) && 'none' }} id='login-btn'>Login</button>
       {/* <button onClick={confirmLogin} style={{ opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent  && 'none' }} id='login-btn'>Login</button> */}
       {/* <Link onClick={confirmLogin} style={{opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none'}} id='login-btn'>Login</Link> */}
@@ -138,10 +149,14 @@ let ReturnAnInputElement = ({ name, elemID, setID, setPassword, updateIfItsNumbe
       let test = regEx.test(value)
       test && updateIfItsNumber(true)
       console.log('here!!')
-    } else if(value.length == 10) {
+    } else if (value.length == 10) {
+      // !value.includes('@') && updateIfItsNumber(false)
       updateIfItsNumber(false)
     }
   }
+
+  useEffect(() => value.length == 0 && updateIfItsNumber(false), [value])
+
   let handleFocus = () => setFocused(true)
   let handleBlur = () => setFocused(false)
 

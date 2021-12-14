@@ -84,7 +84,7 @@ export let readDataInDescendingORderFromSubCollection = (userID, updateData) => 
     })
 }
 
-export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser) => {
+export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser, userPhotoUrl) => {
     let docRef = doc(db, 'tweets-user', userID);
     let date = new Date()
     let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -123,6 +123,10 @@ export let createFirestoreCollectionDocument = (userID, name, handleCurrentUser)
                         {
                             content: `${month} ${day}, ${year}`,
                             title: 'Joining date',
+                        },
+                        {
+                            content: userPhotoUrl || 'https://picsum.photos/200/300',
+                            title: 'userPhotoUrl'
                         }
                     ]}
 

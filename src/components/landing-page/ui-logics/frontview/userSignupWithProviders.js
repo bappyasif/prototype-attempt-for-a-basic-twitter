@@ -19,8 +19,8 @@ export let signUpWithGoogle = (currentUser, handleCurrentUser) => {
             let tokem = credential.accessToken;
             // sign in user info
             let user = result.user
-            console.log(user, 'with google', user.uid, user.displayName)
-            createFirestoreCollectionDocument(user.uid, user.displayName, handleCurrentUser)
+            console.log(user, 'with google', user.uid, user.displayName, user.getIdToken().then(val => val), user.photoURL)
+            createFirestoreCollectionDocument(user.uid, user.displayName, handleCurrentUser, user.photoURL)
             // handleCurrentUser(user.uid)
             // window.open('/username', '_parent')
             // console.log(currentUser, '!!')

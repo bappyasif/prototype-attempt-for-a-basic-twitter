@@ -102,8 +102,8 @@ input[type='submit'] {
 }
 
 #announcement-div {
-    width: 281px;
-    margin-left: 2.9px;
+    width: -webkit-fill-available;
+    /* margin-left: 2.9px; */
     margin-bottom: .78em;
     background-color: rgb(254, 222, 227);
     padding-top: 12px;
@@ -113,7 +113,7 @@ input[type='submit'] {
     padding-right: 16px;
     font-size: smaller;
     text-align: left;
-    display: none;
+    /* display: none; */
 }
 
 /* svg {

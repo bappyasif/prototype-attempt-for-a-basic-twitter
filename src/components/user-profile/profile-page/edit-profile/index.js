@@ -40,8 +40,9 @@ function EditProfile({currentUser, setOpacity}) {
         changeDataInsideDatasetWithoutMutationInDuplicate({content: url, title: 'coverPicture'}, 7)
     }
 
-    profilePictureUrl && console.log(profilePictureUrl, profileData)
-    coverPictureUrl && console.log(coverPictureUrl, profileData)
+    // profilePictureUrl && console.log(profilePictureUrl, profileData)
+    // coverPictureUrl && console.log(coverPictureUrl, profileData)
+    // profileData && console.log(coverPictureUrl, profileData)
 
     useEffect(() => profilePictureUrl && setActivateOpacityForProfile(false), [profilePictureUrl])
 
@@ -49,7 +50,6 @@ function EditProfile({currentUser, setOpacity}) {
 
     useEffect(() => {
         profilePictureUploaded && downloadProfilePictureUrlFromStorage(currentUser, updateProfilePictureUrl)
-
     }, [profilePictureUploaded])
 
     useEffect(() => coverPictureUploaded && downloadProfilePictureUrlFromStorage(currentUser, updateCoverPictureUrl, 'coverPhoto'), [coverPictureUploaded])
@@ -86,7 +86,7 @@ function EditProfile({currentUser, setOpacity}) {
     let changeDataInsideDatasetWithoutMutationInDuplicate = (data, idx) => {
         setProfileData(prevData => {
             // let idx = prevData.findIndex(entry => entry.id == id);
-            console.log(idx, 'which index', data)
+            // console.log(idx, 'which index', data)
             return prevData.slice(0, idx).concat([data], prevData.slice(idx+1))
         })
     }
@@ -262,7 +262,7 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
     }
 
     useEffect(() => {
-        !startEditBirthdate && console.log(profileData, 'cancel!!', startEditBirthdate, check)
+        // !startEditBirthdate && console.log(profileData, 'cancel!!', startEditBirthdate, check)
         // this re renders data from firestore once again, not ideal but works somewhat!! and also know as pessimistic update
         // !showCalendar && getUserProfileData(currentUser, handleDataLoader)
 
@@ -279,7 +279,7 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
 
         let dateTokens = data.split('-');
         dateString = `${dateTokens[0]} ${dateTokens[1]}, ${dateTokens[2]}`
-        console.log(data, 'convert it', dateString, 'original', profileData, startEditBirthdate)
+        // console.log(data, 'convert it', dateString, 'original', profileData, startEditBirthdate)
         // item.content = dateString;   // if i uncomment here, this would change data set at hand
         // mergeData({content: dateString, title: 'Birth date'}) // this simply adds one more to data set but keeps duplicate unmutated!!
         // mergeData({content: dateString, title: 'Birth date'})  // this works just fine, but specific to edges in data set

@@ -18,6 +18,7 @@ import LandingPageUILogics from '../landing-page/ui-logics';
 import SignupPage from '../signup-page';
 import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
 import TopicsPicker from '../topics-picker';
+import PasswordResetPage from '../password-reset-page';
 
 function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
@@ -49,6 +50,9 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
     let [secondTweetHasPoll, setSecondTweetHasPoll] = useState(false)
     let [userInterests, setUserInterests] = useState([])
     let [sanitizedInterestsData, setSanitizedInterestsData] = useState([])
+    // let [passwordResetRoute, setPasswordResetRoute] = useState('begin-password-reset')
+
+    // let handlePasswordResetRoute = currentRoute => setPasswordResetRoute(currentRoute)
 
     // let {url} = useRouteMatch()
     // let {id} = useParams()
@@ -115,30 +119,32 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                     <SignupPage
                         currentUser={currentUser}
                         handleCurrentUser={handleCurrentUser}
-                        handleData={handleUserInterestsData} 
+                        handleData={handleUserInterestsData}
                         sanitizedData={sanitizedInterestsData}
                     />
                 </Route>
 
                 <Route path='/begin-password-reset'>
-                    <TopNavigation />
-                    <BeginReset />
+                    <PasswordResetPage />
+                    {/* <PasswordResetPage passwordResetRoute={passwordResetRoute} handlePasswordResetRoute={handlePasswordResetRoute} /> */}
                 </Route>
 
                 <Route path='/verify-user-info'>
-                    <TopNavigation />
-                    <VerifyUserInfo />
+                    <PasswordResetPage />
+                    {/* <PasswordResetPage passwordResetRoute={passwordResetRoute} handlePasswordResetRoute={handlePasswordResetRoute} /> */}
+                    {/* <TopNavigation />
+                    <VerifyUserInfo /> */}
                 </Route>
 
                 <Route exact path='/i/topics/picker/home'>
-                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser}/>
+                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <TopicsPicker handleData={handleUserInterestsData} sanitizedData={sanitizedInterestsData} currentUser={currentUser} />
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
                 <Route exact path='/tweet/compose'>
                     {/* {setChangeLayout(true)} */}
-                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser}/>
+                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <ComposeTweet
                         selectedFile={selectedFile}
                         extraSelectedFile={selectedPictureFileForExtraTweet}
@@ -198,7 +204,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 </Route>
 
                 <Route exact path='/tweet/compose/schedule'>
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser}/>
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <TweetScheduler
                         isScheduleIconClicked={isScheduleIconClicked}
                         handleToggle={handleScheduleIconClicked}
@@ -208,7 +214,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 </Route>
 
                 <Route exact path='/tweet/compose/media'>
-                <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser}/>
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <EditTweetMediaContents
                         mediaFile={selectedFile}
                         updateMediaFile={setSelectedFile}
@@ -292,7 +298,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 </Route>
 
                 <Route path={`/${currentUser}/media`}>
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle}  currentUser={currentUser}/>
+                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
                     <AllMedias tweetData={tweetData} />
                     <RightSideNavigationPanel tweetData={tweetData} />
