@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useEffect } from "react/cjs/react.development";
-import { signInWithGoogle, signUpWithGoogle } from "../../../firebase-auths";
+import { signInWithGoogle, signUpWithGoogle, userSigninWithProvidersAndLocalAuthPersistence, userSignupWithProvidersAndLocalPersistence } from "../../../firebase-auths";
 import "../../styles/frontview.css";
 // import { SignInWithGoogle, signUpWithGoogle } from './userSignupWithProviders';
 
@@ -39,7 +39,12 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
     // signUpWithGoogle();
     // signInWithGoogle(currentUser, handleCurrentUser);
     // SignInWithGoogle(handleCurrentUser, handleUserProfileCompleted, handleSinginCompleted)
-    signInWithGoogle(handleCurrentUser, handleUserProfileCompleted)
+    
+    // without auth state persistence
+    // signInWithGoogle(handleCurrentUser, handleUserProfileCompleted)
+
+    // with auth state persistence
+    userSigninWithProvidersAndLocalAuthPersistence(handleCurrentUser, handleUserProfileCompleted)
     // currentUser && 
 
     // incrementing counter so that, whnever this route is visited redirect should only be activated when cunter is just 1
@@ -47,7 +52,13 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
   }
 
   let handleSignUpWithGoogle = () => {
-    signUpWithGoogle(currentUser, handleCurrentUser);
+    // without auth state persistence
+    // signUpWithGoogle(currentUser, handleCurrentUser);
+
+    // with auth state persistence
+    userSignupWithProvidersAndLocalPersistence(handleCurrentUser)
+    
+    // incrementing counter so that, whnever this route is visited redirect should only be activated when cunter is just 1
     handleAlreadyVisitedCount()
   }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
-import { userLoginWithFirebase, userLoginWithPhone } from "../firebase-auths";
+import { userLoginWithFirebase, userLoginWithPhone, userSignInWithSessionPersistence } from "../firebase-auths";
 import "./styles/index.css";
 // import { userLoginWithFirebase } from "./user-login-with-firebase";
 // import { userLoginWithPhone } from "./user-login-with-phone";
@@ -95,7 +95,8 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser, handleAnnounceme
   // let confirmLogin = () => userLoginWithFirebase(userID, userPassword)
   // let confirmLogin = () => userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
   let confirmLogin = (evt) => {
-    !loginWithPhoneNumber && userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser, handleAnnouncement)
+    // !loginWithPhoneNumber && userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser, handleAnnouncement)
+    !loginWithPhoneNumber && userSignInWithSessionPersistence(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser, handleAnnouncement)
     // console.log(evt.target, '??')
     loginWithPhoneNumber && userLoginWithPhone(userID, evt.target)
   }

@@ -37,6 +37,19 @@ function ComponentsContainer() {
         // setRerenderDOM(false)
         // setCountForTweetContainer(uuid())
         // setCountForTweetContainer(String(new Date().getTime()))
+
+        // getting session stored auth persistence state, if there is any in sesion storage
+        let browserStorage = window.sessionStorage;
+        // let sessionID = browserStorage.getItem('firebase:authUser:AIzaSyByV2He0B3nM9bIQSgMuVhb8DNmYLxEZJ0:[DEFAULT]')
+        let sessionID = JSON.parse(browserStorage.getItem('firebase:authUser:AIzaSyByV2He0B3nM9bIQSgMuVhb8DNmYLxEZJ0:[DEFAULT]'))
+        sessionID && console.log(browserStorage, sessionID, sessionID.uid)
+        sessionID && handleCurrentUser(sessionID.uid)
+
+        // getting local storage for local auth persistence entry, if there is any
+        let localStorage = window.localStorage;
+        let localSession = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyByV2He0B3nM9bIQSgMuVhb8DNmYLxEZJ0:[DEFAULT]'))
+        localSession && console.log(localStorage, localSession, localSession.uid)
+        localSession && handleCurrentUser(localSession.uid)
     }, [])
 
     useEffect(() => currentUser && makingDataReadyFromSubCollectionInDescendingOrder(currentUser), [currentUser])

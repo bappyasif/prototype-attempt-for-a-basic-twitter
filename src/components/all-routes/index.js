@@ -40,6 +40,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
     let [inputTextChoice07, setInputTextChoice07] = useState('');
     let [inputTextChoice08, setInputTextChoice08] = useState('');
     let [scheduleStamp, setScheduleStamp] = useState('');
+    let [scheduledTimeStamp, setScheduledTimeStamp] = useState('')
     let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(true)
     let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
     // let [newDataStatus, setNewDataStatus] = useState(false)
@@ -56,6 +57,13 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
 
     // let {url} = useRouteMatch()
     // let {id} = useParams()
+
+    useEffect(() => {
+        scheduleStamp && console.log(scheduleStamp.props.children[2].props.children)
+        scheduleStamp && setScheduledTimeStamp(scheduleStamp.props.children[2].props.children)
+    }, [scheduleStamp])
+
+    // useEffect(() => !tweetPublishReady && setScheduledTimeStamp(''), [tweetPublishReady])
 
     let handleUserInterestsData = (data, name) => {
         setUserInterests(prevData => prevData.concat(data))
@@ -277,6 +285,8 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                         setSecondTweetHasPoll={setSecondTweetHasPoll}
                         handleUpdateStatus={handleUpdateStatus}
                         currentUser={currentUser && currentUser}
+                        scheduledTimeStamp={scheduledTimeStamp}
+                        setScheduledTimeStamp={setScheduledTimeStamp}
                     />
                 </Route>
 

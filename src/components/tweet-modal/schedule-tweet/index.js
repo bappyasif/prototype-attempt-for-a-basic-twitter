@@ -17,6 +17,7 @@ function TweetScheduler({ isScheduleIconClicked, handleToggle, setScheduleStamp 
             <span id='schedule-svg'>{scheduleIcon('silver')}</span> <span id='annonunce-text'>{getFormattedDateString(month, day, year, hour, minute)}</span>
         </div>)
         history.push('/tweet/compose');
+        handleToggle()
     }
 
     return (
@@ -117,7 +118,9 @@ let GenerateSelector = ({ title, value, options, handleChange }) => {
     return <div id={title} className='scroll-container'>
         <div className='top-side'>
             <p className='title'>{title}</p>
-            <p className='select-svg'>{selectIcon()}</p>
+            {/* <p className='select-svg'>{selectIcon()}</p> */}
+            {/* will be using css to generate this svg instead */}
+            <p className='select-svg'></p>
         </div>
 
         <select value={value} onChange={(evt) => handleChange(evt.target.value)}>
