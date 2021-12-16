@@ -6,6 +6,7 @@ import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 
 function AllTweetsPage({ tweetData, onlyMedias }) {
+    let [show, setShow] = useState(false)
 
     let renderTweet = (item) => {
         // item.extraTweet && console.log(item.id, 'checkpoint 01', item.extraGif)
@@ -28,18 +29,65 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
                 firstTweetHasMedia: item.firstTweetHasMedia,
                 secondTweetHasMedia: item.secondTweetHasMedia,
                 tweetPoll: item.tweetPoll,
-                extraPoll: item.extraPoll
+                extraPoll: item.extraPoll,
+                scheduledTime: item.scheduledTimeStamp
             }
         } else {
-            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll }
+            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp }
         }
 
         return <RenderTweetDataComponent content={content} />
     }
 
-    let renderingData = tweetData && tweetData.map((item, idx) =>
-    (<div key={item.id} id='tweet-container' style={{ display: (item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? 'block' : 'none' }}>
+    let runThis = time => {
+        setTimeout(() => {
+            // time = time - 1000;
+            // if(time <= 1000) {
+            //     clearTimeout(tick)
+            //     setShow(true)
+            // }
+            setShow(true)
+            // console.log('running..', time)
+        }, time)
 
+        // if(time <= 1000) {
+        //     clearTimeout(tick)
+        //     setShow(true)
+        // }
+    }
+
+    // let convertTimeFrom12To24HrsFormat = timestamp => {
+    //     let [day, month, date, year, time, zone] = timestamp.split(' ')
+    //     let [hour, min, sec] = time.split(':')
+    //     console.log(day, month, year, hour, min, sec, time)
+    // }
+
+    let displayRule = item => {
+        let mode = ''
+        if(item.scheduledTimeStamp) {
+            // console.log(new Date(item.scheduledTimeStamp).getTime(), new Date().getTime(), new Date(item.scheduledTimeStamp).getTime() - new Date().getTime())
+            // convertTimeFrom12To24HrsFormat(item.scheduledTimeStamp)
+
+            if(new Date() < new Date(item.scheduledTimeStamp)) {
+                mode = 'none'
+                if((new Date(item.scheduledTimeStamp).getTime() - new Date().getTime()) <= 120000) {
+                    // console.log('if block')
+                    runThis(new Date(item.scheduledTimeStamp).getTime() - new Date().getTime())
+                }
+            } else {
+                mode = 'block'
+            }
+        } else if (item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) {
+            mode = 'block'
+        } else {
+            mode = 'none'
+        }
+        return mode;
+    }
+
+    let renderingData = tweetData && tweetData.map((item, idx) =>
+    (<div key={item.id} id='tweet-container' style={{ display: show || displayRule(item)}}>
+        
         {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
 
         {/* <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div> */}
@@ -47,6 +95,15 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
         {/* {item.extraTweet ? whenExtraTweetExists(item) : ''} */}
 
     </div>))
+    // (<div key={item.id} id='tweet-container' style={{ display: ((item.scheduledTimeStamp && new Date() > new Date(item.scheduledTimeStamp)) || item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText ) ? 'block' : 'none' }}>
+    //     {console.log((item.scheduledTimeStamp && new Date() < new Date(item.scheduledTimeStamp)), 'check', (item.scheduledTimeStamp && new Date() > new Date(item.scheduledTimeStamp)))}
+    //     {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
+
+    //     {/* <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div> */}
+
+    //     {/* {item.extraTweet ? whenExtraTweetExists(item) : ''} */}
+
+    // </div>))
 
     let renderMediaTweetsOnly = onlyMedias && onlyMedias.map((item) => {
 
@@ -62,10 +119,13 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
 let RenderTweetDataComponent = ({ content }) => {
     let [hoveredID, setHoveredID] = useState('')
-    let { tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
+    let { scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
     // extraGifFile && console.log(extraGifFile, '||here||')
     // extraPictureFile && console.log(extraPictureFile, '||here||')
+    // scheduledTime && console.log(scheduledTime, new Date() < new Date(scheduledTime), new Date())
+
+    // scheduledTime && new Date() < new Date(scheduledTime) && ''
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
 
@@ -99,6 +159,7 @@ let RenderTweetDataComponent = ({ content }) => {
             <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
         </div>)
 
+    // style={{display: scheduledTime && new Date() < new Date(scheduledTime) && 'none'}}
     let whenWithoutExtraTweet = () => <div className='rendering-tweet-data-container'>
         {/* <div className='tweet-id'>{id}</div> */}
         <div className='left-side'>

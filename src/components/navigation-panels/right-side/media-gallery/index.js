@@ -2,8 +2,9 @@ import React from 'react'
 import {getGiphyGifObject} from '../../../user-profile/all-tweets'
 
 function MediaGallery({ tweetData }) {
-    let allMediaTweets = tweetData && [...tweetData].filter((elem, idx) => (elem['medias']['picture'] && elem['medias']['picture'] || elem['medias']['gif'] && elem['medias']['gif']) && idx <= 6)
-    // console.log(allMediaTweets, 'media tweets..', tweetData)
+    // let allMediaTweets = tweetData && [...tweetData].filter((elem, idx) => (elem['medias']['picture'] && elem['medias']['picture'] || elem['medias']['gif'] && elem['medias']['gif']) && idx <= 6)
+    let allMediaTweets = tweetData && [...tweetData].filter((elem) => (elem['medias']['picture'] && elem['medias']['picture'] || elem['medias']['gif'] && elem['medias']['gif'])).filter((_, idx) => idx < 6)
+    console.log(allMediaTweets, 'media tweets..', tweetData)
 
     return (
         <div id='media-gallery-container'>

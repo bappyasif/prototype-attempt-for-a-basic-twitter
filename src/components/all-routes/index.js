@@ -58,12 +58,17 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
     // let {url} = useRouteMatch()
     // let {id} = useParams()
 
+    // let handleScheduleIconClicked = () => setIsScheduleIconClicked(true)
+
     useEffect(() => {
         scheduleStamp && console.log(scheduleStamp.props.children[2].props.children)
         scheduleStamp && setScheduledTimeStamp(scheduleStamp.props.children[2].props.children)
     }, [scheduleStamp])
 
     // useEffect(() => !tweetPublishReady && setScheduledTimeStamp(''), [tweetPublishReady])
+
+    // useEffect(() => isScheduleIconClicked && handleTweetModalityToggle(), [isScheduleIconClicked])
+    // useEffect(() => isScheduleIconClicked && setToggleModality(true), [isScheduleIconClicked])
 
     let handleUserInterestsData = (data, name) => {
         setUserInterests(prevData => prevData.concat(data))
@@ -89,7 +94,8 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
     }, [userInterests])
 
     let handleScheduleIconClicked = () => {
-        setIsScheduleIconClicked(!isScheduleIconClicked);
+        // setIsScheduleIconClicked(!isScheduleIconClicked);
+        setIsScheduleIconClicked(true);
         // if (isPollIconClicked) handlePollIconClicked()
     }
 
@@ -102,7 +108,11 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
     console.log('from routes', currentUser)
 
 
-    let handleTweetModalityToggle = () => setToggleModality(!toggleModality);
+    let handleTweetModalityToggle = () => {
+        setToggleModality(!toggleModality);
+        // setToggleModality(true);
+        // console.log('its here')
+    }
     return (
         <Router>
             <Switch>
@@ -212,13 +222,14 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 </Route>
 
                 <Route exact path='/tweet/compose/schedule'>
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <TweetScheduler
                         isScheduleIconClicked={isScheduleIconClicked}
                         handleToggle={handleScheduleIconClicked}
                         setScheduleStamp={setScheduleStamp}
+                        // handleTweetModalityToggle={handleTweetModalityToggle}
                     />
-                    <RightSideNavigationPanel tweetData={tweetData} />
+                    <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
                 <Route exact path='/tweet/compose/media'>

@@ -14,16 +14,19 @@ function TweetScheduler({ isScheduleIconClicked, handleToggle, setScheduleStamp 
 
     let handleConfirm = () => {
         setScheduleStamp(<div id='annnounce-schedule'>
-            <span id='schedule-svg'>{scheduleIcon('silver')}</span> <span id='annonunce-text'>{getFormattedDateString(month, day, year, hour, minute)}</span>
+            <span id='schedule-svg'>{scheduleIcon('silver')}</span> <span id='annonunce-text'>{getFormattedDateString(month, day, year, hour, minute, amPm)}</span>
         </div>)
         history.push('/tweet/compose');
         handleToggle()
     }
 
+    let handleCloseScheduledModal = () => history.goBack()
+
     return (
         <div id='tweet-scheduler-container' style={{ display: isScheduleIconClicked ? 'block' : 'none' }}>
             <div id='top-section'>
-                <div className='left-side'><span id='delete-icon' onClick={handleToggle}>{deleteIcon()}</span> <span className='header-text'>Schedule</span></div>
+                {/* <div className='left-side'><span id='delete-icon' onClick={handleToggle}>{deleteIcon()}</span> <span className='header-text'>Schedule</span></div> */}
+                <div className='left-side'><span id='delete-icon' onClick={handleCloseScheduledModal}>{deleteIcon()}</span> <span className='header-text'>Schedule</span></div>
                 <div className='right-side'>
                     <input type='button' value='Confirm' onClick={handleConfirm} />
                 </div>
@@ -31,7 +34,7 @@ function TweetScheduler({ isScheduleIconClicked, handleToggle, setScheduleStamp 
             <hr />
             <div id='mid-section'>
                 <div id='annnounce-schedule'>
-                    <span id='schedule-svg'>{scheduleIcon('silver')}</span> <span id='annonunce-text'>{getFormattedDateString(month, day, year, hour, minute)}</span>
+                    <span id='schedule-svg'>{scheduleIcon('silver')}</span> <span id='annonunce-text'>{getFormattedDateString(month, day, year, hour, minute, amPm)}</span>
                 </div>
                 <DateSelection month={month} setMonth={setMonth} day={day} setDay={setDay} year={year} setYear={setYear} />
 
@@ -137,10 +140,17 @@ let getTimeZoneName = () => {
     return long.split(', ')[1]
 }
 
-let getFormattedDateString = (month, day, year, hrs, min) => {
+let getFormattedDateString = (month, day, year, hrs, min, amPm) => {
+    hrs = hrs == 12 ? 0 : hrs;
+    // hrs = amPm == 'PM' || 'pm' && parseInt(hrs, 10) + 12
+    if(amPm == 'PM') hrs = parseInt(hrs, 10) + 12
+    hrs = hrs > 24 ? hrs - 24 : hrs
+
     let dateAndTimeString = `${month}/${day}/${year} ${hrs}:${min}`
     let dateString = new Date(dateAndTimeString);
-    return dateString.toString().split(' (')[0]
+    // console.log(dateString.toString(), 'from scheduled', amPm)
+    // return dateString.toString().split(' (')[0]
+    return dateString.toString()
 }
 
 export default TweetScheduler
