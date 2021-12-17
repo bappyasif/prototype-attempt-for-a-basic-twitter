@@ -1,0 +1,22 @@
+#topics-picker-container-in-time-line #scrolling-part {
+    overflow-x: auto;
+    width: 560px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 200px;
+}
+
+#topics-picker-container-in-time-line #scrolling-part::-webkit-scrollbar {
+    display: none;
+}
+
+#topics-picker-container-in-time-line #scrolling-part .category-container {
+    width: 164px;
+    height: 40px;
+    border: solid;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 2px;
+}

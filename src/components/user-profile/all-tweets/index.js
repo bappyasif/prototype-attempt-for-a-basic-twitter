@@ -4,9 +4,33 @@ import '../../user-profile/profile-page/index.css';
 import { getPrivacySelectedElement, showGif, showImg } from '..';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
+import TopicsPickerInTimeline from '../topics-picker-in-timeline';
 
 function AllTweetsPage({ tweetData, onlyMedias }) {
     let [show, setShow] = useState(false)
+    let [noMoreTweets, setNoMoreTweets] = useState(false)
+    let [totalTweets, setTotalTweets] = useState()
+    let [currentTweetsIndex, setCurrentTweetsIndex] = useState()
+
+    let handleNoMoreTweets = () => setNoMoreTweets(true)
+
+    let handleShowMoreTweets = () => {
+        setCurrentTweetsIndex(currentTweetsIndex + 11 <= totalTweets ? currentTweetsIndex + 11 : totalTweets)
+    }
+
+    useEffect(() => currentTweetsIndex >= totalTweets && handleNoMoreTweets(), [currentTweetsIndex])
+
+    useEffect(() => {
+        onlyMedias && setTotalTweets(onlyMedias.length)
+        onlyMedias && setCurrentTweetsIndex(6)
+    }, [onlyMedias])
+
+    useEffect(() => {
+        tweetData && setTotalTweets(tweetData.length)
+        tweetData && setCurrentTweetsIndex(11)
+    }, [tweetData])
+
+    // console.log(totalTweets, '<<>>', currentTweetsIndex)
 
     let renderTweet = (item) => {
         // item.extraTweet && console.log(item.id, 'checkpoint 01', item.extraGif)
@@ -86,13 +110,15 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
     }
 
     let renderingData = tweetData && tweetData.map((item, idx) =>
-    (<div key={item.id} id='tweet-container' style={{ display: show || displayRule(item)}}>
+    (idx < currentTweetsIndex && <div key={item.id} id='tweet-container' style={{ display: show || displayRule(item)}}>
         
+        {/* {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null} */}
         {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
 
         {/* <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div> */}
 
         {/* {item.extraTweet ? whenExtraTweetExists(item) : ''} */}
+        {/* <div id='show-more-tweets'>Show more</div> */}
 
     </div>))
     // (<div key={item.id} id='tweet-container' style={{ display: ((item.scheduledTimeStamp && new Date() > new Date(item.scheduledTimeStamp)) || item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText ) ? 'block' : 'none' }}>
@@ -105,16 +131,21 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
     // </div>))
 
-    let renderMediaTweetsOnly = onlyMedias && onlyMedias.map((item) => {
+    let renderMediaTweetsOnly = onlyMedias && onlyMedias.map((item, idx) => {
 
-        return <div key={item.id} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
+        return idx < currentTweetsIndex && <div key={item.id} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
 
+            {/* {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null} */}
             {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
 
         </div>
     })
 
-    return <div id='all-tweets-container'>{onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}</div>
+    return <div id='all-tweets-container'>
+        {onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}
+        <div id='show-more-tweets' style={{display: noMoreTweets && 'none'}} onClick={handleShowMoreTweets}>Show more</div>
+        <TopicsPickerInTimeline />
+        </div>
 }
 
 let RenderTweetDataComponent = ({ content }) => {
