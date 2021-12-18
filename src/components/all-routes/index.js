@@ -339,6 +339,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                             />
                         </Route>
                         :
+                        // <Redirect to='/login' />
                         setTimeout(() => <Redirect to='/login' />, 4000)
                 }
 
@@ -369,6 +370,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)
+                        // <Redirect to='/login' />
                 }
 
                 {
@@ -395,7 +397,10 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 }
 
                 <Route path={'*'}>
-                    <PageUnavailable />
+                    {setTimeout(() => {
+                        return <PageUnavailable />
+                    }, 4000)}
+                    {/* <PageUnavailable /> */}
                 </Route>
             </Switch>
         </Router>
