@@ -2,6 +2,27 @@
     position: relative;
 }
 
+#topics-picker-container-in-time-line #headings-part,
+#topics-picker-container-in-time-line #bottom-part {
+    text-align: left;
+}
+
+#topics-picker-container-in-time-line #headings-part {
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+}
+
+#topics-picker-container-in-time-line #headings-part #title-text {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+#topics-picker-container-in-time-line #headings-part #title-subtext {
+    color: silver;
+    font-size: smaller;
+    margin-top: 4px;
+}
+
 #topics-picker-container-in-time-line #scrolling-part {
     overflow-x: auto;
     width: 560px;
@@ -11,10 +32,13 @@
     height: 314px;
     /* position: relative; */
     scroll-behavior: smooth;
+    scrollbar-width: none;
 }
 
 #topics-picker-container-in-time-line #scrolling-part::-webkit-scrollbar {
     display: none;
+    scrollbar-width: none;
+    width: 0 ! important
 }
 
 #topics-picker-container-in-time-line #scrolling-part .category-container {
@@ -76,7 +100,7 @@
 #topics-picker-container-in-time-line .left-arrow,
 #topics-picker-container-in-time-line .right-arrow {
     position: absolute;
-    top: 167.3px;
+    top: 188.3px;
     width: 24px;
     /* background: silver; */
     height: 24px
@@ -101,6 +125,38 @@
 #topics-picker-container-in-time-line .left-arrow:hover,
 #topics-picker-container-in-time-line .right-arrow:hover,
 #topics-picker-container-in-time-line .highlight-both {
-    background-color: silver;
+    background-color: rgba(192, 192, 192, .6);
     border-radius: 50%;
+}
+
+#topics-picker-container-in-time-line .left-arrow:hover,
+#topics-picker-container-in-time-line .right-arrow:hover {
+    background-color: rgba(192, 192, 192, 1);
+}
+
+#topics-picker-container-in-time-line #bottom-part,
+#topics-picker-container-in-time-line #more-topics #link-text {
+    border: 0.1px solid rgba(192, 192, 192, .2);
+    transform: translate(10px, -47px);
+}
+
+#topics-picker-container-in-time-line #bottom-part:hover,
+#topics-picker-container-in-time-line #more-topics #link-text:hover {
+    background-color: rgba(192, 192, 192, .2);
+    cursor: pointer;
+}
+
+#topics-picker-container-in-time-line #bottom-part #heading-text,
+#topics-picker-container-in-time-line #more-topics {
+    font-size: large;
+    /* line-height: 2.7em; */
+    padding-left: 13px;
+    color: rgb(9, 185, 211);
+    text-decoration: none;
+}
+
+#topics-picker-container-in-time-line #more-topics #link-text {
+    text-align: left;
+    padding-left: 13px;
+    line-height: 3.1em;
 }

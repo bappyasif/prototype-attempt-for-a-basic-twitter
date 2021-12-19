@@ -397,10 +397,11 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                 }
 
                 <Route path={'*'}>
-                    {setTimeout(() => {
+                    {/* {setTimeout(() => {
+                        console.log('runnig....')
                         return <PageUnavailable />
-                    }, 4000)}
-                    {/* <PageUnavailable /> */}
+                    }, 4000)} */}
+                    {!currentUser && <PageUnavailable />}
                 </Route>
             </Switch>
         </Router>

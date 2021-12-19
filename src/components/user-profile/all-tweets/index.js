@@ -88,13 +88,13 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
 
     let displayRule = item => {
         let mode = ''
-        if(item.scheduledTimeStamp) {
+        if (item.scheduledTimeStamp) {
             // console.log(new Date(item.scheduledTimeStamp).getTime(), new Date().getTime(), new Date(item.scheduledTimeStamp).getTime() - new Date().getTime())
             // convertTimeFrom12To24HrsFormat(item.scheduledTimeStamp)
 
-            if(new Date() < new Date(item.scheduledTimeStamp)) {
+            if (new Date() < new Date(item.scheduledTimeStamp)) {
                 mode = 'none'
-                if((new Date(item.scheduledTimeStamp).getTime() - new Date().getTime()) <= 120000) {
+                if ((new Date(item.scheduledTimeStamp).getTime() - new Date().getTime()) <= 120000) {
                     // console.log('if block')
                     runThis(new Date(item.scheduledTimeStamp).getTime() - new Date().getTime())
                 }
@@ -110,8 +110,8 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
     }
 
     let renderingData = tweetData && tweetData.map((item, idx) =>
-    (idx < currentTweetsIndex && <div key={item.id} id='tweet-container' style={{ display: show || displayRule(item)}}>
-        
+    (idx < currentTweetsIndex && <div key={item.id} id='tweet-container' style={{ display: show || displayRule(item) }}>
+
         {/* {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null} */}
         {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
 
@@ -141,24 +141,18 @@ function AllTweetsPage({ tweetData, onlyMedias }) {
         </div>
     })
 
-    return <div id='all-tweets-container'>
-        {onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}
-        <div id='show-more-tweets' style={{display: noMoreTweets && 'none'}} onClick={handleShowMoreTweets}>Show more</div>
-        <TopicsPickerInTimeline />
+    return (
+        <div id='all-tweets-container'>
+            {onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}
+            <div id='show-more-tweets' style={{ display: noMoreTweets && 'none' }} onClick={handleShowMoreTweets}>Show more</div>
+            <TopicsPickerInTimeline />
         </div>
+    )
 }
 
-let RenderTweetDataComponent = ({ content }) => {
+let RenderTweetBottomIcons = ({elem, extraTwee, extraEen}) => {
     let [hoveredID, setHoveredID] = useState('')
-    let { scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
-
-    // extraGifFile && console.log(extraGifFile, '||here||')
-    // extraPictureFile && console.log(extraPictureFile, '||here||')
-    // scheduledTime && console.log(scheduledTime, new Date() < new Date(scheduledTime), new Date())
-
-    // scheduledTime && new Date() < new Date(scheduledTime) && ''
-
-    let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
+    let [iconClicked, setIconClicked] = useState('')
 
     let findWhichIconId = evt => {
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
@@ -176,7 +170,15 @@ let RenderTweetDataComponent = ({ content }) => {
         setHoveredID('')
     }
 
-    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) =>
+    let handleClicked = (evt) => {
+        // console.log(evt.target.parentNode.parentNode)
+        let iconElement = evt.target.parentNode.parentNode.id
+        setIconClicked(iconElement)
+    }
+
+    // iconClicked && console.log(iconClicked, '?!')
+
+    return (
         <div
             key={elem.id}
 
@@ -187,8 +189,56 @@ let RenderTweetDataComponent = ({ content }) => {
             onMouseOver={mouseHoveredIn}
             onMouseOut={mouseHoveredOut}
         >
-            <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
-        </div>)
+            <span onClick={handleClicked} style={{fill: iconClicked == 'like' && 'red'}}>{iconClicked == 'like' ? loveIcon() : elem.icon}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
+            {/* <span onClick={handleClicked} style={{color: 'red', fill: iconClicked == 'like' && 'red'}}>{loveIcon()}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span> */}
+        </div>
+    )
+
+}
+
+let RenderTweetDataComponent = ({ content }) => {
+    // let [hoveredID, setHoveredID] = useState('')
+    let { scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
+
+    // extraGifFile && console.log(extraGifFile, '||here||')
+    // extraPictureFile && console.log(extraPictureFile, '||here||')
+    // scheduledTime && console.log(scheduledTime, new Date() < new Date(scheduledTime), new Date())
+
+    // scheduledTime && new Date() < new Date(scheduledTime) && ''
+
+    let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
+
+    // let findWhichIconId = evt => {
+    //     let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
+    //     return whichIcon
+    // }
+
+    // let mouseHoveredIn = evt => {
+    //     // console.log('in', evt.target.id, evt.target.parentNode.id)
+    //     let foundElement = findWhichIconId(evt)
+    //     // console.log(foundElement, 'which?!')
+    //     setHoveredID(foundElement)
+    // }
+    // let mouseHoveredOut = evt => {
+    //     // console.log('out', evt.target.id)
+    //     setHoveredID('')
+    // }
+
+    // let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) =>
+    //     <div
+    //         key={elem.id}
+
+    //         id={extraTwee ? elem.id + '-twee' : extraEen ? elem.id + '-een' : elem.id}
+
+    //         className='hoverable-div'
+
+    //         onMouseOver={mouseHoveredIn}
+    //         onMouseOut={mouseHoveredOut}
+    //     >
+    //         <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
+    //     </div>)
+
+    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} />)
 
     // style={{display: scheduledTime && new Date() < new Date(scheduledTime) && 'none'}}
     let whenWithoutExtraTweet = () => <div className='rendering-tweet-data-container'>
@@ -234,7 +284,7 @@ let RenderTweetDataComponent = ({ content }) => {
                         </div>
 
                         <div className='tweet-text'>{tweetText}</div>
-                        
+
                         {<div className='tweet-media-file-content'>{readyMedia()}</div>}
                         {/* {gifFile && pictureFile && <div className='tweet-media-file-content'>{readyMedia()}</div>} */}
                         {/* {<div className='tweet-media-file-content' style={{minHeight: (!gifFile && !pictureFile) && '0px'}}>{readyMedia()}</div>} */}
@@ -249,7 +299,7 @@ let RenderTweetDataComponent = ({ content }) => {
                     {/* <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons}</div> */}
                 </div>
 
-                {((pictureFile && extraPictureFile) || (gifFile && extraGifFile) || (((pictureFile || gifFile ) && extraTweet))) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '407.9px', transform: 'translate(24.5px, -406.5px)' }}></div>}
+                {((pictureFile && extraPictureFile) || (gifFile && extraGifFile) || (((pictureFile || gifFile) && extraTweet))) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '407.9px', transform: 'translate(24.5px, -406.5px)' }}></div>}
 
                 {((pictureFile || extraPictureFile) || (gifFile || extraGifFile) || (!pictureFile && !extraPictureFile) || (!gifFile && !extraGifFile)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '106.9px', transform: 'translate(24.5px, -104.5px)' }}></div>}
 
@@ -378,5 +428,7 @@ export let getGiphyGifObject = async (gifId) => {
         console.log(err)
     }
 }
+
+let loveIcon = () => <svg className='profile-page-svg-icons'><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path></g></svg>
 
 export default AllTweetsPage
