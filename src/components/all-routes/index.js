@@ -21,7 +21,7 @@ import TopicsPicker from '../topics-picker';
 import PasswordResetPage from '../password-reset-page';
 import PageUnavailable from '../404-page';
 
-function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -336,6 +336,7 @@ function AllRoutes({ currentUser, handleCurrentUser, handleUpdateStatus, updateD
                                 currentUser={currentUser && currentUser}
                                 scheduledTimeStamp={scheduledTimeStamp}
                                 setScheduledTimeStamp={setScheduledTimeStamp}
+                                removeSpeceficArrayItem={removeSpeceficArrayItem}
                             />
                         </Route>
                         :

@@ -320,6 +320,7 @@
 
 .rendering-tweet-data-container {
   padding-bottom: 9px;
+  position: relative;
 }
 
 .rendering-tweet-data-container .left-side{
@@ -460,4 +461,52 @@
 .rendering-tweet-data-container .when-has-extra-tweet .extended-line-in-tweet {
   height: 107.9px;
   transform: translate(25px, -105.5px);
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .icon-svg {
+  background-color: rgba(192, 192, 192, .2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 4.5px;
+  padding-top: 2.2px;
+  border-radius: 50%;
+  /* position: relative; */
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .icon-svg:hover {
+  background-color: rgba(192, 192, 192, 1);
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container {
+  position: absolute;
+  right: 0px;
+  top: 38px;
+  background-color: whitesmoke;
+  z-index: 99;
+  margin: 2px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container:hover {
+  background: rgba(192, 192, 192, .2);
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container .options-svg {
+  padding-left: 6px;
+    /* padding-right: 6px;
+    padding-bottom: 2.1px;
+    padding-top: 6px;
+    background: rgba(192, 192, 192, .2);
+    border-radius: 50%; */
+  margin-right: 17px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container:last-child {
+  margin-bottom: 2px;
 }

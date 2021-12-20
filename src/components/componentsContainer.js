@@ -114,10 +114,23 @@ function ComponentsContainer() {
 
     let generateOneNewID = () => setUniqueID(uuid())
 
+    let removeSpeceficArrayItem = idx => {
+        // idx = 'fb34e41b-60ab-4541-a99e-65d2d6181102'
+        setUserDocs(prevData => {
+            let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
+            return prevData.slice(0, foundIndex).concat(prevData.slice(foundIndex+1))
+        })
+        // let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
+        //     console.log(foundIndex, 'found!!')
+    }
+
+    // currentUser && removeSpeceficArrayItem()
+    userDocs && console.log(userDocs.length, 'removed??', userDocs)
+
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )
