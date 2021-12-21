@@ -7,7 +7,7 @@ import { writeDataIntoCollection } from '../firestore-methods';
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
-function UserProfile({removeSpeceficArrayItem, setScheduledTimeStamp, scheduledTimeStamp, currentUser, handleUpdateStatus, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08 }) {
+function UserProfile({updateTweetPrivacy, removeSpeceficArrayItem, setScheduledTimeStamp, scheduledTimeStamp, currentUser, handleUpdateStatus, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08 }) {
     let [pictureUrl, setPictureUrl] = useState('')
 
     let [extraPictureUrl, setExtraPictureUrl] = useState('')
@@ -118,6 +118,7 @@ function UserProfile({removeSpeceficArrayItem, setScheduledTimeStamp, scheduledT
             {tweetData && <AllTweetsPage
                 // tweetData={tweetData}
                 removeSpeceficArrayItem={removeSpeceficArrayItem}
+                updateTweetPrivacy={updateTweetPrivacy}
                 tweetData={tweetData || []}
                 // handleCount={handleCount}
             />
@@ -158,15 +159,15 @@ export let showImg = (imgRR) => {
     return imgRR && <img src={handleMediaFileChecks(imgRR)} />
 }
 
-export let getPrivacySelectedElement = (whichOption, color) => {
+export let getPrivacySelectedElement = (whichOption, color, text) => {
     // console.log(whichOption, '<<which option>>')
     switch (whichOption) {
         case '01':
-            return tweetPrivacySelected01(color)
+            return tweetPrivacySelected01(color, text)
         case '02':
-            return tweetPrivacySelected02(color)
+            return tweetPrivacySelected02(color, text)
         case '03':
-            return tweetPrivacySelected03(color)
+            return tweetPrivacySelected03(color, text)
         default: console.log('somethigs wrong!!')
     }
 }

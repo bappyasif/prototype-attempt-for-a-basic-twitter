@@ -481,11 +481,11 @@ let TweetTextInput = ({ primaryTweetOnFocused, height, placeholderText, tweetTex
     return <textarea rows='4' id='tweet-input' type='text' maxLength='20' onFocus={handleTextareaWhenFocused} value={tweetText} onChange={handleTweetTextChanges} placeholder={placeholderText} />
 }
 
-export let tweetPrivacySelected01 = (color) => <span className='privacy-spans'><span className='privacy-svg'>{everybodyIcon(color ? color : 'none')}</span> <span className='privacy-text'>Everybody can reply</span></span>
+export let tweetPrivacySelected01 = (color, text) => <span className='privacy-spans'>{text != ' ' && <span className='privacy-svg'>{everybodyIcon(color ? color : 'none')}</span>}<span className='privacy-text'>{text || 'Everybody can reply'}</span></span>
 
-export let tweetPrivacySelected02 = (color) => <span className='privacy-spans'><span className='privacy-svg'>{peopleIcon(color ? color : 'rgb(29, 155, 240)')}</span> <span className='privacy-text'>People you follow</span></span>
+export let tweetPrivacySelected02 = (color, text) => <span className='privacy-spans'>{text != ' ' && <span className='privacy-svg'>{peopleIcon(color ? color : 'rgb(29, 155, 240)')}</span>}<span className='privacy-text'>{text || 'People you follow'}</span></span>
 
-export let tweetPrivacySelected03 = (color) => <span className='privacy-spans'><span className='privacy-svg'>{mentionedIcon(color ? color : 'rgb(29, 155, 240)')}</span> <span className='privacy-text'>Only people you mention</span></span>
+export let tweetPrivacySelected03 = (color, text) => <span className='privacy-spans'>{text != ' ' && <span className='privacy-svg'>{mentionedIcon(color ? color : 'rgb(29, 155, 240)')}</span>}<span className='privacy-text'>{text || 'Only people you mention'}</span></span>
 
 let GridDemo = ({ onGifClick, isGifIconClicked }) => {
     const fetchGifs = (offset) =>

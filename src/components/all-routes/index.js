@@ -21,7 +21,7 @@ import TopicsPicker from '../topics-picker';
 import PasswordResetPage from '../password-reset-page';
 import PageUnavailable from '../404-page';
 
-function AllRoutes({removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -337,6 +337,7 @@ function AllRoutes({removeSpeceficArrayItem, currentUser, handleCurrentUser, han
                                 scheduledTimeStamp={scheduledTimeStamp}
                                 setScheduledTimeStamp={setScheduledTimeStamp}
                                 removeSpeceficArrayItem={removeSpeceficArrayItem}
+                                updateTweetPrivacy={updateTweetPrivacy}
                             />
                         </Route>
                         :
@@ -366,7 +367,7 @@ function AllRoutes({removeSpeceficArrayItem, currentUser, handleCurrentUser, han
                             {/* {tweetPublishReady && setTweetPublishReady(false)} */}
                             <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                             {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
-                            <TweetsAndRepliesPage tweetData={tweetData} />
+                            <TweetsAndRepliesPage tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} />
                             <RightSideNavigationPanel tweetData={tweetData} />
                         </Route>
                         :

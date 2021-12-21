@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { Component, useEffect, useState } from 'react'
 import AllRoutes from './all-routes'
 import FirebaseApp from './firebase-configs';
-import { createSubCollectionForCurrentUser, getAllDocsOnce, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime } from './firestore-methods';
+import { createSubCollectionForCurrentUser, deleteDocFromFirestore, getAllDocsOnce, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime, updateDataInFirestore } from './firestore-methods';
 import { v4 as uuid } from 'uuid'
 import LandingPageUILogics from './landing-page/ui-logics';
 
@@ -118,19 +118,44 @@ function ComponentsContainer() {
         // idx = 'fb34e41b-60ab-4541-a99e-65d2d6181102'
         setUserDocs(prevData => {
             let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
+            // updating records in firestore as well
+            deleteDocFromFirestore(currentUser, idx)
+            // updating userdocs for DOM node rendering
             return prevData.slice(0, foundIndex).concat(prevData.slice(foundIndex+1))
         })
         // let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
         //     console.log(foundIndex, 'found!!')
     }
 
+    let updateTweetPrivacy = (idx, privacyOption) => {
+        let foundIndex = userDocs.findIndex(item => item.id == idx)
+        setUserDocs(prevData => prevData.map(item => item.id == idx ? {...item, privacy: privacyOption} : {...item}))
+        updateDataInFirestore(currentUser, idx, {privacy: privacyOption})
+        // setUserDocs(prevData => [...prevData, prevData[foundIndex].privacy = privacyOption])
+        
+        // ({
+        //     ...prevState,
+        //     `${prevData[foundIndex].privacy}`: {
+        //              ...prevState.preferences,
+        //              [key]: newValue
+        //          }
+        //  })
+        
+        // setUserDocs(prevData => ({
+        //     ...prevData,
+        //     prevData[foundIndex].privacy = privacyOption
+        // }))
+
+        // console.log(foundIndex, 'index here!!', privacyOption)
+    }
+
     // currentUser && removeSpeceficArrayItem()
-    userDocs && console.log(userDocs.length, 'removed??', userDocs)
+    // userDocs && console.log(userDocs.length, 'removed??', userDocs)
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )

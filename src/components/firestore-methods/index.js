@@ -1,5 +1,5 @@
 import React from 'react';
-import { Timestamp, getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy, deleteField, FieldValue } from 'firebase/firestore'
+import { Timestamp, getFirestore, collection, addDoc, updateDoc, getDocs, setDoc, doc, getDoc, onSnapshot, query, where, limit, orderBy, deleteField, FieldValue, deleteDoc } from 'firebase/firestore'
 import { Link, Route } from 'react-router-dom';
 import FirebaseApp from '../firebase-configs'
 import { merge } from 'lodash';
@@ -280,4 +280,18 @@ export let getSomeDataFromUserMainDocument = (userID, dataLoader, whichData) => 
             console.log('no such document found')
         }
     }).catch(err => console.log('could not extract data from given docuement', err.message))
+}
+
+export let deleteDocFromFirestore = (userID, docID) => {
+    let docRef = doc(db, 'tweets-user', userID, userID, docID)
+    deleteDoc(docRef)
+    .then(() => console.log('document is now deleted'))
+    .catch(err => console.log('document deletion has failed', err.code, err.message))
+}
+
+export let updateDataInFirestore = (userID, docID, data) => {
+    let docRef = doc(db, 'tweets-user', userID, userID, docID)
+    updateDoc(docRef, data)
+    .then(() => console.log('data been updated successfuly'))
+    .catch(err=>console.log('data update has failed', err.code, err.message))
 }

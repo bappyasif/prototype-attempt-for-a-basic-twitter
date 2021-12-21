@@ -510,3 +510,35 @@
 .rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container:last-child {
   margin-bottom: 2px;
 }
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container {
+  position: absolute;
+  width: 218px;
+  right: 0px;
+  top: 38px;
+  background-color: whitesmoke;
+  z-index: 99;
+  padding-left: 2px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .privacy-spans .privacy-text {
+  /* color: white; */
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container:hover {
+  background-color: rgba(192, 192, 192, .2);
+}
+
+/* .rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container:last-child, */
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container svg {
+  transform: scale(.8);
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container .privacy-spans .privacy-svg {
+  /* background-color: rgba(192, 192, 192, 1); */
+}
