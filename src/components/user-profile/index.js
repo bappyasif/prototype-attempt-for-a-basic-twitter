@@ -117,6 +117,7 @@ function UserProfile({updateTweetPrivacy, removeSpeceficArrayItem, setScheduledT
             {/* {pictureUrl && <img src={pictureUrl} />} */}
             {tweetData && <AllTweetsPage
                 // tweetData={tweetData}
+                currentUser={currentUser}
                 removeSpeceficArrayItem={removeSpeceficArrayItem}
                 updateTweetPrivacy={updateTweetPrivacy}
                 tweetData={tweetData || []}

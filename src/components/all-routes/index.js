@@ -20,6 +20,7 @@ import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
 import TopicsPicker from '../topics-picker';
 import PasswordResetPage from '../password-reset-page';
 import PageUnavailable from '../404-page';
+import AnalyticsUI from '../user-profile/all-tweets/tweet-top/analytics-ui';
 
 function AllRoutes({updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
@@ -141,6 +142,9 @@ function AllRoutes({updateTweetPrivacy, removeSpeceficArrayItem, currentUser, ha
                         currentUser={currentUser}
                         handleCurrentUser={handleCurrentUser}
                     />
+                </Route>
+                <Route exact path={'/analytics'}>
+                    <AnalyticsUI />
                 </Route>
 
                 {/* {

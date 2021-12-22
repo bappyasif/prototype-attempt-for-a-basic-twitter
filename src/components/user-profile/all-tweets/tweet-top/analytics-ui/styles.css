@@ -1,0 +1,114 @@
+#tweet-analytics-ui-container {
+    width: 650px;
+    border: solid;
+    /* padding: 8px; */
+}
+
+#tweet-analytics-ui-container #analytics-header-ui-wrapper,
+#tweet-analytics-ui-container #analysing-user-tweet-wrapper #user-info-wrapper,
+#tweet-analytics-ui-container #analytics-data-section-container #like-retweet-reply-numbers-ui-wrapper,
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper .upper-deck
+#tweet-analytics-ui-container #lower-deck-wrapper,
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper {
+    display: flex;
+}
+
+#tweet-analytics-ui-container #analytics-header-ui-wrapper {
+    padding: 8px;
+}
+
+#tweet-analytics-ui-container #analytics-header-ui-wrapper #header-text {
+    margin-left: 31px;
+}
+
+#tweet-analytics-ui-container #analysing-user-tweet-wrapper {
+    text-align: left;
+    margin-bottom: 11px;
+    border: solid;
+    padding: 8px;
+}
+
+#tweet-analytics-ui-container #analytics-data-section-container {
+    padding: 8px;
+}
+
+#tweet-analytics-ui-container #analytics-data-section-container #analysing-user-tweet-wrapper #user-info-wrapper {
+    width: 50%;
+    justify-content: space-between;
+}
+
+#tweet-analytics-ui-container #analytics-data-section-container #like-retweet-reply-numbers-ui-wrapper {
+    justify-content: space-evenly;
+    border: solid;
+    padding: 4px;
+    margin-bottom: 11px;
+}
+
+#tweet-analytics-ui-container #analytics-data-section-container #like-retweet-reply-numbers-ui-wrapper .marker-wrapper .svg-icon {
+    height: 24px;
+    width: fit-content;
+}
+
+#tweet-analytics-ui-container #analytics-data-section-container #like-retweet-reply-numbers-ui-wrapper .marker-wrapper .svg-icon .profile-page-svg-icons {
+    width: 24px;
+    height: 24px;
+}
+
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper {
+    justify-content: space-around;
+}
+
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper:nth-child(1) {
+    /* width: 42%; */
+}
+
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper .upper-deck {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper #Impressions .meteric-number {
+    /* margin-left: 78px; */
+}
+
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper .upper-deck .metric-name {
+    /* margin-right: 11px; */
+}
+
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper .upper-deck .tooltip-svg {
+    transform: scale(.6);
+}
+
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper .meteric-number {
+    font-size: -webkit-xxx-large;
+    width: fit-content;
+}
+#tweet-analytics-ui-container #lower-deck-wrapper #left-side {
+    width: fit-content;
+    text-align: left;
+}
+
+#tweet-analytics-ui-container #lower-deck-wrapper #left-side #heading-text {
+    font-size: larger;
+}
+
+#tweet-analytics-ui-container #lower-deck-wrapper #left-side #sub-text {
+    font-size: smaller;
+}
+
+#tweet-analytics-ui-container #lower-deck-wrapper #switch-to {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid;
+    width: 330px;
+    background-color: whitesmoke;
+    border-radius: 24px;
+}
+
+#tweet-analytics-ui-container #lower-deck-wrapper {
+    display: flex;
+    border-top: 1px solid silver;
+    padding: 8px;
+}

@@ -1,86 +1,125 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { checkMarkSvg } from '../../../topics-picker'
 import { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../../../tweet-modal'
 import { analyticsIcon, moreIcon } from '../../profile-page/svg-resources'
+import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
+import { getDataFromFirestoreSubCollection } from '../../../firestore-methods'
 
-export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy }) => {
+export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, currentUser }) => {
     let [clicked, setClicked] = useState(false)
     let [whichPrivacy, setWhichPrivacy] = useState('')
+    let [privacyOption, setPrivacyOption] = useState('')
+    let [existingPrivacy, setExistingPrivacy] = useState('')
     let [changedWhoCanReply, setChangedWhoCanReply] = useState(false)
     
     let handleClicked = () => setClicked(!clicked)
     // let rederDropdown = () => moreOptions.map(item => <Rend)
     let handleWhoCanReply = () => setChangedWhoCanReply(!changedWhoCanReply)
     let handleWhichPrivacy = value => setWhichPrivacy(value)
+    let handlewhichPrivacyOption = value => setPrivacyOption(value)
     
     // useEffect(() => whichPrivacy && updateTweetPrivacy(ID, whichPrivacy), [whichPrivacy])
-    useEffect(() => whichPrivacy && updateTweetPrivacy(ID, convertOptionsToPrivacy()), [whichPrivacy])
+    useEffect(() => {
+        // recording newly selected privacy option and updating it both on DOM and Firestore
+        whichPrivacy && updateTweetPrivacy(ID, convertOptionsToPrivacy())
+        
+        // neutralising intial privacy settings
+        whichPrivacy && setPrivacyOption(null)
+        whichPrivacy && setExistingPrivacy(null)
+        
+        // whichPrivacy && console.log('privacy running', whichPrivacy, convertOptionsToPrivacy())
+    }, [whichPrivacy])
     // console.log(whichPrivacy, 'which privcy')
+
+    // initial loading, for check mark visibility on DOM
+    useEffect(() => {
+        getDataFromFirestoreSubCollection(currentUser, ID, 'privacy', handlewhichPrivacyOption)
+    }, [])
+
+    // converting intial privacyOption to DOM readable text so that chekc mark visibility gets shown on DOM
+    useEffect(() => {  
+        // privacyOption && updateTweetPrivacy(ID, privacyOption)
+        privacyOption && setExistingPrivacy(convertOptionToText())
+    }, [privacyOption])
+
+    // converting initial privacy option to text
+    let convertOptionToText = () => privacyOption == '01' ? 'Everybody' : privacyOption == '02' ? 'People who you follow' : privacyOption == '03' && 'Only you'
     
+    // converting selected privacy text to server compatible option number
     let convertOptionsToPrivacy = () => whichPrivacy == 'Only you' ? '03' : whichPrivacy == 'People who you follow' ? '02' : whichPrivacy == 'Everybody' && '01'
 
     return (
         <div className='tweet-top'>
             <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
-            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} />}
-            {changedWhoCanReply && <RenderDropdownForWhoCanReply handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} />}
+            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} />}
+            {changedWhoCanReply && <RenderDropdownForWhoCanReply handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />}
         </div>
     )
 }
 
-let RenderDropdownForWhoCanReply = ({handleClicked, handleWhoCanReply, whichPrivacy, handleWhichPrivacy}) => {
-    let renderPrivacy = privacyOptions.map((item, idx) => <RenderPrivacyOption key={item.name} item={item.privacyType} type={item.name} handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} />)
+let RenderDropdownForWhoCanReply = ({handleClicked, handleWhoCanReply, whichPrivacy, handleWhichPrivacy, existingPrivacy}) => {
+    let [isClickedOutside, setIsClickedOutside] = useState(true)
+    let clcikedRef = useRef()
+
+    let handleModal = () => {
+        setIsClickedOutside(false)
+        handleWhoCanReply()
+        // handleClicked()
+    }
+    useOnClickOutside(clcikedRef, handleModal)
+
+    let renderPrivacy = privacyOptions.map((item, idx) => <RenderPrivacyOption key={item.name} item={item.privacyType} type={item.name} handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />)
 
     return (
-        <div className='who-can-reply-container'>
+        <div className='who-can-reply-container' ref={clcikedRef} style={{display: !isClickedOutside && 'none'}}>
             <div className='header-text'>Who can reply?</div>
             <div className='subheading-text' style={{ fontSize: 'smaller', color: 'sienna' }}>Choose who can reply to this Tweet. Anyone mentioned can always reply.</div>
             <div className='privacy-options' style={{ marginTop: '8px' }}>
                 {renderPrivacy}
-                {/* <div className='option-everybody' onClick={handleSelected}>
-                    {tweetPrivacySelected01('white')}
-                    {selected && checkMarkSvg()}
-                </div>
-                <div className='option-everybody' onClick={handleSelected}>
-                    {tweetPrivacySelected02('white')}
-                    {selected && checkMarkSvg()}
-                </div>
-                <div className='option-everybody' onClick={handleSelected}>
-                    {tweetPrivacySelected03('white')}
-                    {selected && checkMarkSvg()}
-                </div> */}
             </div>
         </div>
     )
 }
 
-let RenderPrivacyOption = ({ item, type, handleClicked, handleWhoCanReply, whichPrivacy, handleWhichPrivacy }) => {
+let RenderPrivacyOption = ({ item, type, handleClicked, handleWhoCanReply, whichPrivacy, handleWhichPrivacy, existingPrivacy }) => {
     let [selected, setSelected] = useState(false)
     let handleSelected = () => {
         setSelected(!selected)
-        handleClicked()
+        // handleClicked()
         handleWhoCanReply()
         handleWhichPrivacy(type)
     }
     return (
         <div className='option-container' onClick={handleSelected}>
             {item}
-            {(selected || (whichPrivacy == type)) && checkMarkSvg()}
+            {(selected || (whichPrivacy == type) || (existingPrivacy == type)) && checkMarkSvg()}
         </div>
     )
 }
 
-let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWhoCanReply }) => {
-    let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} />)
+let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked }) => {
+    let [isClickedOutside, setIsClickedOutside] = useState(true)
+    let clcikedRef = useRef()
+
+    // useEffect(() => setIsClickedOutside(true), [ID])
+
+    // calling a hook to decide if mouse is clicked outside point reference or not, and then closing modal
+    let handleModal = () => {
+        setIsClickedOutside(false)
+        handleClicked()
+    }
+    useOnClickOutside(clcikedRef, handleModal)
+
+    let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} />)
 
     return (
-        <div id='more-options-dropdown-container'>
+        <div id='more-options-dropdown-container' ref={clcikedRef} style={{display: !isClickedOutside && 'none'}}>
             {renderOptions}
         </div>
     )
 }
 
-let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply }) => {
+let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked }) => {
     let [tweetID, setTweetID] = useState('')
     // console.log('heree!!')
     let handleClickAction = evt => {
@@ -95,7 +134,12 @@ let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply }) =
         // console.log(test, '?!')
         if (test.textContent == 'Change who can reply') {
             handleWhoCanReply()
+        } else if (test.textContent == 'Embed tweet') {
+            window.open('https://publish.twitter.com/', '_blank')
+            // handleClicked()
         }
+
+        handleClicked()
     }
     // tweetID && console.log(tweetID)
     // removing that targetted tweet from profile
@@ -115,4 +159,4 @@ let listSvg = () => <svg className='profile-page-svg-icons'><g><path d="M23.25 3
 let replySvg = () => <svg className='profile-page-svg-icons'><g><path d="M14.046 2.242l-4.148-.01h-.002c-4.374 0-7.8 3.427-7.8 7.802 0 4.098 3.186 7.206 7.465 7.37v3.828c0 .108.044.286.12.403.142.225.384.347.632.347.138 0 .277-.038.402-.118.264-.168 6.473-4.14 8.088-5.506 1.902-1.61 3.04-3.97 3.043-6.312v-.017c-.006-4.367-3.43-7.787-7.8-7.788zm3.787 12.972c-1.134.96-4.862 3.405-6.772 4.643V16.67c0-.414-.335-.75-.75-.75h-.396c-3.66 0-6.318-2.476-6.318-5.886 0-3.534 2.768-6.302 6.3-6.302l4.147.01h.002c3.532 0 6.3 2.766 6.302 6.296-.003 1.91-.942 3.844-2.514 5.176z"></path></g></svg>
 let embedSvg = () => <svg className='profile-page-svg-icons'><g><path d="M23.804 11.5l-6.496-7.25c-.278-.31-.752-.334-1.06-.06-.308.277-.334.752-.058 1.06L22.238 12l-6.047 6.75c-.275.308-.25.782.06 1.06.142.127.32.19.5.19.204 0 .41-.084.558-.25l6.496-7.25c.252-.28.258-.713 0-1zm-23.606 0l6.496-7.25c.278-.31.752-.334 1.06-.06.308.277.334.752.058 1.06L1.764 12l6.047 6.75c.277.308.25.782-.057 1.06-.143.127-.322.19-.5.19-.206 0-.41-.084-.56-.25L.197 12.5c-.252-.28-.257-.713 0-1zm9.872 12c-.045 0-.09-.004-.135-.012-.407-.073-.68-.463-.605-.87l3.863-21.5c.074-.407.466-.674.87-.606.408.073.68.463.606.87l-3.864 21.5c-.065.363-.38.618-.737.618z"></path></g></svg>
 let moreOptions = [{ title: 'Delete', icon: deleteSvg() }, { title: 'Pin to your profile', icon: pinSvg() }, { title: 'Add/Remove @username from Lists', icon: listSvg() }, { title: 'Change who can reply', icon: replySvg() }, { title: 'Embed tweet', icon: embedSvg() }, { title: 'Analytics', icon: analyticsIcon() }]
-let privacyOptions = [{name: 'Everybody', privacyType: tweetPrivacySelected01('white') }, {name: 'Only you', privacyType: tweetPrivacySelected03('white')}, { name: 'People who you follow', privacyType: tweetPrivacySelected02('white') }]
+let privacyOptions = [{name: 'Everybody', privacyType: tweetPrivacySelected01('white') }, { name: 'People who you follow', privacyType: tweetPrivacySelected02('white')}, {name: 'Only you', privacyType: tweetPrivacySelected03('white')}]

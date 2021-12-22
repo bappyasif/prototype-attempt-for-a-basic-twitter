@@ -146,7 +146,7 @@ function ComponentsContainer() {
         //     prevData[foundIndex].privacy = privacyOption
         // }))
 
-        // console.log(foundIndex, 'index here!!', privacyOption)
+        // console.log('index here!!', privacyOption, idx)
     }
 
     // currentUser && removeSpeceficArrayItem()

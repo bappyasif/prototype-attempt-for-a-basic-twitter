@@ -295,3 +295,15 @@ export let updateDataInFirestore = (userID, docID, data) => {
     .then(() => console.log('data been updated successfuly'))
     .catch(err=>console.log('data update has failed', err.code, err.message))
 }
+
+export let getDataFromFirestoreSubCollection = (userID, docID, whichData, dataLoader) => {
+    let docRef = doc(db, 'tweets-user', userID, userID, docID)
+    getDoc(docRef)
+    .then(docSnap => {
+        if(docSnap.exists) {
+            let data = docSnap.data()[whichData]
+            data && dataLoader(data)
+            data && console.log('data loaded!!')
+        }
+    }).catch(err => console.log('data was not found', err.code, err.message))
+}

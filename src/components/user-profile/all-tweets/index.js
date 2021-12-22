@@ -9,7 +9,7 @@ import {tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03} 
 import { TweeetTop } from './tweet-top';
 import { RenderTweetBottomIcons } from './tweet-bottom';
 
-function AllTweetsPage({ tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy }) {
+function AllTweetsPage({ tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser }) {
     let [show, setShow] = useState(false)
     let [noMoreTweets, setNoMoreTweets] = useState(false)
     let [totalTweets, setTotalTweets] = useState()
@@ -33,20 +33,9 @@ function AllTweetsPage({ tweetData, onlyMedias, removeSpeceficArrayItem, updateT
         tweetData && setCurrentTweetsIndex(11)
     }, [tweetData])
 
-    // let removeArrayItemSafelyFromData = idx => {
-
-    // }
-
-    // console.log(totalTweets, '<<>>', currentTweetsIndex)
-
     let renderTweet = (item) => {
-        // item.extraTweet && console.log(item.id, 'checkpoint 01', item.extraGif)
         let ID = item.id
         let content
-
-        // item.privacy && console.log(item.privacy, 'found privacy!!')
-
-        // console.log(item.extraPoll)
 
         if (item.medias.gif || item.medias.picture || item.medias.extraPicture || item.medias.extraGif) {
             content = {
@@ -68,37 +57,19 @@ function AllTweetsPage({ tweetData, onlyMedias, removeSpeceficArrayItem, updateT
             content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID}
         }
 
-        return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} />
+        return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} />
     }
 
     let runThis = time => {
         setTimeout(() => {
-            // time = time - 1000;
-            // if(time <= 1000) {
-            //     clearTimeout(tick)
-            //     setShow(true)
-            // }
             setShow(true)
             // console.log('running..', time)
         }, time)
-
-        // if(time <= 1000) {
-        //     clearTimeout(tick)
-        //     setShow(true)
-        // }
     }
-
-    // let convertTimeFrom12To24HrsFormat = timestamp => {
-    //     let [day, month, date, year, time, zone] = timestamp.split(' ')
-    //     let [hour, min, sec] = time.split(':')
-    //     console.log(day, month, year, hour, min, sec, time)
-    // }
 
     let displayRule = item => {
         let mode = ''
         if (item.scheduledTimeStamp) {
-            // console.log(new Date(item.scheduledTimeStamp).getTime(), new Date().getTime(), new Date(item.scheduledTimeStamp).getTime() - new Date().getTime())
-            // convertTimeFrom12To24HrsFormat(item.scheduledTimeStamp)
 
             if (new Date() < new Date(item.scheduledTimeStamp)) {
                 mode = 'none'
@@ -120,30 +91,14 @@ function AllTweetsPage({ tweetData, onlyMedias, removeSpeceficArrayItem, updateT
     let renderingData = tweetData && tweetData.map((item, idx) =>
     (idx < currentTweetsIndex && <div key={item.id} id='tweet-container' style={{ display: show || displayRule(item) }}>
 
-        {/* {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null} */}
         {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
 
-        {/* <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div> */}
-
-        {/* {item.extraTweet ? whenExtraTweetExists(item) : ''} */}
-        {/* <div id='show-more-tweets'>Show more</div> */}
-
     </div>))
-    // (<div key={item.id} id='tweet-container' style={{ display: ((item.scheduledTimeStamp && new Date() > new Date(item.scheduledTimeStamp)) || item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText ) ? 'block' : 'none' }}>
-    //     {console.log((item.scheduledTimeStamp && new Date() < new Date(item.scheduledTimeStamp)), 'check', (item.scheduledTimeStamp && new Date() > new Date(item.scheduledTimeStamp)))}
-    //     {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
-
-    //     {/* <div id='show-connecting-line' style={{ visibility: item.extraTweet && item.tweetText ? 'visible' : 'hidden' }}></div> */}
-
-    //     {/* {item.extraTweet ? whenExtraTweetExists(item) : ''} */}
-
-    // </div>))
 
     let renderMediaTweetsOnly = onlyMedias && onlyMedias.map((item, idx) => {
 
         return idx < currentTweetsIndex && <div key={item.id} id='tweet-container' style={{ display: item ? 'block' : 'none' }}>
 
-            {/* {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null} */}
             {(item['medias'].picture || item['medias'].gif || item.tweetText || item.extraTweetText) ? renderTweet(item) : null}
 
         </div>
@@ -158,220 +113,21 @@ function AllTweetsPage({ tweetData, onlyMedias, removeSpeceficArrayItem, updateT
     )
 }
 
-// let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData }) => {
-//     let [hoveredID, setHoveredID] = useState('')
-//     let [iconClicked, setIconClicked] = useState('')
-
-//     let findWhichIconId = evt => {
-//         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
-//         return whichIcon
-//     }
-
-//     let mouseHoveredIn = evt => {
-//         // console.log('in', evt.target.id, evt.target.parentNode.id)
-//         let foundElement = findWhichIconId(evt)
-//         // console.log(foundElement, 'which?!')
-//         setHoveredID(foundElement)
-//     }
-//     let mouseHoveredOut = evt => {
-//         // console.log('out', evt.target.id)
-//         setHoveredID('')
-//     }
-
-//     let handleClicked = (evt) => {
-//         // console.log(evt.target.parentNode.parentNode)
-//         let iconElement = evt.target.parentNode.parentNode.id
-//         setIconClicked(iconElement)
-//     }
-
-//     // iconClicked && console.log(iconClicked, '?!')
-
-//     // let shareableData = () => {
-//     //     let shareDataObject = {
-//     //         title: 'sharing from web app',
-//     //         url: window.location.href,
-//     //         text: tweetData.tweetText
-//     //     }
-//     //     // let shareDataObject = navigator.share({
-//     //     //     title: document.title,
-//     //     //     text: 'Hello World',
-//     //     //     url: 'https://developer.mozilla.org',
-//     //     //   });
-//     //     return shareDataObject
-//     // }
-
-//     // let checkingIfDataShareable = () => {
-//     //     let isShareable = navigator.canShare && navigator.canShare(tweetData.tweetText)
-//     //     // let isShareable = navigator.canShare
-//     //     return isShareable
-//     // }
-
-//     // let sharingData = () => {
-//     //     if(checkingIfDataShareable()) {
-//     //         navigator.share(shareableData)
-//     //     } else {
-//     //         navigator.share(shareableData)
-//     //         .then(()=>console.log('success!!'))
-//     //         .catch(console.error)
-//     //         // alert('data unshareable')
-//     //     }
-
-//     // }
-
-//     let handleShare = evt => {
-//         console.log(iconClicked, 'share!!', tweetData)
-//         // sharingData()
-//         // if(navigator.share) {
-//         //     console.log('supports share')
-//         //     navigator.share({text: 'yeah.what'})
-//         //     .then(()=>console.log('successfull'))
-//         //     .catch(err=>console.log(err.message))
-//         // }
-//     }
-
-//     return (
-//         <div
-//             key={elem.id}
-
-//             id={extraTwee ? elem.id + '-twee' : extraEen ? elem.id + '-een' : elem.id}
-
-//             className='hoverable-div'
-
-//             onMouseOver={mouseHoveredIn}
-//             onMouseOut={mouseHoveredOut}
-//         >
-//             <span onClick={iconClicked == 'share' ? handleShare : handleClicked} style={{ fill: iconClicked == 'like' ? 'red' : iconClicked == 'retweet' && 'lightGreen' }}>{iconClicked == 'like' ? loveIcon() : elem.icon}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
-//             {/* <span onClick={handleClicked} style={{color: 'red', fill: iconClicked == 'like' && 'red'}}>{loveIcon()}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span> */}
-//         </div>
-//     )
-
-// }
-
-// let TweeetTop = ({ID, removeSpeceficArrayItem}) => {
-//     let [clicked, setClicked] = useState(false)
-//     let [changedWhoCanReply, setChangedWhoCanReply] = useState(false) 
-//     let handleClicked = () => setClicked(!clicked)
-//     // let rederDropdown = () => moreOptions.map(item => <Rend)
-//     let handleWhoCanReply = () => setChangedWhoCanReply(true)
-//     return (
-//         <div className='tweet-top'>
-//             <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
-//             { clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} /> }
-//             { changedWhoCanReply && <RenderDropdownForWhoCanReply /> }
-//         </div>
-//     )
-// }
-
-// let RenderDropdownForWhoCanReply = () => {
-//     return (
-//         <div className='who-can-reply-container'>
-//             <div className='header-text'>Who can reply?</div>
-//             <div className='subheading-text'>Choose who can reply to this Tweet. Anyone mentioned can always reply.</div>
-//             <div className='privacy-options'>
-//                 {tweetPrivacySelected01()}
-//                 {tweetPrivacySelected02()}
-//                 {tweetPrivacySelected03()}
-//             </div>
-//         </div>
-//     )
-// }
-
-// let RenderDropdownForTweetMoreOptions = ({ID, removeSpeceficArrayItem}) => {
-//     let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} />)
-
-//     return (
-//         <div id='more-options-dropdown-container'>
-//             {renderOptions}
-//         </div>
-//     )
-// }
-
-// let RenderOptions = ({item, ID, removeSpeceficArrayItem}) => {
-//     let [tweetID, setTweetID] = useState('')
-//     // console.log('heree!!')
-//     let handleClickAction = evt => {
-//         // evt.target.parentNode.id && console.log( evt.target.id || evt.target.parentNode.id)
-//         // setting tweet ID with which docID needs to be deleted both from DOM and Firestore
-//         (evt.target.id || evt.target.parentNode.id) && setTweetID(evt.target.id || evt.target.parentNode.id)
-        
-//         // removing that targetted tweet from profile
-//         // removeSpeceficArrayItem(ID)
-
-//         let test = (evt.target.querySelector('.option-title') || evt.target.parentNode.querySelector('.option-title'))
-//         // console.log(test, '?!')
-//         if(test.textContent == 'Change who can reply') {
-
-//         }
-//     }
-//     // tweetID && console.log(tweetID)
-//     // removing that targetted tweet from profile
-//     useEffect(() => tweetID && removeSpeceficArrayItem(tweetID), [tweetID])
-
-//     return (
-//         <div className='option-container' id={item.title == 'Delete' ? ID : null} onClick={handleClickAction}>
-//             <div className='options-svg'>{item.icon}</div>
-//             <div className='option-title'>{item.title}</div>
-//         </div>
-//     )
-// }
-
-let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy }) => {
-    // let [hoveredID, setHoveredID] = useState('')
+let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser }) => {
     let { ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
-
-    // extraGifFile && console.log(extraGifFile, '||here||')
-    // extraPictureFile && console.log(extraPictureFile, '||here||')
-    // scheduledTime && console.log(scheduledTime, new Date() < new Date(scheduledTime), new Date())
-
-    // scheduledTime && new Date() < new Date(scheduledTime) && ''
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
 
-    // let findWhichIconId = evt => {
-    //     let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
-    //     return whichIcon
-    // }
-
-    // let mouseHoveredIn = evt => {
-    //     // console.log('in', evt.target.id, evt.target.parentNode.id)
-    //     let foundElement = findWhichIconId(evt)
-    //     // console.log(foundElement, 'which?!')
-    //     setHoveredID(foundElement)
-    // }
-    // let mouseHoveredOut = evt => {
-    //     // console.log('out', evt.target.id)
-    //     setHoveredID('')
-    // }
-
-    // let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) =>
-    //     <div
-    //         key={elem.id}
-
-    //         id={extraTwee ? elem.id + '-twee' : extraEen ? elem.id + '-een' : elem.id}
-
-    //         className='hoverable-div'
-
-    //         onMouseOver={mouseHoveredIn}
-    //         onMouseOut={mouseHoveredOut}
-    //     >
-    //         <span>{elem.icon}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
-    //     </div>)
-
     let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} />)
 
-    // style={{display: scheduledTime && new Date() < new Date(scheduledTime) && 'none'}}
     let whenWithoutExtraTweet = () => <div className='rendering-tweet-data-container'>
-        {/* <div className='tweet-id'>{id}</div> */}
         <div className='left-side'>
             <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' />
         </div>
         <div className='right-side'>
             <div className='tweet-info'>
 
-                {/* <div className='tweet-top'>
-                    <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div>
-                </div> */}
-                {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} /> }
+                {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} /> }
 
                 <div className='tweet-text'>{tweetText}</div>
 
@@ -379,7 +135,6 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
 
                 {<RenderPolls poll={tweetPoll} />}
 
-                {/* {getPrivacySelectedElement(tweetPrivacy, 'white')} */}
                 {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
 
                 <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons()}</div>
@@ -389,7 +144,6 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
 
     let whenWithExtraTweet = () => {
         return <div className='rendering-tweet-data-container'>
-            {/* <div className='tweet-id'>{id}</div> */}
 
             <div className='when-has-extra-tweet'>
 
@@ -400,26 +154,17 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
 
                     <div className='right-side'>
 
-                        {/* <div className='tweet-top'>
-                            <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div>
-                        </div> */}
-                        {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} /> }
+                    {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} /> }
 
                         <div className='tweet-text'>{tweetText}</div>
 
                         {<div className='tweet-media-file-content'>{readyMedia()}</div>}
-                        {/* {gifFile && pictureFile && <div className='tweet-media-file-content'>{readyMedia()}</div>} */}
-                        {/* {<div className='tweet-media-file-content' style={{minHeight: (!gifFile && !pictureFile) && '0px'}}>{readyMedia()}</div>} */}
-
-                        {/* deal with extra tweet */}
                         {<RenderPolls poll={tweetPoll} />}
 
-                        {/* {getPrivacySelectedElement(tweetPrivacy, 'white')} */}
                         {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
 
                         <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons('-een')}</div>
                     </div>
-                    {/* <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons}</div> */}
                 </div>
 
                 {((pictureFile && extraPictureFile) || (gifFile && extraGifFile) || (((pictureFile || gifFile) && extraTweet))) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '407.9px', transform: 'translate(24.5px, -406.5px)' }}></div>}
@@ -444,12 +189,8 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
 
                         <div className='extra-tweet-text'>{extraTweet}</div>
 
-                        {/* deal with extra media */}
                         {<div className='tweet-media-file-content'>{readyMedia('extra')}</div>}
-                        {/* {(extraGifFile || extraPictureFile) && <div className='tweet-media-file-content'>{readyMedia()}</div>} */}
-                        {/* {<div className='tweet-media-file-content' style={{maxHeight: (!extraGifFile || !extraPictureFile) && '0px'}}>{readyMedia()}</div>} */}
 
-                        {/* deal with extra poll */}
                         {extraPoll && <RenderPolls poll={extraPoll && extraPoll} />}
 
                         {getPrivacySelectedElement(tweetPrivacy, 'white')}
@@ -486,25 +227,18 @@ let RenderPolls = ({ poll }) => {
     // maxVotes <= 0 && alert('votes limit has reached!!')
 
     return poll.map(choice => {
-        // return Object.values(choice).map((value, idx) => value ? <div key={value} className='poll-info'><div className='left-view' onClick={handleVotes} id={idx}><span className='poll-progress' style={{ minwidth: `${(votes * 100) / 100}%` }}>[]</span><p>{value}</p></div><span className='poll-percentage'>{(votes * 100) / 100}%</span></div> : null)
-        // return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} /> : null)
         return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} handleChange={handleChange} highestValue={maxVotes} /> : null)
     })
 }
 
 let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
-    // let [votes, setvotes] = useState(4)
     let [votes, setvotes] = useState(0)
-    // let [initialWidth, setInitialWidth] = useState(0)
 
     let handleVotes = () => {
         handleChange();
-        // console.log(highestValue, 'value check', votes + 1 <= (highestValue || 104), votes + 1)
-        // setvotes( (highestValue + votes) <= 100 ? votes + 1 : votes)
+
         setvotes((highestValue > 0) ? votes + 1 : votes)
     }
-
-    // useEffect(() => setInitialWidth(4), [])
 
     return (
         <div key={value} className='poll-info'>
@@ -516,7 +250,6 @@ let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
                     <div className='progress-initial'></div>
 
                     <div className='progress-bar' style={{ width: `${votes}%`, borderTopLeftRadius: votes && '0px', borderBottomLeftRadius: votes && '0px' }}></div>
-                    {/* <div className='progress-bar' style={{ width: `${votes + 8}%` }}></div> */}
                 </div>
 
                 <p>{value}</p>
@@ -530,14 +263,9 @@ let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
 let MakeGifObjectAvailable = ({ gifId }) => {
     let [gif, setGif] = useState(null)
 
-    // gif && console.log(gifId, 'gif ID ??', gif.id)
-
     gifId && getGiphyGifObject(gifId).then(res => {
         setGif(res)
-        // console.log('checkpoint04', gifId)
     }).catch(err => console.log(err.message))
-
-    // gif && console.log('chekpoint05', gifId)
 
     return gif && <Gif gif={gif} height='290px' className='style-gif-border-radius' />
 }

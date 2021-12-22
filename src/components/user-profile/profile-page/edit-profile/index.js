@@ -30,19 +30,13 @@ function EditProfile({currentUser, setOpacity}) {
 
     let updateProfilePictureUrl = (url) => {
         setProfilePictureUrl(url)
-        // setProfileData(prevData => prevData.concat({content: url, title: 'profilePicture'}))
         changeDataInsideDatasetWithoutMutationInDuplicate({content: url, title: 'profilePicture'}, 6)
     }
 
     let updateCoverPictureUrl = (url) => {
         setCoverPictureUrl(url)
-        // setProfileData(prevData => prevData.concat({content: url, title: 'coverPicture'}))
         changeDataInsideDatasetWithoutMutationInDuplicate({content: url, title: 'coverPicture'}, 7)
     }
-
-    // profilePictureUrl && console.log(profilePictureUrl, profileData)
-    // coverPictureUrl && console.log(coverPictureUrl, profileData)
-    // profileData && console.log(coverPictureUrl, profileData)
 
     useEffect(() => profilePictureUrl && setActivateOpacityForProfile(false), [profilePictureUrl])
 
@@ -53,10 +47,6 @@ function EditProfile({currentUser, setOpacity}) {
     }, [profilePictureUploaded])
 
     useEffect(() => coverPictureUploaded && downloadProfilePictureUrlFromStorage(currentUser, updateCoverPictureUrl, 'coverPhoto'), [coverPictureUploaded])
-
-    // let handleDimLuminosityInEditProfile = () => setDimModal(true)
-
-    // let handleReviveLuminosityInEditProfile = () => setDimModal(false)
 
     let toggleEditProfileLuminosity = () => setDimModal(!dimModal)
 
@@ -97,22 +87,15 @@ function EditProfile({currentUser, setOpacity}) {
     }
 
     useEffect(() => {
-        // not deleting from server, but its here to show that it could have been done!!
-        // profileData.length == 4 && updateUserProfileDataInDocument(currentUser, {profileInfo: profileData})
-        // profileData && setPhotoElementForProfile(profileData[7])
-        // profileData[7] && console.log(profileData[7].coverPicture)
         profileData[7] && setPhotoElementForCover(profileData[7].content)
         profileData[6] && setPhotoElementForProfile(profileData[6].content)
     }, [profileData])
 
 
     useEffect(() => getUserProfileData(currentUser, handleDataLoader), [])
-
-    // console.log(profileData, 'profile data!!')
     
     let handleMouseEnter = evt => {
         let findWhich = evt.target.id || evt.target.parentNode.id
-        // console.log(evt.target, 'enter', findWhich)
         setHovered(findWhich)
     }
     
@@ -133,7 +116,6 @@ function EditProfile({currentUser, setOpacity}) {
     let handleChange = evt => {
         let fileSelected = evt.target.files[0]
         setPhotoElementForCover(fileSelected)
-        // console.log(fileSelected)
         uploadUserProfilePictureToStorage(fileSelected, currentUser, handleCoverPictureUploaded, 'coverPhoto')
         setActivateOpacityForCover(true)
     }
@@ -154,38 +136,28 @@ function EditProfile({currentUser, setOpacity}) {
     }
 
     useEffect(() => setOpacity(true), [])
-    // let decideSvgVisualsClassnames = () => photoElement ? '' : 'additive'
 
     let handleData = () => {
         profileData && updateUserProfileDataInDocument(currentUser, {profileInfo: profileData})
         profileData && 'running update?!'
-        // profilePictureUrl && updateUserProfileDataInDocument(currentUser, {})
     }
-
-    // style={{backgroundColor: dimModal && 'rgba(0, 0, 0, 0.11)'}}
 
     return (
         <div id='edit-profile-container' >
             <div id='header-section'>
-                {/* <Link id='remove-icon' to='/username'>{removeIcon()}</Link> */}
                 <Link id='remove-icon' to={`/${currentUser}`}>{removeIcon()}</Link>
                 <div id='edit-profile-text'>Edit profile</div>
-                {/* <Link id='save-edit-profile-changes' to='/username' onClick={handleData} style={{opacity: (activateOpacityForProfile || activateOpacityForCover) &&  .5, pointerEvents: (activateOpacityForProfile || activateOpacityForCover) && 'none'}}>Save</Link> */}
                 <Link id='save-edit-profile-changes' to={`/${currentUser}`} onClick={handleData} style={{opacity: (activateOpacityForProfile || activateOpacityForCover) &&  .5, pointerEvents: (activateOpacityForProfile || activateOpacityForCover) && 'none'}}>Save</Link>
             </div>
             <div id='body-section'>
                 <div id='profile-visuals' style={{maxHeight: '249px'}}>
                     <div id='profile-cover-photo' style={{backgroundColor: photoElementForCover == '' && 'darkslategray'}}>
-                        {/* <img id='cover-photo' src='https://picsum.photos/200/300' /> */}
                         <input type='file' onChange={handleChange} name='image-file' ref={coverPictureInputRef} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
 
-                        {/* {photoElementForCover && <img id='cover-photo' src={handleMediaFileFormats((profileData && profileData[7].coverPicture) || photoElementForCover)} />} */}
                         {photoElementForCover && <img id='cover-photo' src={handleMediaFileFormats(photoElementForCover)} />}
-                        {/* <img id='cover-photo' src={handleMediaFileFormats(photoElement ? photoElement : 'https://picsum.photos/200/300')} /> */}
 
                         <div id='svg-visuals' style={{ transform: photoElementForCover == '' && 'translate(10px, 76px)' }}>
-                            {/* <div className='camera-icon'>{cameraIcon()}</div>
-                            <div className='remove-icon-svg'>{removeIcon(true)}</div> */}
+
                             <div id='cover-camera' className='camera-icon' onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} style={{pointerEvents: activateOpacityForCover && 'none'}}>
                                 {cameraIcon()}
                                 <div id='cover-camera-icon-tooltips' style={{ display: hovered == 'cover-camera' ? 'block' : 'none' }}>Add Photo</div>
@@ -198,9 +170,9 @@ function EditProfile({currentUser, setOpacity}) {
                     </div>
                     
                     <input type='file' onChange={handleChangeforProfile} name='image-file' ref={profilePictureInputRef} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
-                    {/* {photoElementForProfile && <img id='profile-photo' src={handleMediaFileFormats(photoElementForProfile)} />} */}
+
                     <div id='profile-photo-div' style={{backgroundColor: photoElementForProfile == '' && 'darkslategray', pointerEvents: activateOpacityForProfile && 'none'}}>
-                        {/* <img id='profile-photo' src='https://picsum.photos/200/300' /> */}
+
                         {photoElementForProfile && <img id='profile-photo' src={handleMediaFileFormats(photoElementForProfile)} />}
                         <div id='profile-camera' className='camera-icon' style={{ transform: photoElementForProfile == '' && 'translate(0px, 42px)' }} onClick={handlePictureForProfile} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                             {cameraIcon()}
@@ -240,7 +212,6 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
     }, [test])
 
     let handleShowModal = () => {
-        // console.log('show calendar!!')
         setStartEditBirthdate(true)
         toggleLuminosity()
     }
@@ -254,9 +225,7 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
     }
 
     let handleCancelModal = () => {
-        // item = profileData[4]
         setStartEditBirthdate(false)
-        // console.log(profileData, 'cancel!!', showCalendar)
         toggleLuminosity()
         
     }
@@ -279,8 +248,7 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
 
         let dateTokens = data.split('-');
         dateString = `${dateTokens[0]} ${dateTokens[1]}, ${dateTokens[2]}`
-        // console.log(data, 'convert it', dateString, 'original', profileData, startEditBirthdate)
-        // item.content = dateString;   // if i uncomment here, this would change data set at hand
+
         // mergeData({content: dateString, title: 'Birth date'}) // this simply adds one more to data set but keeps duplicate unmutated!!
         // mergeData({content: dateString, title: 'Birth date'})  // this works just fine, but specific to edges in data set
         changeData({content: dateString, title: item.title}, index) // this should also work as this is more uniform approach, regardless of data position in dataset
@@ -298,7 +266,6 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
             ?
             <textarea readOnly={item.title == 'Birth date' ? true : false} maxLength={item.maxLength} id={item.title} className='editable-item-content' value={test ? test : item.content} onChange={handleChange} rows={item.title == 'Bio' ? 4 : 2} onFocus={() => setShow(true)} onBlur={() => setShow(false)} />
             :
-            // <EditBirthdate item={item} convertDateIntoString={convertDateIntoString} startEditBirthdate={startEditBirthdate} changeData={changeData} currentUser={currentUser} deleteData={deleteData} />
             showDateComponent
             ?
             <EditBirthdate item={item} convertDateIntoString={convertDateIntoString} startEditBirthdate={startEditBirthdate} changeData={changeData} currentUser={currentUser} deleteData={deleteData} />
