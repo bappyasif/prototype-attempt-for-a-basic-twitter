@@ -22,7 +22,7 @@ import PasswordResetPage from '../password-reset-page';
 import PageUnavailable from '../404-page';
 import AnalyticsUI from '../user-profile/all-tweets/tweet-top/analytics-ui';
 
-function AllRoutes({updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -144,7 +144,7 @@ function AllRoutes({updateTweetPrivacy, removeSpeceficArrayItem, currentUser, ha
                     />
                 </Route>
                 <Route exact path={'/analytics'}>
-                    <AnalyticsUI />
+                    <AnalyticsUI analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} currentUser={currentUser} />
                 </Route>
 
                 {/* {
@@ -342,6 +342,7 @@ function AllRoutes({updateTweetPrivacy, removeSpeceficArrayItem, currentUser, ha
                                 setScheduledTimeStamp={setScheduledTimeStamp}
                                 removeSpeceficArrayItem={removeSpeceficArrayItem}
                                 updateTweetPrivacy={updateTweetPrivacy}
+                                handleAnalysingTweetID={handleAnalysingTweetID}
                             />
                         </Route>
                         :
@@ -371,7 +372,7 @@ function AllRoutes({updateTweetPrivacy, removeSpeceficArrayItem, currentUser, ha
                             {/* {tweetPublishReady && setTweetPublishReady(false)} */}
                             <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                             {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
-                            <TweetsAndRepliesPage tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} />
+                            <TweetsAndRepliesPage currentUser={currentUser} tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
                             <RightSideNavigationPanel tweetData={tweetData} />
                         </Route>
                         :
@@ -385,7 +386,8 @@ function AllRoutes({updateTweetPrivacy, removeSpeceficArrayItem, currentUser, ha
                         <Route path={`/${currentUser}/media`}>
                             <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                             {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
-                            <AllMedias tweetData={tweetData} />
+                            {/* <AllMedias tweetData={tweetData} handleAnalysingTweetID={handleAnalysingTweetID} /> */}
+                            <AllMedias tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
                             <RightSideNavigationPanel tweetData={tweetData} />
                         </Route>
                         :

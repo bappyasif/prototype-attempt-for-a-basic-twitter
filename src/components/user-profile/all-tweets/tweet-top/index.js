@@ -4,8 +4,9 @@ import { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 
 import { analyticsIcon, moreIcon } from '../../profile-page/svg-resources'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 import { getDataFromFirestoreSubCollection } from '../../../firestore-methods'
+import { Redirect, useHistory } from 'react-router-dom'
 
-export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, currentUser }) => {
+export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) => {
     let [clicked, setClicked] = useState(false)
     let [whichPrivacy, setWhichPrivacy] = useState('')
     let [privacyOption, setPrivacyOption] = useState('')
@@ -51,7 +52,7 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     return (
         <div className='tweet-top'>
             <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
-            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} />}
+            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} />}
             {changedWhoCanReply && <RenderDropdownForWhoCanReply handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />}
         </div>
     )
@@ -97,7 +98,7 @@ let RenderPrivacyOption = ({ item, type, handleClicked, handleWhoCanReply, which
     )
 }
 
-let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked }) => {
+let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID }) => {
     let [isClickedOutside, setIsClickedOutside] = useState(true)
     let clcikedRef = useRef()
 
@@ -110,7 +111,7 @@ let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWh
     }
     useOnClickOutside(clcikedRef, handleModal)
 
-    let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} />)
+    let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} />)
 
     return (
         <div id='more-options-dropdown-container' ref={clcikedRef} style={{display: !isClickedOutside && 'none'}}>
@@ -119,8 +120,10 @@ let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWh
     )
 }
 
-let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked }) => {
+let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID }) => {
     let [tweetID, setTweetID] = useState('')
+    let history = useHistory()
+
     // console.log('heree!!')
     let handleClickAction = evt => {
         // evt.target.parentNode.id && console.log( evt.target.id || evt.target.parentNode.id)
@@ -137,6 +140,10 @@ let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, han
         } else if (test.textContent == 'Embed tweet') {
             window.open('https://publish.twitter.com/', '_blank')
             // handleClicked()
+        } else if (test.textContent == 'Analytics') {
+            // <Redirect to={'/analytics'} />
+            handleAnalysingTweetID(ID);
+            history.push('/analytics')
         }
 
         handleClicked()

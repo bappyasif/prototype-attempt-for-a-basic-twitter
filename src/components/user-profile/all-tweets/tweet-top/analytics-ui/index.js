@@ -1,14 +1,20 @@
-import React from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {useHistory} from 'react-router-dom'
 import { likeloveIcon, replyIcon, retweetIcon } from '../../../profile-page/svg-resources'
 import './styles.css'
+import useOnClickOutside from '../../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
+import {getUserProfileData} from '../../../../firestore-methods'
 
-function AnalyticsUI() {
+function AnalyticsUI({analysingTweetID, analysingTweetData, currentUser}) {
     return (
+        analysingTweetID
+        &&
+        analysingTweetData
+        &&
         <div id='tweet-analytics-ui-container'>
             <RenderAnalyticsHeaderSection />
-            <RenderAnalyticsDataSection />
-            <RenderTweetAnalyticMetrics />
+            <RenderAnalyticsDataSection analysingTweetData={analysingTweetData} currentUser={currentUser} />
+            <RenderTweetAnalyticMetrics analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} />
             <RenderAnalyticsFooterSection />
         </div>
     )
@@ -36,19 +42,22 @@ let FooterSectionLowerDeck = ({ number }) => {
     )
 }
 
-let RenderAnalyticsDataSection = () => {
+let RenderAnalyticsDataSection = ({analysingTweetData, currentUser}) => {
     return (
         <div id='analytics-data-section-container'>
-            <RenderAnalysingUserTweet />
+            <RenderAnalysingUserTweet analysingTweetData={analysingTweetData} currentUser={currentUser} />
             <RenderAnalysingTweetLikeRetweetReplyNumbersUI />
             {/* <RenderTweetAnalyticMetrics /> */}
         </div>
     )
 }
 
-let RenderTweetAnalyticMetrics = () => {
+let RenderTweetAnalyticMetrics = ({analysingTweetID, analysingTweetData}) => {
+    // let [currentTooltip, setCurrentTooltip] = useState(null)
     let tooltipSvg = informationTooltipSvg()
-    let renderMetrics = analyticMetrics.map(item => <RenderTweetAnalyticMetric key={item.name} item={item} tooltipSvg={tooltipSvg} />)
+    let renderMetrics = analyticMetrics.map(item => <RenderTweetAnalyticMetric key={item.name} item={item} tooltipSvg={tooltipSvg} analysingTweetData={analysingTweetData} />)
+    // let renderMetrics = analyticMetrics.map(item => <RenderTweetAnalyticMetric key={item.name} item={item} tooltipSvg={tooltipSvg} currentTooltip={currentTooltip} setCurrentTooltip={setCurrentTooltip} />)
+    analysingTweetID && console.log(analysingTweetID, analysingTweetData)
     return (
         <div id='analytic-metrics-ui-wrapper'>
             {renderMetrics}
@@ -57,13 +66,46 @@ let RenderTweetAnalyticMetrics = () => {
 }
 
 let RenderTweetAnalyticMetric = ({ item, tooltipSvg }) => {
+    let [currentTooltip, setCurrentTooltip] = useState(null)
+
+    let handleTooltips = evt => {
+        if(item.name == evt.target.parentNode.parentNode.parentNode.id) {
+            setCurrentTooltip(item.name)
+        }
+    }
+
+    let closeTooltip = () => setCurrentTooltip(null)
+    
     return (
         <div className='metric-wrapper' id={item.name}>
+            {item.name == currentTooltip && <RenderMetricTooltipModal tooltip={currentTooltip} closeTooltip={closeTooltip} />}
+            
             <div className='upper-deck'>
                 <div className='metric-name'>{item.name}</div>
-                <div className='tooltip-svg'>{tooltipSvg}</div>
+                <div className='tooltip-svg' onClick={handleTooltips}>{tooltipSvg}</div>
             </div>
+            
             <div className='meteric-number'>{item.number}</div>
+        </div>
+    )
+}
+
+let RenderMetricTooltipModal = ({tooltip, closeTooltip}) => {
+    let ref = useRef(null);
+
+    let handleModal = () => {
+        closeTooltip()
+    }
+    
+    useOnClickOutside(ref, handleModal)
+
+    let subText = tooltip == 'Impressions' ? 'Times this tweets was seen on Twitter' : tooltip == 'New followers' ? 'Follows gained directly from this Tweet' : 'Number of profile views from this Tweet'
+
+    return (
+        <div className='tooltip-ui-wrapper' ref={ref}>
+            <div className='tooltip-name'>{tooltip}</div>
+            <div className='tooltip-subtext'>{subText}</div>
+            <div className='tooltip-modal-btn' onClick={() => closeTooltip()}>OK</div>
         </div>
     )
 }
@@ -86,31 +128,71 @@ let RenderAnalysingTweetMarker = ({ item }) => {
     )
 }
 
-let RenderAnalysingUserTweet = () => {
+let RenderAnalysingUserTweet = ({analysingTweetData, currentUser}) => {
+    let [userProfileData, setUserProfileData] = useState(null)
+    
+    let [neededInfo, setNeededInfo] = useState([])
+
+    let handleDataLoading = (dataset) => setUserProfileData(dataset)
+
+    let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText} = analysingTweetData && {...analysingTweetData[0]}
+    
+    useEffect(() => currentUser && getUserProfileData(currentUser, handleDataLoading), [])
+
+    let filterProfileData = () => {
+        let itemFiltered = userProfileData.filter((item, idx) => (idx == 0 || idx == 6) && item.content)
+        setNeededInfo(itemFiltered)
+    }
+
+    useEffect(() => userProfileData && filterProfileData(), [userProfileData])
+
+    // let processCreatedDateFormat = () => new Date(created).toDateString()
+    // let processCreatedDateFormat = () => new Date(created.seconds).toString()
+    // let processCreatedDateFormat = () => {
+    //     let dateString =  new Date(created.seconds).toUTCString()
+    //     let neededPieces = []
+    //     let dateTokens = dateString.split(' ')
+    //     neededPieces.push(dateTokens[1], dateTokens[2])
+    //     return neededPieces.reverse().join(', ')
+    // }
+    
+    neededInfo && created && userProfileData && console.log(tweetText, created, userProfileData, neededInfo)
+
     return (
         <div id='analysing-user-tweet-wrapper'>
-            <RenderTweetUserInfo />
-            <RenderAnalysingTweetText />
+            <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={created && created.seconds} />
+            <RenderAnalysingTweetText tweetText={tweetText} />
         </div>
     )
 }
 
-let RenderAnalysingTweetText = () => {
+let RenderAnalysingTweetText = ({tweetText}) => {
     return (
-        <div id='analysing-tweet-text-wrapper'>
-            user Tweet
+        <div id='analysing-tweet-text-wrapper' style={{marginTop: '6px'}}>
+            {tweetText || 'user Tweet'}
         </div>
     )
 }
 
-let RenderTweetUserInfo = () => {
+let RenderTweetUserInfo = ({name, profileHandle, tweetPostedDate}) => {
+    // let dateFormatted = ''
+
+    let processCreatedDateFormat = () => {
+        // let dateString =  new Date(created.seconds).toUTCString()
+        let dateString =  new Date(tweetPostedDate).toUTCString()
+        let neededPieces = []
+        let dateTokens = dateString.split(' ')
+        neededPieces.push(dateTokens[1], dateTokens[2])
+        // dateFormatted = neededPieces.reverse().join(', ');
+        return neededPieces.reverse().join(', ')
+    }
     return (
         <div id='user-info-wrapper'>
             <img style={{width: '20px', height: '20px'}} src='https://picsum.photos/200/300' />
-            <div id='profile-name'>profile name</div>
-            <div id='profile-handle'>profile handle</div>
+            <div id='profile-name'>{name || 'profile name'}</div>
+            <div id='profile-handle'>{profileHandle || 'profile handle'}</div>
             <div id='text-separator'>-</div>
-            <div id='published-date'>Month day</div>
+            <div id='published-date'>{processCreatedDateFormat() || 'Month day'}</div>
         </div>
     )
 }
@@ -137,3 +219,57 @@ let tweetMarkers = [{ name: 'like', number: '00', icon: likeloveIcon() }, { name
 let analyticMetrics = [{ name: 'Impressions', number: '00' }, { name: 'New followers', number: '00' }, { name: 'Profile visits', number: '00' }]
 
 export default AnalyticsUI
+
+/**
+ * 
+ * 
+ let RenderTweetAnalyticMetric = ({ item, tooltipSvg }) => {
+    // let [tooltipClicked, setTooltipClicked] = useState(false)
+    let [currentTooltip, setCurrentTooltip] = useState(null)
+
+    let handleTooltips = evt => {
+        // console.log(evt.target.parentNode.parentNode.parentNode.id)
+        // setCurrentTooltip('')        
+        if(item.name == evt.target.parentNode.parentNode.parentNode.id) {
+            setCurrentTooltip(item.name)
+        }
+        // setTooltipClicked(true)
+    }
+
+    let closeTooltip = () => setCurrentTooltip(null)
+
+    // useEffect(() => {
+    //     setCurrentTooltip('')
+    // }, [item.name])
+
+    // useEffect(() => setCurrentTooltip(''), )
+
+    // console.log(currentTooltip, 'currentTooltip')
+    
+    return (
+        <div className='metric-wrapper' id={item.name}>
+            {/* {currentTooltip && <RenderMetricTooltipModal tooltip={currentTooltip} />} *}
+            {item.name == currentTooltip && <RenderMetricTooltipModal tooltip={currentTooltip} closeTooltip={closeTooltip} />}
+            <div className='upper-deck'>
+                <div className='metric-name'>{item.name}</div>
+                <div className='tooltip-svg' onClick={handleTooltips}>{tooltipSvg}</div>
+            </div>
+            <div className='meteric-number'>{item.number}</div>
+        </div>
+    )
+}
+ * 
+ * 
+ // let RenderMetricTooltipModal = React.forwardRef((props, ref) => {
+//     let {tooltip, closeTooltip} = {...props}
+//     let subText = tooltip == 'Impressions' ? 'Times this tweets was seen on Twitter' : tooltip == 'New followers' ? 'Follows gained directly from this Tweet' : 'Number of profile views from this Tweet'
+//     // console.log(props, 'props', tooltip, closeTooltip)
+//     return (
+//         <div className='tooltip-ui-wrapper' ref={ref}>
+//             <div className='tooltip-name'>{tooltip}</div>
+//             <div className='tooltip-subtext'>{subText}</div>
+//             <div className='tooltip-modal-btn' onClick={() => closeTooltip()}>OK</div>
+//         </div>
+//     )
+// })
+ */

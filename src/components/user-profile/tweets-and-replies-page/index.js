@@ -1,10 +1,10 @@
 import React from 'react'
 import AllTweetsPage from '../all-tweets'
 
-function TweetsAndRepliesPage({tweetData, removeSpeceficArrayItem}) {
+function TweetsAndRepliesPage({tweetData, removeSpeceficArrayItem, updateTweetPrivacy, handleAnalysingTweetID, currentUser}) {
     return (
         <div className='all-tweets-and-replies'>
-            <AllTweetsPage tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} />
+            <AllTweetsPage currentUser={currentUser} tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
         </div>
     )
 }

@@ -18,7 +18,11 @@ function ComponentsContainer() {
     let [uniqueID, setUniqueID] = useState()
     let [rerenderDOM, setRerenderDOM] = useState(false)
     let [currentUser, setCurrentUser] = useState('')
+    let [analysingTweetID, setAnalysingTweetID] = useState(null)
+    let [analysingTweetData, setAnalysingTweetData] = useState(null)
     // vnxOMhbaq8ObeFIE56GNPDQanig1
+
+    let handleAnalysingTweetID = value => setAnalysingTweetID(value)
 
     let handleCurrentUser = (userID) => setCurrentUser(userID)
 
@@ -149,13 +153,21 @@ function ComponentsContainer() {
         // console.log('index here!!', privacyOption, idx)
     }
 
+    let getSpeceficItemFromUserDocs = () => {
+        let tweetAnalysing = userDocs.filter(item => item.id == analysingTweetID)
+        setAnalysingTweetData(tweetAnalysing)
+        // return tweetAnalysing
+    }
+
+    useEffect(() => analysingTweetID && getSpeceficItemFromUserDocs(), [analysingTweetID])
+
     // currentUser && removeSpeceficArrayItem()
     // userDocs && console.log(userDocs.length, 'removed??', userDocs)
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )

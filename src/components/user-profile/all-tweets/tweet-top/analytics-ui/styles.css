@@ -2,6 +2,8 @@
     width: 650px;
     border: solid;
     /* padding: 8px; */
+    background-color: rgba(0, 0, 0, .8);
+    color: white;
 }
 
 #tweet-analytics-ui-container #analytics-header-ui-wrapper,
@@ -14,7 +16,7 @@
 }
 
 #tweet-analytics-ui-container #analytics-header-ui-wrapper {
-    padding: 8px;
+    padding: 11px 2px 6px 20px;
 }
 
 #tweet-analytics-ui-container #analytics-header-ui-wrapper #header-text {
@@ -23,9 +25,11 @@
 
 #tweet-analytics-ui-container #analysing-user-tweet-wrapper {
     text-align: left;
-    margin-bottom: 11px;
-    border: solid;
-    padding: 8px;
+    margin-bottom: 20px;
+    border: solid 0.11px;
+    padding: 11px 0px 8px 27px;
+    /* padding-left: 29px; */
+    border-radius: 35px;
 }
 
 #tweet-analytics-ui-container #analytics-data-section-container {
@@ -39,9 +43,10 @@
 
 #tweet-analytics-ui-container #analytics-data-section-container #like-retweet-reply-numbers-ui-wrapper {
     justify-content: space-evenly;
-    border: solid;
-    padding: 4px;
-    margin-bottom: 11px;
+    margin-bottom: 20px;
+    border: solid 0.11px;
+    padding: 11px 0px 8px 27px;
+    border-radius: 35px;
 }
 
 #tweet-analytics-ui-container #analytics-data-section-container #like-retweet-reply-numbers-ui-wrapper .marker-wrapper .svg-icon {
@@ -74,10 +79,20 @@
 
 #tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper .upper-deck .metric-name {
     /* margin-right: 11px; */
+    color: silver;
+}
+
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper {
+    position: relative;
 }
 
 #tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper .upper-deck .tooltip-svg {
     transform: scale(.6);
+    stroke: silver;
+}
+
+#tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper .upper-deck .tooltip-svg:hover {
+    cursor: pointer;
 }
 
 #tweet-analytics-ui-container #analytic-metrics-ui-wrapper .metric-wrapper .meteric-number {
@@ -91,24 +106,61 @@
 
 #tweet-analytics-ui-container #lower-deck-wrapper #left-side #heading-text {
     font-size: larger;
+    margin-bottom: 8px;
 }
 
 #tweet-analytics-ui-container #lower-deck-wrapper #left-side #sub-text {
-    font-size: smaller;
+    font-size: small;
+    color: silver;
 }
 
 #tweet-analytics-ui-container #lower-deck-wrapper #switch-to {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: solid;
+    border: solid transparent;
     width: 330px;
     background-color: whitesmoke;
     border-radius: 24px;
+    color: black;
 }
 
 #tweet-analytics-ui-container #lower-deck-wrapper {
     display: flex;
     border-top: 1px solid silver;
-    padding: 8px;
+    padding: 11px 6px 11px 20px;
+}
+
+/* tooltips styles */
+#analytic-metrics-ui-wrapper .metric-wrapper .tooltip-ui-wrapper {
+    background-color: rgba(0, 0, 0, 1);
+    text-align: left;
+    padding: 16px;
+    padding-bottom: 8px;
+    position: absolute;
+    top: -125px;
+    width: max-content;
+}
+
+#analytic-metrics-ui-wrapper .metric-wrapper .tooltip-ui-wrapper .tooltip-name {
+    font-size: x-large;
+    margin-bottom: 8px;
+    /* color: black; */
+}
+
+#analytic-metrics-ui-wrapper .metric-wrapper .tooltip-ui-wrapper .tooltip-subtext {
+    margin-bottom: 17px;
+    color: gray;
+}
+
+#analytic-metrics-ui-wrapper .metric-wrapper .tooltip-ui-wrapper .tooltip-modal-btn {
+    text-align: center;
+    background-color: rgba(119, 136, 153, .6);
+    border-radius: 29px;
+    /* color: black; */
+    font-size: x-large;
+}
+
+#analytic-metrics-ui-wrapper .metric-wrapper .tooltip-ui-wrapper .tooltip-modal-btn:hover {
+    background-color: rgba(119, 136, 153, 1);
 }
