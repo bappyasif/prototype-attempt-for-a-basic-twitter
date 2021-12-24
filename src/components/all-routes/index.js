@@ -22,7 +22,7 @@ import PasswordResetPage from '../password-reset-page';
 import PageUnavailable from '../404-page';
 import AnalyticsUI from '../user-profile/all-tweets/tweet-top/analytics-ui';
 
-function AllRoutes({analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -67,6 +67,11 @@ function AllRoutes({analysingTweetData, handleAnalysingTweetID, analysingTweetID
     // useEffect(() => {
     //     setCurrentRoute(window.location.href)
     // }, [])
+
+    // useEffect(() => {
+    //     currentRoute && console.log(currentRoute, '?!')
+    //     currentRoute && currentRoute.split('/')[5] == 'compose' && console.log('here!!')
+    // }, [currentRoute])
 
     // useEffect(() => {
     //     currentRoute && console.log(currentRoute.split('/'), '<<ccurrent route>>', currentRoute.split('/')[3].length)
@@ -125,7 +130,7 @@ function AllRoutes({analysingTweetData, handleAnalysingTweetID, analysingTweetID
 
     // console.log(inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04, "showing values from routes")
 
-    console.log('from routes', currentUser)
+    console.log(toggleModality, 'from routes', currentUser)
 
 
     let handleTweetModalityToggle = () => {
@@ -133,6 +138,7 @@ function AllRoutes({analysingTweetData, handleAnalysingTweetID, analysingTweetID
         // setToggleModality(true);
         // console.log('its here')
     }
+
     return (
         <Router>
             <Switch>
@@ -254,6 +260,7 @@ function AllRoutes({analysingTweetData, handleAnalysingTweetID, analysingTweetID
                         secondTweetHasPoll={secondTweetHasPoll}
                         setSecondTweetHasPoll={setSecondTweetHasPoll}
                         currentUser={currentUser}
+                        quoteTweetData={quoteTweetData}
                     />
                     {/* <ProfilePageUpperView /> */}
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
@@ -343,6 +350,7 @@ function AllRoutes({analysingTweetData, handleAnalysingTweetID, analysingTweetID
                                 removeSpeceficArrayItem={removeSpeceficArrayItem}
                                 updateTweetPrivacy={updateTweetPrivacy}
                                 handleAnalysingTweetID={handleAnalysingTweetID}
+                                handleQuoteTweetID={handleQuoteTweetID}
                             />
                         </Route>
                         :

@@ -9,10 +9,11 @@ import TweetScheduler from './schedule-tweet';
 import TweetWordCount from './tweet-word-count';
 import ContentInComposeTweet from '../compose-tweet/content-in-compose-tweet';
 import { Link } from 'react-router-dom';
+import { RenderAnalysingUserTweet, RenderUserTweet } from '../user-profile/all-tweets/tweet-top/analytics-ui';
 
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
-function TweetModal({ currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
+function TweetModal({quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -78,6 +79,17 @@ function TweetModal({ currentUser, firstTweetHasMedia, setFirstTweetHasMedia, se
     useEffect(() => addExtraTweetClicked && isPollIconClicked && setSecondTweetHasPoll(true), [addExtraTweetClicked])
 
     useEffect(() => setExtraTweetText(''), [!readyTweetPublish])
+
+    useEffect(() => {
+        quoteTweetData && console.log('quote data', quoteTweetData)
+        if(quoteTweetData) {
+            // setAddExtraTweetClicked(true)
+            // setExtraTweetText('')
+            // setTweetText(quoteTweetData[0].tweetText)
+            // setTweetPrivacy(quoteTweetData[0].privacy)
+            
+        }
+    }, [quoteTweetData])
 
     let fileUploadChangeHandler = (evt) => {
         // setSelectedFile(evt.target.files[0])
@@ -150,7 +162,7 @@ function TweetModal({ currentUser, firstTweetHasMedia, setFirstTweetHasMedia, se
     }
 
     return (
-        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((extraGifFile && gifFile) || (selectedFile && extraSelectedFile)) && isPrimaryTweetClicked) ? '1104px' : ((extraGifFile || extraSelectedFile) && isPrimaryTweetClicked) ? '731px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >
+        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((extraGifFile && gifFile) || (selectedFile && extraSelectedFile)) && isPrimaryTweetClicked) ? '1104px' : ((extraGifFile || extraSelectedFile) && isPrimaryTweetClicked) ? '731px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >    
             <div className='upper-content'>
                 {/* <span id='delete-icon' onClick={closeTweetModalHandler}>{deleteIcon()}</span> */}
                 {/* <span id='delete-icon' onClick={closeTweetModalHandler}><Link to='/username'>{deleteIcon()}</Link></span> */}
@@ -160,16 +172,17 @@ function TweetModal({ currentUser, firstTweetHasMedia, setFirstTweetHasMedia, se
 
             <div id='middle-content'>
                 {scheduleStamp && scheduleStamp}
+                {quoteTweetData && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} />}
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />
 
                     {/* <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{isPollIconClicked ? <TweetTextInput height="42.6px" placeholderText="Ask a question" tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} /> : <TweetTextInput height="81.6px" placeholderText="What's happening?" tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} />}</div> */}
-                    <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{<TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question" : "What's happening?"} tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} />}</div>
+                    <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{<TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question" : (quoteTweetData && quoteTweetData.length) ? 'Add another Tweet' : "What's happening?"} tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} />}</div>
                 </div>
 
                 {/* connecting two existing tweets, on load default connector */}
                 {(!selectedFile || !gifFile || !firstTweetHasPoll || !firstTweetHasGif) && <p id='line-extension' style={{ display: addExtraTweetClicked && !isPrimaryTweetClicked && !firstTweetHasPoll ? 'block' : 'none' }}></p>}
-                {<p id='line-extension-with-two-gifs-and-not-primary-selected' style={{ display: addExtraTweetClicked && !isPollIconClicked && !isPrimaryTweetClicked ? 'block' : 'none' }}></p>}
+                {<p id='line-extension-with-two-gifs-and-not-primary-selected' style={{ display: addExtraTweetClicked && !isPollIconClicked && !isPrimaryTweetClicked && !quoteTweetData ? 'block' : 'none' }}></p>}
                 {<p id='line-extension-with-two-gifs-and-when-primary-is-selected' style={{ display: addExtraTweetClicked && isPrimaryTweetClicked && firstTweetHasGif ? 'block' : 'none' }}></p>}
                 
                 {(firstTweetHasPoll && !isPollIconClickedForExtraTweet) && <p id='line-extension-when-first-tweet-has-poll-and-second-is-none' style={{ display: addExtraTweetClicked && !isPrimaryTweetClicked ? 'block' : 'none' }}></p>}
@@ -193,7 +206,7 @@ function TweetModal({ currentUser, firstTweetHasMedia, setFirstTweetHasMedia, se
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
                         {(addExtraTweetClicked) && <img id='profile-pic' src='https://picsum.photos/200/300' />}
                         {/* {(addExtraTweetClicked) && <TweetTextInput height="81.6px" placeholderText="What's happening?" tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />} */}
-                        {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
+                        {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : quoteTweetData ? 'Add another Tweet' : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
                         {console.log('checkpoint00')}
                     </div>
                 }
@@ -437,7 +450,7 @@ let TweetPrivacySelected = ({ setTweetOptions, tweetPrivacy, setTweetPrivacy }) 
     return <span id='options-selected'>{tweetPrivacy == '01' ? tweetPrivacySelected01() : tweetPrivacy == '02' ? tweetPrivacySelected02() : tweetPrivacySelected03()}</span>
 }
 
-let TweetTextInput = ({ primaryTweetOnFocused, height, placeholderText, tweetText, setTweetText, setPrimaryTweetClicked, setExtraTweetClicked, setBoth }) => {
+let TweetTextInput = ({primaryTweetOnFocused, height, placeholderText, tweetText, setTweetText, setPrimaryTweetClicked, setExtraTweetClicked, setBoth }) => {
     // let testRef = useRef();
     let handleTweetTextChanges = evt => {
         adjustHeight(evt);

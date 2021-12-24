@@ -45,7 +45,8 @@ let FooterSectionLowerDeck = ({ number }) => {
 let RenderAnalyticsDataSection = ({analysingTweetData, currentUser}) => {
     return (
         <div id='analytics-data-section-container'>
-            <RenderAnalysingUserTweet analysingTweetData={analysingTweetData} currentUser={currentUser} />
+            {/* <RenderAnalysingUserTweet analysingTweetData={analysingTweetData} currentUser={currentUser} /> */}
+            <RenderUserTweet speceficTweetData={analysingTweetData} currentUser={currentUser} />
             <RenderAnalysingTweetLikeRetweetReplyNumbersUI />
             {/* <RenderTweetAnalyticMetrics /> */}
         </div>
@@ -128,14 +129,14 @@ let RenderAnalysingTweetMarker = ({ item }) => {
     )
 }
 
-let RenderAnalysingUserTweet = ({analysingTweetData, currentUser}) => {
+export let RenderUserTweet = ({speceficTweetData, currentUser}) => {
     let [userProfileData, setUserProfileData] = useState(null)
     
     let [neededInfo, setNeededInfo] = useState([])
 
     let handleDataLoading = (dataset) => setUserProfileData(dataset)
 
-    let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText} = analysingTweetData && {...analysingTweetData[0]}
+    let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText} = speceficTweetData && {...speceficTweetData[0]}
     
     useEffect(() => currentUser && getUserProfileData(currentUser, handleDataLoading), [])
 
@@ -145,28 +146,19 @@ let RenderAnalysingUserTweet = ({analysingTweetData, currentUser}) => {
     }
 
     useEffect(() => userProfileData && filterProfileData(), [userProfileData])
-
-    // let processCreatedDateFormat = () => new Date(created).toDateString()
-    // let processCreatedDateFormat = () => new Date(created.seconds).toString()
-    // let processCreatedDateFormat = () => {
-    //     let dateString =  new Date(created.seconds).toUTCString()
-    //     let neededPieces = []
-    //     let dateTokens = dateString.split(' ')
-    //     neededPieces.push(dateTokens[1], dateTokens[2])
-    //     return neededPieces.reverse().join(', ')
-    // }
     
-    neededInfo && created && userProfileData && console.log(tweetText, created, userProfileData, neededInfo)
+    // neededInfo && created && userProfileData && console.log(tweetText, created, userProfileData, neededInfo)
 
     return (
         <div id='analysing-user-tweet-wrapper'>
             <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={created && created.seconds} />
-            <RenderAnalysingTweetText tweetText={tweetText} />
+            {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
+            <RenderUserTweetText tweetText={tweetText} />
         </div>
     )
 }
 
-let RenderAnalysingTweetText = ({tweetText}) => {
+let RenderUserTweetText = ({tweetText}) => {
     return (
         <div id='analysing-tweet-text-wrapper' style={{marginTop: '6px'}}>
             {tweetText || 'user Tweet'}
@@ -221,6 +213,54 @@ let analyticMetrics = [{ name: 'Impressions', number: '00' }, { name: 'New follo
 export default AnalyticsUI
 
 /**
+ * 
+ * 
+ let RenderAnalysingTweetText = ({tweetText}) => {
+    return (
+        <div id='analysing-tweet-text-wrapper' style={{marginTop: '6px'}}>
+            {tweetText || 'user Tweet'}
+        </div>
+    )
+}
+ * 
+ * 
+ let RenderAnalysingUserTweet = ({analysingTweetData, currentUser}) => {
+    let [userProfileData, setUserProfileData] = useState(null)
+    
+    let [neededInfo, setNeededInfo] = useState([])
+
+    let handleDataLoading = (dataset) => setUserProfileData(dataset)
+
+    let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText} = analysingTweetData && {...analysingTweetData[0]}
+    
+    useEffect(() => currentUser && getUserProfileData(currentUser, handleDataLoading), [])
+
+    let filterProfileData = () => {
+        let itemFiltered = userProfileData.filter((item, idx) => (idx == 0 || idx == 6) && item.content)
+        setNeededInfo(itemFiltered)
+    }
+
+    useEffect(() => userProfileData && filterProfileData(), [userProfileData])
+
+    // let processCreatedDateFormat = () => new Date(created).toDateString()
+    // let processCreatedDateFormat = () => new Date(created.seconds).toString()
+    // let processCreatedDateFormat = () => {
+    //     let dateString =  new Date(created.seconds).toUTCString()
+    //     let neededPieces = []
+    //     let dateTokens = dateString.split(' ')
+    //     neededPieces.push(dateTokens[1], dateTokens[2])
+    //     return neededPieces.reverse().join(', ')
+    // }
+    
+    neededInfo && created && userProfileData && console.log(tweetText, created, userProfileData, neededInfo)
+
+    return (
+        <div id='analysing-user-tweet-wrapper'>
+            <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={created && created.seconds} />
+            <RenderAnalysingTweetText tweetText={tweetText} />
+        </div>
+    )
+}
  * 
  * 
  let RenderTweetAnalyticMetric = ({ item, tooltipSvg }) => {

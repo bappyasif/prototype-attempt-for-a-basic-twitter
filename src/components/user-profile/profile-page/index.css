@@ -111,8 +111,8 @@
 }
 
 .profile-page-svg-icons {
-  width: 29px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
 }
 
 /* #profile-page-container  */
@@ -396,6 +396,7 @@
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons {
   margin-bottom: 4px;
   margin-right: 20px;
+  position: relative;
 }
 
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons .hoverable-div {
@@ -541,4 +542,33 @@
 
 .rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container .privacy-spans .privacy-svg {
   /* background-color: rgba(192, 192, 192, 1); */
+}
+
+/* tweet bottom icon extended functionalities styles here */
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper {
+  position: absolute;
+  top: -4px;
+  left: -12px;
+  background-color: rgba(245, 245, 245, 1);
+  z-index: 99;
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 2px 4px 0px 2px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper:hover {
+  background-color: darkgray;
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper .action-svg {
+  transform: scale(.92);
+}
+
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper .action-name {
+  font-size: medium;
+  padding-bottom: 4px;
+  margin-left: 4px;
 }

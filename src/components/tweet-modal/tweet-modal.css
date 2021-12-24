@@ -43,6 +43,29 @@
   margin-top: 11px;
 }
 
+#middle-content #analysing-user-tweet-wrapper {
+  text-align: left;
+  margin-left: 31px;
+  margin-bottom: 20px;
+}
+
+#middle-content #analysing-user-tweet-wrapper #user-info-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 56%;
+}
+
+#middle-content #analysing-user-tweet-wrapper #user-info-wrapper img {
+  width: 33px !important;
+  height: 33px !important;
+  border-radius: 50%;
+}
+
+#middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper {
+      margin-top: 0px !important;
+      margin-left: 51px !important;
+}
+
 #middle-content #annnounce-schedule {
   margin-left: 78px;
 }

@@ -9,7 +9,7 @@ import {tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03} 
 import { TweeetTop } from './tweet-top';
 import { RenderTweetBottomIcons } from './tweet-bottom';
 
-function AllTweetsPage({ tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
+function AllTweetsPage({ handleQuoteTweetID, tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
     let [show, setShow] = useState(false)
     let [noMoreTweets, setNoMoreTweets] = useState(false)
     let [totalTweets, setTotalTweets] = useState()
@@ -57,7 +57,7 @@ function AllTweetsPage({ tweetData, onlyMedias, removeSpeceficArrayItem, updateT
             content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID}
         }
 
-        return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} />
+        return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} />
     }
 
     let runThis = time => {
@@ -113,12 +113,12 @@ function AllTweetsPage({ tweetData, onlyMedias, removeSpeceficArrayItem, updateT
     )
 }
 
-let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) => {
+let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID }) => {
     let { ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
 
-    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} />)
+    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} />)
 
     let whenWithoutExtraTweet = () => <div className='rendering-tweet-data-container'>
         <div className='left-side'>
