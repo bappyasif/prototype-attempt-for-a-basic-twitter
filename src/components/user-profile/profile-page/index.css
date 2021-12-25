@@ -259,6 +259,21 @@
   margin-bottom: 13px;
 }
 
+.rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: -13px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper .replying-to-text {
+  color: silver;
+  margin: 8px 8px 8px 0px
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper .profile-handle {
+  cursor: pointer;
+}
+
 .rendering-tweet-data-container .right-side .tweet-info .poll-info:nth-last-child() {
   /* margin-bottom: 8px; */
 }

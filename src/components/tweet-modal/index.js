@@ -173,6 +173,7 @@ function TweetModal({quoteTweetData, currentUser, firstTweetHasMedia, setFirstTw
             <div id='middle-content'>
                 {scheduleStamp && scheduleStamp}
                 {quoteTweetData && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} />}
+                {quoteTweetData && <div id='addtional-tweet-line'></div>}
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />
 

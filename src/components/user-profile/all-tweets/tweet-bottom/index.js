@@ -1,14 +1,29 @@
 import React, { useState, useRef, useEffect } from 'react'
 import {useHistory} from 'react-router-dom'
+import { getDataFromFirestoreSubCollection, updateDataInFirestore } from '../../../firestore-methods'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 
-export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, handleQuoteTweetID }) => {
+export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser }) => {
     let [hoveredID, setHoveredID] = useState('')
     let [iconClicked, setIconClicked] = useState('')
     let [showModal, setShowModal] = useState(false)
     let [undoRetweet, setUndoRetweet] = useState(false)
     let [counter, setCounter] = useState(0);
+    let [replyCount, setReplyCount] = useState(0)
+    let [replyCountFlag, setCountReplyFlag] = useState(false)
     let history = useHistory()
+
+    let handleReplyCount = (val) => {
+        // setReplyCount(val ? val : 1)
+        setReplyCount(Number(val + 1))
+        setCountReplyFlag(true)
+        setCounter(Number(val + 1))
+        console.log('checkpoint 2', val)
+    }
+
+    let handleInitialReplyCount = val => {
+        setCounter(val)
+    }
 
     let handleIncreaseCount = () => setCounter(prevCount => prevCount+1)
 
@@ -28,6 +43,13 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
         undoRetweet && handleIncreaseCount()
         counter && !undoRetweet && handleDecreaseCount()
     }, [undoRetweet])
+
+    useEffect(() => {
+        iconClicked && replyCountFlag && updateDataInFirestore(currentUser, tweetData.ID, {replyCount: replyCount})
+        iconClicked && replyCountFlag && history.push('/tweet/compose')
+    }, [replyCountFlag])
+
+    useEffect(() => currentUser && elem.id == 'reply' && loadInitialReplyCount(), [])
 
     let findWhichIconId = evt => {
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
@@ -56,9 +78,23 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
             handleDecreaseCount()
         } else if(iconClicked == 'reply') {
             handleQuoteTweetID(tweetData.ID)
-            history.push('/tweet/compose')
+            handleQuoteTweetCount()
+            // HandleQuoteTweetProcess({userID: currentUser, docID: tweetData.ID, whichData: 'replyCount'})
+            // updateDataInFirestore(currentUser, tweetData.ID, {replyCount: })
+            // history.push('/tweet/compose')
         }
     }
+
+    let loadInitialReplyCount = () => {
+        getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleInitialReplyCount )
+    }
+
+    let handleQuoteTweetCount = () => {
+        getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleReplyCount )
+        console.log('checkpointy 1', currentUser, tweetData.ID)
+    }
+
+    replyCount && console.log(replyCount, 'replyCount!!')
 
     return (
         <div
@@ -75,7 +111,8 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
 
             <div className='item-wrapper' onClick={handleClicked} style={{display: 'flex', alignItems: 'center'}}>
                 <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{iconClicked == 'like' ? loveIcon() : elem.icon}</div>
-                {counter > 0 && <div className='item-counter' style={{color: 'silver', fontSize: 'large', marginLeft: '4px', position: 'absolute', 'right': '-15px'}}>{counter}</div>}
+                {(counter > 0) && <div className='item-counter' style={{color: 'silver', fontSize: 'large', marginLeft: '4px', position: 'absolute', 'right': '-15px'}}>{counter}</div>}
+                {/* {(counter > 0 || replyCount > 0) && <div className='item-counter' style={{color: 'silver', fontSize: 'large', marginLeft: '4px', position: 'absolute', 'right': '-15px'}}>{counter || (elem.ID && replyCount)}</div>} */}
             </div>
             <span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
 
@@ -88,6 +125,18 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
     )
 
 }
+
+// let HandleQuoteTweetProcess = ({userID, docID, whichData}) => {
+//     let [replyCount, setReplyCount] =  useState(null)
+//     let handleReplyCount = (val) => setReplyCount(val);
+    
+//     useEffect(() => getDataFromFirestoreSubCollection(userID, docID, whichData, handleReplyCount ), [])
+//     useEffect(() => replyCount && updateDataInFirestore(currentUser, tweetData.ID, {replyCount: replyCount ? replyCount + 1 : 1}), [replyCount])
+    
+//     replyCount && history.push('/tweet/compose')
+
+//     return ''
+// }
 
 let ShowRetweetModalUI = ({ handleShowModal, undoRetweet, handleUndoTweet }) => {
     let ref = useRef()

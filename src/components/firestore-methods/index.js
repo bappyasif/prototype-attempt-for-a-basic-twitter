@@ -10,7 +10,7 @@ let db = getFirestore();
 
 // set data into firestore
 export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, userID) => {
-    let {scheduledTimeStamp, extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
+    let {quoteTweetID, scheduledTimeStamp, extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
 
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
@@ -18,11 +18,11 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, us
 
     let refinedData;
     if (extraImgFile && imgFile) {
-        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia}
+        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, quoteTweetID: quoteTweetID ? quoteTweetID : null, replyCount: 0}
     } else if (!extraImgFile && imgFile) {
-        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, quoteTweetID: quoteTweetID ? quoteTweetID : null, replyCount: 0 }
     } else {
-        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia }
+        refinedData = { id: docID, extraPoll, tweetPoll, tweetText, extraTweet, medias: { picture: imgFile ? imgFile : '', extraPicture: extraImgFile ? extraImgFile : '', gif: gifItem ? gifItem.id : '', extraGif: extraGifItem ? extraGifItem.id : '' }, created: dateCreated, privacy: tweetPrivacy, firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, quoteTweetID: quoteTweetID ? quoteTweetID : null, replyCount: 0 }
         // console.log('here!!????', refinedData)
     }
 
@@ -298,12 +298,17 @@ export let updateDataInFirestore = (userID, docID, data) => {
 
 export let getDataFromFirestoreSubCollection = (userID, docID, whichData, dataLoader) => {
     let docRef = doc(db, 'tweets-user', userID, userID, docID)
+    // console.log('checkpoint 3')
     getDoc(docRef)
     .then(docSnap => {
+        // console.log('checkpoint 4', docSnap.data(), docSnap.exists(), whichData, docSnap.data()[whichData])
         if(docSnap.exists) {
             let data = docSnap.data()[whichData]
-            data && dataLoader(data)
-            data && console.log('data loaded!!')
+            // data && dataLoader(data)
+            data ? dataLoader(data) : whichData == 'replyCount' && dataLoader(data)
+            data && console.log('data loaded!!', data)
+        } else {
+            console.log('data does not exist!!')
         }
     }).catch(err => console.log('data was not found', err.code, err.message))
 }

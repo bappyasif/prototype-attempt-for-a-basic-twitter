@@ -41,6 +41,16 @@
   /* width: 551px; */
   width: 546px;
   margin-top: 11px;
+  position: relative;
+}
+
+#middle-content #addtional-tweet-line {
+  width: 0.71px;
+  height: 34px;
+  position: absolute;
+  top: 35px;
+  left: 46px;
+  border-right: dashed 0.1px silver;
 }
 
 #middle-content #analysing-user-tweet-wrapper {

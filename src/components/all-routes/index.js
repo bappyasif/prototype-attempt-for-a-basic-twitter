@@ -22,7 +22,7 @@ import PasswordResetPage from '../password-reset-page';
 import PageUnavailable from '../404-page';
 import AnalyticsUI from '../user-profile/all-tweets/tweet-top/analytics-ui';
 
-function AllRoutes({quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -351,6 +351,8 @@ function AllRoutes({quoteTweetData, handleQuoteTweetID, analysingTweetData, hand
                                 updateTweetPrivacy={updateTweetPrivacy}
                                 handleAnalysingTweetID={handleAnalysingTweetID}
                                 handleQuoteTweetID={handleQuoteTweetID}
+                                quoteTweetData={quoteTweetData}
+                                quoteTweetID={quoteTweetID}
                             />
                         </Route>
                         :
@@ -380,7 +382,7 @@ function AllRoutes({quoteTweetData, handleQuoteTweetID, analysingTweetData, hand
                             {/* {tweetPublishReady && setTweetPublishReady(false)} */}
                             <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                             {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
-                            <TweetsAndRepliesPage currentUser={currentUser} tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
+                            <TweetsAndRepliesPage currentUser={currentUser} tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} />
                             <RightSideNavigationPanel tweetData={tweetData} />
                         </Route>
                         :

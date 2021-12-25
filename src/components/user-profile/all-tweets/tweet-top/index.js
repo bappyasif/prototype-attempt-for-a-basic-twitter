@@ -128,10 +128,13 @@ let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, han
     let handleClickAction = evt => {
         // evt.target.parentNode.id && console.log( evt.target.id || evt.target.parentNode.id)
         // setting tweet ID with which docID needs to be deleted both from DOM and Firestore
-        (evt.target.id || evt.target.parentNode.id) && setTweetID(evt.target.id || evt.target.parentNode.id)
+        // (evt.target.id || evt.target.parentNode.id) && setTweetID(evt.target.id || evt.target.parentNode.id)
+        // setTweetID(evt.target.id || evt.target.parentNode.id)
 
         // removing that targetted tweet from profile
         // removeSpeceficArrayItem(ID)
+        // console.log(evt.target.id || evt.target.parentNode.id)
+        // (evt.target.id || evt.target.parentNode.id) && (evt.target.id || evt.target.parentNode.id) == ID && console.log('here tweetID')
 
         let test = (evt.target.querySelector('.option-title') || evt.target.parentNode.querySelector('.option-title'))
         // console.log(test, '?!')
@@ -144,13 +147,17 @@ let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, han
             // <Redirect to={'/analytics'} />
             handleAnalysingTweetID(ID);
             history.push('/analytics')
+        } else if (test.textContent == 'Delete') {
+            // setTweetID(ID)
+            // console.log(ID, 'delete')
+            removeSpeceficArrayItem(ID)            
         }
 
         handleClicked()
     }
-    // tweetID && console.log(tweetID)
+    // console.log(tweetID)
     // removing that targetted tweet from profile
-    useEffect(() => tweetID && removeSpeceficArrayItem(tweetID), [tweetID])
+    // useEffect(() => tweetID && removeSpeceficArrayItem(tweetID), [tweetID])
 
     return (
         <div className='option-container' id={item.title == 'Delete' ? ID : null} onClick={handleClickAction}>

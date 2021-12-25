@@ -5,23 +5,33 @@ import { getPrivacySelectedElement, showGif, showImg } from '..';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 import TopicsPickerInTimeline from '../topics-picker-in-timeline';
-import {tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03} from '../../tweet-modal'
+import { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../../tweet-modal'
 import { TweeetTop } from './tweet-top';
 import { RenderTweetBottomIcons } from './tweet-bottom';
+import { getUserProfileData } from '../../firestore-methods';
 
-function AllTweetsPage({ handleQuoteTweetID, tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
+function AllTweetsPage({ quoteTweetData, handleQuoteTweetID, tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
     let [show, setShow] = useState(false)
-    let [noMoreTweets, setNoMoreTweets] = useState(false)
+    let [showNoMoreTweets, setShowNoMoreTweets] = useState(false)
     let [totalTweets, setTotalTweets] = useState()
     let [currentTweetsIndex, setCurrentTweetsIndex] = useState()
 
-    let handleNoMoreTweets = () => setNoMoreTweets(true)
+    let handleNoMoreTweets = () => {
+        setShowNoMoreTweets(true)
+        console.log('no more!!')
+    }
 
     let handleShowMoreTweets = () => {
         setCurrentTweetsIndex(currentTweetsIndex + 11 <= totalTweets ? currentTweetsIndex + 11 : totalTweets)
     }
 
-    useEffect(() => currentTweetsIndex >= totalTweets && handleNoMoreTweets(), [currentTweetsIndex])
+    // useEffect(() => (currentTweetsIndex < 11 || currentTweetsIndex == totalTweets) && handleNoMoreTweets(), [currentTweetsIndex])
+
+    useEffect(() => totalTweets && (currentTweetsIndex == totalTweets) && handleNoMoreTweets(), [currentTweetsIndex])
+
+    useEffect(() => (totalTweets) && totalTweets <= 11 && handleNoMoreTweets(), [totalTweets])
+
+    console.log(currentTweetsIndex, totalTweets, showNoMoreTweets)
 
     useEffect(() => {
         onlyMedias && setTotalTweets(onlyMedias.length)
@@ -51,13 +61,14 @@ function AllTweetsPage({ handleQuoteTweetID, tweetData, onlyMedias, removeSpecef
                 tweetPoll: item.tweetPoll,
                 extraPoll: item.extraPoll,
                 scheduledTime: item.scheduledTimeStamp,
-                ID: ID
+                ID: ID,
+                quotedTweetID: item.quoteTweetID
             }
         } else {
-            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID}
+            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID, quotedTweetID: item.quoteTweetID }
         }
 
-        return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} />
+        return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} />
     }
 
     let runThis = time => {
@@ -107,18 +118,34 @@ function AllTweetsPage({ handleQuoteTweetID, tweetData, onlyMedias, removeSpecef
     return (
         <div id='all-tweets-container'>
             {onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}
-            <div id='show-more-tweets' style={{ display: noMoreTweets && 'none' }} onClick={handleShowMoreTweets}>Show more</div>
+            <div id='show-more-tweets' style={{ display: showNoMoreTweets && 'none' }} onClick={handleShowMoreTweets}>Show more</div>
+            {/* <div id='show-more-tweets' style={{ display: noMoreTweets && 'none' }} onClick={handleShowMoreTweets}>Show more</div> */}
             <TopicsPickerInTimeline />
         </div>
     )
 }
 
-let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID }) => {
-    let { ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
+let GetReplyToInformation = ({currentUser}) => {
+    let [profileData, setProfileData] = useState(null)
+    let handleLoading = data => setProfileData(data)
+    // getUserProfileData(currentUser, handleLoading)
+    useEffect(() => getUserProfileData(currentUser, handleLoading), [])
+    // console.log(profileData, 'profile data!!')
+    return (
+        profileData
+        &&
+        <div className='replying-to-wrapper'><div className='replying-to-text'>{`replying to `}</div><div className='profile-handle'>@{profileData[0].content}</div></div>
+    )
+}
+
+let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData }) => {
+    let {quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
 
-    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} />)
+    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} />)
+
+    console.log(quotedTweetID, 'check!!')
 
     let whenWithoutExtraTweet = () => <div className='rendering-tweet-data-container'>
         <div className='left-side'>
@@ -127,7 +154,9 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
         <div className='right-side'>
             <div className='tweet-info'>
 
-                {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} /> }
+                {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} />}
+
+                {quotedTweetID && <GetReplyToInformation currentUser={currentUser} />}
 
                 <div className='tweet-text'>{tweetText}</div>
 
@@ -154,7 +183,9 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
 
                     <div className='right-side'>
 
-                    {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} /> }
+                        {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} />}
+
+                        {quotedTweetID && <GetReplyToInformation currentUser={currentUser} />}
 
                         <div className='tweet-text'>{tweetText}</div>
 
