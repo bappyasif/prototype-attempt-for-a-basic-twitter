@@ -2,12 +2,12 @@ import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 import React, { useEffect, useState } from 'react'
 import { downloadTweetPictureUrlFromStorage, testUploadBlobFile, uploadTweetPictureUrlToStorage } from '../firebase-storage';
-import { writeDataIntoCollection } from '../firestore-methods';
+import { updateDataInFirestore, writeDataIntoCollection } from '../firestore-methods';
 
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
-function UserProfile({quoteTweetID, quoteTweetData, handleQuoteTweetID, handleAnalysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, setScheduledTimeStamp, scheduledTimeStamp, currentUser, handleUpdateStatus, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08 }) {
+function UserProfile({handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, handleAnalysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, setScheduledTimeStamp, scheduledTimeStamp, currentUser, handleUpdateStatus, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08 }) {
     let [pictureUrl, setPictureUrl] = useState('')
 
     let [extraPictureUrl, setExtraPictureUrl] = useState('')
@@ -69,12 +69,19 @@ function UserProfile({quoteTweetID, quoteTweetData, handleQuoteTweetID, handleAn
         extraSelectedFile && uploadTweetPictureUrlToStorage(extraSelectedFile, uniqueID, updateExtraPictureUploadingStatus, 'extra')
     }, [])
 
+    // quoteTweetID && alert('here!!')
+
 
     // when there is new data to store in firestore and render on DOM
     useEffect(() => {        
         if (!(selectedFile || extraSelectedFile)) {
             newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, gifItem: gifFile, extraGifItem: extraGifFile, scheduledTimeStamp: scheduledTimeStamp, quoteTweetID: quoteTweetID }, uniqueID, newDataStatus, updateData, currentUser)
         }
+
+        // when there is a tweet quoted by user, and posted it on profile, updating that count on Firestore
+        quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: Number(replyCount + 1)})
+        // resetting previous reply count to zero, so that it doesnt invoke route forwarding from tweet bottom 'who can reply' functionality
+        quoteTweetID && handleReplyCount(0)
 
         setNewDataStatus(false)
         setScheduledTimeStamp('')
@@ -123,6 +130,9 @@ function UserProfile({quoteTweetID, quoteTweetData, handleQuoteTweetID, handleAn
                 handleAnalysingTweetID={handleAnalysingTweetID}
                 handleQuoteTweetID={handleQuoteTweetID}
                 quoteTweetData={quoteTweetData}
+                handleReplyCount={handleReplyCount}
+                replyCount={replyCount}
+                handlePinnedTweetID={handlePinnedTweetID}
                 tweetData={tweetData || []}
                 // handleCount={handleCount}
             />

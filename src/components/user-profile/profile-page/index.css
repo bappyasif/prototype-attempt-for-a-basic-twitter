@@ -484,8 +484,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 4.5px;
-  padding-top: 2.2px;
+  /* padding-left: 4.5px;
+  padding-top: 2.2px; */
+  padding: 2px;
   border-radius: 50%;
   /* position: relative; */
 }
@@ -525,6 +526,56 @@
 
 .rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container:last-child {
   margin-bottom: 2px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container {
+  position: absolute;
+  top: 54px;
+  left: 153px;
+  width: 202px;
+  background-color: lightslategray;
+  z-index: 99;
+  padding: 11px 20px 8px 20px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container .modal-header {
+  font-size: larger;
+  margin-bottom: 2px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container .explanation-text {
+  color: white;
+  margin-bottom: 8px;
+  font-size: smaller;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container .clickable-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 2em;
+  /* border: solid; */
+  border-radius: 20px;
+  margin-bottom: 4px;
+  font-size: larger;
+  color: white;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Pin {
+  background-color: rgba(192, 192, 192, 1);
+  margin-bottom: 11px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Pin:hover {
+  background-color: rgba(192, 192, 192, .8);
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Cancel {
+  background-color: rgba(112, 128, 144, .6);
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Cancel:hover {
+  background-color: rgba(112, 128, 144, 1);
 }
 
 .rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container {

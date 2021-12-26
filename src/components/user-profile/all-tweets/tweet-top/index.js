@@ -6,17 +6,23 @@ import useOnClickOutside from '../../../navigation-panels/right-side/click-outsi
 import { getDataFromFirestoreSubCollection } from '../../../firestore-methods'
 import { Redirect, useHistory } from 'react-router-dom'
 
-export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) => {
+export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handlePinnedTweetID }) => {
     let [clicked, setClicked] = useState(false)
     let [whichPrivacy, setWhichPrivacy] = useState('')
     let [privacyOption, setPrivacyOption] = useState('')
     let [existingPrivacy, setExistingPrivacy] = useState('')
     let [changedWhoCanReply, setChangedWhoCanReply] = useState(false)
+    let [showPinModal, setShowPinModal] = useState(false);
     
+    let handleShowPinModal = () => setShowPinModal(!showPinModal)
+
     let handleClicked = () => setClicked(!clicked)
     // let rederDropdown = () => moreOptions.map(item => <Rend)
+    
     let handleWhoCanReply = () => setChangedWhoCanReply(!changedWhoCanReply)
+    
     let handleWhichPrivacy = value => setWhichPrivacy(value)
+    
     let handlewhichPrivacyOption = value => setPrivacyOption(value)
     
     // useEffect(() => whichPrivacy && updateTweetPrivacy(ID, whichPrivacy), [whichPrivacy])
@@ -52,9 +58,43 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     return (
         <div className='tweet-top'>
             <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
-            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} />}
+            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} />}
             {changedWhoCanReply && <RenderDropdownForWhoCanReply handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />}
+            {showPinModal && <PinTweetConfirmationModal handleShowPinModal={handleShowPinModal} ID={ID} handlePinnedTweetID={handlePinnedTweetID} />}
         </div>
+    )
+}
+
+let PinTweetConfirmationModal = ({handleShowPinModal, ID, handlePinnedTweetID}) => {
+    let ref = useRef()
+    
+    let handleModal = () => {
+        handleShowPinModal()
+    }
+
+    useOnClickOutside(ref, handleModal)
+    
+    return (
+        <div className='pin-tweet-modal-container' ref={ref}>
+            <div className='modal-header'>Pin Tweet to profile?</div>
+            <div className='explanation-text'>This will appear at the top of your profile and replace any previously pinned Tweet.</div>
+            <ClickableDiv name={'Pin'} handleShowPinModal={handleShowPinModal} ID={ID} handlePinnedTweetID={handlePinnedTweetID} />
+            <ClickableDiv name={'Cancel'} handleShowPinModal={handleShowPinModal} />
+        </div>
+    )
+}
+
+let ClickableDiv = ({name, handleShowPinModal, ID, handlePinnedTweetID}) => {
+    let handleClick = () => {
+        if(name == 'Pin') {
+            handlePinnedTweetID(ID)
+            handleShowPinModal()
+        } else if(name == 'Cancel') {
+            handleShowPinModal()
+        }
+    }
+    return (
+        <div id={name} className='clickable-div' onClick={handleClick}>{name}</div>
     )
 }
 
@@ -98,7 +138,7 @@ let RenderPrivacyOption = ({ item, type, handleClicked, handleWhoCanReply, which
     )
 }
 
-let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID }) => {
+let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID, handleShowPinModal }) => {
     let [isClickedOutside, setIsClickedOutside] = useState(true)
     let clcikedRef = useRef()
 
@@ -107,11 +147,12 @@ let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWh
     // calling a hook to decide if mouse is clicked outside point reference or not, and then closing modal
     let handleModal = () => {
         setIsClickedOutside(false)
-        handleClicked()
+        // handleClicked()
     }
+
     useOnClickOutside(clcikedRef, handleModal)
 
-    let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} />)
+    let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} />)
 
     return (
         <div id='more-options-dropdown-container' ref={clcikedRef} style={{display: !isClickedOutside && 'none'}}>
@@ -120,8 +161,10 @@ let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWh
     )
 }
 
-let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID }) => {
+let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID, handleShowPinModal }) => {
     let [tweetID, setTweetID] = useState('')
+    // let [showPinModal, setShowPinModal] = useState(false);
+
     let history = useHistory()
 
     // console.log('heree!!')
@@ -151,6 +194,8 @@ let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, han
             // setTweetID(ID)
             // console.log(ID, 'delete')
             removeSpeceficArrayItem(ID)            
+        } else if (test.textContent == 'Pin to your profile') {
+            handleShowPinModal()
         }
 
         handleClicked()

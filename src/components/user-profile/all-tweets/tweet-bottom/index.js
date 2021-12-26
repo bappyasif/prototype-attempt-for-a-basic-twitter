@@ -3,23 +3,23 @@ import {useHistory} from 'react-router-dom'
 import { getDataFromFirestoreSubCollection, updateDataInFirestore } from '../../../firestore-methods'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 
-export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser }) => {
+export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID }) => {
     let [hoveredID, setHoveredID] = useState('')
     let [iconClicked, setIconClicked] = useState('')
     let [showModal, setShowModal] = useState(false)
     let [undoRetweet, setUndoRetweet] = useState(false)
     let [counter, setCounter] = useState(0);
-    let [replyCount, setReplyCount] = useState(0)
-    let [replyCountFlag, setCountReplyFlag] = useState(false)
+    // let [replyCount, setReplyCount] = useState(0)
+    // let [replyCountFlag, setCountReplyFlag] = useState(false)
     let history = useHistory()
 
-    let handleReplyCount = (val) => {
-        // setReplyCount(val ? val : 1)
-        setReplyCount(Number(val + 1))
-        setCountReplyFlag(true)
-        setCounter(Number(val + 1))
-        console.log('checkpoint 2', val)
-    }
+    // let handleReplyCount = (val) => {
+    //     // setReplyCount(val ? val : 1)
+    //     setReplyCount(Number(val + 1))
+    //     setCountReplyFlag(true)
+    //     setCounter(Number(val + 1))
+    //     console.log('checkpoint 2', val)
+    // }
 
     let handleInitialReplyCount = val => {
         setCounter(val)
@@ -36,18 +36,27 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
     useEffect(() => {
         if(iconClicked == 'like') {
             handleIncreaseCount()
+        } else if(iconClicked == 'reply') {
+            // replyCount && history.push('/tweet/compose')
+        } else if(iconClicked == 'analytics') {
+            // alert('here!!')
+            handleAnalysingTweetID(ID);
+            history.push('/analytics')
         }
     }, [iconClicked])
+
+    useEffect(() => replyCount && history.push('/tweet/compose'), [replyCount])
 
     useEffect(() => {
         undoRetweet && handleIncreaseCount()
         counter && !undoRetweet && handleDecreaseCount()
     }, [undoRetweet])
 
-    useEffect(() => {
-        iconClicked && replyCountFlag && updateDataInFirestore(currentUser, tweetData.ID, {replyCount: replyCount})
-        iconClicked && replyCountFlag && history.push('/tweet/compose')
-    }, [replyCountFlag])
+    // useEffect(() => {
+    //     // iconClicked == 'reply' && history.push('/tweet/compose')
+    //     // iconClicked && replyCountFlag && updateDataInFirestore(currentUser, tweetData.ID, {replyCount: replyCount})
+    //     // iconClicked && replyCountFlag && history.push('/tweet/compose')
+    // }, [replyCountFlag])
 
     useEffect(() => currentUser && elem.id == 'reply' && loadInitialReplyCount(), [])
 

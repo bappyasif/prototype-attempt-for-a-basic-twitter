@@ -312,3 +312,10 @@ export let getDataFromFirestoreSubCollection = (userID, docID, whichData, dataLo
         }
     }).catch(err => console.log('data was not found', err.code, err.message))
 }
+
+export let addSpecificDataIntoFirestoreCollection = (userID, data) => {
+    let docRef = doc(db, 'tweets-user', userID);
+    updateDoc(docRef, data)
+    .then(() => console.log('data added to firestore'))
+    .catch(err => console.log('data addition has failed', err.code, err.message))
+}

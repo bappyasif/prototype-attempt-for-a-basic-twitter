@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { Component, useEffect, useState } from 'react'
 import AllRoutes from './all-routes'
 import FirebaseApp from './firebase-configs';
-import { createSubCollectionForCurrentUser, deleteDocFromFirestore, getAllDocsOnce, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime, updateDataInFirestore } from './firestore-methods';
+import { addSpecificDataIntoFirestoreCollection, createSubCollectionForCurrentUser, deleteDocFromFirestore, getAllDocsOnce, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime, updateDataInFirestore } from './firestore-methods';
 import { v4 as uuid } from 'uuid'
 import LandingPageUILogics from './landing-page/ui-logics';
 
@@ -22,8 +22,17 @@ function ComponentsContainer() {
     let [analysingTweetData, setAnalysingTweetData] = useState(null)
     let [quoteTweetID, setQuoteTweetID] = useState(false)
     let [quoteTweetData, setQuoteTweetData] = useState(null)
+    let [replyCount, setReplyCount] = useState(0)
+    let [pinnedTweetID, setPinnedTweetID] = useState(null)
+    let [pinnedTweetData, setPinnedTweetData] = useState(null)
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
+
+    let handlePinnedTweetID = val => setPinnedTweetID(val);
+
+    let handlePinnedTweetData = dataset => setPinnedTweetData(dataset)
+
+    let handleReplyCount = (val) => setReplyCount(val);
 
     let handleQuoteTweetID = value => setQuoteTweetID(value)
 
@@ -172,15 +181,32 @@ function ComponentsContainer() {
 
     useEffect(() =>  quoteTweetID && getSpeceficItemFromUserDocs(quoteTweetID, setQuoteTweetData), [quoteTweetID])
 
+    useEffect(() => {
+        pinnedTweetID && getSpeceficItemFromUserDocs(pinnedTweetID, handlePinnedTweetData)
+        pinnedTweetID && removeSpeceficArrayItem(pinnedTweetID);
+    }, [pinnedTweetID])
+
+    useEffect(() => {
+        pinnedTweetData && addSpecificDataIntoFirestoreCollection(currentUser, {pinnedTweet: pinnedTweetData[0]})
+        
+        pinnedTweetData && setUserDocs(prevData => {
+            // ([pinnedTweetData[0], prevData.filter(item => item.id != pinnedTweetID)])
+            let temp = prevData.filter(item => item.id != pinnedTweetID)
+            return [].concat(pinnedTweetData[0], temp)
+        })
+
+    }, [pinnedTweetData])
+
     // currentUser && removeSpeceficArrayItem()
     // userDocs && console.log(userDocs.length, 'removed??', userDocs)
 
-    quoteTweetID && console.log(quoteTweetID, 'quoteID')
+    // quoteTweetID && console.log(quoteTweetID, 'quoteID')
+    pinnedTweetData && console.log(pinnedTweetData, 'pinned tweet data here!!');
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )
@@ -189,3 +215,53 @@ function ComponentsContainer() {
 // export let generateOneNewID = () => setUniqueID(uuid())
 
 export default ComponentsContainer
+
+
+
+/**
+ * 
+ * 
+ useEffect(() => {
+        pinnedTweetData && addSpecificDataIntoFirestoreCollection(currentUser, {pinnedTweet: pinnedTweetData[0]})
+        pinnedTweetData && setUserDocs(prevData => {
+            // ([pinnedTweetData[0], prevData.filter(item => item.id != pinnedTweetID)])
+            let temp = prevData.filter(item => item.id != pinnedTweetID)
+            return [].concat(pinnedTweetData[0], temp)
+        })
+        // if(pinnedTweetData) {
+        //     let temp = [pinnedTweetData[0], userDocs.slice(0)]
+        //     console.log(temp, '<><>')
+        //     // setUserDocs(temp)
+        // }
+        // pinnedTweetData && setUserDocs(prevData => [].concat(pinnedTweetData[0], prevData.slice(1)))
+        // pinnedTweetData && setUserDocs(prevData => prevData.slice(0, 0).concat(pinnedTweetData[0]).concat(prevData.slice(1)))
+        // pinnedTweetData && setUserDocs(prevData => prevData.slice(0, 0).concat(pinnedTweetData[0], prevData.slice(1)))
+        // pinnedTweetData && setUserDocs(prevData => prevData.concat(pinnedTweetData[0], prevData.slice(1)))
+        // pinnedTweetData && setUserDocs(prevData => prevData.unshift(pinnedTweetData[0]))
+        // pinnedTweetData && setUserDocs(prevData => prevData.splice(0, 0, pinnedTweetData[0]))
+        // pinnedTweetData && setUserDocs(prevData => {
+        //     let temp = []
+        //     let prevSliced = prevData.slice(1)
+        //     temp = temp.concat(pinnedTweetData[0], prevSliced)
+        //     return temp
+        // })
+        // pinnedTweetData && setUserDocs(prevData => [...prevData.slice(0, 0)].concat(pinnedTweetData[0], prevData.slice(1)))
+        // pinnedTweetData && setUserDocs(prevData => [].concat(pinnedTweetData[0], prevData.slice(1)))
+        // let temp = []
+        // pinnedTweetData && userDocs.forEach(item => temp.push(item))
+        // pinnedTweetData && temp.shift()
+        // pinnedTweetData && temp.unshift(pinnedTweetData[0])
+        // temp && setUserDocs(temp)
+        // let temp = [...userDocs].shift()
+        // temp.unshift(pinnedTweetData[0])
+        // setUserDocs(temp)
+
+        // if(pinnedTweetData) {
+        //     let temp = []
+        //     temp = [...userDocs]
+        //     temp.shift()
+        //     temp.unshift(pinnedTweetData[0])
+        //     setUserDocs(temp)
+        // }
+    }, [pinnedTweetData])
+ */
