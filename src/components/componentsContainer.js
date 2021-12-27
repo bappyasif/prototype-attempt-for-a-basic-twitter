@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { Component, useEffect, useState } from 'react'
 import AllRoutes from './all-routes'
 import FirebaseApp from './firebase-configs';
-import { addSpecificDataIntoFirestoreCollection, createSubCollectionForCurrentUser, deleteDocFromFirestore, getAllDocsOnce, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime, updateDataInFirestore } from './firestore-methods';
+import { addSpecificDataIntoFirestoreCollection, createSubCollectionForCurrentUser, deleteDocFromFirestore, getAllDocsOnce, getSomeDataFromUserMainDocument, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime, updateDataInFirestore } from './firestore-methods';
 import { v4 as uuid } from 'uuid'
 import LandingPageUILogics from './landing-page/ui-logics';
 
@@ -25,8 +25,15 @@ function ComponentsContainer() {
     let [replyCount, setReplyCount] = useState(0)
     let [pinnedTweetID, setPinnedTweetID] = useState(null)
     let [pinnedTweetData, setPinnedTweetData] = useState(null)
+    let [initialPinnedTweetData, setInitialPinnedTweetData] = useState(null)
+    let [userDocsFlag, setUserDocsFlag] = useState(false)
+    let [pinnedTweetIndex, setPinnedTweetIndex] = useState(null)
+    let [previousPinnedTweetID, setPreviousPinnedTweetID] = useState(null)
+    // let [newlYPinnedTweetID, setNewlyPinneedTweetID] = useState(null)
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
+
+    let handleInitialPinnedTweetDataLoader = dataset => setInitialPinnedTweetData(dataset)
 
     let handlePinnedTweetID = val => setPinnedTweetID(val);
 
@@ -70,7 +77,11 @@ function ComponentsContainer() {
         localSession && handleCurrentUser(localSession.uid)
     }, [])
 
-    useEffect(() => currentUser && makingDataReadyFromSubCollectionInDescendingOrder(currentUser), [currentUser])
+    useEffect(() => {
+        currentUser && makingDataReadyFromSubCollectionInDescendingOrder(currentUser)
+        // search for pinned tweet, in firestore user collection
+        currentUser && getSomeDataFromUserMainDocument(currentUser, handleInitialPinnedTweetDataLoader, 'pinnedTweet')
+    }, [currentUser])
 
     let updateData = data => {
         // when there is two picture files in a tweet, spanned over two tweets together, we had to do some cleanign up to do before rendering it on DOM, otherwise a duplicate node is getting rendered
@@ -98,19 +109,12 @@ function ComponentsContainer() {
         setUserDocs(userDocs)
         console.log(userDocs, ' ---- from update ---- ', data)
         generateOneNewID();
+        setUserDocsFlag(true)
+
+        // adjusting dataset if there is any pinned tweet exist in user profile
+        // pinnedTweetID && adjustUserDocsDataset(initialPinnedTweetData.id, initialPinnedTweetData)
         // console.log(checkDuplicate, 'checking duplicate')
     }
-
-    // let makingDataReadyInDescendingOrder = () => {
-    //     // uniqueID && console.log(uniqueID, 'is it?!')
-    //     readDataDescendingOrder().then(res => {
-    //         console.log(res, 'sorted?!')
-    //         setUserDocs(res)
-    //         // setDataLoading(false)
-    //     }).catch(err => console.log('error in useEffect fetching', err.message))
-    // }
-
-    // useEffect(() => generateOneNewID(), [userDocs])
 
     let makingDataReadyFromSubCollectionInDescendingOrder = (currentUser) => {
         readDataInDescendingORderFromSubCollection(currentUser, setUserDocs)
@@ -136,8 +140,10 @@ function ComponentsContainer() {
         // idx = 'fb34e41b-60ab-4541-a99e-65d2d6181102'
         setUserDocs(prevData => {
             let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
-            // updating records in firestore as well
-            deleteDocFromFirestore(currentUser, idx)
+            
+            // updating records in firestore as well, trying against it
+            // deleteDocFromFirestore(currentUser, idx)
+
             // updating userdocs for DOM node rendering
             return prevData.slice(0, foundIndex).concat(prevData.slice(foundIndex+1))
         })
@@ -149,31 +155,11 @@ function ComponentsContainer() {
         let foundIndex = userDocs.findIndex(item => item.id == idx)
         setUserDocs(prevData => prevData.map(item => item.id == idx ? {...item, privacy: privacyOption} : {...item}))
         updateDataInFirestore(currentUser, idx, {privacy: privacyOption})
-        // setUserDocs(prevData => [...prevData, prevData[foundIndex].privacy = privacyOption])
-        
-        // ({
-        //     ...prevState,
-        //     `${prevData[foundIndex].privacy}`: {
-        //              ...prevState.preferences,
-        //              [key]: newValue
-        //          }
-        //  })
-        
-        // setUserDocs(prevData => ({
-        //     ...prevData,
-        //     prevData[foundIndex].privacy = privacyOption
-        // }))
-
-        // console.log('index here!!', privacyOption, idx)
     }
 
     let getSpeceficItemFromUserDocs = (idx, dataLoader) => {
         let tweetAnalysing = userDocs.filter(item => item.id == idx)
         dataLoader(tweetAnalysing)
-
-        // let tweetAnalysing = userDocs.filter(item => item.id == analysingTweetID)
-        // setAnalysingTweetData(tweetAnalysing)
-        // return tweetAnalysing
     }
 
     // useEffect(() => analysingTweetID && getSpeceficItemFromUserDocs(), [analysingTweetID])
@@ -183,25 +169,70 @@ function ComponentsContainer() {
 
     useEffect(() => {
         pinnedTweetID && getSpeceficItemFromUserDocs(pinnedTweetID, handlePinnedTweetData)
-        pinnedTweetID && removeSpeceficArrayItem(pinnedTweetID);
+        // pinnedTweetID && removeSpeceficArrayItem(pinnedTweetID);
+        // keeping track whether a new pinned id is detected after already existing pinned tweet id
+        // pinnedTweetID && setPreviousPinnedTweetID(pinnedTweetID);
     }, [pinnedTweetID])
 
     useEffect(() => {
+        // pinnedTweetData && addSpecificDataIntoFirestoreCollection(currentUser, {pinnedTweet: pinnedTweetData[0]})
+        // if(pinnedTweetData) pinnedTweetData[0].index = pinnedTweetIndex
+        // pinnedTweetData && removeSpeceficArrayItem(pinnedTweetID);
+        // pinnedTweetData && adjustUserDocsDataset(pinnedTweetID, pinnedTweetData[0])
+        // pinnedTweetData && updateUserDocsItems(pinnedTweetID)
         pinnedTweetData && addSpecificDataIntoFirestoreCollection(currentUser, {pinnedTweet: pinnedTweetData[0]})
-        
-        pinnedTweetData && setUserDocs(prevData => {
-            // ([pinnedTweetData[0], prevData.filter(item => item.id != pinnedTweetID)])
-            let temp = prevData.filter(item => item.id != pinnedTweetID)
-            return [].concat(pinnedTweetData[0], temp)
-        })
-
+        pinnedTweetData && adjustUserDocsDataset(pinnedTweetID, pinnedTweetData[0])
+        // pinnedTweetData && setPinnedTweetData(null)
+        // pinnedTweetData && alert('??')
     }, [pinnedTweetData])
+
+    let updateUserDocsItems = idx => {
+        setUserDocs(prevData => {
+            let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
+
+            // updating userdocs for DOM node rendering
+            return prevData.slice(0, foundIndex).concat(prevData.slice(foundIndex+1))
+        })
+    }
+
+    let adjustUserDocsDataset = (pinnedID, pinnedData) => {
+        console.log('dataset updating....', pinnedData)
+        setUserDocs(prevData => {
+            let temp = prevData.filter((item, idx) => {
+                // setPinnedTweetIndex(idx)
+                return item.id != pinnedID
+            })
+            return [].concat(pinnedData, temp)
+        })
+    }
+
+    useEffect(() => {
+        initialPinnedTweetData && adjustUserDocsDataset(initialPinnedTweetData.id, initialPinnedTweetData)
+        // initialPinnedTweetData && setPreviousPinnedTweetID(initialPinnedTweetData.id)
+    }, [initialPinnedTweetData])
+
+    useEffect(() => {
+        // userDocsFlag && adjustUserDocsDataset(initialPinnedTweetData.id, initialPinnedTweetData)
+        // userDocsFlag && (pinnedTweetData || initialPinnedTweetData) && adjustUserDocsDataset(pinnedTweetID, pinnedTweetData[0])
+        
+        // if there is a new pinned tweet adjust accordingly otherwise adjust with initial pinned tweet data
+        if (pinnedTweetData) {
+            userDocsFlag && adjustUserDocsDataset(pinnedTweetID, pinnedTweetData)
+        } else if(initialPinnedTweetData) {
+            userDocsFlag && adjustUserDocsDataset(initialPinnedTweetData.id, initialPinnedTweetData)
+        }
+        
+        userDocsFlag && setUserDocsFlag(false)
+
+    }, [userDocsFlag])
 
     // currentUser && removeSpeceficArrayItem()
     // userDocs && console.log(userDocs.length, 'removed??', userDocs)
 
     // quoteTweetID && console.log(quoteTweetID, 'quoteID')
-    pinnedTweetData && console.log(pinnedTweetData, 'pinned tweet data here!!');
+    // pinnedTweetData && console.log(pinnedTweetData, 'pinned tweet data here!!');
+    // initialPinnedTweetData && console.log(initialPinnedTweetData, 'initial pinned!!')
+    pinnedTweetID && console.log(pinnedTweetID, 'tweet ID', userDocs)
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
@@ -219,6 +250,35 @@ export default ComponentsContainer
 
 
 /**
+ * 
+ * 
+     // let makingDataReadyInDescendingOrder = () => {
+    //     // uniqueID && console.log(uniqueID, 'is it?!')
+    //     readDataDescendingOrder().then(res => {
+    //         console.log(res, 'sorted?!')
+    //         setUserDocs(res)
+    //         // setDataLoading(false)
+    //     }).catch(err => console.log('error in useEffect fetching', err.message))
+    // }
+
+    // useEffect(() => generateOneNewID(), [userDocs])
+ * 
+ * 
+ 
+    // useEffect(() => {
+    //     // if(pinnedTweetIndex && pinnedTweetData[0]) pinnedTweetData[0].index = pinnedTweetIndex
+    //     pinnedTweetData && pinnedTweetIndex && addSpecificDataIntoFirestoreCollection(currentUser, {pinnedTweet: pinnedTweetData[0]})
+    // }, [pinnedTweetIndex])
+
+    // useEffect(() => {
+    //     // previousPinnedTweetID == pinnedTweetID && console.log('different id')
+
+    //     // whenever ther is newer tweet pinned iD kepping it updated in firestore as well
+    //     // (previousPinnedTweetID) && pinnedTweetData && addSpecificDataIntoFirestoreCollection(currentUser, {pinnedTweet: pinnedTweetData[0]})
+
+    //     // // adding back previously pinned tweet ID back into firestore
+    //     // previousPinnedTweetID && pinnedTweetData && updateDataInFirestore(currentUser, previousPinnedTweetID, pinnedTweetData[0])
+    // }, [previousPinnedTweetID])
  * 
  * 
  useEffect(() => {
