@@ -36,6 +36,18 @@
   background-color: rgba(128, 128, 128, 0.1);
 }
 
+#tweet-container #pinned-tweet-ui-wrapper {
+  display: flex;
+  align-items: center;
+  width: 168px;
+  justify-content: space-around;
+}
+
+#tweet-container #pinned-tweet-ui-wrapper #svg-icon {
+  fill: silver;
+  transform: scale(.89);
+}
+
 /* #profile-page-container  */
 #tweet-container .right-portion {
   display: flex;
@@ -328,6 +340,7 @@
 /* readjusted tweet display styling */
 .rendering-tweet-data-container,
 .rendering-tweet-data-container .right-side .tweet-top,
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper,
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons {
   display: flex;
   justify-content: space-between;
@@ -357,6 +370,64 @@
 
 .rendering-tweet-data-container .right-side .tweet-top {
   margin: 4px 4px 4px 0px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container {
+  position: absolute;
+  top: 0px;
+  width: 400px;
+  border: solid;
+  background-color: whitesmoke;
+  /* padding: 2px 11px 2px 0px; */
+  padding: 2px 0px 2px 0px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper {
+  align-items: center;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half {
+  display: flex;
+  align-items: center;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #svg-icon {
+  transform: scale(.8);
+  padding: 4px 2px 0px 2px;
+  border-radius: 50%;
+  margin: 1px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #svg-icon:hover {
+  background-color: silver;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #action-header {
+  margin-left: 42px;
+  font-size: x-large;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #other-half {
+  width: 60px;
+  display: flex;
+  justify-content: center;
+  background-color: silver;
+  font-size: larger;
+  border-radius: 11px;
+  padding: 2px;
+  margin-right: 6px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #create-new-list-wrapper {
+  line-height: 2em;
+  font-size: x-large;
+  padding-left: 6px;
+  /* border: solid; */
+  border-bottom: 2px solid darkslategray;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #create-new-list-wrapper:hover {
+  background-color: darkgrey;
 }
 
 .rendering-tweet-data-container .right-side .privacy-spans {

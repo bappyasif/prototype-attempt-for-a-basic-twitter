@@ -11,8 +11,11 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     let [whichPrivacy, setWhichPrivacy] = useState('')
     let [privacyOption, setPrivacyOption] = useState('')
     let [existingPrivacy, setExistingPrivacy] = useState('')
-    let [changedWhoCanReply, setChangedWhoCanReply] = useState(false)
+    let [changedWhoCanReply, setChangedWhoCanReply] = useState(false);
     let [showPinModal, setShowPinModal] = useState(false);
+    let [showListModal, setShowListModal] = useState(false);
+
+    let handleShowListModal = () => setShowListModal(!showListModal)
     
     let handleShowPinModal = () => setShowPinModal(!showPinModal)
 
@@ -58,9 +61,38 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     return (
         <div className='tweet-top'>
             <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
-            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} />}
+            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} handleShowListModal={handleShowListModal} />}
             {changedWhoCanReply && <RenderDropdownForWhoCanReply handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />}
             {showPinModal && <PinTweetConfirmationModal handleShowPinModal={handleShowPinModal} ID={ID} handlePinnedTweetID={handlePinnedTweetID} />}
+            {showListModal && <AddToListModal />}
+        </div>
+    )
+}
+
+let AddToListModal = () => {
+    return (
+        <div id='add-to-list-container'>
+            <AddToListHeader />
+            <CreateNewList />
+        </div>
+    )
+}
+
+let CreateNewList = () => {
+    let handleClick = () => console.log('add a new item')
+    return (
+        <div id='create-new-list-wrapper' onClick={handleClick}>Create A new List</div>
+    )
+}
+
+let AddToListHeader = () => {
+    return (
+        <div id='list-header-wrapper'>
+            <div id='first-half'>
+                <div id='svg-icon'>{removeIconSvg()}</div>
+                <div id='action-header'>Pick a list</div>
+            </div>
+            <div id='other-half'>Save</div>
         </div>
     )
 }
@@ -138,7 +170,7 @@ let RenderPrivacyOption = ({ item, type, handleClicked, handleWhoCanReply, which
     )
 }
 
-let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID, handleShowPinModal }) => {
+let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID, handleShowPinModal, handleShowListModal }) => {
     let [isClickedOutside, setIsClickedOutside] = useState(true)
     let clcikedRef = useRef()
 
@@ -152,7 +184,7 @@ let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWh
 
     useOnClickOutside(clcikedRef, handleModal)
 
-    let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} />)
+    let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} handleShowListModal={handleShowListModal} />)
 
     return (
         <div id='more-options-dropdown-container' ref={clcikedRef} style={{display: !isClickedOutside && 'none'}}>
@@ -161,7 +193,7 @@ let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWh
     )
 }
 
-let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID, handleShowPinModal }) => {
+let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, handleClicked, handleAnalysingTweetID, handleShowPinModal, handleShowListModal }) => {
     let [tweetID, setTweetID] = useState('')
     // let [showPinModal, setShowPinModal] = useState(false);
 
@@ -196,6 +228,8 @@ let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, han
             removeSpeceficArrayItem(ID)            
         } else if (test.textContent == 'Pin to your profile') {
             handleShowPinModal()
+        } else if(test.textContent == 'Add/Remove @username from Lists') {
+            handleShowListModal()
         }
 
         handleClicked()
@@ -212,6 +246,7 @@ let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, han
     )
 }
 
+let removeIconSvg = () => <svg className='profile-page-svg-icons'><g><path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path></g></svg>
 let deleteSvg = () => <svg className='profile-page-svg-icons'><g><path d="M20.746 5.236h-3.75V4.25c0-1.24-1.01-2.25-2.25-2.25h-5.5c-1.24 0-2.25 1.01-2.25 2.25v.986h-3.75c-.414 0-.75.336-.75.75s.336.75.75.75h.368l1.583 13.262c.216 1.193 1.31 2.027 2.658 2.027h8.282c1.35 0 2.442-.834 2.664-2.072l1.577-13.217h.368c.414 0 .75-.336.75-.75s-.335-.75-.75-.75zM8.496 4.25c0-.413.337-.75.75-.75h5.5c.413 0 .75.337.75.75v.986h-7V4.25zm8.822 15.48c-.1.55-.664.795-1.18.795H7.854c-.517 0-1.083-.246-1.175-.75L5.126 6.735h13.74L17.32 19.732z"></path><path d="M10 17.75c.414 0 .75-.336.75-.75v-7c0-.414-.336-.75-.75-.75s-.75.336-.75.75v7c0 .414.336.75.75.75zm4 0c.414 0 .75-.336.75-.75v-7c0-.414-.336-.75-.75-.75s-.75.336-.75.75v7c0 .414.336.75.75.75z"></path></g></svg>
 let pinSvg = () => <svg className='profile-page-svg-icons'><g><path d="M20.472 14.738c-.388-1.808-2.24-3.517-3.908-4.246l-.474-4.307 1.344-2.016c.258-.387.28-.88.062-1.286-.218-.406-.64-.66-1.102-.66H7.54c-.46 0-.884.254-1.1.66-.22.407-.197.9.06 1.284l1.35 2.025-.42 4.3c-1.667.732-3.515 2.44-3.896 4.222-.066.267-.043.672.222 1.01.14.178.46.474 1.06.474h3.858l2.638 6.1c.12.273.39.45.688.45s.57-.177.688-.45l2.638-6.1h3.86c.6 0 .92-.297 1.058-.474.265-.34.288-.745.228-.988zM12 20.11l-1.692-3.912h3.384L12 20.11zm-6.896-5.413c.456-1.166 1.904-2.506 3.265-2.96l.46-.153.566-5.777-1.39-2.082h7.922l-1.39 2.08.637 5.78.456.153c1.355.45 2.796 1.78 3.264 2.96H5.104z"></path></g></svg>
 let listSvg = () => <svg className='profile-page-svg-icons'><g><path d="M23.25 3.25h-2.425V.825c0-.414-.336-.75-.75-.75s-.75.336-.75.75V3.25H16.9c-.414 0-.75.336-.75.75s.336.75.75.75h2.425v2.425c0 .414.336.75.75.75s.75-.336.75-.75V4.75h2.425c.414 0 .75-.336.75-.75s-.336-.75-.75-.75zM18.575 22H4.25C3.01 22 2 20.99 2 19.75V5.5c0-1.24 1.01-2.25 2.25-2.25h8.947c.414 0 .75.336.75.75s-.336.75-.75.75H4.25c-.413 0-.75.336-.75.75v14.25c0 .414.337.75.75.75h14.325c.413 0 .75-.336.75-.75v-8.872c0-.414.336-.75.75-.75s.75.336.75.75v8.872c0 1.24-1.01 2.25-2.25 2.25z"></path><path d="M16.078 9.583H6.673c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h9.405c.414 0 .75.336.75.75s-.336.75-.75.75zm0 3.867H6.673c-.414 0-.75-.337-.75-.75s.336-.75.75-.75h9.405c.414 0 .75.335.75.75s-.336.75-.75.75zm-4.703 3.866H6.673c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h4.702c.414 0 .75.336.75.75s-.336.75-.75.75z"></path></g></svg>

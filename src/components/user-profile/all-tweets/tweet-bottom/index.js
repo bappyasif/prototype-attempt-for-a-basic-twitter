@@ -9,6 +9,7 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
     let [showModal, setShowModal] = useState(false)
     let [undoRetweet, setUndoRetweet] = useState(false)
     let [counter, setCounter] = useState(0);
+    let [replyRouteReady, setReplyRouteReady] = useState(false)
     // let [replyCount, setReplyCount] = useState(0)
     // let [replyCountFlag, setCountReplyFlag] = useState(false)
     let history = useHistory()
@@ -45,7 +46,9 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
         }
     }, [iconClicked])
 
-    useEffect(() => replyCount && history.push('/tweet/compose'), [replyCount])
+    // useEffect(() => replyCount && history.push('/tweet/compose'), [replyCount])
+
+    useEffect(() => replyRouteReady && history.push('/tweet/compose'), [replyRouteReady])
 
     useEffect(() => {
         undoRetweet && handleIncreaseCount()
@@ -88,6 +91,7 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
         } else if(iconClicked == 'reply') {
             handleQuoteTweetID(tweetData.ID)
             handleQuoteTweetCount()
+            setReplyRouteReady(true)
             // HandleQuoteTweetProcess({userID: currentUser, docID: tweetData.ID, whichData: 'replyCount'})
             // updateDataInFirestore(currentUser, tweetData.ID, {replyCount: })
             // history.push('/tweet/compose')

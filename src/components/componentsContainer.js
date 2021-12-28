@@ -29,9 +29,15 @@ function ComponentsContainer() {
     let [userDocsFlag, setUserDocsFlag] = useState(false)
     let [pinnedTweetIndex, setPinnedTweetIndex] = useState(null)
     let [previousPinnedTweetID, setPreviousPinnedTweetID] = useState(null)
+    let [regainedDocs, setRegainedDocs] = useState(null)
+    let [showPinnedTweetTag, setShowPinnedTweetTag] = useState(false)
+    let [currentlyPinnedTweetID, setCurrentlyPinnedTweetID] = useState(false);
+    // let [pinnedTweetFlag, setPinnedTweetFlag] = useState(false)
     // let [newlYPinnedTweetID, setNewlyPinneedTweetID] = useState(null)
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
+
+    let tweetDataRefetched = data => setRegainedDocs(data)
 
     let handleInitialPinnedTweetDataLoader = dataset => setInitialPinnedTweetData(dataset)
 
@@ -181,10 +187,34 @@ function ComponentsContainer() {
         // pinnedTweetData && adjustUserDocsDataset(pinnedTweetID, pinnedTweetData[0])
         // pinnedTweetData && updateUserDocsItems(pinnedTweetID)
         pinnedTweetData && addSpecificDataIntoFirestoreCollection(currentUser, {pinnedTweet: pinnedTweetData[0]})
+        // pinnedTweetData && makingDataReadyFromSubCollectionInDescendingOrder(currentUser)
+        // pinnedTweetData && setPinnedTweetFlag(true)
         pinnedTweetData && adjustUserDocsDataset(pinnedTweetID, pinnedTweetData[0])
+        pinnedTweetData && readDataInDescendingORderFromSubCollection(currentUser, tweetDataRefetched)
         // pinnedTweetData && setPinnedTweetData(null)
         // pinnedTweetData && alert('??')
     }, [pinnedTweetData])
+
+    useEffect(() => {
+        regainedDocs && adjustUserDocsDataset(pinnedTweetID, pinnedTweetData[0])
+        regainedDocs && console.log('here!!', regainedDocs, userDocs)
+        regainedDocs && setShowPinnedTweetTag(true)
+        regainedDocs && setCurrentlyPinnedTweetID(pinnedTweetID)
+        regainedDocs && adjustDocsFromRecentlyFetchedDataset()
+    }, [regainedDocs])
+
+    let adjustDocsFromRecentlyFetchedDataset = () => {
+        let temp = regainedDocs.filter(item => item.id != pinnedTweetID)
+        let readyDocs = [].concat(pinnedTweetData[0], temp)
+        // console.log(readyDocs);
+        readyDocs && setUserDocs(readyDocs)
+    }
+
+    // useEffect(() => {
+    //     pinnedTweetFlag && adjustUserDocsDataset(pinnedTweetID, pinnedTweetData[0])
+    //     pinnedTweetFlag && setPinnedTweetFlag(false)
+    //     pinnedTweetFlag && pinnedTweetData && setPinnedTweetData(null)
+    // }, [pinnedTweetFlag])
 
     let updateUserDocsItems = idx => {
         setUserDocs(prevData => {
@@ -209,6 +239,8 @@ function ComponentsContainer() {
     useEffect(() => {
         initialPinnedTweetData && adjustUserDocsDataset(initialPinnedTweetData.id, initialPinnedTweetData)
         // initialPinnedTweetData && setPreviousPinnedTweetID(initialPinnedTweetData.id)
+        initialPinnedTweetData && setShowPinnedTweetTag(true)
+        initialPinnedTweetData && setCurrentlyPinnedTweetID(initialPinnedTweetData.id)
     }, [initialPinnedTweetData])
 
     useEffect(() => {
@@ -231,13 +263,13 @@ function ComponentsContainer() {
 
     // quoteTweetID && console.log(quoteTweetID, 'quoteID')
     // pinnedTweetData && console.log(pinnedTweetData, 'pinned tweet data here!!');
-    // initialPinnedTweetData && console.log(initialPinnedTweetData, 'initial pinned!!')
-    pinnedTweetID && console.log(pinnedTweetID, 'tweet ID', userDocs)
+    initialPinnedTweetData && console.log(initialPinnedTweetData, 'initial pinned!!')
+    // pinnedTweetID && console.log(pinnedTweetID, 'tweet ID', userDocs)
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )
