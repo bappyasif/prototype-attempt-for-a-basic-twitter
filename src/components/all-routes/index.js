@@ -21,6 +21,8 @@ import TopicsPicker from '../topics-picker';
 import PasswordResetPage from '../password-reset-page';
 import PageUnavailable from '../404-page';
 import AnalyticsUI from '../user-profile/all-tweets/tweet-top/analytics-ui';
+import AddMemebersIntoLists from '../user-profile/all-tweets/tweet-top/add-members-into-lists';
+import CreateLists from '../user-profile/all-tweets/tweet-top/create-lists';
 
 function AllRoutes({currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
@@ -151,6 +153,14 @@ function AllRoutes({currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTwee
                 </Route>
                 <Route exact path={'/analytics'}>
                     <AnalyticsUI analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} currentUser={currentUser} />
+                </Route>
+
+                <Route exact path={'/i/lists/add_member'}>
+                    <AddMemebersIntoLists />
+                </Route>
+
+                <Route exact path={'/i/lists/create'}>
+                    <CreateLists />
                 </Route>
 
                 {/* {

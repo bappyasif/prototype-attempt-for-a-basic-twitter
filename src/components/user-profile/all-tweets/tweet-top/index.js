@@ -14,6 +14,7 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     let [changedWhoCanReply, setChangedWhoCanReply] = useState(false);
     let [showPinModal, setShowPinModal] = useState(false);
     let [showListModal, setShowListModal] = useState(false);
+    let history = useHistory()
 
     let handleShowListModal = () => setShowListModal(!showListModal)
     
@@ -27,6 +28,8 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     let handleWhichPrivacy = value => setWhichPrivacy(value)
     
     let handlewhichPrivacyOption = value => setPrivacyOption(value)
+
+    useEffect(() =>  showListModal && history.push('/i/lists/add_member'))
     
     // useEffect(() => whichPrivacy && updateTweetPrivacy(ID, whichPrivacy), [whichPrivacy])
     useEffect(() => {
@@ -64,38 +67,46 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
             {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} handleShowListModal={handleShowListModal} />}
             {changedWhoCanReply && <RenderDropdownForWhoCanReply handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />}
             {showPinModal && <PinTweetConfirmationModal handleShowPinModal={handleShowPinModal} ID={ID} handlePinnedTweetID={handlePinnedTweetID} />}
-            {showListModal && <AddToListModal />}
+            {/* {showListModal && <AddToListModal />} */}
         </div>
     )
 }
 
-let AddToListModal = () => {
-    return (
-        <div id='add-to-list-container'>
-            <AddToListHeader />
-            <CreateNewList />
-        </div>
-    )
-}
+// let AddToListModal = () => {
+//     return (
+//         <div id='add-to-list-container'>
+//             <AddToListHeader />
+//             <CreateNewList />
+//         </div>
+//     )
+// }
 
-let CreateNewList = () => {
-    let handleClick = () => console.log('add a new item')
-    return (
-        <div id='create-new-list-wrapper' onClick={handleClick}>Create A new List</div>
-    )
-}
+// let CreateNewList = () => {
+//     let [showModal, setShowModal] = useState(false)
+//     let history = useHistory()
 
-let AddToListHeader = () => {
-    return (
-        <div id='list-header-wrapper'>
-            <div id='first-half'>
-                <div id='svg-icon'>{removeIconSvg()}</div>
-                <div id='action-header'>Pick a list</div>
-            </div>
-            <div id='other-half'>Save</div>
-        </div>
-    )
-}
+//     useEffect(() => showModal && history.push('/i/lists/create'))
+
+//     let handleClick = () => {
+//         console.log('add a new item')
+//         setShowModal(true)
+//     }
+//     return (
+//         <div id='create-new-list-wrapper' onClick={handleClick}>Create A new List</div>
+//     )
+// }
+
+// let AddToListHeader = () => {
+//     return (
+//         <div id='list-header-wrapper'>
+//             <div id='first-half'>
+//                 <div id='svg-icon'>{removeIconSvg()}</div>
+//                 <div id='action-header'>Pick a list</div>
+//             </div>
+//             <div id='other-half'>Save</div>
+//         </div>
+//     )
+// }
 
 let PinTweetConfirmationModal = ({handleShowPinModal, ID, handlePinnedTweetID}) => {
     let ref = useRef()
