@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
-function AddMemebersIntoLists() {
-    return <AddToExistingList />
+function AddMemebersIntoLists({currentList}) {
+    // let [currentList, setCurrentList] = useState(null)
+    // let handleCurrentList = (item) => setCurrentList(prevData => prevData.concat(item))
+    return <AddToExistingList currentList={currentList} />
 }
 
-let AddToExistingList = () => {
+let AddToExistingList = ({currentList}) => {
+    let history = useHistory()
+    let handleSave = () => console.log('handle save')
     return (
         <div id='add-to-list-container'>
-            <ListModalHeader icon={removeIconSvg()} action={'Save'} modalTitle={'Pick a list'} />
+            <ListModalHeader icon={removeIconSvg()} action={'Save'} modalTitle={'Pick a list'} history={history} modalAction={handleSave} />
             <CreateNewList />
+            <ShowCurrentListItems currentList={currentList} />
         </div>
     )
+}
+
+let ShowCurrentListItems = ({currentList}) => {
+    console.log(currentList, 'currentlist')
 }
 
 let CreateNewList = () => {
@@ -29,17 +38,19 @@ let CreateNewList = () => {
     )
 }
 
-export let ListModalHeader = ({icon, action, modalTitle}) => {
+export let ListModalHeader = ({icon, action, modalTitle, history, modalAction}) => {
+    // let history = useHistory()
+    let iconAction = () => history.goBack()
     return (
         <div id='list-header-wrapper'>
             <div id='first-half'>
                 {/* <div id='svg-icon'>{removeIconSvg()}</div> */}
-                <div id='svg-icon'>{icon}</div>
+                <div id='svg-icon' onClick={iconAction}>{icon}</div>
                 {/* <div id='action-header'>Pick a list</div> */}
                 <div id='action-header'>{modalTitle}</div>
             </div>
             {/* <div id='other-half'>Save</div> */}
-            <div id='other-half'>{action}</div>
+            <div id='other-half' onClick={modalAction}>{action}</div>
         </div>
     )
 }

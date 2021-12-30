@@ -343,6 +343,7 @@
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper,
 #components-container #add-to-list-container #list-header-wrapper,
 #components-container #create-lists-container #list-header-wrapper,
+#components-container #container-for-suggested-members #list-header-wrapper,
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons {
   display: flex;
   justify-content: space-between;
@@ -376,7 +377,8 @@
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container,
 #components-container #add-to-list-container,
-#components-container #create-lists-container {
+#components-container #create-lists-container,
+#components-container #container-for-suggested-members {
   position: absolute;
   top: 90px;
   width: 490px;
@@ -386,133 +388,81 @@
   padding: 2px 0px 2px 0px;
 }
 
-#components-container #create-lists-container {
+#components-container #create-lists-container,
+#components-container #container-for-suggested-members {
   border: none;
+  /* overflow-y: scroll; */
+  /* max-height: 398px; */
+}
+
+/* #components-container #container-for-suggested-members {
   overflow-y: scroll;
   max-height: 398px;
-}
+} */
 
-::-webkit-scrollbar {
+#components-container #create-lists-container::-webkit-scrollbar {
   width: 15px;
-  border: 2px solid blue;
-}
-/*tells the browser how the arrows will appear*/
-
-::-webkit-scrollbar-button:single-button {
-  background-color: red;
-  height: 16px;
-  width: 16px;
-}
-/* tells the browser how the scrollable 
-handle would look like */
-
-::-webkit-scrollbar-thumb {
-  background: black;
-}
-/* tells the browser how will the 
-path of the handle will look like */
-
-::-webkit-scrollbar-track {
-  background: yellow;
-}
-/* works the same as ::-webkit-scrollbar-track 
-    but tells the browser how the path where 
-    the handle is not present currently*/
-/* ::-webkit-scrollbar-track-piece{
-  background: green;
-} */
-/* tells the browser how will the point 
- where vertical and  horizontal meet will look like*/
-/* ::-webkit-scrollbar-corner{
-  background: orange ;
-  display: solid;
-} */
-/* resizer*/
-
-::-webkit-resizer {
-  background: pink;
-}
-
-
-/* ::-webkit-scrollbar {
-  width: 13px;
-  height: 13px;
-}
-
-::-webkit-scrollbar-button:single-button:decrement,
-::-webkit-scrollbar-button:single-button:increment {
-  display: block;
 }
 
 ::-webkit-scrollbar-track {
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-
-::-webkit-scrollbar-thumb {
+  border: 2px solid darkgrey;
   background-color: darkslategrey;
-  max-height: 56px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, grey, silver);
+  height: 11px;
+}
+
+/* ::-webkit-scrollbar-button {
+  background-color: black;
+  height: 15px;
+  width: 15px;
 } */
 
-/* #components-container #create-lists-container::-webkit-scrollbar {
-  width: 16px;
-  border: 5px solid white;
-
-}
-
-#components-container #create-lists-container::-webkit-scrollbar-thumb {
-  background-color: #b0b0b0;
-  background-clip: padding-box;
-  border: 0.05em solid #eeeeee;
-}
-
-#components-container #create-lists-container::-webkit-scrollbar-track {
-  background-color: #bbbbbb;
-}
-
 ::-webkit-scrollbar-button:single-button {
-  background-color: #bbbbbb;
+  background-color: silver;
   display: block;
-  border-style: solid;
-  height: 13px;
-  width: 16px;
+  background-size: 20px;
+  background-repeat: no-repeat;
 }
 
 ::-webkit-scrollbar-button:single-button:vertical:decrement {
-  border-width: 0 8px 8px 8px;
-  border-color: transparent transparent #555555 transparent;
-}
-
-::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
-  border-color: transparent transparent #777777 transparent;
+  border-radius: 5px 20px 0 0;
+  height: 20px;
+  width: 20px;
+  background-position: center 4px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(29, 155, 240)'><polygon points='50,00 0,50 100,50'/></svg>");
 }
 
 ::-webkit-scrollbar-button:single-button:vertical:increment {
-  border-width: 8px 8px 0 8px;
-  border-color: #555555 transparent transparent transparent;
+  border-radius: 0px 0px 20px 5px;
+  height: 20px;
+  width: 20px;
+  background-position: center 4px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(29, 155, 240)'><polygon points='0,0 100,0 50,50'/></svg>");
 }
-
-::-webkit-scrollbar-button:vertical:single-button:increment:hover {
-  border-color: #777777 transparent transparent transparent;
-} */
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper,
 #components-container #add-to-list-container #list-header-wrapper,
-#components-container #create-lists-container #list-header-wrapper {
+#components-container #create-lists-container #list-header-wrapper,
+#components-container #container-for-suggested-members #list-header-wrapper {
   align-items: center;
   position: relative;
 }
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half,
 #components-container #add-to-list-container #list-header-wrapper #first-half,
-#components-container #create-lists-container #list-header-wrapper #first-half {
+#components-container #create-lists-container #list-header-wrapper #first-half,
+#components-container #container-for-suggested-members #list-header-wrapper #first-half {
   display: flex;
   align-items: center;
 }
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #svg-icon,
 #components-container #add-to-list-container #list-header-wrapper #first-half #svg-icon,
-#components-container #create-lists-container #list-header-wrapper #first-half #svg-icon {
+#components-container #create-lists-container #list-header-wrapper #first-half #svg-icon,
+#components-container #container-for-suggested-members #list-header-wrapper #first-half #svg-icon {
   transform: scale(.8);
   padding: 4px 2px 0px 2px;
   border-radius: 50%;
@@ -521,20 +471,23 @@ path of the handle will look like */
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #svg-icon:hover,
 #components-container #add-to-list-container #list-header-wrapper #first-half #svg-icon:hover,
-#components-container #create-lists-container #list-header-wrapper #first-half #svg-icon:hover {
+#components-container #create-lists-container #list-header-wrapper #first-half #svg-icon:hover,
+#components-container #container-for-suggested-members #list-header-wrapper #first-half #svg-icon:hover {
   background-color: silver;
 }
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #action-header,
 #components-container #add-to-list-container #list-header-wrapper #first-half #action-header,
-#components-container #create-lists-container #list-header-wrapper #first-half #action-header {
+#components-container #create-lists-container #list-header-wrapper #first-half #action-header,
+#components-container #container-for-suggested-members #list-header-wrapper #first-half #action-header {
   margin-left: 42px;
   font-size: x-large;
 }
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #other-half,
 #components-container #add-to-list-container #list-header-wrapper #other-half,
-#components-container #create-lists-container #list-header-wrapper #other-half{
+#components-container #create-lists-container #list-header-wrapper #other-half,
+#components-container #container-for-suggested-members #list-header-wrapper #other-half {
   width: 60px;
   display: flex;
   justify-content: center;
@@ -616,6 +569,42 @@ path of the handle will look like */
 #components-container #create-lists-container #list-information-wrapper .make-list-private-wrapper .checkbox-input {
   width: 51px;
   height: 29px;
+}
+
+#components-container #container-for-suggested-members #modal-options-wrapper .modal-options {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 8px 2px 8px;
+}
+
+#components-container #container-for-suggested-members #modal-options-wrapper .modal-options .modal-option {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  font-size: larger;
+  padding: 8px;
+}
+
+#components-container #container-for-suggested-members #modal-options-wrapper .modal-options .modal-option:hover {
+  background-color: lightgrey;
+}
+
+#components-container #container-for-suggested-members #search-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 4px 4px 8px;
+  align-items: center;
+  border: solid rgb(29, 155, 240) .4px;
+  border-radius: 20px;
+}
+
+#components-container #container-for-suggested-members #search-wrapper #svg-icon {
+  transform: scale(.72);
+}
+
+#components-container #container-for-suggested-members #search-wrapper #search-suggested-list {
+  background-color: transparent;
+  width: -webkit-fill-available;
 }
 
 .rendering-tweet-data-container .right-side .privacy-spans {
@@ -897,3 +886,138 @@ path of the handle will look like */
   padding-bottom: 4px;
   margin-left: 4px;
 }
+
+/* scrollbar custom styling tryouts */
+
+/* ::-webkit-scrollbar-button:single-button:vertical:increment {
+  /* border: solid red; */
+  /* border-color: transparent transparent red transparent; /
+  border: solid;
+  border-color: black green red yellow;
+  /* border-color: transparent transparent red transparent; /
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement {
+  border: solid;
+  border-color: aqua blue red black;
+}
+
+::-webkit-scrollbar-thumb {
+  border: solid orangered .1px;
+  background-color: purple;
+  /* border-radius: 12px 12px 12px 12px; /
+  border-radius: 12px;
+  margin: 0px auto;
+}
+
+::-webkit-scrollbar-track {
+  background-color: red;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: black;
+} */
+
+/* ::-webkit-scrollbar {
+  width: 15px;
+  border: 2px solid blue;
+}
+/*tells the browser how the arrows will appear/
+
+::-webkit-scrollbar-button:single-button {
+  background-color: red;
+  height: 16px;
+  width: 16px;
+}
+/* tells the browser how the scrollable 
+handle would look like /
+
+::-webkit-scrollbar-thumb {
+  background: black;
+}
+/* tells the browser how will the 
+path of the handle will look like /
+
+::-webkit-scrollbar-track {
+  background: yellow;
+}
+/* works the same as ::-webkit-scrollbar-track 
+    but tells the browser how the path where 
+    the handle is not present currently/
+/* ::-webkit-scrollbar-track-piece{
+  background: green;
+} /
+/* tells the browser how will the point 
+ where vertical and  horizontal meet will look like/
+/* ::-webkit-scrollbar-corner{
+  background: orange ;
+  display: solid;
+} /
+/* resizer/
+
+::-webkit-resizer {
+  background: pink;
+} */
+
+
+/* ::-webkit-scrollbar {
+  width: 13px;
+  height: 13px;
+}
+
+::-webkit-scrollbar-button:single-button:decrement,
+::-webkit-scrollbar-button:single-button:increment {
+  display: block;
+}
+
+::-webkit-scrollbar-track {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkslategrey;
+  max-height: 56px;
+} */
+
+/* #components-container #create-lists-container::-webkit-scrollbar {
+  width: 16px;
+  border: 5px solid white;
+
+}
+
+#components-container #create-lists-container::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0;
+  background-clip: padding-box;
+  border: 0.05em solid #eeeeee;
+}
+
+#components-container #create-lists-container::-webkit-scrollbar-track {
+  background-color: #bbbbbb;
+}
+
+::-webkit-scrollbar-button:single-button {
+  background-color: #bbbbbb;
+  display: block;
+  border-style: solid;
+  height: 13px;
+  width: 16px;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement {
+  border-width: 0 8px 8px 8px;
+  border-color: transparent transparent #555555 transparent;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
+  border-color: transparent transparent #777777 transparent;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:increment {
+  border-width: 8px 8px 0 8px;
+  border-color: #555555 transparent transparent transparent;
+}
+
+::-webkit-scrollbar-button:vertical:single-button:increment:hover {
+  border-color: #777777 transparent transparent transparent;
+} */

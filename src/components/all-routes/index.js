@@ -23,8 +23,9 @@ import PageUnavailable from '../404-page';
 import AnalyticsUI from '../user-profile/all-tweets/tweet-top/analytics-ui';
 import AddMemebersIntoLists from '../user-profile/all-tweets/tweet-top/add-members-into-lists';
 import CreateLists from '../user-profile/all-tweets/tweet-top/create-lists';
+import SuggestedMembersForList from '../user-profile/all-tweets/tweet-top/suggested-members';
 
-function AllRoutes({currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -156,11 +157,15 @@ function AllRoutes({currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTwee
                 </Route>
 
                 <Route exact path={'/i/lists/add_member'}>
-                    <AddMemebersIntoLists />
+                    <AddMemebersIntoLists currentList={currentList} />
                 </Route>
 
                 <Route exact path={'/i/lists/create'}>
-                    <CreateLists />
+                    <CreateLists handleCurrentList={handleCurrentList} />
+                </Route>
+
+                <Route exact path={'/i/lists/members/suggested'}>
+                    <SuggestedMembersForList />
                 </Route>
 
                 {/* {
