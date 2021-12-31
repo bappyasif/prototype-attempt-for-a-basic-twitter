@@ -344,6 +344,7 @@
 #components-container #add-to-list-container #list-header-wrapper,
 #components-container #create-lists-container #list-header-wrapper,
 #components-container #container-for-suggested-members #list-header-wrapper,
+#components-container #container-for-added-members #list-header-wrapper,
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons {
   display: flex;
   justify-content: space-between;
@@ -378,7 +379,8 @@
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container,
 #components-container #add-to-list-container,
 #components-container #create-lists-container,
-#components-container #container-for-suggested-members {
+#components-container #container-for-suggested-members,
+#components-container #container-for-added-members {
   position: absolute;
   top: 90px;
   width: 490px;
@@ -389,7 +391,8 @@
 }
 
 #components-container #create-lists-container,
-#components-container #container-for-suggested-members {
+#components-container #container-for-suggested-members,
+#components-container #container-for-added-members {
   border: none;
   /* overflow-y: scroll; */
   /* max-height: 398px; */
@@ -446,7 +449,8 @@
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper,
 #components-container #add-to-list-container #list-header-wrapper,
 #components-container #create-lists-container #list-header-wrapper,
-#components-container #container-for-suggested-members #list-header-wrapper {
+#components-container #container-for-suggested-members #list-header-wrapper,
+#components-container #container-for-added-members #list-header-wrapper {
   align-items: center;
   position: relative;
 }
@@ -454,7 +458,8 @@
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half,
 #components-container #add-to-list-container #list-header-wrapper #first-half,
 #components-container #create-lists-container #list-header-wrapper #first-half,
-#components-container #container-for-suggested-members #list-header-wrapper #first-half {
+#components-container #container-for-suggested-members #list-header-wrapper #first-half,
+#components-container #container-for-added-members #list-header-wrapper #first-half {
   display: flex;
   align-items: center;
 }
@@ -462,7 +467,8 @@
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #svg-icon,
 #components-container #add-to-list-container #list-header-wrapper #first-half #svg-icon,
 #components-container #create-lists-container #list-header-wrapper #first-half #svg-icon,
-#components-container #container-for-suggested-members #list-header-wrapper #first-half #svg-icon {
+#components-container #container-for-suggested-members #list-header-wrapper #first-half #svg-icon,
+#components-container #container-for-added-members #list-header-wrapper #first-half #svg-icon {
   transform: scale(.8);
   padding: 4px 2px 0px 2px;
   border-radius: 50%;
@@ -472,14 +478,16 @@
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #svg-icon:hover,
 #components-container #add-to-list-container #list-header-wrapper #first-half #svg-icon:hover,
 #components-container #create-lists-container #list-header-wrapper #first-half #svg-icon:hover,
-#components-container #container-for-suggested-members #list-header-wrapper #first-half #svg-icon:hover {
+#components-container #container-for-suggested-members #list-header-wrapper #first-half #svg-icon:hover,
+#components-container #container-for-added-members #list-header-wrapper #first-half #svg-icon:hover {
   background-color: silver;
 }
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #action-header,
 #components-container #add-to-list-container #list-header-wrapper #first-half #action-header,
 #components-container #create-lists-container #list-header-wrapper #first-half #action-header,
-#components-container #container-for-suggested-members #list-header-wrapper #first-half #action-header {
+#components-container #container-for-suggested-members #list-header-wrapper #first-half #action-header,
+#components-container #container-for-added-members #list-header-wrapper #first-half #action-header {
   margin-left: 42px;
   font-size: x-large;
 }
@@ -487,7 +495,8 @@
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #other-half,
 #components-container #add-to-list-container #list-header-wrapper #other-half,
 #components-container #create-lists-container #list-header-wrapper #other-half,
-#components-container #container-for-suggested-members #list-header-wrapper #other-half {
+#components-container #container-for-suggested-members #list-header-wrapper #other-half,
+#components-container #container-for-added-members #list-header-wrapper #other-half {
   width: 60px;
   display: flex;
   justify-content: center;
@@ -571,40 +580,85 @@
   height: 29px;
 }
 
-#components-container #container-for-suggested-members #modal-options-wrapper .modal-options {
+#components-container #container-for-suggested-members #modal-options-wrapper .modal-options,
+#components-container #container-for-added-members #modal-options-wrapper .modal-options {
   display: flex;
   justify-content: space-between;
   padding: 2px 8px 2px 8px;
 }
 
-#components-container #container-for-suggested-members #modal-options-wrapper .modal-options .modal-option {
+#components-container #container-for-suggested-members #modal-options-wrapper .modal-options .modal-option,
+#components-container #container-for-added-members #modal-options-wrapper .modal-options .modal-option {
   display: flex;
   justify-content: center;
   width: 50%;
   font-size: larger;
-  padding: 8px;
+  padding: 6px 0px 0px 2px;
+  flex-direction: column;
+  align-items: center;
 }
 
-#components-container #container-for-suggested-members #modal-options-wrapper .modal-options .modal-option:hover {
+#components-container #container-for-suggested-members #modal-options-wrapper .modal-options .modal-option:hover,
+#components-container #container-for-added-members #modal-options-wrapper .modal-options .modal-option:hover {
   background-color: lightgrey;
 }
 
-#components-container #container-for-suggested-members #search-wrapper {
+#components-container #container-for-suggested-members #modal-options-wrapper .modal-options .modal-option .option-underline,
+#components-container #container-for-added-members #modal-options-wrapper .modal-options .modal-option .option-underline {
+  width: 90px;
+  height: 2px;
+  background-color: rgb(29, 155, 240);
+  margin-top: 4px;
+}
+
+#components-container #container-for-suggested-members #search-wrapper,
+#components-container #container-for-added-members #search-wrapper {
   display: flex;
   justify-content: space-between;
   padding: 4px 4px 4px 8px;
   align-items: center;
-  border: solid rgb(29, 155, 240) .4px;
+  border: solid silver .4px;
   border-radius: 20px;
 }
 
-#components-container #container-for-suggested-members #search-wrapper #svg-icon {
+#components-container #container-for-suggested-members #search-wrapper #svg-icon,
+#components-container #container-for-added-members #search-wrapper #svg-icon {
   transform: scale(.72);
 }
 
-#components-container #container-for-suggested-members #search-wrapper #search-suggested-list {
+#components-container #container-for-suggested-members #search-wrapper #search-suggested-list,
+#components-container #container-for-added-members #search-wrapper #search-suggested-list {
   background-color: transparent;
   width: -webkit-fill-available;
+}
+
+#components-container #container-for-suggested-members #list-of-members-wrapper .member-info-wrapper,
+#components-container #container-for-added-members #list-of-members-wrapper .member-info-wrapper {
+  display: flex;
+  /* justify-content: space-between; */
+  /* border: solid; */
+  padding: 8px 11px 4px 11px;
+  margin: 11px 2px 0px 2px;
+  position: relative;
+}
+
+#components-container #container-for-suggested-members #list-of-members-wrapper .member-info-wrapper .member-photo,
+#components-container #container-for-added-members #list-of-members-wrapper .member-info-wrapper .member-photo {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+}
+
+#components-container #container-for-suggested-members #list-of-members-wrapper .member-info-wrapper .add-btn,
+#components-container #container-for-added-members #list-of-members-wrapper .member-info-wrapper .add-btn {
+  background-color: silver;
+  height: fit-content;
+  padding: 8px;
+  border-radius: 17px;
+  position: absolute;
+  right: 11px;
+  min-width: 51px;
+  font-weight: bolder;
 }
 
 .rendering-tweet-data-container .right-side .privacy-spans {
