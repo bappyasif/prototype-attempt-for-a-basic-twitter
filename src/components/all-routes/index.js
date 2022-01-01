@@ -162,15 +162,15 @@ function AllRoutes({checkMemberExists, handleMembersRemoval, membersList, handle
                 </Route>
 
                 <Route exact path={'/i/lists/create'}>
-                    <CreateLists handleCurrentList={handleCurrentList} />
+                    <CreateLists />
                 </Route>
 
                 <Route exact path={'/i/lists/members/'}>
-                    <ListOfAddedMembers listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} currentMembers={membersList} checkMemberExists={checkMemberExists} handleMembersList={handleMembersRemoval} />
+                    <ListOfAddedMembers currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} currentMembers={membersList} checkMemberExists={checkMemberExists} handleMembersList={handleMembersRemoval} />
                 </Route>
 
                 <Route exact path={'/i/lists/members/suggested'}>
-                    <SuggestedMembersForList listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} currentMembers={membersList} />
+                    <SuggestedMembersForList currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} currentMembers={membersList} />
                 </Route>
 
                 {/* {

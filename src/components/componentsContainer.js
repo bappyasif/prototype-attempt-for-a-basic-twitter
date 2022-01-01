@@ -34,7 +34,7 @@ function ComponentsContainer() {
     let [currentlyPinnedTweetID, setCurrentlyPinnedTweetID] = useState(false);
     // let [pinnedTweetFlag, setPinnedTweetFlag] = useState(false)
     // let [newlYPinnedTweetID, setNewlyPinneedTweetID] = useState(null)
-    let [currentList, setCurrentList] = useState(null)
+    let [currentList, setCurrentList] = useState([])
     let [countAddedMembers, setCountAddedMembers] = useState(0)
     let [membersList, setMembersList] = useState([])
 
@@ -80,6 +80,8 @@ function ComponentsContainer() {
     //     setRerenderDOM(true);
     //     console.log('<< ::fromWhere:: >>', frmWhr)
     // }
+
+    useEffect(() => currentList && setMembersList([]), [currentList])
 
     // useEffect(() => rerenderDOM && makingDataReadyInDescendingOrder(), [rerenderDOM])
 
@@ -286,6 +288,7 @@ function ComponentsContainer() {
     // pinnedTweetData && console.log(pinnedTweetData, 'pinned tweet data here!!');
     initialPinnedTweetData && console.log(initialPinnedTweetData, 'initial pinned!!')
     // pinnedTweetID && console.log(pinnedTweetID, 'tweet ID', userDocs)
+    currentList && console.log(currentList, 'currentList')
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>

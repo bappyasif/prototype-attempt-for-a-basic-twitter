@@ -4,7 +4,7 @@ import { ListModalHeader } from '../add-members-into-lists'
 import { leftArrowSvg } from '../create-lists'
 import { ModalOptions, RenderMembersList, SearchComponent } from '../suggested-members'
 
-function ListOfAddedMembers({listMembersCount, handleMembersCount, currentMembers, checkMemberExists, handleMembersList}) {
+function ListOfAddedMembers({handleCurrentList, listMembersCount, handleMembersCount, currentMembers, checkMemberExists, handleMembersList}) {
     let history = useHistory()
     let handleDone = () => console.log('handle done')
     // console.log(membersList, 'members!!')
