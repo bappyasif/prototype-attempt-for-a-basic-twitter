@@ -42,13 +42,13 @@ function ComponentsContainer() {
 
     let handleMembersRemoval = name => {
         let idx = membersList.findIndex(item => item == name)
-        console.log(membersList, idx, name)
+        // console.log(membersList, idx, name)
         setMembersList(prevList => prevList.slice(0, idx).concat(prevList.slice(idx+1)))
     }
 
     let checkMemberExists = (name) => {
         let idx = membersList.findIndex(item => item == name)
-        console.log(idx)
+        // console.log(idx)
         return idx
     }
 
@@ -104,6 +104,10 @@ function ComponentsContainer() {
         let localSession = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyByV2He0B3nM9bIQSgMuVhb8DNmYLxEZJ0:[DEFAULT]'))
         localSession && console.log(localStorage, localSession, localSession.uid)
         localSession && handleCurrentUser(localSession.uid)
+
+        // creating some dummy list to use when needed
+        handleCurrentList({name: 'test list', description: 'listDescription', isPrivate: true, listPictureUrl: 'https://picsum.photos/200/300'})
+        handleCurrentList({name: 'list test', description: 'listDescription', isPrivate: false, listPictureUrl: 'https://picsum.photos/200/300'})
     }, [])
 
     useEffect(() => {

@@ -4,13 +4,19 @@ import { useState } from 'react/cjs/react.development'
 import { ListModalHeader } from '../add-members-into-lists'
 import { leftArrowSvg } from '../create-lists'
 
-function SuggestedMembersForList({ currentUser, handleCurrentList, listMembersCount, currentMembers, handleMembersCount, handleMembersList, handleMembersRemoval, checkMemberExists }) {
+function SuggestedMembersForList({ currentUser, currentList, handleCurrentList, listMembersCount, currentMembers, handleMembersCount, handleMembersList, handleMembersRemoval, checkMemberExists }) {
     // let [countAddedMembers, setCountAddedMembers] = useState(0)
     // let handleMembersAddedCount = (added) => setCountAddedMembers(prevCount => added ? prevCount + 1 : prevCount - 1)
     let history = useHistory()
     let handleDone = () => {
-        console.log('done', [...currentMembers]);
-        handleCurrentList([...currentMembers])
+        console.log('done', [...currentMembers], currentList);
+        
+        // let listTOS = currentList[currentList.length -1]
+        // listTOS.members = [...currentMembers]
+
+        let listTOS = currentList[currentList.length -1]
+        listTOS.members = currentMembers.length
+        // handleCurrentList([...currentMembers])
         history.push(`/${currentUser}`)
     }
     return (
@@ -81,7 +87,13 @@ export let RenderMembersList = ({ handleCount, handleMembersList, membersList, h
 let RenderMember = ({ name, handleCount, handleMembersList, handleMembersRemoval, checkMemberExists, isMember }) => {
     let [hovered, setHovered] = useState(false);
     // let [added, setAdded] = useState(false);
-    let [added, setAdded] = useState(!checkMemberExists(name) || false);
+    // let [added, setAdded] = useState(!checkMemberExists(name) || false);
+    let previouslyExistsCheck = () => {
+        let idx = checkMemberExists(name)
+        idx >= 0 ? true : false
+    }
+    let [added, setAdded] = useState(previouslyExistsCheck());
+    // let [added, setAdded] = useState(checkMemberExists(name) != -1 ? checkMemberExists(name) : false );
     let [addedFlag, setAddedFlag] = useState(false);
 
     let handleAdded = () => {
@@ -101,7 +113,7 @@ let RenderMember = ({ name, handleCount, handleMembersList, handleMembersRemoval
         addedFlag && setAddedFlag(false)
     }, [addedFlag])
 
-    added && addedFlag && console.log('added', added, 'flag', addedFlag, 'member', isMember)
+    added && addedFlag && console.log('added', added, 'flag', addedFlag, 'member', isMember,checkMemberExists(name), name)
 
     return <div className='member-info-wrapper' onMouseOver={handleHovered} onMouseOut={handleHovered} style={{ backgroundColor: hovered && 'lightgray' }}>
         <img className='member-photo' src='https://picsum.photos/200/300' />

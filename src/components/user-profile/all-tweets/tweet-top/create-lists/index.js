@@ -13,9 +13,12 @@ function CreateLists({handleCurrentList}) {
     let handleListName = val => setListName(val)
     let handleListDescription = val => setListDescription(val)
 
-    let makingDataReady = () => [].concat({name: listName, description: listDescription, isPrivate: isListPrivate})
+    // let makingDataReady = () => [].concat({name: listName, description: listDescription, isPrivate: isListPrivate, listPictureUrl: 'https://picsum.photos/200/300'})
 
-    let handleModalAction = () => history.push('/i/lists/members/suggested')
+    let handleModalAction = () => {
+        history.push('/i/lists/members/suggested')
+        handleCurrentList({name: listName, description: listDescription, isPrivate: isListPrivate, pictureUrl: 'https://picsum.photos/200/300'})
+    }
 
     // console.log(listName, listDescription, isListPrivate)
     return (
@@ -79,7 +82,7 @@ export let TextareaComponentWithCount = ({ maxLength, rows, name, feedDataToPare
 
 let TextAreaUpperDeck = ({name, length, maxLength, focused}) => {
     return (
-        <div className='upper-deck-wrapper' style={{visibility: focused ? 'visible' : 'hidden'}}>
+        <div className='upper-deck-wrapper' style={{visibility: (focused || name) ? 'visible' : 'hidden'}}>
             <div className='title-text'>{name}</div>
             <div className='text-area-count-side' style={{fontSize: 'smaller'}}>{length}/{maxLength}</div>
         </div>

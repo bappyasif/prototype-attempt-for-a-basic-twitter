@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import useOnClickOutside from '../../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
+import useOnHoverOutside from './useOnHoverOutside'
 
 function AddMemebersIntoLists({ currentList }) {
     // let [currentList, setCurrentList] = useState(null)
@@ -8,57 +10,139 @@ function AddMemebersIntoLists({ currentList }) {
 }
 
 let AddToExistingList = ({ currentList }) => {
+    let [saveFlag, setSaveFlag] = useState(false)
     let history = useHistory()
+    let handleSaveFlag = () => setSaveFlag(true)
+    let handleSavedFlagReversal = () => {
+        setSaveFlag(false)
+        console.log('02 chk')
+    }
     let handleSave = () => console.log('handle save')
     return (
         <div id='add-to-list-container'>
-            <ListModalHeader icon={removeIconSvg()} action={'Save'} modalTitle={'Pick a list'} history={history} modalAction={handleSave} />
+            <ListModalHeader icon={removeIconSvg()} action={'Save'} modalTitle={'Pick a list'} history={history} modalAction={handleSave} saveFlag={saveFlag} />
             <CreateNewList />
-            <ShowAvailableListItems currentList={currentList} />
+            <ShowAvailableListItems currentList={currentList} handleSaveFlag={handleSaveFlag} toggleSavedFlag={handleSavedFlagReversal} />
         </div>
     )
 }
 
-let ShowAvailableListItems = ({ currentList }) => {
+let ShowAvailableListItems = ({ currentList, handleSaveFlag, toggleSavedFlag }) => {
     console.log(currentList, 'currentlist')
-    let renderLists = currentList.map(list => <RenderList key={list} name={list} />)
+    // let handleMembersAddition = name => {
+    //     let idx = currentList.findIndex(item => item.name == name)
+    //     if (idx != -1) {
+    //         let assignValue = currentList[idx].members ? (currentList[idx].members.length) + 1 : 1
+    //         currentList[idx].members = assignValue
+    //     }
+    //     console.log(idx, name, currentList[idx].members)
+    // }
+    let renderLists = currentList.map((list, _, arr) => <RenderList key={list.name} list={list} arr={arr} handleSaveFlag={handleSaveFlag} toggleSavedFlag={toggleSavedFlag} />)
     return <div id='available-list-items-container'>{renderLists}</div>
 }
 
-let RenderList = ({ name }) => {
+let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag }) => {
     let [addToList, setAddToList] = useState(false)
-    let [hovered, setHovered] = useState(false)
-    let handleHovered = () => setHovered(!hovered)
+    let [showThumbnail, setShowThumbnail] = useState(false)
+    let [hovered, setHovered] = useState(null)
+    let [numberFlag, setNumberFlag] = useState(false);
+
+    let handleFlag = () => setNumberFlag(!numberFlag)
+
+    // let ref = useRef()
+    // let thumbnailToggler = () => setShowThumbnail(!showThumbnail)
+    // useOnHoverOutside(ref, thumbnailToggler)
+    // useOnClickOutside(ref, handleHovered)
+    // let handleHovered = () => setHovered(!hovered)
+    
+    let handleHovered = evt => {
+        let whichList = evt.target.parentNode.querySelector('.list-name') ? evt.target.parentNode.querySelector('.list-name').textContent : null
+        // console.log(whichList)
+        // if(whichList) {
+        //     setHovered(whichList)
+        //     setShowThumbnail(!showThumbnail)
+        // }
+        setHovered(whichList)
+        setShowThumbnail(!showThumbnail)
+    }
+
+    // useEffect(() => {
+    //     if(hovered != list.name) {
+    //         setShowThumbnail(false)
+    //         console.log('checkpoint uno')
+    //     }
+    // }, [hovered])
+    // onMouseEnter={handleHovered}
+
     let handleAddToList = () => setAddToList(!addToList)
+
+    useEffect(() => {
+        // addToList && addMember(list.name)
+        addToList && handleMembersAddition(list.name, "+")
+        addToList && handleFlag();
+        // addToList && handleSaveFlag()
+        // !addToList && handleMembersAddition(list.name, "-")
+    }, [addToList])
+
+    useEffect(() => {
+        // numberFlag && !addToList && toggleSavedFlag()
+        // numberFlag && !addToList && handleSaveFlag()
+        numberFlag && !addToList && handleMembersAddition(list.name, "-")
+        numberFlag && !addToList && console.log('><>><>')
+        numberFlag && handleFlag()
+    }, [numberFlag])
+
+    let handleMembersAddition = (name, action) => {
+        let idx = arr.findIndex(item => item.name == name)
+        if (idx != -1) {
+            memberNumberManipulation(idx, action)
+            // action == '+' ? handleSaveFlag() : toggleSavedFlag()
+            // action == '+' ? console.log('if') : console.log('else')
+        }
+        // action == '+' ? handleSaveFlag() : toggleSavedFlag()
+        // action == '-' ? console.log('if') : console.log('else')
+        // console.log(idx, name, arr[idx].members)
+    }
+
+    let memberNumberManipulation = (idx, action) => {
+        let assignValue = arr[idx].members ? eval(`${(arr[idx].members)}${action}1`) : 1
+        arr[idx].members = assignValue
+        // let assignValue = arr[idx].members ? (arr[idx].members) + 1 : 1
+        // arr[idx].members = assignValue
+    }
+    
     return (
-        <div className='list-wrapper' onClick={handleAddToList}>
-            <div className='first-half' onMouseOver={handleHovered} onMouseOut={handleHovered}>
+        <div className='list-wrapper' onClick={handleAddToList} onMouseLeave={handleHovered}>
+            <div className='first-half' onMouseEnter={handleHovered}>
                 <div className='img-div'></div>
                 <div className='list-info'>
-                    <div className='list-name'>{name}</div>
-                    <div className='privacy-svg'>{lockIconSvg()}</div>
+                    <div className='list-name'>{list.name}</div>
+                    {list.isPrivate && <div className='privacy-svg'>{lockIconSvg()}</div>}
                 </div>
             </div>
             {addToList && <div className='tick-mark-svg'>{tickMarkSvg()}</div>}
-            {hovered && <ShowListThumbnailCard name={name} />}
+            {/* {hovered && <ShowListThumbnailCard name={name} handleHovered={handleHovered} />} */}
+            {((list.name == hovered) && showThumbnail) && <ShowListThumbnailCard list={list} handleHovered={handleHovered} />}
+            {/* {(showThumbnail) && <ShowListThumbnailCard list={list} handleHovered={handleHovered} />} */}
         </div>
     )
 }
 
-let ShowListThumbnailCard = ({name}) => {
+let ShowListThumbnailCard = ({list, handleHovered}) => {
+    console.log(list, '?!')
     return (
-        <div className='thumbnail-card-wrapper'>
+        <div className='thumbnail-card-wrapper' onMouseLeave={handleHovered}>
             <div className='cover-img'></div>
             <div className='card-info'>
-                <div className='list-name'>{name}</div>
-                <div className='list-description'>some description</div>
+                <div className='list-name'>{list.name}</div>
+                <div className='list-description'>{list.description}</div>
                 <div className='user-info'>
-                    <img className='profile-pic' src='https://picsum.photos/200/300'/>
+                    <img className='profile-pic' src={list.pictureUrl}/>
                     <div className='user-name'>user name</div>
                     <div className='user-handle'>@user_handle</div>
                 </div>
                 <div className='list-numbers'>
-                    <div className='members-numbers'>0000</div>
+                    <div className='members-numbers'>{list.members ? list.members : '0000'}</div>
                     <div className='followers-numbers'>0000</div>
                 </div>
             </div>
@@ -73,7 +157,7 @@ let CreateNewList = () => {
     useEffect(() => showModal && history.push('/i/lists/create'))
 
     let handleClick = () => {
-        console.log('add a new item')
+        // console.log('add a new item')
         setShowModal(true)
     }
     return (
@@ -81,9 +165,10 @@ let CreateNewList = () => {
     )
 }
 
-export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction }) => {
+export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction, saveFlag }) => {
     // let history = useHistory()
     let iconAction = () => history.goBack()
+    console.log(saveFlag, 'saveflag')
     return (
         <div id='list-header-wrapper'>
             <div id='first-half'>
@@ -93,7 +178,7 @@ export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction }
                 <div id='action-header'>{modalTitle}</div>
             </div>
             {/* <div id='other-half'>Save</div> */}
-            <div id='other-half' onClick={modalAction}>{action}</div>
+            <div id='other-half' onClick={modalAction} style={{backgroundColor: saveFlag && 'darkslategray', pointerEvents: !saveFlag && 'none'}}>{action}</div>
         </div>
     )
 }
