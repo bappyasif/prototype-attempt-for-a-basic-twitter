@@ -1,15 +1,45 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom';
-import { ListModalHeader } from '../add-members-into-lists'
+import { ListModalHeader } from '../add-members-into-lists';
 
 function CreateLists({handleCurrentList}) {
     let [listName, setListName] = useState('');
     let [listDescription, setListDescription] = useState('')
     let [isListPrivate, setIsListPrivate] = useState(false);
+    let [modalActionFlag, setModalActionFlag] = useState(false);
     let history = useHistory()
+
+    // let makeTrue
+    // console.log(listName, listDescription, '<<><><><')
+
+    useEffect(() => {
+        if (listName && listDescription) setModalActionFlag(true)
+        if (listName.length == 0 || listDescription.length == 0) setModalActionFlag(false)
+
+        // (listName && listDescription) ? setModalActionFlag(true) : setModalActionFlag(false)
+        // if (listName == null || listDescription == null) setModalActionFlag(false)
+        // if (listName != null || listDescription != null) console.log(listName.length,'<<<>>')
+    }, [listName, listDescription])
+
+    // useEffect(() => {
+    //     if(listName && listDescription) {
+    //         setModalActionFlag(true)
+    //     } else {
+    //         console.log('<here>')
+    //         setModalActionFlag(false)
+    //     }
+    // }, [listName, listDescription])
 
     // let handleSvgIconAction = () => history.goBack()
     let handleIsListPrivate = (val) => setIsListPrivate(val)
+    // let handleListName = val => {
+    //     setListName(val)
+    //     if (val == '') setModalActionFlag(false)
+    // }
+    // let handleListDescription = val => {
+    //     setListDescription(val)
+    //     if (val == '') setModalActionFlag(false)
+    // }
     let handleListName = val => setListName(val)
     let handleListDescription = val => setListDescription(val)
 
@@ -24,7 +54,7 @@ function CreateLists({handleCurrentList}) {
     return (
         <div id='create-lists-container'>
             {/* <ListModalHeader icon={leftArrowSvg()} action={'Next'} modalTitle={'Create a new List'} iconAction={handleSvgIconAction} /> */}
-            <ListModalHeader icon={leftArrowSvg()} action={'Next'} modalTitle={'Create a new List'} history={history} modalAction={handleModalAction} />
+            <ListModalHeader icon={leftArrowSvg()} action={'Next'} modalTitle={'Create a new List'} history={history} modalAction={handleModalAction} modalActionFlag={modalActionFlag} />
             <ListCoverPhoto />
             <ListInformations handleListName={handleListName} handleListDescription={handleListDescription} handleIsListPrivate={handleIsListPrivate} />
         </div>
@@ -96,7 +126,8 @@ let TextareaComponent = ({ name, maxLength, rows, handleLength, handleFocused, f
     
     useEffect(() => {
         handleLength(text.length)
-        text && feedDataToParent(text)
+        feedDataToParent(text)
+        // text && feedDataToParent(text)
     }, [text])
 
     return <textarea maxLength={maxLength} onChange={handleChange} placeholder={!focused ? name : ''} rows={rows} value={text} onFocus={handleFocused} onBlur={handleFocused} />

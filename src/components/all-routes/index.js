@@ -158,7 +158,7 @@ function AllRoutes({checkMemberExists, handleMembersRemoval, membersList, handle
                 </Route>
 
                 <Route exact path={'/i/lists/add_member'}>
-                    <AddMemebersIntoLists currentList={currentList} />
+                    <AddMemebersIntoLists currentList={currentList} currentUser={currentUser} />
                 </Route>
 
                 <Route exact path={'/i/lists/create'}>
