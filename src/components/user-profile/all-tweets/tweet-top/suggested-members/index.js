@@ -7,6 +7,22 @@ import { leftArrowSvg } from '../create-lists'
 function SuggestedMembersForList({ currentUser, currentList, handleCurrentList, listMembersCount, currentMembers, handleMembersCount, handleMembersList, handleMembersRemoval, checkMemberExists }) {
     // let [countAddedMembers, setCountAddedMembers] = useState(0)
     // let handleMembersAddedCount = (added) => setCountAddedMembers(prevCount => added ? prevCount + 1 : prevCount - 1)
+    
+    let [doneFlag, setDoneFlag] = useState(false)
+
+    let handleDoneFlag = () => setDoneFlag(true)
+    
+    let handleDoneFlagReversal = () => {
+        setDoneFlag(false)
+    }
+
+    useEffect(() => {
+        currentMembers && currentMembers.length > 0 && handleDoneFlag()
+        currentMembers.length < 1 && handleDoneFlagReversal()
+    }, [currentMembers])
+
+    // console.log(currentList, '....<<>>....', currentMembers)
+    
     let history = useHistory()
     let handleDone = () => {
         console.log('done', [...currentMembers], currentList);
@@ -14,19 +30,27 @@ function SuggestedMembersForList({ currentUser, currentList, handleCurrentList, 
         // let listTOS = currentList[currentList.length -1]
         // listTOS.members = [...currentMembers]
 
-        let listTOS = currentList[currentList.length -1]
-        listTOS.members = currentMembers.length
+        // let listTOS = currentList[currentList.length -1]
+        // listTOS.members = currentMembers.length
         // handleCurrentList([...currentMembers])
+
+        adjustMembersNumber(currentList, currentMembers)
         history.push(`/${currentUser}`)
     }
     return (
         <div id='container-for-suggested-members'>
-            <ListModalHeader action={'Done'} modalAction={handleDone} icon={leftArrowSvg()} history={history} modalTitle={'Add to your List'} />
+            <ListModalHeader action={'Done'} modalAction={handleDone} modalActionFlag={doneFlag} icon={leftArrowSvg()} history={history} modalTitle={'Add to your List'} />
             <SearchComponent />
             <ModalOptions membersCount={currentMembers.length} underlined={'Suggested'} history={history} routeUrl={'/i/lists/members/'} />
             <RenderMembersList isMember={false} handleCount={handleMembersCount} handleMembersList={handleMembersList} membersList={members} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} />
         </div>
     )
+}
+
+export let adjustMembersNumber = (currentList, currentMembers) => {
+    let listTOS = currentList[currentList.length -1];
+    listTOS.members = currentMembers.length;
+    listTOS.membersList = currentMembers;
 }
 
 export let SearchComponent = () => {
@@ -90,9 +114,10 @@ let RenderMember = ({ name, handleCount, handleMembersList, handleMembersRemoval
     // let [added, setAdded] = useState(!checkMemberExists(name) || false);
     let previouslyExistsCheck = () => {
         let idx = checkMemberExists(name)
-        idx >= 0 ? true : false
+        return idx >= 0 ? true : false
     }
-    let [added, setAdded] = useState(previouslyExistsCheck());
+    // let [added, setAdded] = useState(previouslyExistsCheck());
+    let [added, setAdded] = useState(previouslyExistsCheck() || false);
     // let [added, setAdded] = useState(checkMemberExists(name) != -1 ? checkMemberExists(name) : false );
     let [addedFlag, setAddedFlag] = useState(false);
 
@@ -100,20 +125,33 @@ let RenderMember = ({ name, handleCount, handleMembersList, handleMembersRemoval
         setAdded(!added)
         // setAdded(prevVal => !prevVal)
         setAddedFlag(!addedFlag)
-        // console.log('clicked!!')
+        console.log('clicked!!')
     }
 
     let handleHovered = () => setHovered(!hovered)
 
     useEffect(() => {
         added && addedFlag && handleMembersList(name)
+        
+        isMember && addedFlag && handleMembersList(name) // when its in members route we are passing in memebers removal for handleMemebersList, as there is only removal is applicable
 
-        !isMember && !added && addedFlag && handleMembersRemoval(name)
+        !isMember && !added && addedFlag && handleMembersRemoval(name)  // when its in suggested route while clicked showing remove, it remove item from list
 
         addedFlag && setAddedFlag(false)
+
+        // added && addedFlag && handleModalActionFlag()
+
+        // !added && !addedFlag && reverseModalActionFlag()
+
+        // !isMember && added && addedFlag && handleMembersList(name)
+        // added && !addedFlag && isMember && handleMembersList(name)
+        // isMember && handleMembersList(name)
+        // isMember && added && handleMembersList(name)
+        // added && addedFlag && setAddedFlag(false)
     }, [addedFlag])
 
-    added && addedFlag && console.log('added', added, 'flag', addedFlag, 'member', isMember,checkMemberExists(name), name)
+    // console.log('added', added, 'flag', addedFlag, 'member', isMember, checkMemberExists(name), name)
+    // added && addedFlag && console.log('added', added, 'flag', addedFlag, 'member', isMember,checkMemberExists(name), name)
 
     return <div className='member-info-wrapper' onMouseOver={handleHovered} onMouseOut={handleHovered} style={{ backgroundColor: hovered && 'lightgray' }}>
         <img className='member-photo' src='https://picsum.photos/200/300' />

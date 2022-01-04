@@ -25,6 +25,7 @@ import AddMemebersIntoLists from '../user-profile/all-tweets/tweet-top/add-membe
 import CreateLists from '../user-profile/all-tweets/tweet-top/create-lists';
 import SuggestedMembersForList from '../user-profile/all-tweets/tweet-top/suggested-members';
 import ListOfAddedMembers from '../user-profile/all-tweets/tweet-top/list-of-added-members';
+import ShowListExistingMembers from '../user-profile/all-tweets/tweet-top/add-members-into-lists/show-existing-members-list';
 
 function AllRoutes({checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
@@ -165,8 +166,12 @@ function AllRoutes({checkMemberExists, handleMembersRemoval, membersList, handle
                     <CreateLists handleCurrentList={handleCurrentList} />
                 </Route>
 
+                <Route exact path={'/i/list/members/'}>
+                    <ShowListExistingMembers handleMembersList={handleMembersRemoval} currentMembers={membersList} checkMemberExists={checkMemberExists} currentList={currentList} />
+                </Route>
+
                 <Route exact path={'/i/lists/members/'}>
-                    <ListOfAddedMembers currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} currentMembers={membersList} checkMemberExists={checkMemberExists} handleMembersList={handleMembersRemoval} currentList={currentList} />
+                    <ListOfAddedMembers currentList={currentList} currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} currentMembers={membersList} checkMemberExists={checkMemberExists} handleMembersList={handleMembersRemoval} currentList={currentList} />
                 </Route>
 
                 <Route exact path={'/i/lists/members/suggested'}>

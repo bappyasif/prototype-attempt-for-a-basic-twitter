@@ -35,7 +35,7 @@ let AddToExistingList = ({ currentList, currentUser }) => {
     )
 }
 
-let ShowAvailableListItems = ({ currentList, handleSaveFlag, toggleSavedFlag }) => {
+export let ShowAvailableListItems = ({ currentList, handleSaveFlag, toggleSavedFlag }) => {
     let [initialNumbers, setInitialNumbers] = useState([])
     useEffect(() => {
         currentList && currentList.forEach(item => item.members ? setInitialNumbers(p=>p.concat(item.members)) : setInitialNumbers(p=>p.concat(0)))
@@ -148,9 +148,11 @@ let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag, initi
 }
 
 let ShowListThumbnailCard = ({list, handleHovered}) => {
+    let history = useHistory()
+
     console.log(list, '?!')
     return (
-        <div className='thumbnail-card-wrapper' onMouseLeave={handleHovered}>
+        <div className='thumbnail-card-wrapper' onMouseLeave={handleHovered} onClick={() => history.push('/i/list/members/')}>
             <div className='cover-img'></div>
             <div className='card-info'>
                 <div className='list-name'>{list.name}</div>

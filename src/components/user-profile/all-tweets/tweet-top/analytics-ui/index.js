@@ -4,6 +4,9 @@ import { likeloveIcon, replyIcon, retweetIcon } from '../../../profile-page/svg-
 import './styles.css'
 import useOnClickOutside from '../../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 import {getUserProfileData} from '../../../../firestore-methods'
+import { Gif } from '@giphy/react-components'
+import { GiphyFetch } from '@giphy/js-fetch-api'
+// import { getGiphyGifObject, MakeGifObjectAvailable } from '../../../all-tweets'
 
 function AnalyticsUI({analysingTweetID, analysingTweetData, currentUser}) {
     return (
@@ -154,7 +157,23 @@ export let RenderUserTweet = ({speceficTweetData, currentUser}) => {
             <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={created && created.seconds} />
             {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
             <RenderUserTweetText tweetText={tweetText} />
+            <RenderUserTweetMedias medias={medias} />
         </div>
+    )
+}
+
+let RenderUserTweetMedias = ({medias}) => {
+    let [gifObj, setGifObj] = useState(null)
+    let {gif, picture} = {...medias}
+    console.log(gif, picture, 'media found!!')
+    let getGifFromID = () => {
+        // getGiphyGifObject(gif)
+
+    }
+    return (
+        // picture ? <img width={'461px'} src={picture} /> : getGifFromID()
+        picture ? <img width='400px' src={handleMediaFileChecks(picture)} /> : <MakeGifObjectAvailable gifId={gif} />
+        // <div id='medias-wrapper'></div>
     )
 }
 
@@ -209,6 +228,27 @@ let informationTooltipSvg = () => <svg width={24} height={24}><g><path d="M12 18
 let tweetMarkers = [{ name: 'like', number: '00', icon: likeloveIcon() }, { name: 'retweet', number: '00', icon: retweetIcon() }, { name: 'reply', number: '00', icon: replyIcon() }]
 
 let analyticMetrics = [{ name: 'Impressions', number: '00' }, { name: 'New followers', number: '00' }, { name: 'Profile visits', number: '00' }]
+
+let MakeGifObjectAvailable = ({ gifId }) => {
+    let [gif, setGif] = useState(null)
+
+    gifId && getGiphyGifObject(gifId).then(res => {
+        setGif(res)
+    }).catch(err => console.log(err.message))
+
+    return gif && <Gif gif={gif} height='290px' className='style-gif-border-radius' />
+}
+
+let getGiphyGifObject = async (gifId) => {
+    try {
+        let { data } = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId)
+        // console.log('checkoiint06', gifId)
+        return data
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 
 export default AnalyticsUI
 
