@@ -157,6 +157,7 @@ export let RenderUserTweet = ({speceficTweetData, currentUser}) => {
             <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={created && created.seconds} />
             {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
             <RenderUserTweetText tweetText={tweetText} />
+            <div id='addtional-tweet-line' style={{height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px'}} ></div>
             <RenderUserTweetMedias medias={medias} />
         </div>
     )
@@ -236,7 +237,7 @@ let MakeGifObjectAvailable = ({ gifId }) => {
         setGif(res)
     }).catch(err => console.log(err.message))
 
-    return gif && <Gif gif={gif} height='290px' className='style-gif-border-radius' />
+    return gif && <Gif width={422} height={290} gif={gif} className='style-gif-border-radius' />
 }
 
 let getGiphyGifObject = async (gifId) => {

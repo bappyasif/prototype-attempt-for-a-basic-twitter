@@ -59,6 +59,19 @@
   margin-bottom: 20px;
 }
 
+#middle-content #analysing-user-tweet-wrapper a {
+  width: -webkit-fill-available;
+  height: 290px;
+  margin: auto;
+  display: flex;
+  justify-content: flex-end;
+  border-radius: 20px;
+}
+
+#middle-content #analysing-user-tweet-wrapper a div picture img {
+  border-radius: 20px;
+}
+
 #middle-content #analysing-user-tweet-wrapper #user-info-wrapper {
   display: flex;
   justify-content: space-between;

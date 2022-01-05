@@ -160,6 +160,7 @@ function TweetModal({quoteTweetData, currentUser, firstTweetHasMedia, setFirstTw
 
         // setIsPollIconClicked(false)
     }
+    // quoteTweetData && quoteTweetData.medias.gif && console.log(quoteTweetData.medias.gif)
 
     return (
         <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((extraGifFile && gifFile) || (selectedFile && extraSelectedFile)) && isPrimaryTweetClicked) ? '1104px' : ((extraGifFile || extraSelectedFile) && isPrimaryTweetClicked) ? '731px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >    
@@ -174,6 +175,7 @@ function TweetModal({quoteTweetData, currentUser, firstTweetHasMedia, setFirstTw
                 {scheduleStamp && scheduleStamp}
                 {quoteTweetData && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} />}
                 {quoteTweetData && <div id='addtional-tweet-line'></div>}
+                {/* {quoteTweetData && <div id='addtional-tweet-line' style={{height: ((quoteTweetData.medias.gif && quoteTweetData.medias.gif) || (quoteTweetData.medias.picture && quoteTweetData.medias.picture)) && '324px'}} ></div>} */}
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />
 

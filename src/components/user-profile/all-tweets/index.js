@@ -300,7 +300,7 @@ let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
     )
 }
 
-let MakeGifObjectAvailable = ({ gifId }) => {
+export let MakeGifObjectAvailable = ({ gifId }) => {
     let [gif, setGif] = useState(null)
 
     gifId && getGiphyGifObject(gifId).then(res => {
