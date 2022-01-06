@@ -89,6 +89,10 @@ function UserProfile({currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTw
         // resetting previous reply count to zero, so that it doesnt invoke route forwarding from tweet bottom 'who can reply' functionality
         quoteTweetID && handleReplyCount(0)
 
+        // making previously held quoteTweetID reset to null
+        newDataStatus && quoteTweetID && handleQuoteTweetID(false)
+        // newDataStatus && quoteTweetID && alert('here!!')
+
         setNewDataStatus(false)
         setScheduledTimeStamp('')
 
@@ -182,7 +186,7 @@ export let showImg = (imgRR) => {
 }
 
 export let getPrivacySelectedElement = (whichOption, color, text) => {
-    // console.log(whichOption, '<<which option>>')
+    // console.log(whichOption, '<<which option>>', color, text)
     switch (whichOption) {
         case '01':
             return tweetPrivacySelected01(color, text)

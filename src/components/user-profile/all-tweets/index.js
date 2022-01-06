@@ -9,6 +9,7 @@ import { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 
 import { TweeetTop } from './tweet-top';
 import { RenderTweetBottomIcons } from './tweet-bottom';
 import { getUserProfileData } from '../../firestore-methods';
+import { MakeGifObjectAvailable, RenderPolls } from './reuseable-helper-functions';
 
 function AllTweetsPage({ currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetData, handleQuoteTweetID, tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
     let [show, setShow] = useState(false)
@@ -233,7 +234,8 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
 
                         {extraPoll && <RenderPolls poll={extraPoll && extraPoll} />}
 
-                        {getPrivacySelectedElement(tweetPrivacy, 'white')}
+                        {/* {getPrivacySelectedElement(tweetPrivacy, 'white')} */}
+                        {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
 
                         <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons(null, '-twee')}</div>
 
@@ -252,73 +254,73 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
     )
 }
 
-let RenderPolls = ({ poll }) => {
-    let [maxVotes, setMaxVotes] = useState(100)
-    // let [maxVotes, setMaxVotes] = useState(104)
+// let RenderPolls = ({ poll }) => {
+//     let [maxVotes, setMaxVotes] = useState(100)
+//     // let [maxVotes, setMaxVotes] = useState(104)
 
-    let handleChange = () => setMaxVotes(maxVotes - 1 >= 0 ? maxVotes - 1 : maxVotes)
-    // let handleChange;
+//     let handleChange = () => setMaxVotes(maxVotes - 1 >= 0 ? maxVotes - 1 : maxVotes)
+//     // let handleChange;
 
-    useEffect(() => {
-        // handleChange = () => setMaxVotes(maxVotes-1 >= 0 ? maxVotes-1 : maxVotes)
-        maxVotes == 0 && alert('votes limit has reached!!')
-    }, [maxVotes])
+//     useEffect(() => {
+//         // handleChange = () => setMaxVotes(maxVotes-1 >= 0 ? maxVotes-1 : maxVotes)
+//         maxVotes == 0 && alert('votes limit has reached!!')
+//     }, [maxVotes])
 
-    // maxVotes <= 0 && alert('votes limit has reached!!')
+//     // maxVotes <= 0 && alert('votes limit has reached!!')
 
-    return poll.map(choice => {
-        return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} handleChange={handleChange} highestValue={maxVotes} /> : null)
-    })
-}
+//     return poll.map(choice => {
+//         return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} handleChange={handleChange} highestValue={maxVotes} /> : null)
+//     })
+// }
 
-let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
-    let [votes, setvotes] = useState(0)
+// let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
+//     let [votes, setvotes] = useState(0)
 
-    let handleVotes = () => {
-        handleChange();
+//     let handleVotes = () => {
+//         handleChange();
 
-        setvotes((highestValue > 0) ? votes + 1 : votes)
-    }
+//         setvotes((highestValue > 0) ? votes + 1 : votes)
+//     }
 
-    return (
-        <div key={value} className='poll-info'>
+//     return (
+//         <div key={value} className='poll-info'>
 
-            <div className='left-view' onClick={handleVotes}>
+//             <div className='left-view' onClick={handleVotes}>
 
-                <div className='poll-progress'>
+//                 <div className='poll-progress'>
 
-                    <div className='progress-initial'></div>
+//                     <div className='progress-initial'></div>
 
-                    <div className='progress-bar' style={{ width: `${votes}%`, borderTopLeftRadius: votes && '0px', borderBottomLeftRadius: votes && '0px' }}></div>
-                </div>
+//                     <div className='progress-bar' style={{ width: `${votes}%`, borderTopLeftRadius: votes && '0px', borderBottomLeftRadius: votes && '0px' }}></div>
+//                 </div>
 
-                <p>{value}</p>
-            </div>
+//                 <p>{value}</p>
+//             </div>
 
-            <span className='poll-percentage'>{(votes * 100) / 100}%</span>
-        </div>
-    )
-}
+//             <span className='poll-percentage'>{(votes * 100) / 100}%</span>
+//         </div>
+//     )
+// }
 
-export let MakeGifObjectAvailable = ({ gifId }) => {
-    let [gif, setGif] = useState(null)
+// let MakeGifObjectAvailable = ({ gifId }) => {
+//     let [gif, setGif] = useState(null)
 
-    gifId && getGiphyGifObject(gifId).then(res => {
-        setGif(res)
-    }).catch(err => console.log(err.message))
+//     gifId && getGiphyGifObject(gifId).then(res => {
+//         setGif(res)
+//     }).catch(err => console.log(err.message))
 
-    return gif && <Gif gif={gif} height='290px' className='style-gif-border-radius' />
-}
+//     return gif && <Gif gif={gif} height='290px' className='style-gif-border-radius' />
+// }
 
-export let getGiphyGifObject = async (gifId) => {
-    try {
-        let { data } = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId)
-        // console.log('checkoiint06', gifId)
-        return data
-    } catch (err) {
-        console.log(err)
-    }
-}
+// let getGiphyGifObject = async (gifId) => {
+//     try {
+//         let { data } = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId)
+//         // console.log('checkoiint06', gifId)
+//         return data
+//     } catch (err) {
+//         console.log(err)
+//     }
+// }
 
 let pinnedTweetIcon = () => <svg width={'24px'} height={'24px'} ><g><path d="M20.235 14.61c-.375-1.745-2.342-3.506-4.01-4.125l-.544-4.948 1.495-2.242c.157-.236.172-.538.037-.787-.134-.25-.392-.403-.675-.403h-9.14c-.284 0-.542.154-.676.403-.134.25-.12.553.038.788l1.498 2.247-.484 4.943c-1.668.62-3.633 2.38-4.004 4.116-.04.16-.016.404.132.594.103.132.304.29.68.29H8.64l2.904 6.712c.078.184.26.302.458.302s.38-.118.46-.302l2.903-6.713h4.057c.376 0 .576-.156.68-.286.146-.188.172-.434.135-.59z"></path></g></svg>
 // let loveIcon = () => <svg className='profile-page-svg-icons'><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path></g></svg>

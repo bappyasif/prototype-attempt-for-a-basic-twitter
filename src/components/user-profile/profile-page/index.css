@@ -257,7 +257,9 @@
 .rendering-tweet-data-container .right-side .tweet-info .poll-info,
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .left-view,
 .rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info,
-.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .left-view {
+.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .left-view,
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info,
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -265,7 +267,8 @@
 
 #tweet-container .tweet-poll-on-profile .poll-info,
 .rendering-tweet-data-container .right-side .tweet-info .poll-info,
-.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info {
+.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info,
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info {
   padding: 0px 31px 0px 0px;
   height: 1.7em;
   margin-bottom: 13px;
@@ -291,7 +294,9 @@
 }
 
 /* .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress */
-#tweet-container .tweet-poll-on-profile .poll-info .poll-progress {
+#tweet-container .tweet-poll-on-profile .poll-info .poll-progress,
+/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .poll-progress, */
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress {
   min-width: 4px;
   background-color: aqua;
   margin-right: 4px;
@@ -303,6 +308,7 @@
   /* display: flex; */
 }
 
+/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .poll-progress */
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress,
 .rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress {
   width: 200px;
@@ -313,7 +319,8 @@
 }
 
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-initial,
-.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-initial {
+.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-initial,
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial {
   width: 4px;
   /* border-bottom-right-radius: 0px; */
   /* border-top-right-radius: 0px; */
@@ -322,7 +329,8 @@
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-bar,
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-initial,
 .rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-bar,
-.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-initial {
+.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-initial,
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial {
   /* height: 20px;
   background-color: aqua; */
   background: aqua;
@@ -330,6 +338,10 @@
   height: 100%;
   /* min-width: 4px; */
   border-radius: 4px;
+}
+
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial {
+  height: 20px;
 }
 
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-bar {

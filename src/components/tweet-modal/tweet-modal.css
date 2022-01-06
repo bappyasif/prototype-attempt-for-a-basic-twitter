@@ -59,10 +59,19 @@
   margin-bottom: 20px;
 }
 
-#middle-content #analysing-user-tweet-wrapper a {
-  width: -webkit-fill-available;
-  height: 290px;
+#middle-content #analysing-user-tweet-wrapper .quoted-picture {
+  height: 279px;
+  width: 413px;
+  display: flex;
+  border-radius: 20px;
+  justify-content: center;
   margin: auto;
+}
+
+#middle-content #analysing-user-tweet-wrapper a {
+  width: 481px;
+  /* height: 290px;
+  margin: auto; */
   display: flex;
   justify-content: flex-end;
   border-radius: 20px;
@@ -539,17 +548,24 @@
 }
 
 .length-container {
-  display: flex;
-  justify-content: space-evenly;
   border: solid silver 0.11em;
-  /* height: 3.8em; */
+  /* height: 2.6em; */
   width: 5.6em;
   font-size: larger;
+  position: relative;
+  /* display: flex;
+  justify-content: space-evenly;
+  border: solid silver 0.11em;
+  height: 3.8em;
+  width: 5.6em;
+  font-size: larger; */
 }
 
 .length-container select {
-  /* text-align: right; */
-  width: 200px;
+  width: -webkit-fill-available;
+  position: absolute;
+  top: 0px;
+  height: -webkit-fill-available;
 }
 
 .length-container select option {

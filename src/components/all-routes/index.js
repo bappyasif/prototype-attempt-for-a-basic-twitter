@@ -27,7 +27,7 @@ import SuggestedMembersForList from '../user-profile/all-tweets/tweet-top/sugges
 import ListOfAddedMembers from '../user-profile/all-tweets/tweet-top/list-of-added-members';
 import ShowListExistingMembers from '../user-profile/all-tweets/tweet-top/add-members-into-lists/show-existing-members-list';
 
-function AllRoutes({checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -128,6 +128,10 @@ function AllRoutes({checkMemberExists, handleMembersRemoval, membersList, handle
         setIsScheduleIconClicked(true);
         // if (isPollIconClicked) handlePollIconClicked()
     }
+
+    // useEffect(() => {
+    //     !newDataStatus && toggleModality && quoteTweetID && handleQuoteTweetData(null)
+    // }, [toggleModality])
 
     // let [currentUser, setCurrentUser] = useState('')
 
@@ -286,6 +290,7 @@ function AllRoutes({checkMemberExists, handleMembersRemoval, membersList, handle
                         setSecondTweetHasPoll={setSecondTweetHasPoll}
                         currentUser={currentUser}
                         quoteTweetData={quoteTweetData}
+                        handleQuoteTweetID={handleQuoteTweetID}
                     />
                     {/* <ProfilePageUpperView /> */}
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />

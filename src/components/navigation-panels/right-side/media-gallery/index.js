@@ -1,5 +1,6 @@
 import React from 'react'
-import {getGiphyGifObject} from '../../../user-profile/all-tweets'
+import { getGiphyGifObject } from '../../../user-profile/all-tweets/reuseable-helper-functions'
+// import {getGiphyGifObject} from '../../../user-profile/all-tweets'
 
 function MediaGallery({ tweetData }) {
     // let allMediaTweets = tweetData && [...tweetData].filter((elem, idx) => (elem['medias']['picture'] && elem['medias']['picture'] || elem['medias']['gif'] && elem['medias']['gif']) && idx <= 6)

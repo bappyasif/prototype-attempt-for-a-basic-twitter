@@ -6,6 +6,9 @@ import useOnClickOutside from '../../../../navigation-panels/right-side/click-ou
 import {getUserProfileData} from '../../../../firestore-methods'
 import { Gif } from '@giphy/react-components'
 import { GiphyFetch } from '@giphy/js-fetch-api'
+import { handleMediaFileChecks } from '../../../../compose-tweet/content-in-compose-tweet'
+import { MakeGifObjectAvailable, RenderPolls } from '../../reuseable-helper-functions'
+// import { RenderPolls } from '../..'
 // import { getGiphyGifObject, MakeGifObjectAvailable } from '../../../all-tweets'
 
 function AnalyticsUI({analysingTweetID, analysingTweetData, currentUser}) {
@@ -158,29 +161,30 @@ export let RenderUserTweet = ({speceficTweetData, currentUser}) => {
             {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
             <RenderUserTweetText tweetText={tweetText} />
             <div id='addtional-tweet-line' style={{height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px'}} ></div>
-            <RenderUserTweetMedias medias={medias} />
+            {((medias.gif && medias.gif) || (medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />}
+            {tweetPoll && <RenderPolls poll={tweetPoll} />}
         </div>
     )
 }
 
 let RenderUserTweetMedias = ({medias}) => {
-    let [gifObj, setGifObj] = useState(null)
+    // let [gifObj, setGifObj] = useState(null)
     let {gif, picture} = {...medias}
-    console.log(gif, picture, 'media found!!')
-    let getGifFromID = () => {
-        // getGiphyGifObject(gif)
+    // console.log(gif, picture, 'media found!!')
+    // let getGifFromID = () => {
+    //     // getGiphyGifObject(gif)
 
-    }
+    // }
     return (
         // picture ? <img width={'461px'} src={picture} /> : getGifFromID()
-        picture ? <img width='400px' src={handleMediaFileChecks(picture)} /> : <MakeGifObjectAvailable gifId={gif} />
+        picture ? <img className='quoted-picture' src={handleMediaFileChecks(picture)} /> : <MakeGifObjectAvailable gifId={gif} />
         // <div id='medias-wrapper'></div>
     )
 }
 
 let RenderUserTweetText = ({tweetText}) => {
     return (
-        <div id='analysing-tweet-text-wrapper' style={{marginTop: '6px'}}>
+        <div id='analysing-tweet-text-wrapper' style={{marginBottom: '11px'}}>
             {tweetText || 'user Tweet'}
         </div>
     )
@@ -230,25 +234,26 @@ let tweetMarkers = [{ name: 'like', number: '00', icon: likeloveIcon() }, { name
 
 let analyticMetrics = [{ name: 'Impressions', number: '00' }, { name: 'New followers', number: '00' }, { name: 'Profile visits', number: '00' }]
 
-let MakeGifObjectAvailable = ({ gifId }) => {
-    let [gif, setGif] = useState(null)
+// let MakeGifObjectAvailable = ({ gifId }) => {
+//     let [gif, setGif] = useState(null)
 
-    gifId && getGiphyGifObject(gifId).then(res => {
-        setGif(res)
-    }).catch(err => console.log(err.message))
+//     gifId && getGiphyGifObject(gifId).then(res => {
+//         setGif(res)
+//     }).catch(err => console.log(err.message))
 
-    return gif && <Gif width={422} height={290} gif={gif} className='style-gif-border-radius' />
-}
+//     // return gif && <Gif width={422} height={290} gif={gif} className='style-gif-border-radius' />
+//     return gif && <Gif height={279} gif={gif} className='style-gif-border-radius' />
+// }
 
-let getGiphyGifObject = async (gifId) => {
-    try {
-        let { data } = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId)
-        // console.log('checkoiint06', gifId)
-        return data
-    } catch (err) {
-        console.log(err)
-    }
-}
+// let getGiphyGifObject = async (gifId) => {
+//     try {
+//         let { data } = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId)
+//         // console.log('checkoiint06', gifId)
+//         return data
+//     } catch (err) {
+//         console.log(err)
+//     }
+// }
 
 
 export default AnalyticsUI

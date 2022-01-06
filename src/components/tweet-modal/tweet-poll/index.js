@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
 export default function TweetPoll({ isPollIconClicked, handleToggle, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) {
-    
+
     // console.log(inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04, "showing values tweet poll")
-    
+
     return (
         <div id='poll-container' style={{ display: isPollIconClicked ? 'flex' : 'none' }}>
             <div id='top-layer'>
@@ -46,7 +46,17 @@ export let PollLengths = () => {
 
     let returnNumericalValuedDropdowns = (data) => data.map(num => <option key={num}>{num}</option>)
 
-    let returnLengthBox = (id, value, dropdowns) => <div className="length-container"><div className='length-info'><div className="length-text">{id}</div><div className='length-value'>{value}</div></div><select id={id} onChange={handleChanges}>{dropdowns}</select></div>
+    let returnLengthBox = (id, value, dropdowns) => {
+        return (
+            <div className="length-container">
+                <div className='length-info'>
+                    <div className="length-text">{id}</div>
+                    <div className='length-value'>{value}</div>
+                </div>
+                <select id={id} onChange={handleChanges}>{dropdowns}</select>
+            </div>
+        )
+    }
 
     let handleChanges = evt => {
         let whichLength = evt.target.id;
@@ -74,7 +84,12 @@ export let PollLengths = () => {
     let hoursLength = returnLengthBox('hours', hours, hoursDropdown);
     let minutesLength = returnLengthBox('minutes', minutes, minutesDropdown);
 
-    return <div id='poll-lengths'> <div id='poll-length-text'>Poll length</div> <div id='all-lengths'>{daysLength} {hoursLength} {minutesLength}</div> </div>
+    return (
+        <div id='poll-lengths'>
+            <div id='poll-length-text'>Poll length</div>
+            <div id='all-lengths'>{daysLength} {hoursLength} {minutesLength}</div>
+        </div>
+    )
 }
 
 export let PollChoices = ({ inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04 }) => {
@@ -167,12 +182,12 @@ export let PollChoices = ({ inputTextChoice01, setInputTextChoice01, inputTextCh
     //     // setInputTextChoice02(inputTextChoice02 ? inputTextChoice02 : '')
     //     // setInputTextChoice03(inputTextChoice03 ? inputTextChoice03 : '')
     //     // setInputTextChoice01(inputTextChoice04 ? inputTextChoice04 : '')
-        
+
     //     // setInputTextChoice01(inputTextChoice01 && inputTextChoice01 )
     //     // setInputTextChoice02(inputTextChoice02 && inputTextChoice02)
     //     // setInputTextChoice03(inputTextChoice03 && inputTextChoice03 )
     //     // setInputTextChoice01(inputTextChoice04 && inputTextChoice04 )
-        
+
     //     console.log(inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04, "showing values")
     // }, [inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04])
 
@@ -216,7 +231,7 @@ export let PollChoices = ({ inputTextChoice01, setInputTextChoice01, inputTextCh
         return <div key={choice.placeholderText} className='choices-container'>
             <div className='split-divs'>
                 <div className='div-text'>{choice.id == '01' ? divTextChoice01 : choice.id == '02' ? divTextChoice02 : choice.id == '03' ? divTextChoice03 : divTextChoice04}</div>
-               
+
                 <div className='word-count'>{choice.id == '01' ? wordCountChoice01 : choice.id == '02' ? wordCountChoice02 : choice.id == '03' ? wordCountChoice03 : wordCountChoice04}</div>
             </div>
             {/* <input className='poll-choices' id={choice.id} type='text' maxLength='25' onChange={handleChanges} onFocus={handleFocused} placeholder={choice.placeholderText} /> */}

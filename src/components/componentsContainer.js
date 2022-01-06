@@ -70,6 +70,8 @@ function ComponentsContainer() {
 
     let handleQuoteTweetID = value => setQuoteTweetID(value)
 
+    let handleQuoteTweetData = dataset => setQuoteTweetData(dataset)
+
     let handleAnalysingTweetID = value => setAnalysingTweetID(value)
 
     let handleCurrentUser = (userID) => setCurrentUser(userID)
@@ -174,8 +176,8 @@ function ComponentsContainer() {
         setUserDocs(prevData => {
             let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
             
-            // updating records in firestore as well, trying against it
-            // deleteDocFromFirestore(currentUser, idx)
+            // updating records in firestore as well
+            deleteDocFromFirestore(currentUser, idx)
 
             // updating userdocs for DOM node rendering
             return prevData.slice(0, foundIndex).concat(prevData.slice(foundIndex+1))
@@ -198,7 +200,12 @@ function ComponentsContainer() {
     // useEffect(() => analysingTweetID && getSpeceficItemFromUserDocs(), [analysingTweetID])
     useEffect(() => analysingTweetID && getSpeceficItemFromUserDocs(analysingTweetID, setAnalysingTweetData), [analysingTweetID])
 
-    useEffect(() =>  quoteTweetID && getSpeceficItemFromUserDocs(quoteTweetID, setQuoteTweetData), [quoteTweetID])
+    useEffect(() =>  {
+        // when wuoteTweetID is available get dta from Firestore and update quoteTweetData
+        quoteTweetID && getSpeceficItemFromUserDocs(quoteTweetID, setQuoteTweetData)
+        // when there is no quoteTweetID available resets to null or assign as such
+        !quoteTweetID && setQuoteTweetData(null)
+    }, [quoteTweetID])
 
     useEffect(() => {
         pinnedTweetID && getSpeceficItemFromUserDocs(pinnedTweetID, handlePinnedTweetData)
@@ -288,16 +295,16 @@ function ComponentsContainer() {
     // currentUser && removeSpeceficArrayItem()
     // userDocs && console.log(userDocs.length, 'removed??', userDocs)
 
-    // quoteTweetID && console.log(quoteTweetID, 'quoteID')
+    quoteTweetID && console.log(quoteTweetID, 'quoteID')
     // pinnedTweetData && console.log(pinnedTweetData, 'pinned tweet data here!!');
-    initialPinnedTweetData && console.log(initialPinnedTweetData, 'initial pinned!!')
+    // initialPinnedTweetData && console.log(initialPinnedTweetData, 'initial pinned!!')
     // pinnedTweetID && console.log(pinnedTweetID, 'tweet ID', userDocs)
-    currentList && console.log(currentList, 'currentList')
+    // currentList && console.log(currentList, 'currentList')
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )
