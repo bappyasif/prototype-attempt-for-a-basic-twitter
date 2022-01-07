@@ -11,7 +11,7 @@ import { RenderTweetBottomIcons } from './tweet-bottom';
 import { getUserProfileData } from '../../firestore-methods';
 import { MakeGifObjectAvailable, RenderPolls } from './reuseable-helper-functions';
 
-function AllTweetsPage({ currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetData, handleQuoteTweetID, tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
+function AllTweetsPage({ handlePollVotesCount, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetData, handleQuoteTweetID, tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
     let [show, setShow] = useState(false)
     let [showNoMoreTweets, setShowNoMoreTweets] = useState(false)
     let [totalTweets, setTotalTweets] = useState()
@@ -69,7 +69,7 @@ function AllTweetsPage({ currentlyPinnedTweetID, showPinnedTweetTag, handlePinne
             content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID, quotedTweetID: item.quoteTweetID }
         }
 
-        return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} />
+        return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} handlePollVotesCount={handlePollVotesCount} />
     }
 
     let runThis = time => {
@@ -148,7 +148,7 @@ let PinnedTweetUI = () => {
     )
 }
 
-let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag }) => {
+let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount }) => {
     let {quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
@@ -172,7 +172,7 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
 
                 {<div className='tweet-media-file-content'>{readyMedia()}</div>}
 
-                {<RenderPolls poll={tweetPoll} />}
+                {<RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} />}
 
                 {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
 
@@ -200,7 +200,8 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
                         <div className='tweet-text'>{tweetText}</div>
 
                         {<div className='tweet-media-file-content'>{readyMedia()}</div>}
-                        {<RenderPolls poll={tweetPoll} />}
+                        {/* {<RenderPolls poll={tweetPoll} />} */}
+                        {<RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} />}
 
                         {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
 
@@ -232,7 +233,8 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
 
                         {<div className='tweet-media-file-content'>{readyMedia('extra')}</div>}
 
-                        {extraPoll && <RenderPolls poll={extraPoll && extraPoll} />}
+                        {/* {extraPoll && <RenderPolls poll={extraPoll && extraPoll} />} */}
+                        {extraPoll && <RenderPolls poll={extraPoll && extraPoll} handlePollVotesCount={handlePollVotesCount} />}
 
                         {/* {getPrivacySelectedElement(tweetPrivacy, 'white')} */}
                         {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}

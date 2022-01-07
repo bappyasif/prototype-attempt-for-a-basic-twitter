@@ -27,7 +27,7 @@ import SuggestedMembersForList from '../user-profile/all-tweets/tweet-top/sugges
 import ListOfAddedMembers from '../user-profile/all-tweets/tweet-top/list-of-added-members';
 import ShowListExistingMembers from '../user-profile/all-tweets/tweet-top/add-members-into-lists/show-existing-members-list';
 
-function AllRoutes({handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -159,7 +159,7 @@ function AllRoutes({handleQuoteTweetData, checkMemberExists, handleMembersRemova
                     />
                 </Route>
                 <Route exact path={'/analytics'}>
-                    <AnalyticsUI analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} currentUser={currentUser} />
+                    <AnalyticsUI analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} currentUser={currentUser} handlePollVotesCount={handlePollVotesCount} />
                 </Route>
 
                 <Route exact path={'/i/lists/add_member'}>
@@ -291,6 +291,8 @@ function AllRoutes({handleQuoteTweetData, checkMemberExists, handleMembersRemova
                         currentUser={currentUser}
                         quoteTweetData={quoteTweetData}
                         handleQuoteTweetID={handleQuoteTweetID}
+                        pollVotesCount={pollVotesCount}
+                        handlePollVotesCount={handlePollVotesCount}
                     />
                     {/* <ProfilePageUpperView /> */}
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
@@ -388,6 +390,7 @@ function AllRoutes({handleQuoteTweetData, checkMemberExists, handleMembersRemova
                                 handlePinnedTweetID={handlePinnedTweetID}
                                 showPinnedTweetTag={showPinnedTweetTag}
                                 currentlyPinnedTweetID={currentlyPinnedTweetID}
+                                handlePollVotesCount={handlePollVotesCount}
                             />
                         </Route>
                         :

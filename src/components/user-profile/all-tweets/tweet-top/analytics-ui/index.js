@@ -135,14 +135,14 @@ let RenderAnalysingTweetMarker = ({ item }) => {
     )
 }
 
-export let RenderUserTweet = ({speceficTweetData, currentUser}) => {
+export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, handlePollVotesCount}) => {
     let [userProfileData, setUserProfileData] = useState(null)
     
     let [neededInfo, setNeededInfo] = useState([])
 
     let handleDataLoading = (dataset) => setUserProfileData(dataset)
 
-    let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText} = speceficTweetData && {...speceficTweetData[0]}
+    let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText, id} = speceficTweetData && {...speceficTweetData[0]}
     
     useEffect(() => currentUser && getUserProfileData(currentUser, handleDataLoading), [])
 
@@ -153,6 +153,7 @@ export let RenderUserTweet = ({speceficTweetData, currentUser}) => {
 
     useEffect(() => userProfileData && filterProfileData(), [userProfileData])
     
+    console.log(id, '<><>', pollVotesCount)
     // neededInfo && created && userProfileData && console.log(tweetText, created, userProfileData, neededInfo)
 
     return (
@@ -162,7 +163,7 @@ export let RenderUserTweet = ({speceficTweetData, currentUser}) => {
             <RenderUserTweetText tweetText={tweetText} />
             <div id='addtional-tweet-line' style={{height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px'}} ></div>
             {((medias.gif && medias.gif) || (medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />}
-            {tweetPoll && <RenderPolls poll={tweetPoll} />}
+            {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} />}
         </div>
     )
 }

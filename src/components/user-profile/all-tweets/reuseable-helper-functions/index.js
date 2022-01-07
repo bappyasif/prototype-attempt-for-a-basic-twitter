@@ -3,9 +3,18 @@ import { Gif } from '@giphy/react-components'
 import React, { useEffect, useState } from 'react'
 
 
-export let RenderPolls = ({ poll }) => {
+export let RenderPolls = ({ poll, handlePollVotesCount, pollVotesCount }) => {
     let [maxVotes, setMaxVotes] = useState(100)
     // let [maxVotes, setMaxVotes] = useState(104)
+    // let [votesCount, setVotesCount] = useState({})
+
+    // let handleVotesCount = (elem, value) => {
+    //     setVotesCount({...votesCount, [elem]: value})
+    //     // setVotesCount(prevData => prevData[elem] ? value : 1)
+    //     // setVotesCount(prevData => prevData.map(item => ({...item, [elem]: value})))
+    // }
+
+    console.log(pollVotesCount, 'pollVotes')
 
     let handleChange = () => setMaxVotes(maxVotes - 1 >= 0 ? maxVotes - 1 : maxVotes)
     // let handleChange;
@@ -18,18 +27,20 @@ export let RenderPolls = ({ poll }) => {
     // maxVotes <= 0 && alert('votes limit has reached!!')
 
     return poll.map(choice => {
-        return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} handleChange={handleChange} highestValue={maxVotes} /> : null)
+        return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} handleChange={handleChange} highestValue={maxVotes} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} /> : null)
     })
 }
 
-let HandlePollOptionProgress = ({ value, handleChange, highestValue }) => {
+let HandlePollOptionProgress = ({ value, handleChange, highestValue, handlePollVotesCount, pollVotesCount }) => {
     let [votes, setvotes] = useState(0)
 
     let handleVotes = () => {
         handleChange();
-
+        handlePollVotesCount(value, votes)
         setvotes((highestValue > 0) ? votes + 1 : votes)
     }
+
+    useEffect(() => pollVotesCount && setvotes(pollVotesCount[value]), [])
 
     return (
         <div key={value} className='poll-info'>

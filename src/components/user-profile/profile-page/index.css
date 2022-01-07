@@ -297,7 +297,7 @@
 #tweet-container .tweet-poll-on-profile .poll-info .poll-progress,
 /* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .poll-progress, */
 #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress {
-  min-width: 4px;
+  /* min-width: 4px; */
   background-color: aqua;
   margin-right: 4px;
   line-height: 2em;
@@ -330,7 +330,8 @@
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-initial,
 .rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-bar,
 .rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-initial,
-#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial {
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial,
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-bar {
   /* height: 20px;
   background-color: aqua; */
   background: aqua;
