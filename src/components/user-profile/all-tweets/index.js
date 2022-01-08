@@ -10,6 +10,7 @@ import { TweeetTop } from './tweet-top';
 import { RenderTweetBottomIcons } from './tweet-bottom';
 import { getUserProfileData } from '../../firestore-methods';
 import { MakeGifObjectAvailable, RenderPolls } from './reuseable-helper-functions';
+import { useHistory } from 'react-router-dom';
 
 function AllTweetsPage({ handlePollVotesCount, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetData, handleQuoteTweetID, tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
     let [show, setShow] = useState(false)
@@ -153,9 +154,17 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
 
-    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} replyCount={replyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} />)
+    let [initialReplyCount, setInitialReplyCount] = useState(null)
 
-    console.log(quotedTweetID, 'check!!', showPinnedTweetTag)
+    let handleInitialReplyCount = (val) => setInitialReplyCount(val)
+
+    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} replyCount={replyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} />)
+    
+    console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount)
+
+    let history = useHistory()
+
+    let handleShowThread = () => history.push('/status/tweetID')
 
     let whenWithoutExtraTweet = () => <div className='rendering-tweet-data-container'>
         <div className='left-side'>
@@ -177,8 +186,11 @@ let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetP
                 {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
 
                 <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons()}</div>
+
+                {(initialReplyCount) > 0 && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>}
             </div>
         </div>
+        {/* {(initialReplyCount) > 0 && <div id='show-tweet-thread'>Show this thread</div>} */}
     </div>
 
     let whenWithExtraTweet = () => {

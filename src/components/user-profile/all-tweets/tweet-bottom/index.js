@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 import { getDataFromFirestoreSubCollection, updateDataInFirestore } from '../../../firestore-methods'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 
-export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID }) => {
+export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount }) => {
     let [hoveredID, setHoveredID] = useState('')
     let [iconClicked, setIconClicked] = useState('')
     let [showModal, setShowModal] = useState(false)
@@ -24,6 +24,7 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
 
     let handleInitialReplyCount = val => {
         setCounter(val)
+        feedParentInitialReplyCount(val)
     }
 
     let handleIncreaseCount = () => setCounter(prevCount => prevCount+1)

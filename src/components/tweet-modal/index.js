@@ -179,7 +179,7 @@ function TweetModal({handlePollVotesCount, pollVotesCount, handleQuoteTweetID, q
 
             <div id='middle-content'>
                 {scheduleStamp && scheduleStamp}
-                {quoteTweetData && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} />}
+                {quoteTweetData && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} forModal={true} />}
                 {quoteTweetData && <div id='addtional-tweet-line'></div>}
                 {/* {quoteTweetData && <div id='addtional-tweet-line' style={{height: ((quoteTweetData.medias.gif && quoteTweetData.medias.gif) || (quoteTweetData.medias.picture && quoteTweetData.medias.picture)) && '324px'}} ></div>} */}
                 <div id='header-section'>

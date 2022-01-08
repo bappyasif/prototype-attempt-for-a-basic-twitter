@@ -7,7 +7,7 @@ import {getUserProfileData} from '../../../../firestore-methods'
 import { Gif } from '@giphy/react-components'
 import { GiphyFetch } from '@giphy/js-fetch-api'
 import { handleMediaFileChecks } from '../../../../compose-tweet/content-in-compose-tweet'
-import { MakeGifObjectAvailable, RenderPolls } from '../../reuseable-helper-functions'
+import { MakeGifObjectAvailable, RenderPolls, RenderUserTweetText } from '../../reuseable-helper-functions'
 // import { RenderPolls } from '../..'
 // import { getGiphyGifObject, MakeGifObjectAvailable } from '../../../all-tweets'
 
@@ -135,7 +135,7 @@ let RenderAnalysingTweetMarker = ({ item }) => {
     )
 }
 
-export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, handlePollVotesCount}) => {
+export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, handlePollVotesCount, forModal}) => {
     let [userProfileData, setUserProfileData] = useState(null)
     
     let [neededInfo, setNeededInfo] = useState([])
@@ -153,7 +153,8 @@ export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, h
 
     useEffect(() => userProfileData && filterProfileData(), [userProfileData])
     
-    console.log(id, '<><>', pollVotesCount)
+    let numberOfPollOptions = Object.values(tweetPoll[0]).filter(val=>val).length
+    console.log(id, '<><>', pollVotesCount, tweetPoll.length, tweetPoll[0], numberOfPollOptions)
     // neededInfo && created && userProfileData && console.log(tweetText, created, userProfileData, neededInfo)
 
     return (
@@ -162,8 +163,9 @@ export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, h
             {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
             <RenderUserTweetText tweetText={tweetText} />
             <div id='addtional-tweet-line' style={{height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px'}} ></div>
+            <div id='poll-tweet-line-extension' style={{height: numberOfPollOptions == 3 ? '153px' : numberOfPollOptions == 4 && '194px'}}></div>
             {((medias.gif && medias.gif) || (medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />}
-            {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} />}
+            {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} forModal={forModal} />}
         </div>
     )
 }
@@ -183,13 +185,13 @@ let RenderUserTweetMedias = ({medias}) => {
     )
 }
 
-let RenderUserTweetText = ({tweetText}) => {
-    return (
-        <div id='analysing-tweet-text-wrapper' style={{marginBottom: '11px'}}>
-            {tweetText || 'user Tweet'}
-        </div>
-    )
-}
+// let RenderUserTweetText = ({tweetText}) => {
+//     return (
+//         <div id='analysing-tweet-text-wrapper' style={{marginBottom: '11px'}}>
+//             {tweetText || 'user Tweet'}
+//         </div>
+//     )
+// }
 
 let RenderTweetUserInfo = ({name, profileHandle, tweetPostedDate}) => {
     // let dateFormatted = ''

@@ -257,9 +257,10 @@
 .rendering-tweet-data-container .right-side .tweet-info .poll-info,
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .left-view,
 .rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info,
-.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .left-view,
-#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info,
-#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view {
+.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .left-view
+/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info,
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view  */
+{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -267,11 +268,25 @@
 
 #tweet-container .tweet-poll-on-profile .poll-info,
 .rendering-tweet-data-container .right-side .tweet-info .poll-info,
-.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info,
-#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info {
+.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info
+/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info  */
+{
   padding: 0px 31px 0px 0px;
   height: 1.7em;
   margin-bottom: 13px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info #show-tweet-thread {
+  transform: translate(-60px, 11px);
+  line-height: 2em;
+  padding-left: 60px;
+  font-size: larger;
+  width: 100%;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info #show-tweet-thread:hover {
+  background-color: lightgrey;
+  color: white;
 }
 
 .rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper {
@@ -293,10 +308,10 @@
   /* margin-bottom: 8px; */
 }
 
+/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress */
 /* .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress */
-#tweet-container .tweet-poll-on-profile .poll-info .poll-progress,
-/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .poll-progress, */
-#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress {
+#tweet-container .tweet-poll-on-profile .poll-info .poll-progress
+/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .poll-progress, */ {
   /* min-width: 4px; */
   background-color: aqua;
   margin-right: 4px;
@@ -329,9 +344,10 @@
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-bar,
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-initial,
 .rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-bar,
-.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-initial,
-#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial,
-#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-bar {
+.rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info .poll-progress .progress-initial
+/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial, */
+/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-bar  */
+{
   /* height: 20px;
   background-color: aqua; */
   background: aqua;
@@ -341,9 +357,9 @@
   border-radius: 4px;
 }
 
-#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial {
+/* #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial {
   height: 20px;
-}
+} */
 
 .rendering-tweet-data-container .right-side .tweet-info .poll-info .poll-progress .progress-bar {
   /* border-top-left-radius: 0px; */
@@ -1067,6 +1083,143 @@
   font-size: medium;
   padding-bottom: 4px;
   margin-left: 4px;
+}
+
+/* tweet thread styles here */
+#components-container #show-tweet-thread-container {
+  width: 515px;
+  border: solid;
+}
+
+#components-container #show-tweet-thread-container #component-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+#components-container #show-tweet-thread-container #component-wrapper #component-title {
+  font-size: larger;
+  padding-bottom: 2px;
+  margin-left: 42px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #user-info-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 4px 0px 2px 11px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #user-info-wrapper .profile-pic,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper .profile-pic {
+  width: 51px;
+  height: 51px;
+  border-radius: 50%;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #user-info-wrapper #profile-info {
+  margin-left: 29px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #user-info-wrapper #profile-info #profile-handle {
+  color: silver;
+  font-size: smaller;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #analysing-tweet-text-wrapper {
+  text-align: left;
+  margin: 4px 0px 4px 4px;
+  font-size: x-large;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #timestamp-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #analytics-activity-wrapper {
+  display: flex;
+  align-items: center;
+  border: solid;
+  border-left: none;
+  border-right: none;
+  margin-bottom: 4px;
+  padding: 4px 0px 4px 2px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #analytics-activity-wrapper:hover {
+  background-color: lightgrey;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: solid;
+  margin-bottom: 2px;
+  padding: 4px 0px 4px 0px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper .hoverable-div {
+  position: relative;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper .hoverable-div .hoverable-div-tooltips-text,
+#components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #retweet .hoverable-div-tooltips-text,
+#components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #like .hoverable-div-tooltips-text,
+#components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #share .hoverable-div-tooltips-text {
+  position: absolute;
+  left: -4px;
+  top: 24px;
+  background-color: silver;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #retweet .hoverable-div-tooltips-text {
+  left: -13px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #like .hoverable-div-tooltips-text {
+  left: 0px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #share .hoverable-div-tooltips-text {
+  left: -8px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #privacy-announcement-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: midnightblue;
+  color: silver;
+  width: 96%;
+  margin: auto;
+  margin-bottom: 4px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #privacy-announcement-wrapper .profile-page-svg-icons {
+  stroke: white;
+  fill: white;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #privacy-announcement-wrapper #announcement-texts {
+  text-align: left;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 8px 0px 8px 0px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper #reply-tweet {
+  font-size: x-large;
+  width: 69%;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper #reply-btn {
+  background-color: silver;
+  line-height: 2em;
+  padding: 0px 11px 0px 11px;
+  border-radius: 20px;
 }
 
 /* scrollbar custom styling tryouts */

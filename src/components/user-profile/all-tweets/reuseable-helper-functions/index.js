@@ -3,7 +3,7 @@ import { Gif } from '@giphy/react-components'
 import React, { useEffect, useState } from 'react'
 
 
-export let RenderPolls = ({ poll, handlePollVotesCount, pollVotesCount }) => {
+export let RenderPolls = ({ poll, handlePollVotesCount, pollVotesCount, forModal }) => {
     let [maxVotes, setMaxVotes] = useState(100)
     // let [maxVotes, setMaxVotes] = useState(104)
     // let [votesCount, setVotesCount] = useState({})
@@ -27,11 +27,11 @@ export let RenderPolls = ({ poll, handlePollVotesCount, pollVotesCount }) => {
     // maxVotes <= 0 && alert('votes limit has reached!!')
 
     return poll.map(choice => {
-        return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} handleChange={handleChange} highestValue={maxVotes} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} /> : null)
+        return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} handleChange={handleChange} highestValue={maxVotes} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} forModal={forModal} /> : null)
     })
 }
 
-let HandlePollOptionProgress = ({ value, handleChange, highestValue, handlePollVotesCount, pollVotesCount }) => {
+let HandlePollOptionProgress = ({ value, handleChange, highestValue, handlePollVotesCount, pollVotesCount, forModal }) => {
     let [votes, setvotes] = useState(0)
 
     let handleVotes = () => {
@@ -45,19 +45,19 @@ let HandlePollOptionProgress = ({ value, handleChange, highestValue, handlePollV
     return (
         <div key={value} className='poll-info'>
 
-            <div className='left-view' onClick={handleVotes}>
+            <div className='left-view' onClick={!forModal && handleVotes}>
 
                 <div className='poll-progress'>
 
                     <div className='progress-initial'></div>
 
-                    <div className='progress-bar' style={{ width: `${votes}%`, borderTopLeftRadius: votes && '0px', borderBottomLeftRadius: votes && '0px' }}></div>
+                    <div className='progress-bar' style={{ width: `${forModal ? votes + 4 : votes}${forModal ? 'px' : '%'}`, borderTopLeftRadius: votes && '0px', borderBottomLeftRadius: votes && '0px' }}></div>
                 </div>
 
                 <p>{value}</p>
             </div>
 
-            <span className='poll-percentage'>{(votes * 100) / 100}%</span>
+            <span className='poll-percentage'>{votes ? ((votes * 100) / 100) : 0}{`${forModal ? ' vote' : '%'}`}</span>
         </div>
     )
 }
@@ -80,4 +80,12 @@ export let getGiphyGifObject = async (gifId) => {
     } catch (err) {
         console.log(err)
     }
+}
+
+export let RenderUserTweetText = ({tweetText}) => {
+    return (
+        <div id='analysing-tweet-text-wrapper' style={{marginBottom: '11px'}}>
+            {tweetText || 'user Tweet'}
+        </div>
+    )
 }

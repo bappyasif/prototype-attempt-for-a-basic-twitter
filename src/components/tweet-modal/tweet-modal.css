@@ -44,13 +44,65 @@
   position: relative;
 }
 
-#middle-content #addtional-tweet-line {
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info,
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view  {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info {
+  padding: 0px 31px 0px 0px;
+  height: 1.7em;
+  margin-bottom: 13px;
+  max-width: 80%;
+  margin-left: 49px;
+}
+
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress {
+  background-color: aqua;
+  margin-right: 4px;
+  line-height: 2em;
+  border-radius: 4px;
+  color: aqua;
+  max-width: 110px;
+  border: solid silver 1.1px;
+}
+
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial{
+  width: 4px;
+}
+
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial,
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-bar {
+  background: aqua;
+  color: aqua;
+  height: 100%;
+  /* min-width: 4px; */
+  border-radius: 4px;
+}
+
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-bar {
+  max-width: 110px;
+  /* height: 20px; */
+}
+
+#tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view .poll-progress .progress-initial {
+  height: 20px;
+}
+
+#middle-content #addtional-tweet-line,
+#middle-content #analysing-user-tweet-wrapper #poll-tweet-line-extension {
   width: 0.71px;
   height: 34px;
   position: absolute;
   top: 35px;
   left: 46px;
   border-right: dashed 0.1px silver;
+}
+
+#middle-content #analysing-user-tweet-wrapper #poll-tweet-line-extension {
+  height: 112px;
 }
 
 #middle-content #analysing-user-tweet-wrapper {
