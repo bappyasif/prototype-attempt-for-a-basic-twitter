@@ -1,33 +1,103 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { RenderTweetDataComponent } from '..'
 import { tweetPrivacySelected01 } from '../../../tweet-modal'
+import { replyTweetModalIcons } from '../../../tweet-modal/svg-resources'
 import { analyticsIcon, backIcon, tweetAdditionalIconsArray } from '../../profile-page/svg-resources'
 import { RenderUserTweetText } from '../reuseable-helper-functions'
 import { RenderTweetBottomIcons } from '../tweet-bottom'
 
-function ShowTweetThread() {
+function ShowTweetThread({threadedTweetData}) {
+    let {quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = {...threadedTweetData}
+    console.log(ID, tweetText, '::::')
     return (
         <div id='show-tweet-thread-container'>
             <HeaderComponent />
             <TweetComponent />
             <ReplyThreadComponent />
+            <RenderAlreadyRepliedTweets />
+        </div>
+    )
+}
+
+let RenderAlreadyRepliedTweets = () => {
+    let content = {
+            tweetText: 'item.tweetText',
+            tweetPrivacy: '02',
+            // ID: 'd7AMxpgBtuNcnBr7XwM9uWvKrmG3',
+        }
+    return (
+        <div id='already-replied-tweets-wrapper'>
+            <RenderTweetDataComponent content={content} />
+            <div id='extra-tweet-extension-line'></div>
+            <RenderAddAnotherTweet />
+        </div>
+    )
+}
+
+let RenderAddAnotherTweet = () => {
+    return (
+        <div id='add-another-tweet-wrapper'>
+            <img className='profile-pic' src='https://picsum.photos/200/300' />
+            <div id='add-another-tweet'>Add another Tweet</div>
         </div>
     )
 }
 
 let ReplyThreadComponent = () => {
+    let [clicked, setClicked] = useState(false)
+    let handleClicked = () => setClicked(true)
     return (
-        <div id='reply-tweet-thread-wrapper'>
-            <BeforeClickedMarkup />
+        <div id='reply-tweet-thread-wrapper' style={{marginBottom: '20px'}}>
+            {clicked ? <AfterClickedMarkup /> : <BeforeClickedMarkup handleClicked={handleClicked} />}
         </div>
     )
 }
 
-let BeforeClickedMarkup = () => {
+let AfterClickedMarkup = () => {
+    return (
+        <div id='after-clicked-markup-wrapper'>
+            <div id='replying-to'>Replying to @profile_handle</div>
+            <div id='user-tweet'>
+                <img className='profile-pic' src='https://picsum.photos/200/300' />
+                <label htmlFor='tweet-reply' />
+                <input id='tweet-reply' placeholder='Tweet your reply' />
+            </div>
+            <ReplyTweetBottomUI />
+        </div>
+    )
+}
+
+let ReplyTweetBottomUI = () => {
+    let nameChecks = name => (name == 'Poll' || name == 'Schedule Tweet') ? true : false;
+    let renderIcons = () => replyTweetModalIcons().map(item => !nameChecks(item.name) && <RenderIcon key={item.name} item={item} />)
+
+    return (
+        <div id='reply-tweet-modal-wrapper'>
+            <div id='icons-wrapper'>{renderIcons()}</div>
+            <div id='reply-btn'>Reply</div>
+        </div>
+    )
+}
+
+let RenderIcon = ({item}) => {
+    let [hovered, setHovered] = useState(null)
+    let handleHovered = () => setHovered(item.name)
+    let handleHoveredReversed = () => setHovered(null)
+    return(
+        <div id='icon-item-wrapper' onMouseEnter={handleHovered} onMouseLeave={handleHoveredReversed}>
+            <div className='svg-icon'>{item.icon}</div>
+            <div className='hoverable-text' style={{display: hovered == item.name ? 'block' : 'none'}}>{item.name}</div>
+        </div>
+    )
+}
+
+let BeforeClickedMarkup = ({handleClicked}) => {
     return(
         <div id='before-clicked-markup-wrapper'>
             <img className='profile-pic' src='https://picsum.photos/200/300' />
             <label htmlFor='reply-tweet' />
-            <input type={'text'} id='reply-tweet' placeholder='Tweet your reply' />
+            <input type={'text'} id='reply-tweet' placeholder='Tweet your reply' onClick={handleClicked} />
             <div id='reply-btn'>Reply</div>
         </div>
     )
@@ -94,9 +164,10 @@ let UserInfo = () => {
 }
 
 let HeaderComponent = () => {
+    let history = useHistory()
     return (
         <div id='component-wrapper'>
-            <div id='svg-icon'>{backIcon()}</div>
+            <div id='svg-icon' onClick={() => history.goBack()}>{backIcon()}</div>
             <div id='component-title'>Thread</div>
         </div>
     )
@@ -106,3 +177,20 @@ export let poepleMentionePrivacySvg = () => <svg className='profile-page-svg-ico
 
 
 export default ShowTweetThread
+
+// let content = {
+    //     tweetText: 'item.tweetText',
+    //     extraTweet: 'item.extraTweet',
+    //     gifFile: 'item.medias.gif',
+    //     extraGifFile: 'item.medias.extraGif',
+    //     pictureFile: 'item.medias.picture',
+    //     extraPictureFile: 'item.medias.extraPicture',
+    //     tweetPrivacy: 'item.privacy',
+    //     firstTweetHasMedia: 'item.firstTweetHasMedia',
+    //     secondTweetHasMedia: 'item.secondTweetHasMedia',
+    //     tweetPoll: ['item.tweetPoll'],
+    //     extraPoll: ['item.extraPoll'],
+    //     scheduledTime: 'item.scheduledTimeStamp',
+    //     ID: 'ID',
+    //     quotedTweetID: 'item.quoteTweetID'
+// }

@@ -1109,7 +1109,9 @@
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #user-info-wrapper .profile-pic,
-#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper .profile-pic {
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper .profile-pic,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #user-tweet .profile-pic,
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper #add-another-tweet-wrapper .profile-pic {
   width: 51px;
   height: 51px;
   border-radius: 50%;
@@ -1133,6 +1135,7 @@
 #components-container #show-tweet-thread-container #tweet-component-wrapper #timestamp-wrapper {
   display: flex;
   justify-content: space-evenly;
+  margin: 8px;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #analytics-activity-wrapper {
@@ -1166,41 +1169,47 @@
 #components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #like .hoverable-div-tooltips-text,
 #components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #share .hoverable-div-tooltips-text {
   position: absolute;
-  left: -4px;
+  left: -11px;
   top: 24px;
   background-color: silver;
+  padding: 2px 6px 2px 8px;
+  border-radius: 8px;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #retweet .hoverable-div-tooltips-text {
-  left: -13px;
+  left: -18px;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #like .hoverable-div-tooltips-text {
-  left: 0px;
+  left: -6px;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #share .hoverable-div-tooltips-text {
-  left: -8px;
+  left: -15px;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #privacy-announcement-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   background-color: midnightblue;
   color: silver;
-  width: 96%;
+  width: 94%;
   margin: auto;
-  margin-bottom: 4px;
+  margin-top: 13px;
+  margin-bottom: 20px;
+  padding: 8px;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #privacy-announcement-wrapper .profile-page-svg-icons {
   stroke: white;
   fill: white;
+  margin-left: 11px;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #privacy-announcement-wrapper #announcement-texts {
   text-align: left;
+  margin-left: 33px;
 }
 
 #components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper {
@@ -1210,16 +1219,121 @@
   margin: 8px 0px 8px 0px;
 }
 
-#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper #reply-tweet {
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper #reply-tweet,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #user-tweet #tweet-reply {
   font-size: x-large;
   width: 69%;
 }
 
-#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper #reply-btn {
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper #reply-btn,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #reply-btn {
   background-color: silver;
   line-height: 2em;
   padding: 0px 11px 0px 11px;
   border-radius: 20px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #reply-btn {
+  margin-right: 9px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #icons-wrapper {
+  margin-left: 74px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #icons-wrapper,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #icons-wrapper #icon-item-wrapper {
+  display: flex;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #icons-wrapper #icon-item-wrapper {
+  position: relative;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #icons-wrapper #icon-item-wrapper .svg-icon,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #user-tweet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #icons-wrapper #icon-item-wrapper .hoverable-text {
+  position: absolute;
+  text-align: center;
+  background-color: silver;
+  padding: 4px;
+  border-radius: 20px;
+  top: 35px;
+  left: -6px;
+  min-width: 44px;
+  font-size: smaller;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #icons-wrapper #icon-item-wrapper:nth-child(4) .hoverable-text {
+  left: -20px;
+  padding: 4px 15px 6px 15px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #user-tweet {
+  padding: 2px 2px 2px 15px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #user-tweet #tweet-reply {
+  margin-left: 20px;
+  width: -webkit-fill-available;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #replying-to {
+  text-align: left;
+  margin-left: 85px;
+}
+
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper {
+  position: relative;
+  padding: 8px 11px 6px 8px;
+}
+
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper .rendering-tweet-data-container .right-side {
+  width: -webkit-fill-available;
+  text-align: left;
+  margin-left: 36px;
+  margin-top: 6px;
+}
+
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper #extra-tweet-extension-line {
+  width: 2px;
+  background-color: silver;
+  height: 98.7px;
+  position: absolute;
+  top: 56px;
+  left: 31px;
+}
+
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper #add-another-tweet-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 6px 0px 6px 11px;
+  line-height: 1.5em;
+}
+
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper #add-another-tweet-wrapper .profile-pic {
+  width: 29px;
+  height: 29px;
+  margin-right: 31px;
+}
+
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper #add-another-tweet-wrapper #add-another-tweet {
+  border: solid 1px rgb(29, 155, 240);
+  border-radius: 20px;
+  padding: 0px 11px 0px 11px;
+  font-size: smaller;
 }
 
 /* scrollbar custom styling tryouts */

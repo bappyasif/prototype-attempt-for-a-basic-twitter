@@ -28,7 +28,7 @@ import ListOfAddedMembers from '../user-profile/all-tweets/tweet-top/list-of-add
 import ShowListExistingMembers from '../user-profile/all-tweets/tweet-top/add-members-into-lists/show-existing-members-list';
 import ShowTweetThread from '../user-profile/all-tweets/show-tweet-thread';
 
-function AllRoutes({pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -184,7 +184,7 @@ function AllRoutes({pollVotesCount, handlePollVotesCount, handleQuoteTweetData, 
                 </Route>
 
                 <Route exact path={'/status/tweetID'}>
-                    <ShowTweetThread />
+                    <ShowTweetThread threadedTweetData={threadedTweetData} />
                 </Route>
 
                 {/* {
@@ -396,6 +396,7 @@ function AllRoutes({pollVotesCount, handlePollVotesCount, handleQuoteTweetData, 
                                 showPinnedTweetTag={showPinnedTweetTag}
                                 currentlyPinnedTweetID={currentlyPinnedTweetID}
                                 handlePollVotesCount={handlePollVotesCount}
+                                handleThreadedTweetData={handleThreadedTweetData}
                             />
                         </Route>
                         :

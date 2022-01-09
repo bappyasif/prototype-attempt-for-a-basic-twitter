@@ -46,7 +46,7 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
 
     // initial loading, for check mark visibility on DOM
     useEffect(() => {
-        getDataFromFirestoreSubCollection(currentUser, ID, 'privacy', handlewhichPrivacyOption)
+        ID && getDataFromFirestoreSubCollection(currentUser, ID, 'privacy', handlewhichPrivacyOption)
     }, [])
 
     // converting intial privacyOption to DOM readable text so that chekc mark visibility gets shown on DOM
