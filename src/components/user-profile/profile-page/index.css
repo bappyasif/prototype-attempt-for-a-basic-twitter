@@ -1134,8 +1134,12 @@
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #timestamp-wrapper {
   display: flex;
-  justify-content: space-evenly;
+  /* justify-content: space-evenly; */
   margin: 8px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #timestamp-wrapper #timestamp {
+  margin-right: 6px;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #analytics-activity-wrapper {

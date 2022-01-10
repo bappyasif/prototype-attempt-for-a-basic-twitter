@@ -8,12 +8,12 @@ import { RenderUserTweetText } from '../reuseable-helper-functions'
 import { RenderTweetBottomIcons } from '../tweet-bottom'
 
 function ShowTweetThread({threadedTweetData}) {
-    let {quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = {...threadedTweetData}
-    console.log(ID, tweetText, '::::')
+    let {createdDate, quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = {...threadedTweetData}
+    console.log(ID, tweetText, createdDate, '::::', threadedTweetData)
     return (
         <div id='show-tweet-thread-container'>
             <HeaderComponent />
-            <TweetComponent />
+            {tweetText && <TweetComponent tweetText={tweetText} createdDate={createdDate} />}
             <ReplyThreadComponent />
             <RenderAlreadyRepliedTweets />
         </div>
@@ -103,12 +103,17 @@ let BeforeClickedMarkup = ({handleClicked}) => {
     )
 }
 
-let TweetComponent = () => {
+let TweetComponent = ({tweetText, createdDate}) => {
+    // console.log(new Date(createdDate.seconds))
+    // converting epoch timestamp from seconds to gmt time
+    let timestamp = new Date(createdDate.seconds*1000)
+    let timestampTokens = String(timestamp).split(' ').slice(1, 5)
+    // console.log(timestampTokens, '?!', timestamp)
     return (
         <div id='tweet-component-wrapper'>
             <UserInfo />
-            <RenderUserTweetText tweetText={'tweet text'} />
-            <RenderTweetPostedTimestamp />
+            <RenderUserTweetText tweetText={tweetText || 'dummy text'} />
+            <RenderTweetPostedTimestamp timestampTokens={timestampTokens} />
             <RenderTweetAnalyticsActivity />
             <RenderMoreOptions />
             <RenderTweetPrivacyAnouncement />
@@ -137,13 +142,40 @@ let RenderTweetAnalyticsActivity = () => {
     )
 }
 
-let RenderTweetPostedTimestamp = () => {
+let RenderTweetPostedTimestamp = ({timestampTokens}) => {
+    console.log(timestampTokens, '<><>')
+    let {timeString, dateString} = {...formatTimeAndDate(timestampTokens)}
     return (
         <div id='timestamp-wrapper'>
-            <div id='timestamp'>8:50 PM · Jan 8, 2022</div>
-            <div id='platform'>Twitter Web App</div>
+            {/* <div id='timestamp'>8:50 PM · Jan 8, 2022</div> */}
+            <div id='timestamp'>{timeString} - {dateString}</div>
+            <div id='platform'>- Twitter Web App</div>
         </div>
     )
+}
+
+let formatTimeAndDate = timestamp => {
+    let [hrs, min, sec] = [...timestamp[3].split(':')]
+    let timeString = convertingTime12Hours(hrs, min);
+    // console.log(timeString, '{{{{')
+    let dateString = `${timestamp[0]} ${timestamp[1]}, ${timestamp[2]}`;
+    // console.log(dateString, '}}{"}{}')
+    return {timeString, dateString}
+}
+
+export let convertingTime12Hours = (hrs, min) => {
+    let timeString = ''
+    // console.log(hrs, min, sec, '?!>|')
+    if(hrs > 12 && hrs < 24) {
+        timeString = `${hrs - 12}:${min} PM`
+    } else if(hrs == 12) {
+        timeString = `${hrs}:${min} PM`
+    } else if(hrs == 24) {
+        timeString = `${hrs - 12}:${min} AM`
+    } else {
+        timeString = `${hrs}:${min} AM`
+    }
+    return timeString
 }
 
 let RenderMoreOptions = () => {

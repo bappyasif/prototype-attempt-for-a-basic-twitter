@@ -85,6 +85,7 @@ function UserProfile({handleThreadedTweetData, handlePollVotesCount, currentlyPi
         // when there is a tweet quoted by user, and posted it on profile, updating that count on Firestore
         newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: Number(replyCount + 1)})
         // quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: Number(replyCount + 1)})
+        newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {repliedTweets: [].concat(uniqueID)})
         
         // resetting previous reply count to zero, so that it doesnt invoke route forwarding from tweet bottom 'who can reply' functionality
         quoteTweetID && handleReplyCount(0)

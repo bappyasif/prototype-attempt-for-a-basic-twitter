@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { Component, useEffect, useState } from 'react'
 import AllRoutes from './all-routes'
 import FirebaseApp from './firebase-configs';
-import { addSpecificDataIntoFirestoreCollection, createSubCollectionForCurrentUser, deleteDocFromFirestore, getAllDocsOnce, getSomeDataFromUserMainDocument, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime, updateDataInFirestore } from './firestore-methods';
+import { addSpecificDataIntoFirestoreCollection, getDataFromFirestoreSubCollection, createSubCollectionForCurrentUser, deleteDocFromFirestore, getAllDocsOnce, getSomeDataFromUserMainDocument, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime, updateDataInFirestore } from './firestore-methods';
 import { v4 as uuid } from 'uuid'
 import LandingPageUILogics from './landing-page/ui-logics';
 
@@ -39,8 +39,14 @@ function ComponentsContainer() {
     let [membersList, setMembersList] = useState([])
     let [pollVotesCount, setPollVotesCount] = useState({})
     let [threadedTweetData, setThreadedTweetData] = useState(null)
+    let [repliedTweets, setRepliedTweets] = useState(null)
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
+
+    let handleRepliedTweets = values => {
+        console.log(values, 'chk01')
+        setRepliedTweets([...values])
+    }
 
     let handleThreadedTweetData = (dataset) => setThreadedTweetData(dataset)
 
@@ -216,6 +222,11 @@ function ComponentsContainer() {
     }, [quoteTweetID])
 
     useEffect(() => {
+        quoteTweetData && getDataFromFirestoreSubCollection(currentUser, quoteTweetID, 'repliedTweets', handleRepliedTweets)
+        // quoteTweetData && alert('wtf!!')
+    }, [quoteTweetData])
+
+    useEffect(() => {
         pinnedTweetID && getSpeceficItemFromUserDocs(pinnedTweetID, handlePinnedTweetData)
         // pinnedTweetID && removeSpeceficArrayItem(pinnedTweetID);
         // keeping track whether a new pinned id is detected after already existing pinned tweet id
@@ -308,7 +319,8 @@ function ComponentsContainer() {
     // initialPinnedTweetData && console.log(initialPinnedTweetData, 'initial pinned!!')
     // pinnedTweetID && console.log(pinnedTweetID, 'tweet ID', userDocs)
     // currentList && console.log(currentList, 'currentList')
-    console.log(pollVotesCount, '?!')
+    // console.log(pollVotesCount, '?!')
+    console.log(repliedTweets, '!!repliedTweets')
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
