@@ -1,38 +1,76 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { RenderTweetDataComponent } from '..'
+import { getDataFromFirestoreSubCollection, readDocumentFromFirestoreSubCollection } from '../../../firestore-methods'
 import { tweetPrivacySelected01 } from '../../../tweet-modal'
 import { replyTweetModalIcons } from '../../../tweet-modal/svg-resources'
 import { analyticsIcon, backIcon, tweetAdditionalIconsArray } from '../../profile-page/svg-resources'
 import { RenderUserTweetText } from '../reuseable-helper-functions'
 import { RenderTweetBottomIcons } from '../tweet-bottom'
 
-function ShowTweetThread({threadedTweetData}) {
-    let {createdDate, quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = {...threadedTweetData}
-    console.log(ID, tweetText, createdDate, '::::', threadedTweetData)
+function ShowTweetThread({ threadedTweetData, currentUser }) {
+    let { created, quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...threadedTweetData }
+    console.log(ID, tweetText, created, '::::', threadedTweetData)
     return (
         <div id='show-tweet-thread-container'>
             <HeaderComponent />
-            {tweetText && <TweetComponent tweetText={tweetText} createdDate={createdDate} />}
+            {tweetText && <TweetComponent tweetText={tweetText} createdDate={created} />}
             <ReplyThreadComponent />
-            <RenderAlreadyRepliedTweets />
+            <RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} />
         </div>
     )
 }
 
-let RenderAlreadyRepliedTweets = () => {
-    let content = {
-            tweetText: 'item.tweetText',
-            tweetPrivacy: '02',
-            // ID: 'd7AMxpgBtuNcnBr7XwM9uWvKrmG3',
-        }
+let RenderAlreadyRepliedTweets = ({ currentUser, tweetThreadID }) => {
+    let [repliedTweetsIDs, setRepliedTweetsIDs] = useState(null)
+    let handleLoadingTweetsIDs = data => setRepliedTweetsIDs(data)
+    // let content = {
+    //     tweetText: 'item.tweetText',
+    //     tweetPrivacy: '02',
+    //     // ID: 'd7AMxpgBtuNcnBr7XwM9uWvKrmG3',
+    // }
+    // retriving repliedTweetIDs from firestore
+    useEffect(() => tweetThreadID && getDataFromFirestoreSubCollection(currentUser, tweetThreadID, 'repliedTweets', handleLoadingTweetsIDs), [])
+    // console.log(repliedTweetsIDs, '<< replied tweets IDs >>', tweetThreadID, currentUser)
+
+    let alreadyRepliedTweetsList = () => repliedTweetsIDs && repliedTweetsIDs.map((item, idx) => <RenderRepliedTweet key={item} docID={item} currentUser={currentUser} idx={idx} />)
     return (
         <div id='already-replied-tweets-wrapper'>
-            <RenderTweetDataComponent content={content} />
+            {/* <RenderTweetDataComponent content={content} /> */}
+            {alreadyRepliedTweetsList()}
             <div id='extra-tweet-extension-line'></div>
-            <RenderAddAnotherTweet />
+            {/* <RenderAddAnotherTweet /> */}
         </div>
     )
+}
+
+let RenderRepliedTweet = ({ docID, currentUser, idx }) => {
+    let [dataset, setDataset] = useState(null)
+    let handleDataset = (data) => setDataset(data)
+
+    let markup = '';
+
+    useEffect(() => {
+        docID && readDocumentFromFirestoreSubCollection(currentUser, docID, handleDataset)
+    }, [docID])
+
+    if (dataset) {
+        // let {created, quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = {...dataset}
+        // console.log(docID, 'repliedTweetID!!', dataset, tweetText)
+        // markup = <RenderTweetDataComponent content={dataset} />
+        // return (markup)
+
+        console.log('<<<<checkpoint01>>>>')
+
+        markup = <div className='tweet-ui-wrapper'>
+            <RenderTweetDataComponent content={dataset} currentUser={currentUser} fromTweetThread={true} />
+            {idx == 0 && <RenderAddAnotherTweet />}
+        </div>
+        return (markup)
+    }
+
+    // console.log(docID, 'repliedTweetID!!', dataset, tweetText)
+    return (markup)
 }
 
 let RenderAddAnotherTweet = () => {
@@ -48,7 +86,7 @@ let ReplyThreadComponent = () => {
     let [clicked, setClicked] = useState(false)
     let handleClicked = () => setClicked(true)
     return (
-        <div id='reply-tweet-thread-wrapper' style={{marginBottom: '20px'}}>
+        <div id='reply-tweet-thread-wrapper' style={{ marginBottom: '20px' }}>
             {clicked ? <AfterClickedMarkup /> : <BeforeClickedMarkup handleClicked={handleClicked} />}
         </div>
     )
@@ -80,20 +118,20 @@ let ReplyTweetBottomUI = () => {
     )
 }
 
-let RenderIcon = ({item}) => {
+let RenderIcon = ({ item }) => {
     let [hovered, setHovered] = useState(null)
     let handleHovered = () => setHovered(item.name)
     let handleHoveredReversed = () => setHovered(null)
-    return(
+    return (
         <div id='icon-item-wrapper' onMouseEnter={handleHovered} onMouseLeave={handleHoveredReversed}>
             <div className='svg-icon'>{item.icon}</div>
-            <div className='hoverable-text' style={{display: hovered == item.name ? 'block' : 'none'}}>{item.name}</div>
+            <div className='hoverable-text' style={{ display: hovered == item.name ? 'block' : 'none' }}>{item.name}</div>
         </div>
     )
 }
 
-let BeforeClickedMarkup = ({handleClicked}) => {
-    return(
+let BeforeClickedMarkup = ({ handleClicked }) => {
+    return (
         <div id='before-clicked-markup-wrapper'>
             <img className='profile-pic' src='https://picsum.photos/200/300' />
             <label htmlFor='reply-tweet' />
@@ -103,10 +141,10 @@ let BeforeClickedMarkup = ({handleClicked}) => {
     )
 }
 
-let TweetComponent = ({tweetText, createdDate}) => {
+let TweetComponent = ({ tweetText, createdDate }) => {
     // console.log(new Date(createdDate.seconds))
     // converting epoch timestamp from seconds to gmt time
-    let timestamp = new Date(createdDate.seconds*1000)
+    let timestamp = new Date(createdDate.seconds * 1000)
     let timestampTokens = String(timestamp).split(' ').slice(1, 5)
     // console.log(timestampTokens, '?!', timestamp)
     return (
@@ -122,7 +160,7 @@ let TweetComponent = ({tweetText, createdDate}) => {
 }
 
 let RenderTweetPrivacyAnouncement = () => {
-    return(
+    return (
         <div id='privacy-announcement-wrapper'>
             {poepleMentionePrivacySvg()}
             <div id='announcement-texts'>
@@ -142,9 +180,9 @@ let RenderTweetAnalyticsActivity = () => {
     )
 }
 
-let RenderTweetPostedTimestamp = ({timestampTokens}) => {
+let RenderTweetPostedTimestamp = ({ timestampTokens }) => {
     console.log(timestampTokens, '<><>')
-    let {timeString, dateString} = {...formatTimeAndDate(timestampTokens)}
+    let { timeString, dateString } = { ...formatTimeAndDate(timestampTokens) }
     return (
         <div id='timestamp-wrapper'>
             {/* <div id='timestamp'>8:50 PM · Jan 8, 2022</div> */}
@@ -160,17 +198,17 @@ let formatTimeAndDate = timestamp => {
     // console.log(timeString, '{{{{')
     let dateString = `${timestamp[0]} ${timestamp[1]}, ${timestamp[2]}`;
     // console.log(dateString, '}}{"}{}')
-    return {timeString, dateString}
+    return { timeString, dateString }
 }
 
 export let convertingTime12Hours = (hrs, min) => {
     let timeString = ''
     // console.log(hrs, min, sec, '?!>|')
-    if(hrs > 12 && hrs < 24) {
+    if (hrs > 12 && hrs < 24) {
         timeString = `${hrs - 12}:${min} PM`
-    } else if(hrs == 12) {
+    } else if (hrs == 12) {
         timeString = `${hrs}:${min} PM`
-    } else if(hrs == 24) {
+    } else if (hrs == 24) {
         timeString = `${hrs - 12}:${min} AM`
     } else {
         timeString = `${hrs}:${min} AM`

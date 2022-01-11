@@ -28,6 +28,8 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, us
 
     if(scheduledTimeStamp) refinedData.scheduledTimeStamp = scheduledTimeStamp
 
+    refinedData.repliedTweets = []; // bringing in repliedTweets into firestore subcollection as well
+
     if(gifItem || imgFile || tweetText || extraTweet || extraImgFile || extraGifItem) {
         // let docRef = doc(db, 'tweets-data/', docID);
         let docRef = doc(db, 'tweets-user', userID, userID, docID)
@@ -193,8 +195,8 @@ export let getUserProfileData = (userID, dataLoader) => {
     .then(docSnap => {
         if(docSnap.exists) {
             let userProfileData = docSnap.data().profileInfo;
-            dataLoader(userProfileData)
-            console.log('data is now loaded')
+            userProfileData && dataLoader(userProfileData)
+            userProfileData && console.log('data is now loaded', userProfileData)
         } else {
             console.log('no such document found')
         }
@@ -294,6 +296,20 @@ export let updateDataInFirestore = (userID, docID, data) => {
     updateDoc(docRef, data)
     .then(() => console.log('data been updated successfuly'))
     .catch(err=>console.log('data update has failed', err.code, err.message))
+}
+
+export let readDocumentFromFirestoreSubCollection = (userID, docID, dataLoader) => {
+    let docRef = doc(db, 'tweets-user', userID, userID, docID)
+    getDoc(docRef)
+    .then(docSnap => {
+        if(docSnap.exists) {
+            let dataset = docSnap.data();
+            dataset && dataLoader(dataset)
+            dataset && console.log('document loading was successful')
+        } else {
+            console.log('document was not found!!')
+        }
+    }).catch(err => console.log('docuemnt fetched has failed', err.code, err.message))
 }
 
 export let getDataFromFirestoreSubCollection = (userID, docID, whichData, dataLoader) => {

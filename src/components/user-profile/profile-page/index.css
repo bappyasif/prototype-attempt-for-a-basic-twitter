@@ -381,7 +381,7 @@
 }
 
 .rendering-tweet-data-container {
-  padding-bottom: 9px;
+  padding-bottom: 18px;
   position: relative;
 }
 
@@ -870,6 +870,11 @@
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons .hoverable-div .hoverable-div-tooltips-text {
   position: absolute;
   /* margin-top: 42px; */
+  background-color: silver;
+  line-height: 1.5em;
+  padding: 0px 8px 0px 8px;
+  border-radius: 6px;
+  left: -8px;
 }
 
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #reply .hoverable-div-tooltips-text,
@@ -1301,7 +1306,7 @@
 
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper {
   position: relative;
-  padding: 8px 11px 6px 8px;
+  /* padding: 8px 11px 6px 8px; */
 }
 
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .rendering-tweet-data-container .right-side {
@@ -1314,16 +1319,16 @@
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper #extra-tweet-extension-line {
   width: 2px;
   background-color: silver;
-  height: 98.7px;
+  height: 90.8px;
   position: absolute;
   top: 56px;
-  left: 31px;
+  left: 32.3px;
 }
 
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper #add-another-tweet-wrapper {
   display: flex;
   align-items: center;
-  margin: 6px 0px 6px 11px;
+  margin: 10px 0px 6px 11px;
   line-height: 1.5em;
 }
 
@@ -1338,6 +1343,24 @@
   border-radius: 20px;
   padding: 0px 11px 0px 11px;
   font-size: smaller;
+}
+
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper .rendering-tweet-data-container {
+  padding-bottom: 9px;
+}
+
+/* #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .rendering-tweet-data-container, */
+/* #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper .rendering-tweet-data-container, */
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper {
+  /* margin-bottom: 11px; */
+  border-bottom: solid 1px silver;
+  padding: 8px 9px 11px 8px;
+}
+
+/* #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .rendering-tweet-data-container:hover, */
+/* #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper .rendering-tweet-data-container:hover, */
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper:hover {
+  background-color: lightgrey;
 }
 
 /* scrollbar custom styling tryouts */

@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 import { getDataFromFirestoreSubCollection, updateDataInFirestore } from '../../../firestore-methods'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 
-export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount }) => {
+export let RenderTweetBottomIcons = ({ fromTweetThread, elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount }) => {
     let [hoveredID, setHoveredID] = useState('')
     let [iconClicked, setIconClicked] = useState('')
     let [showModal, setShowModal] = useState(false)
@@ -100,7 +100,8 @@ export let RenderTweetBottomIcons = ({ elem, extraTwee, extraEen, tweetData, han
     }
 
     let loadInitialReplyCount = () => {
-        getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleInitialReplyCount )
+        // console.log(fromTweetThread, '<<<<chjecking>>>>')
+        !fromTweetThread && getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleInitialReplyCount )
     }
 
     let handleQuoteTweetCount = () => {

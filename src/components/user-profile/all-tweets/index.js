@@ -65,10 +65,10 @@ function AllTweetsPage({ handleThreadedTweetData, handlePollVotesCount, currentl
                 scheduledTime: item.scheduledTimeStamp,
                 ID: ID,
                 quotedTweetID: item.quoteTweetID,
-                createdDate: item.created
+                created: item.created
             }
         } else {
-            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID, quotedTweetID: item.quoteTweetID, createdDate: item.created }
+            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID, quotedTweetID: item.quoteTweetID, created: item.created }
         }
 
         return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} handlePollVotesCount={handlePollVotesCount} handleThreadedTweetData={handleThreadedTweetData} />
@@ -150,7 +150,7 @@ let PinnedTweetUI = () => {
     )
 }
 
-export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount, handleThreadedTweetData }) => {
+export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount, handleThreadedTweetData, fromTweetThread }) => {
     let {quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (pictureFile || extraPictureFile) ? showImg(extra != 'extra' ? pictureFile : extraPictureFile) : ''
@@ -159,7 +159,7 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
     let handleInitialReplyCount = (val) => setInitialReplyCount(val)
 
-    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} replyCount={replyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} />)
+    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} replyCount={replyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} fromTweetThread={fromTweetThread} />)
     
     console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount)
 
@@ -179,7 +179,8 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
                 {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} />}
 
-                {quotedTweetID && <GetReplyToInformation currentUser={currentUser} />}
+                {/* {quotedTweetID && <GetReplyToInformation currentUser={currentUser} />} */}
+                {(quotedTweetID || fromTweetThread) && <GetReplyToInformation currentUser={currentUser} />}
 
                 <div className='tweet-text'>{tweetText}</div>
 
@@ -211,7 +212,8 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
                         {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} />}
 
-                        {quotedTweetID && <GetReplyToInformation currentUser={currentUser} />}
+                        {/* {quotedTweetID && <GetReplyToInformation currentUser={currentUser} />} */}
+                        {(quotedTweetID || fromTweetThread) && <GetReplyToInformation currentUser={currentUser} />}
 
                         <div className='tweet-text'>{tweetText}</div>
 
