@@ -40,12 +40,13 @@
   display: flex;
   align-items: center;
   width: 168px;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 #tweet-container #pinned-tweet-ui-wrapper #svg-icon {
   fill: silver;
   transform: scale(.89);
+  margin-left: 13px;
 }
 
 /* #profile-page-container  */
@@ -398,8 +399,9 @@
 .rendering-tweet-data-container .right-side {
   width: -webkit-fill-available;
   text-align: left;
-  margin-left: 20px;
-  margin-top: 6px;
+  /* margin-left: 20px;
+  margin-top: 6px; */
+  margin: 6px 15px 4px 33px;
 }
 
 .rendering-tweet-data-container .right-side .tweet-top {
@@ -856,7 +858,8 @@
 
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons {
   margin-bottom: 4px;
-  margin-right: 20px;
+  /* margin-right: 20px; */
+  margin-right: 4px;
   position: relative;
 }
 
@@ -875,6 +878,7 @@
   padding: 0px 8px 0px 8px;
   border-radius: 6px;
   left: -8px;
+  font-size: smaller;
 }
 
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #reply .hoverable-div-tooltips-text,
@@ -886,7 +890,7 @@
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #like .hoverable-div-tooltips-text,
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #like-een .hoverable-div-tooltips-text,
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #like-twee .hoverable-div-tooltips-text {
-  transform: translate(0px, -5px);
+  transform: translate(2px, -4px);
 }
 
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .hoverable-div-tooltips-text,
@@ -1297,6 +1301,17 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 4px;
+  position: relative;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper .progressbar-wrapper {
+  margin-left: 132px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #emoji-picker-container {
+  top: 51px;
+  width: 657px;
+  z-index: 99;
 }
 
 #components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #replying-to {
@@ -1312,14 +1327,15 @@
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .rendering-tweet-data-container .right-side {
   width: -webkit-fill-available;
   text-align: left;
-  margin-left: 36px;
-  margin-top: 6px;
+  /* margin-left: 36px;
+  margin-top: 6px; */
+  margin: 6px 15px 4px 33px;
 }
 
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper #extra-tweet-extension-line {
   width: 2px;
   background-color: silver;
-  height: 90.8px;
+  height: 83.9px;
   position: absolute;
   top: 56px;
   left: 32.3px;
@@ -1328,8 +1344,13 @@
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper #add-another-tweet-wrapper {
   display: flex;
   align-items: center;
-  margin: 10px 0px 6px 11px;
+  margin: 2px 0px 0px 0px;
   line-height: 1.5em;
+  padding: 9px 0px 9px 19px;
+}
+
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper #add-another-tweet-wrapper:hover {
+  background-color: gray;
 }
 
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper #add-another-tweet-wrapper .profile-pic {
@@ -1349,12 +1370,16 @@
   padding-bottom: 9px;
 }
 
+#components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper .rendering-tweet-data-container .left-side {
+  margin-left: 9px;
+}
+
 /* #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .rendering-tweet-data-container, */
 /* #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper .rendering-tweet-data-container, */
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper {
   /* margin-bottom: 11px; */
   border-bottom: solid 1px silver;
-  padding: 8px 9px 11px 8px;
+  padding: 2px 0px 2px 0px;
 }
 
 /* #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .rendering-tweet-data-container:hover, */

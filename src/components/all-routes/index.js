@@ -184,7 +184,7 @@ function AllRoutes({repliedTweets, threadedTweetData, handleThreadedTweetData, p
                 </Route>
 
                 <Route exact path={'/status/tweetID'}>
-                    <ShowTweetThread threadedTweetData={threadedTweetData} currentUser={currentUser} />
+                    <ShowTweetThread threadedTweetData={threadedTweetData} currentUser={currentUser} uniqueID={uniqueID} updateData={updateData} />
                 </Route>
 
                 {/* {

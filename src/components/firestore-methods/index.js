@@ -14,7 +14,7 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, us
 
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
-    // console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia)
+    console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, data)
 
     let refinedData;
     if (extraImgFile && imgFile) {

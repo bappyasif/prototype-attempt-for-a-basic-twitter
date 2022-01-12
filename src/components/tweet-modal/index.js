@@ -81,7 +81,7 @@ function TweetModal({handlePollVotesCount, pollVotesCount, handleQuoteTweetID, q
     useEffect(() => setExtraTweetText(''), [!readyTweetPublish])
 
     useEffect(() => {
-        quoteTweetData && console.log('quote data', quoteTweetData)
+        // quoteTweetData && console.log('quote data', quoteTweetData)
         if(quoteTweetData) {
             // setAddExtraTweetClicked(true)
             // setExtraTweetText('')
@@ -95,7 +95,7 @@ function TweetModal({handlePollVotesCount, pollVotesCount, handleQuoteTweetID, q
         // setSelectedFile(evt.target.files[0])
         !addExtraTweetClicked && setSelectedFile(evt.target.files[0])
         addExtraTweetClicked && setExtraSelectedFile(evt.target.files[0])
-        addExtraTweetClicked && console.log('yehe')
+        // addExtraTweetClicked && console.log('yehe')
     }
 
     let removeImageHandler = () => {
@@ -517,7 +517,7 @@ let GridDemo = ({ onGifClick, isGifIconClicked }) => {
     return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon'>{deleteIcon()}</span><input id='gif-search' /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} /></div>
 }
 
-let UploadFile = ({ chnageHandler, inputRef }) => {
+export let UploadFile = ({ chnageHandler, inputRef }) => {
     return <input type='file' ref={inputRef} name='image-file' onChange={chnageHandler} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
 }
 
