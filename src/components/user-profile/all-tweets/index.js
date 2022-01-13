@@ -50,23 +50,24 @@ function AllTweetsPage({ handleThreadedTweetData, handlePollVotesCount, currentl
         let content
 
         if (item.medias.gif || item.medias.picture || item.medias.extraPicture || item.medias.extraGif) {
-            content = {
-                tweetText: item.tweetText,
-                extraTweet: item.extraTweet,
-                gifFile: item.medias.gif,
-                extraGifFile: item.medias.extraGif,
-                picture: item.medias.picture,
-                extraPictureFile: item.medias.extraPicture,
-                tweetPrivacy: item.privacy,
-                firstTweetHasMedia: item.firstTweetHasMedia,
-                secondTweetHasMedia: item.secondTweetHasMedia,
-                tweetPoll: item.tweetPoll,
-                extraPoll: item.extraPoll,
-                scheduledTime: item.scheduledTimeStamp,
-                ID: ID,
-                quotedTweetID: item.quoteTweetID,
-                created: item.created
-            }
+            content = sanitizeDatasetForRendering(item)
+            // content = {
+            //     tweetText: item.tweetText,
+            //     extraTweet: item.extraTweet,
+            //     gifFile: item.medias.gif,
+            //     extraGifFile: item.medias.extraGif,
+            //     picture: item.medias.picture,
+            //     extraPictureFile: item.medias.extraPicture,
+            //     tweetPrivacy: item.privacy,
+            //     firstTweetHasMedia: item.firstTweetHasMedia,
+            //     secondTweetHasMedia: item.secondTweetHasMedia,
+            //     tweetPoll: item.tweetPoll,
+            //     extraPoll: item.extraPoll,
+            //     scheduledTime: item.scheduledTimeStamp,
+            //     ID: ID,
+            //     quotedTweetID: item.quoteTweetID,
+            //     created: item.created
+            // }
         } else {
             content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID, quotedTweetID: item.quoteTweetID, created: item.created }
         }
@@ -126,6 +127,26 @@ function AllTweetsPage({ handleThreadedTweetData, handlePollVotesCount, currentl
             <TopicsPickerInTimeline />
         </div>
     )
+}
+
+export let sanitizeDatasetForRendering = item => {
+    return {
+        tweetText: item.tweetText,
+        extraTweet: item.extraTweet,
+        gifFile: item.medias.gif,
+        extraGifFile: item.medias.extraGif,
+        picture: item.medias.picture,
+        extraPictureFile: item.medias.extraPicture,
+        tweetPrivacy: item.privacy,
+        firstTweetHasMedia: item.firstTweetHasMedia,
+        secondTweetHasMedia: item.secondTweetHasMedia,
+        tweetPoll: item.tweetPoll,
+        extraPoll: item.extraPoll,
+        scheduledTime: item.scheduledTimeStamp,
+        ID: item.ID,
+        quotedTweetID: item.quoteTweetID,
+        created: item.created
+    }
 }
 
 let GetReplyToInformation = ({currentUser}) => {

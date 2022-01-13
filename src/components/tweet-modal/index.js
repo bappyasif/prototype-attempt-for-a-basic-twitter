@@ -10,8 +10,10 @@ import TweetWordCount from './tweet-word-count';
 import ContentInComposeTweet from '../compose-tweet/content-in-compose-tweet';
 import { Link } from 'react-router-dom';
 import { RenderAnalysingUserTweet, RenderUserTweet } from '../user-profile/all-tweets/tweet-top/analytics-ui';
+import GifModal from './gif-modal';
 
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
+// var giphyQueryURL = "https://api.giphy.com/v1/gifs/search?";
 
 function TweetModal({handlePollVotesCount, pollVotesCount, handleQuoteTweetID, quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
@@ -317,7 +319,8 @@ function TweetModal({handlePollVotesCount, pollVotesCount, handleQuoteTweetID, q
 
                     <UploadFile chnageHandler={fileUploadChangeHandler} inputRef={inputRef} />
 
-                    <GridDemo onGifClick={onGifClick} isGifIconClicked={isGifIconClicked} />
+                    {/* <GridDemo onGifClick={onGifClick} isGifIconClicked={isGifIconClicked} /> */}
+                    <GifModal onGifClick={onGifClick} isGifIconClicked={isGifIconClicked} gridWidth={960} gridCollumn={3} />
 
                     <TweetOptionsDropDown tweetOptions={tweetOptions} />
 
@@ -509,12 +512,55 @@ export let tweetPrivacySelected02 = (color, text) => <span className='privacy-sp
 
 export let tweetPrivacySelected03 = (color, text) => <span className='privacy-spans'>{text != ' ' && <span className='privacy-svg'>{mentionedIcon(color ? color : 'rgb(29, 155, 240)')}</span>}<span className='privacy-text'>{text || 'Only people you mention'}</span></span>
 
-let GridDemo = ({ onGifClick, isGifIconClicked }) => {
-    const fetchGifs = (offset) =>
-        giphyFetch.trending({ offset, limit: 10 });
-    const [width, setWidth] = useState(window.innerWidth);
+export let GridDemo = ({ onGifClick, isGifIconClicked }) => {
+    let [gifSearchingText, setGifSearchingText] = useState('')
+
+    // var giphySearchApiParams = {
+    //     q: gifSearchingText,
+    //     limit: 10,
+    //     api_key: "sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh",
+    //     fmt: "json"
+    //   };
+
+    let handleGifSearching = (value) => setGifSearchingText(value)
+
+    let [width, setWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        setWidth('760')
+    }, [])
+
     // const [width, setWidth] = useState('470px');
-    return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon'>{deleteIcon()}</span><input id='gif-search' /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} /></div>
+    // return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span><SearchGif handleGifSearching={handleGifSearching} /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} /></div>
+    // return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span><SearchGif handleGifSearching={handleGifSearching} /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={gifSearchingText ? fetchSearchedGifs : fetchGifs} width={width / 2} columns={2} /></div>
+    return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span><SearchGif handleGifSearching={handleGifSearching} /></div>{gifSearchingText ? <FetchSearchedGifs onGifClick={onGifClick} width={width} gifSearchingText={gifSearchingText} /> : <InitialFetchedGifs onGifClick={onGifClick} width={width} />}</div>
+}
+
+let FetchSearchedGifs = ({gifSearchingText, width, onGifClick}) => {
+    // let fetchGifs = (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 });
+    // let fetchGifs = (offset) => giphyFetch.search('dogs', { offset, limit: 10 });
+    let fetchGifs = async (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 });
+    // let fetchGifs;
+    // useEffect(() => fetchGifs = (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 }), [gifSearchingText])
+    return (
+        <Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} />
+    )
+}
+
+let InitialFetchedGifs = ({onGifClick, width}) => {
+    let fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
+    return (
+        <Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} />
+    )
+}
+
+let SearchGif = ({handleGifSearching}) => {
+    let [searchText, setSearchText] = useState('')
+    let handleSearchText = evt => setSearchText(evt.target.value)
+    useEffect(() => searchText && handleGifSearching(searchText), [searchText])
+    return(
+        <input id='gif-search' placeholder='search your gifs here....' onChange={handleSearchText} />
+    )
 }
 
 export let UploadFile = ({ chnageHandler, inputRef }) => {
@@ -522,3 +568,42 @@ export let UploadFile = ({ chnageHandler, inputRef }) => {
 }
 
 export default TweetModal
+
+
+/**
+ * 
+ * 
+ export let GridDemo = ({ onGifClick, isGifIconClicked }) => {
+    let [gifSearchingText, setGifSearchingText] = useState('')
+    let handleGifSearching = (value) => setGifSearchingText(value)
+
+    // const fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
+    // const [width, setWidth] = useState(window.innerWidth);
+
+    // let fetchGifs = null;
+    let fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
+    let [width, setWidth] = useState(window.innerWidth);
+
+    let fetchSearchedGifs = offset => giphyFetch.search(gifSearchingText, { offset, limit: 10 });
+
+    // useEffect(() => {
+    //     if(gifSearchingText.length >=2) {
+    //         fetchGifs = (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 });
+    //         console.log('<<here>>', gifSearchingText, fetchGifs)
+    //     } 
+    //     // else {
+    //     //     // fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
+    //     // }
+    // }, [gifSearchingText])
+
+    useEffect(() => {
+        setWidth('760')
+        // fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
+    }, [])
+
+    // const [width, setWidth] = useState('470px');
+    // return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span><SearchGif handleGifSearching={handleGifSearching} /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} /></div>
+    // return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span><SearchGif handleGifSearching={handleGifSearching} /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={gifSearchingText ? fetchSearchedGifs : fetchGifs} width={width / 2} columns={2} /></div>
+    return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span><SearchGif handleGifSearching={handleGifSearching} /></div>{gifSearchingText ? <FetchSearchedGifs onGifClick={onGifClick} width={width} gifSearchingText={gifSearchingText} /> : <InitialFetchedGifs onGifClick={onGifClick} width={width} />}</div>
+}
+ */

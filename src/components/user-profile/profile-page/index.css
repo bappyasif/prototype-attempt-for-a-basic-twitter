@@ -1314,6 +1314,29 @@
   z-index: 99;
 }
 
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #gif-container {
+  position: absolute;
+  top: 38px;
+  left: 0px;
+  background-color: whitesmoke;
+  padding: 0px;
+  z-index: 99;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #gif-container #gif-top {
+  justify-content: flex-start;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #gif-container #gif-top #gif-search {
+  width: -webkit-fill-available;
+  border-radius: 99px;
+  padding-left: 11px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #reply-tweet-modal-wrapper #gif-container .grid-component {
+  padding: 0px;
+}
+
 #components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #replying-to {
   text-align: left;
   margin-left: 85px;

@@ -101,7 +101,7 @@ export let RenderTweetBottomIcons = ({ fromTweetThread, elem, extraTwee, extraEe
 
     let loadInitialReplyCount = () => {
         // console.log(fromTweetThread, '<<<<chjecking>>>>')
-        !fromTweetThread && getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleInitialReplyCount )
+        !fromTweetThread && tweetData.ID && getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleInitialReplyCount )
     }
 
     let handleQuoteTweetCount = () => {
