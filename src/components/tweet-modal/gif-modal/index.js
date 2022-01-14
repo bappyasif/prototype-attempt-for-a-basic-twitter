@@ -9,22 +9,26 @@ function GifModal({ onGifClick, isGifIconClicked, gridWidth, gridCollumn }) {
 
     const [width, setWidth] = useState(window.innerWidth);
 
+//     let [text, setText] = useState('')
+//   let handleText = evt => setText(evt.target.value)
+
     let handleGifSearching = (evt) => {
-        alert('!!')
+        // alert('!!')
         setGifSearchingText(evt.target.value)
     }
 
     // const fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
     let fetchGifs = (offset=1) => {
+        console.log('?!!?', gifSearchingText)
         return gifSearchingText ? giphyFetch.search(gifSearchingText,{ offset, limit: 10 }) : giphyFetch.trending({ offset, limit: 10 });
     }
 
     useEffect(() => {
-        // fetchGifs(1)
-        console.log('?!!?')
+        gifSearchingText && fetchGifs()
+        // console.log('?!!?')
     }, [gifSearchingText])
 
-    console.log('?!!?', gifSearchingText)
+    // console.log('?!!?', gifSearchingText)
 
     useEffect(() => {
         setWidth(gridWidth ? gridWidth : window.innerWidth)
@@ -36,9 +40,11 @@ function GifModal({ onGifClick, isGifIconClicked, gridWidth, gridCollumn }) {
         <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}>
             <div id='gif-top'>
                 <span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span>
-                <SearchGif handleGifSearching={handleGifSearching} />
+                {/* <SearchGif handleGifSearching={handleGifSearching} /> */}
+                {/* <input id='gif-search' placeholder='search term' onChange={handleText} value={text} /> */}
+                <input type={'text'} id='gif-search' placeholder='search your gifs here....' onChange={handleGifSearching} value={gifSearchingText} />
             </div>
-            <Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={gridCollumn ? gridCollumn : 2} />
+            <Grid onGifClick={onGifClick} className='grid-component' key={gifSearchingText} fetchGifs={fetchGifs} width={width / 2} columns={gridCollumn ? gridCollumn : 2} />
         </div>
     )
 }
@@ -60,7 +66,12 @@ let SearchGif = ({handleGifSearching}) => {
     // console.log(searchText, '[!!!!]')
     return(
         // <input id='gif-search' placeholder='search your gifs here....' onChange={handleGifSearching} />
-        <input type={'text'} id='gif-search' placeholder='search your gifs here....' onChange={handleSearchText} value={searchText} />
+        // <input type={'text'} id='gif-search' placeholder='search your gifs here....' onChange={handleSearchText} value={searchText} />
+        <input type={'text'} id='gif-search' placeholder='search your gifs here....' onKeyPress={handleSearchText} value={searchText} />
+        // <label>{searchText}
+        // <p>{searchText}</p>
+        //     <input type={'text'} id='gif-search' placeholder='search your gifs here....' onChange={handleSearchText} value={searchText} />
+        // </label>
     )
 }
 

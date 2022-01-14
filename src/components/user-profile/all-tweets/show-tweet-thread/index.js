@@ -7,11 +7,13 @@ import { downloadTweetPictureUrlFromStorage, uploadTweetPictureUrlToStorage } fr
 import { getDataFromFirestoreSubCollection, readDocumentFromFirestoreSubCollection, updateDataInFirestore, writeDataIntoCollection } from '../../../firestore-methods'
 import { tweetPrivacySelected01, UploadFile, GridDemo } from '../../../tweet-modal'
 import EmojiPicker from '../../../tweet-modal/emoji-picker'
+import GifModal from '../../../tweet-modal/gif-modal'
 import { replyTweetModalIcons } from '../../../tweet-modal/svg-resources'
 import TweetWordCount from '../../../tweet-modal/tweet-word-count'
 import { analyticsIcon, backIcon, tweetAdditionalIconsArray } from '../../profile-page/svg-resources'
 import { RenderUserTweetText } from '../reuseable-helper-functions'
 import { RenderTweetBottomIcons } from '../tweet-bottom'
+import TagLocation from './tag-location'
 
 function ShowTweetThread({ threadedTweetData, currentUser, uniqueID, updateData }) {
     let { created, quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...threadedTweetData }
@@ -113,6 +115,10 @@ let AfterClickedMarkup = ({handleClicked, currentUser, threadedTweetData, unique
 
     let [showGifPickerModal, setShowGifPickerModal] = useState(false)
 
+    let [showTagLocationModal, setShowTagLocationModal] = useState(false)
+
+    let handleTagLocationModal = () => setShowTagLocationModal(!showTagLocationModal)
+
     let handleGifFile = (gif, evt) => {
         evt.preventDefault();
         setGifFile(gif)
@@ -146,12 +152,13 @@ let AfterClickedMarkup = ({handleClicked, currentUser, threadedTweetData, unique
                 <input id='tweet-reply' placeholder='Tweet your reply' onChange={handleTweetText} maxLength={100} value={tweetText} />
             </div>
             {(imgFile || gifFile) && <ContentInComposeTweet selectedFile={imgFile} gifFile={gifFile} gifWidth={gifFile && 423} />}
-            <ReplyTweetBottomUI showGifPickerModal={showGifPickerModal} handleShowGifPickerModal={handleShowGifPickerModal} gifFile={gifFile} handleGifFile={handleGifFile} imgFile={imgFile} handleImgFileChanges={handleImgFileChanges} imgRef={imgRef} replyingTweetText={tweetText} handleUnicodeFromEmoji={handleUnicodeFromEmoji} cleanupRepliedTweetText={handleRemoveExistingText} handleClicked={handleClicked} handleLoadingTweetsIDs={handleLoadingTweetsIDs} currentUser={currentUser} threadedTweetData={threadedTweetData} tweetText={tweetText} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} />
+            {showTagLocationModal && <TagLocation />}
+            <ReplyTweetBottomUI handleTagLocationModal={handleTagLocationModal} showGifPickerModal={showGifPickerModal} handleShowGifPickerModal={handleShowGifPickerModal} gifFile={gifFile} handleGifFile={handleGifFile} imgFile={imgFile} handleImgFileChanges={handleImgFileChanges} imgRef={imgRef} replyingTweetText={tweetText} handleUnicodeFromEmoji={handleUnicodeFromEmoji} cleanupRepliedTweetText={handleRemoveExistingText} handleClicked={handleClicked} handleLoadingTweetsIDs={handleLoadingTweetsIDs} currentUser={currentUser} threadedTweetData={threadedTweetData} tweetText={tweetText} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} />
         </div>
     )
 }
 
-let ReplyTweetBottomUI = ({showGifPickerModal, handleShowGifPickerModal, gifFile, handleGifFile, imgFile, handleImgFileChanges, imgRef, replyingTweetText, handleUnicodeFromEmoji, cleanupRepliedTweetText, handleClicked, currentUser, threadedTweetData, tweetText, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs}) => {
+let ReplyTweetBottomUI = ({handleTagLocationModal, showGifPickerModal, handleShowGifPickerModal, gifFile, handleGifFile, imgFile, handleImgFileChanges, imgRef, replyingTweetText, handleUnicodeFromEmoji, cleanupRepliedTweetText, handleClicked, currentUser, threadedTweetData, tweetText, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs}) => {
     let [showEmojiPicker, setShowEmojiPicker] = useState(false);
     // let [showGifPickerModal, setShowGifPickerModal] = useState(false)
     let [isUploadPictureToStorageDone, setIsUploadPictureToStorageDone] = useState(false)
@@ -215,13 +222,14 @@ let ReplyTweetBottomUI = ({showGifPickerModal, handleShowGifPickerModal, gifFile
     }
 
     let nameChecks = name => (name == 'Poll' || name == 'Schedule Tweet') ? true : false;
-    let renderIcons = () => replyTweetModalIcons().map(item => !nameChecks(item.name) && <RenderIcon key={item.name} item={item} handleShowEmojiPicker={handleShowEmojiPicker} imgRef={imgRef} handleShowGifPickerModal={handleShowGifPickerModal} />)
+    let renderIcons = () => replyTweetModalIcons().map(item => !nameChecks(item.name) && <RenderIcon key={item.name} item={item} handleShowEmojiPicker={handleShowEmojiPicker} imgRef={imgRef} handleShowGifPickerModal={handleShowGifPickerModal} handleTagLocationModal={handleTagLocationModal} />)
 
     return (
         <div id='reply-tweet-modal-wrapper'>
             <div id='icons-wrapper'>{renderIcons()}</div>
             {showEmojiPicker && <EmojiPicker tweetText={replyingTweetText} setTweetText={handleUnicodeFromEmoji} isIconClicked={showEmojiPicker} />}
-            {showGifPickerModal && <GridDemo onGifClick={handleGifFile} isGifIconClicked={showGifPickerModal}  />}
+            {/* {showGifPickerModal && <GridDemo onGifClick={handleGifFile} isGifIconClicked={showGifPickerModal}  />} */}
+            {showGifPickerModal && <GifModal onGifClick={handleGifFile} isGifIconClicked={showGifPickerModal} gridWidth={760} />}
             <UploadFile chnageHandler={handleImgFileChanges} inputRef={imgRef} />
             {/* {gifFile && <Gif width={461} height={290} gif={gifFile} />} */}
             {replyingTweetText && replyingTweetText.length && <TweetWordCount wordCount={replyingTweetText.length} />}
@@ -230,12 +238,13 @@ let ReplyTweetBottomUI = ({showGifPickerModal, handleShowGifPickerModal, gifFile
     )
 }
 
-let RenderIcon = ({ item, handleShowEmojiPicker, imgRef, handleShowGifPickerModal }) => {
+let RenderIcon = ({ item, handleTagLocationModal, handleShowEmojiPicker, imgRef, handleShowGifPickerModal }) => {
     let [hovered, setHovered] = useState(null)
     // let [clicked, setClicked] = useState(null)
     let handleClicked = () => {
         // console.log(item.name)
         // setClicked(item.name)
+        if(item.name == 'Tag Location') handleTagLocationModal()
         if(item.name == 'GIF') handleShowGifPickerModal()
         if(item.name == 'media') imgRef.current.click()
         item.name == 'emoji' && handleShowEmojiPicker()

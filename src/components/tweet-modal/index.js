@@ -15,7 +15,7 @@ import GifModal from './gif-modal';
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 // var giphyQueryURL = "https://api.giphy.com/v1/gifs/search?";
 
-function TweetModal({handlePollVotesCount, pollVotesCount, handleQuoteTweetID, quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
+function TweetModal({ handlePollVotesCount, pollVotesCount, handleQuoteTweetID, quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -84,12 +84,12 @@ function TweetModal({handlePollVotesCount, pollVotesCount, handleQuoteTweetID, q
 
     useEffect(() => {
         // quoteTweetData && console.log('quote data', quoteTweetData)
-        if(quoteTweetData) {
+        if (quoteTweetData) {
             // setAddExtraTweetClicked(true)
             // setExtraTweetText('')
             // setTweetText(quoteTweetData[0].tweetText)
             // setTweetPrivacy(quoteTweetData[0].privacy)
-            
+
         }
     }, [quoteTweetData])
 
@@ -171,7 +171,7 @@ function TweetModal({handlePollVotesCount, pollVotesCount, handleQuoteTweetID, q
     // quoteTweetData && quoteTweetData.medias.gif && console.log(quoteTweetData.medias.gif)
 
     return (
-        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((extraGifFile && gifFile) || (selectedFile && extraSelectedFile)) && isPrimaryTweetClicked) ? '1104px' : ((extraGifFile || extraSelectedFile) && isPrimaryTweetClicked) ? '731px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >    
+        <div id='tweet-modal' style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((extraGifFile && gifFile) || (selectedFile && extraSelectedFile)) && isPrimaryTweetClicked) ? '1104px' : ((extraGifFile || extraSelectedFile) && isPrimaryTweetClicked) ? '731px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} >
             <div className='upper-content'>
                 {/* <span id='delete-icon' onClick={closeTweetModalHandler}>{deleteIcon()}</span> */}
                 {/* <span id='delete-icon' onClick={closeTweetModalHandler}><Link to='/username'>{deleteIcon()}</Link></span> */}
@@ -195,10 +195,10 @@ function TweetModal({handlePollVotesCount, pollVotesCount, handleQuoteTweetID, q
                 {(!selectedFile || !gifFile || !firstTweetHasPoll || !firstTweetHasGif) && <p id='line-extension' style={{ display: addExtraTweetClicked && !isPrimaryTweetClicked && !firstTweetHasPoll ? 'block' : 'none' }}></p>}
                 {<p id='line-extension-with-two-gifs-and-not-primary-selected' style={{ display: addExtraTweetClicked && !isPollIconClicked && !isPrimaryTweetClicked && !quoteTweetData ? 'block' : 'none' }}></p>}
                 {<p id='line-extension-with-two-gifs-and-when-primary-is-selected' style={{ display: addExtraTweetClicked && isPrimaryTweetClicked && firstTweetHasGif ? 'block' : 'none' }}></p>}
-                
+
                 {(firstTweetHasPoll && !isPollIconClickedForExtraTweet) && <p id='line-extension-when-first-tweet-has-poll-and-second-is-none' style={{ display: addExtraTweetClicked && !isPrimaryTweetClicked ? 'block' : 'none' }}></p>}
                 {(firstTweetHasPoll && !isPollIconClickedForExtraTweet && isBothTextareaExist && isPrimaryTweetClicked) && <p id='line-extension-when-first-tweet-has-poll-and-second-is-none-and-primary-tweet-is-selected' style={{ display: addExtraTweetClicked && !isPrimaryTweetClicked ? 'block' : 'none' }}></p>}
-                
+
                 {(selectedFile) && <p id='line-extension-with-media' style={{ display: (isBothTextareaExist && isPrimaryTweetClicked) ? 'block' : 'none' }}></p>}
                 {(firstTweetHasPoll) && <p id='line-extension-with-poll' style={{ display: (isBothTextareaExist && isPrimaryTweetClicked) ? 'block' : 'none' }}></p>}
 
@@ -462,7 +462,7 @@ let TweetPrivacySelected = ({ setTweetOptions, tweetPrivacy, setTweetPrivacy }) 
     return <span id='options-selected'>{tweetPrivacy == '01' ? tweetPrivacySelected01() : tweetPrivacy == '02' ? tweetPrivacySelected02() : tweetPrivacySelected03()}</span>
 }
 
-let TweetTextInput = ({primaryTweetOnFocused, height, placeholderText, tweetText, setTweetText, setPrimaryTweetClicked, setExtraTweetClicked, setBoth }) => {
+let TweetTextInput = ({ primaryTweetOnFocused, height, placeholderText, tweetText, setTweetText, setPrimaryTweetClicked, setExtraTweetClicked, setBoth }) => {
     // let testRef = useRef();
     let handleTweetTextChanges = evt => {
         adjustHeight(evt);
@@ -512,7 +512,88 @@ export let tweetPrivacySelected02 = (color, text) => <span className='privacy-sp
 
 export let tweetPrivacySelected03 = (color, text) => <span className='privacy-spans'>{text != ' ' && <span className='privacy-svg'>{mentionedIcon(color ? color : 'rgb(29, 155, 240)')}</span>}<span className='privacy-text'>{text || 'Only people you mention'}</span></span>
 
-export let GridDemo = ({ onGifClick, isGifIconClicked }) => {
+let GridDemo = ({ onGifClick, isGifIconClicked }) => {
+    let [gifSearchingText, setGifSearchingText] = useState('')
+
+    let handleGifSearching = (value) => setGifSearchingText(value)
+
+    let [width, setWidth] = useState(window.innerWidth);
+
+    let [fetchedGifs, setFetchedGifs] = useState()
+
+    useEffect(() => {
+        gifSearchingText && setFetchedGifs(<FetchSearchedGifs onGifClick={onGifClick} width={width} gifSearchingText={gifSearchingText} />)
+        !gifSearchingText && setFetchedGifs(<InitialFetchedGifs onGifClick={onGifClick} width={width} />)
+        // setFetchedGifs((offset) => giphyFetch.trending({ offset, limit: 10 }))
+        // gifSearchingText && setFetchedGifs((offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 }))
+        // setFetchedGifs((offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 }))
+        // setFetchedGifs(<Grid onGifClick={onGifClick} className='grid-component' fetchGifs={(offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 })} width={width / 2} columns={2} />)
+    }, [gifSearchingText])
+
+    useEffect(() => {
+        setWidth('760')
+        setFetchedGifs(<InitialFetchedGifs onGifClick={onGifClick} width={width} />)
+        // setFetchedGifs(giphyFetch.trending({ limit: 10 }))
+        // setFetchedGifs(<Grid onGifClick={onGifClick} className='grid-component' fetchGifs={() => giphyFetch.trending({ offset, limit: 10 })} width={width / 2} columns={2} />)
+    }, [])
+
+    // console.log(fetchedGifs, '?!?!')
+
+    return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}>
+        <div id='gif-top'>
+            <span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span>
+            <SearchGif handleGifSearching={handleGifSearching} />
+        </div>
+        {fetchedGifs}
+        {/* <Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchedGifs} width={width / 2} columns={2} /> */}
+        {/* {gifSearchingText ? <FetchSearchedGifs onGifClick={onGifClick} width={width} gifSearchingText={gifSearchingText} /> : <InitialFetchedGifs onGifClick={onGifClick} width={width} />} */}
+    </div>
+}
+
+let FetchSearchedGifs = ({ gifSearchingText, width, onGifClick }) => {
+    // let fetchGifs = (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 });
+    // let fetchGifs = (offset) => giphyFetch.search('dogs', { offset, limit: 10 });
+    let fetchGifs = async (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 });
+    // let fetchGifs = async (offset) => {
+    //     // console.log(gifSearchingText, '!!here!!')
+    //     return giphyFetch.search(gifSearchingText, { offset, limit: 10 });
+    // }
+    // useEffect(() => fetchGifs(), [gifSearchingText])
+    console.log(gifSearchingText, '!!here!!')
+    // let fetchGifs;
+    // useEffect(() => fetchGifs = (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 }), [gifSearchingText])
+    return (
+        <Grid onGifClick={onGifClick} className='grid-component' key={gifSearchingText} fetchGifs={fetchGifs} width={width / 2} columns={2} />
+    )
+}
+
+let InitialFetchedGifs = ({ onGifClick, width }) => {
+    let fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
+    return (
+        <Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} />
+    )
+}
+
+let SearchGif = ({ handleGifSearching }) => {
+    let [searchText, setSearchText] = useState('')
+    let handleSearchText = evt => setSearchText(evt.target.value)
+    useEffect(() => searchText && handleGifSearching(searchText), [searchText])
+    return (
+        <input id='gif-search' placeholder='search your gifs here!!!!' onChange={handleSearchText} />
+    )
+}
+
+export let UploadFile = ({ chnageHandler, inputRef }) => {
+    return <input type='file' ref={inputRef} name='image-file' onChange={chnageHandler} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
+}
+
+export default TweetModal
+
+
+/**
+ * 
+ * 
+ export let GridDemo = ({ onGifClick, isGifIconClicked }) => {
     let [gifSearchingText, setGifSearchingText] = useState('')
 
     // var giphySearchApiParams = {
@@ -533,44 +614,14 @@ export let GridDemo = ({ onGifClick, isGifIconClicked }) => {
     // const [width, setWidth] = useState('470px');
     // return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span><SearchGif handleGifSearching={handleGifSearching} /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} /></div>
     // return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span><SearchGif handleGifSearching={handleGifSearching} /></div><Grid onGifClick={onGifClick} className='grid-component' fetchGifs={gifSearchingText ? fetchSearchedGifs : fetchGifs} width={width / 2} columns={2} /></div>
-    return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}><div id='gif-top'><span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span><SearchGif handleGifSearching={handleGifSearching} /></div>{gifSearchingText ? <FetchSearchedGifs onGifClick={onGifClick} width={width} gifSearchingText={gifSearchingText} /> : <InitialFetchedGifs onGifClick={onGifClick} width={width} />}</div>
+    return <div id='gif-container' style={{ display: isGifIconClicked ? 'block' : 'none' }}>
+        <div id='gif-top'>
+            <span id='remove-icon' onClick={onGifClick}>{deleteIcon()}</span>
+            <SearchGif handleGifSearching={handleGifSearching} />
+        </div>
+        {gifSearchingText ? <FetchSearchedGifs onGifClick={onGifClick} width={width} gifSearchingText={gifSearchingText} /> : <InitialFetchedGifs onGifClick={onGifClick} width={width} />}
+    </div>
 }
-
-let FetchSearchedGifs = ({gifSearchingText, width, onGifClick}) => {
-    // let fetchGifs = (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 });
-    // let fetchGifs = (offset) => giphyFetch.search('dogs', { offset, limit: 10 });
-    let fetchGifs = async (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 });
-    // let fetchGifs;
-    // useEffect(() => fetchGifs = (offset) => giphyFetch.search(gifSearchingText, { offset, limit: 10 }), [gifSearchingText])
-    return (
-        <Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} />
-    )
-}
-
-let InitialFetchedGifs = ({onGifClick, width}) => {
-    let fetchGifs = (offset) => giphyFetch.trending({ offset, limit: 10 });
-    return (
-        <Grid onGifClick={onGifClick} className='grid-component' fetchGifs={fetchGifs} width={width / 2} columns={2} />
-    )
-}
-
-let SearchGif = ({handleGifSearching}) => {
-    let [searchText, setSearchText] = useState('')
-    let handleSearchText = evt => setSearchText(evt.target.value)
-    useEffect(() => searchText && handleGifSearching(searchText), [searchText])
-    return(
-        <input id='gif-search' placeholder='search your gifs here....' onChange={handleSearchText} />
-    )
-}
-
-export let UploadFile = ({ chnageHandler, inputRef }) => {
-    return <input type='file' ref={inputRef} name='image-file' onChange={chnageHandler} accept="image/png, image/jpeg, svg, jpg" style={{ display: 'none' }} />
-}
-
-export default TweetModal
-
-
-/**
  * 
  * 
  export let GridDemo = ({ onGifClick, isGifIconClicked }) => {
