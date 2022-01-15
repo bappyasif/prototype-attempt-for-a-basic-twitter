@@ -27,6 +27,7 @@ import SuggestedMembersForList from '../user-profile/all-tweets/tweet-top/sugges
 import ListOfAddedMembers from '../user-profile/all-tweets/tweet-top/list-of-added-members';
 import ShowListExistingMembers from '../user-profile/all-tweets/tweet-top/add-members-into-lists/show-existing-members-list';
 import ShowTweetThread from '../user-profile/all-tweets/show-tweet-thread';
+import TagLocation from '../user-profile/all-tweets/show-tweet-thread/tag-location';
 
 function AllRoutes({repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
@@ -185,6 +186,10 @@ function AllRoutes({repliedTweets, threadedTweetData, handleThreadedTweetData, p
 
                 <Route exact path={'/status/tweetID'}>
                     <ShowTweetThread threadedTweetData={threadedTweetData} currentUser={currentUser} uniqueID={uniqueID} updateData={updateData} />
+                </Route>
+
+                <Route exact path={'/compose/tweet/place_picker'}>
+                    <TagLocation currentUser={currentUser} />
                 </Route>
 
                 {/* {

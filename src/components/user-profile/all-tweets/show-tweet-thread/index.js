@@ -240,11 +240,13 @@ let ReplyTweetBottomUI = ({handleTagLocationModal, showGifPickerModal, handleSho
 
 let RenderIcon = ({ item, handleTagLocationModal, handleShowEmojiPicker, imgRef, handleShowGifPickerModal }) => {
     let [hovered, setHovered] = useState(null)
+    let history = useHistory(null)
     // let [clicked, setClicked] = useState(null)
     let handleClicked = () => {
         // console.log(item.name)
         // setClicked(item.name)
-        if(item.name == 'Tag Location') handleTagLocationModal()
+        if(item.name == 'Tag Location') history.push('/compose/tweet/place_picker')
+        // if(item.name == 'Tag Location') handleTagLocationModal()
         if(item.name == 'GIF') handleShowGifPickerModal()
         if(item.name == 'media') imgRef.current.click()
         item.name == 'emoji' && handleShowEmojiPicker()

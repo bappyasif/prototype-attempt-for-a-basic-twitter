@@ -436,16 +436,27 @@
 }
 
 /* #components-container #create-lists-container::-webkit-scrollbar, */
-#components-container #container-for-suggested-members::-webkit-scrollbar {
+#components-container #container-for-suggested-members::-webkit-scrollbar,
+#components-container #tag-location-container::-webkit-scrollbar {
   width: 15px;
 }
 
-#components-container #container-for-suggested-members::-webkit-scrollbar-track {
+#components-container #container-for-suggested-members::-webkit-scrollbar-track,
+#components-container #tag-location-container::-webkit-scrollbar-track {
   border: 2px solid darkgrey;
   background-color: lightslategrey;
 }
 
-#components-container #container-for-suggested-members::-webkit-scrollbar-thumb {
+#components-container #tag-location-container::-webkit-scrollbar {
+  /* width: 20px; */
+}
+
+#components-container #tag-location-container::-webkit-scrollbar-track {
+  border-width: 4px;
+}
+
+#components-container #container-for-suggested-members::-webkit-scrollbar-thumb,
+#components-container #tag-location-container::-webkit-scrollbar-thumb {
   background: linear-gradient(45deg, grey, silver);
   height: 11px;
 }
@@ -456,14 +467,16 @@
   width: 15px;
 } */
 
-#components-container #container-for-suggested-members::-webkit-scrollbar-button:single-button {
+#components-container #container-for-suggested-members::-webkit-scrollbar-button:single-button,
+#components-container #tag-location-container::-webkit-scrollbar-button:single-button {
   background-color: silver;
   display: block;
   background-size: 20px;
   background-repeat: no-repeat;
 }
 
-#components-container #container-for-suggested-members::-webkit-scrollbar-button:single-button:vertical:decrement {
+#components-container #container-for-suggested-members::-webkit-scrollbar-button:single-button:vertical:decrement,
+#components-container #tag-location-container::-webkit-scrollbar-button:single-button:vertical:decrement {
   border-radius: 5px 20px 0 0;
   height: 20px;
   width: 20px;
@@ -472,13 +485,29 @@
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='darkslategray'><polygon points='50,00 0,50 100,50'/></svg>");
 }
 
-#components-container #container-for-suggested-members::-webkit-scrollbar-button:single-button:vertical:increment {
+#components-container #container-for-suggested-members::-webkit-scrollbar-button:single-button:vertical:increment,
+#components-container #tag-location-container::-webkit-scrollbar-button:single-button:vertical:increment {
   border-radius: 0px 0px 20px 5px;
   height: 20px;
   width: 20px;
   background-position: center 4px;
   /* background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(29, 155, 240)'><polygon points='0,0 100,0 50,50'/></svg>"); */
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='darkslategray'><polygon points='0,0 100,0 50,50'/></svg>");
+}
+
+#components-container #tag-location-container::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-position: left;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='100' fill='darkslategray'><polygon points='50,00 0,50 100,50'/></svg>");
+}
+
+#components-container #tag-location-container::-webkit-scrollbar-button:single-button:vertical:increment {
+  background-position: left;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='130' fill='darkslategray'><polygon points='0,0 100,0 50,50'/></svg>");  
+}
+
+#components-container #tag-location-container::-webkit-scrollbar-button:single-button:vertical:decrement,
+#components-container #tag-location-container::-webkit-scrollbar-button:single-button:vertical:increment {
+  width: 11px;
 }
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper,
@@ -1340,6 +1369,148 @@
 #components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #replying-to {
   text-align: left;
   margin-left: 85px;
+}
+
+#components-container #tag-location-container {
+  width: 470px;
+  background-color: whitesmoke;
+  overflow-y: scroll;
+  height: 546px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper,
+#components-container #tag-location-container #modal-header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 11px 9px 15px 8px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper #left-side,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper #right-side,
+#components-container #tag-location-container #modal-header-wrapper #left-side,
+#components-container #tag-location-container #modal-header-wrapper #right-side {
+  display: flex;
+  align-items: center;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper #left-side,
+#components-container #tag-location-container #modal-header-wrapper #left-side {
+  width: 161px;
+  justify-content: space-between;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper #right-side,
+#components-container #tag-location-container #modal-header-wrapper #right-side {
+  width: 141px;
+  justify-content: space-between;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper #right-side #remove,
+#components-container #tag-location-container #modal-header-wrapper #right-side #remove {
+  border-bottom: solid 4px;
+  padding-bottom: .3px;
+  line-height: 2em;
+  padding: 0px 6px 0px 6px;
+}
+
+#components-container #tag-location-container #modal-header-wrapper #right-side #remove:hover {
+  border-radius: 8px 8px 6px 6px;
+  /* border-width: 4px; */
+  background-color: lightgrey;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper #right-side #done,
+#components-container #tag-location-container #modal-header-wrapper #right-side #done {
+  background-color: lightgray;
+  line-height: 2em;
+  padding: 0px 11px 0px 11px;
+  border-radius: 17px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper,
+#components-container #tag-location-container #search-component-wrapper {
+  border: solid 1px darkgrey;
+  border-radius: 20px;
+  margin: 8px 4px 8px 4px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper #before-focused,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper #after-focused,
+#components-container #tag-location-container #search-component-wrapper #before-focused,
+#components-container #tag-location-container #search-component-wrapper #after-focused {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper #before-focused,
+#components-container #tag-location-container #search-component-wrapper #before-focused {
+  width: fit-content;
+  margin: auto;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper #before-focused #svg-icon,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper #after-focused #svg-icon,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper #left-side #svg-icon,
+#components-container #tag-location-container #search-component-wrapper #before-focused #svg-icon,
+#components-container #tag-location-container #search-component-wrapper #after-focused #svg-icon,
+#components-container #tag-location-container #modal-header-wrapper #left-side #svg-icon {
+  position: absolute;
+  transform: scale(.8);
+  display: flex;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper #before-focused #search-input,
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper #after-focused #search-input,
+#components-container #tag-location-container #search-component-wrapper #before-focused #search-input,
+#components-container #tag-location-container #search-component-wrapper #after-focused #search-input {
+  text-align: center;
+  line-height: 2em;
+  background-color: transparent;
+  color: lightgrey;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper #after-focused #search-input,
+#components-container #tag-location-container #search-component-wrapper #after-focused #search-input {
+  padding-left: 31px;
+  text-align: left;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #search-component-wrapper #after-focused,
+#components-container #tag-location-container #search-component-wrapper #after-focused  {
+  padding-left: 11px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper #left-side #svg-icon,
+#components-container #tag-location-container #modal-header-wrapper #left-side #svg-icon {
+  position: relative;
+  /* background-color: aqua; */
+  border-radius: 20px;
+  padding: 4px;
+}
+
+#components-container #tag-location-container #modal-header-wrapper #left-side #svg-icon:hover {
+  background-color: lightgrey;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #nearby-places-wrapper .render-place-wrapper,
+#components-container #tag-location-container #nearby-places-wrapper .render-place-wrapper {
+  text-align: left;
+  padding: 6px 0px 6px 11px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #nearby-places-wrapper .render-place-wrapper:hover,
+#components-container #tag-location-container #nearby-places-wrapper .render-place-wrapper:hover {
+  background-color: lightgrey;
+  border-radius: 4px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #nearby-places-wrapper .render-place-wrapper .related-infos,
+#components-container #tag-location-container #nearby-places-wrapper .render-place-wrapper .related-infos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 180px;
 }
 
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper {
