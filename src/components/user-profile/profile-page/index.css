@@ -1374,8 +1374,8 @@
 #components-container #tag-location-container {
   width: 470px;
   background-color: whitesmoke;
-  overflow-y: scroll;
-  height: 546px;
+  /* overflow-y: scroll; */
+  /* height: 546px; */
 }
 
 #components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper,
@@ -1497,6 +1497,7 @@
 #components-container #tag-location-container #nearby-places-wrapper .render-place-wrapper {
   text-align: left;
   padding: 6px 0px 6px 11px;
+  position: relative;
 }
 
 #components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #nearby-places-wrapper .render-place-wrapper:hover,
@@ -1510,7 +1511,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 180px;
+  /* width: 180px; */
+  width: max-content;
+}
+
+#components-container #tag-location-container #nearby-places-wrapper .render-place-wrapper #svg-icon {
+  position: absolute;
+  right: 11px;
+  top: 11px;
+  fill: aqua;
 }
 
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper {
