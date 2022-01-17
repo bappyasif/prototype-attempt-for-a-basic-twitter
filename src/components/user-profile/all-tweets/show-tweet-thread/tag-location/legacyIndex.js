@@ -13,15 +13,11 @@ function TagLocation({currentUser}) {
 
     let [searchedPlaces, setSearchedPlaces] = useState(null)
 
-    // let handleSearchedPlaces = dataset => setSearchedPlaces(dataset[0].items)  // filter this data set, and see if this resolves this issue!!
+    let [searchedPlacesRefined, setSearchedPlacesRefined] = useState([])
 
-    let handleSearchedPlaces = dataset => {
-        let data = dataset[0].items;
-        let filteredData = data.filter((val, idx, self) => 
-        idx == self.findIndex(t=> t.title == val.title))
-        console.log(filteredData, 'data!!', data)
-        setSearchedPlaces(dataset[0].items)
-    }  // filter this data set, and see if this resolves this issue!!
+    let [checkName, setCheckName] = useState(null)
+
+    let handleSearchedPlaces = dataset => setSearchedPlaces(dataset[0].items)
 
     let handleSearchText = evt => setSearchText(evt.target.value)
 
@@ -31,6 +27,21 @@ function TagLocation({currentUser}) {
 
     let handlePlacesData = value => setPlacesData(value);
 
+    // useEffect(() => {
+    //     if(searchedPlaces) {
+    //         setSearchedPlacesRefined([])
+    //         searchedPlaces.forEach(item => {
+    //             if(checkName != item.title) {
+    //                 setCheckName(item.title)
+    //                 console.log(checkName, item.name, 'checkpoint01')
+
+    //                 // setSearchedPlacesRefined(prevData => [...prevData, item])
+    //                 // setSearchedPlacesRefined([])
+    //             }
+    //         })
+    //     }
+    // }, [searchedPlaces])
+
     useEffect(() => placesData && handleAllNearbyPlaces(placesData[0].items))
 
     useEffect(() => {
@@ -38,23 +49,22 @@ function TagLocation({currentUser}) {
         getUserCurrentLocation(handleDeviceCoords)
     }, [])
 
-    // useEffect(() => {
-    //     searchedPlaces && setSearchedPlaces([])
-    // }, [])
-
     useEffect(() => deviceCoords && makingHttpGetRequest(handlePlacesData, deviceCoords), [deviceCoords])
 
     // useEffect(() => searchText && deviceCoords && makingHttpGetRequestForSearch(searchText, handleSearchedPlaces, deviceCoords), [searchText])
     useEffect(() => {
-        searchText && deviceCoords && makingHttpGetRequestForSearch(searchText, handleSearchedPlaces, deviceCoords)
-        !searchText && deviceCoords && makingHttpGetRequestForSearch('Dhaka', handleSearchedPlaces, deviceCoords)
-        !searchText && deviceCoords && setSearchedPlaces([])
+        searchText && searchText.length > 1 && deviceCoords && makingHttpGetRequestForSearch(searchText, handleSearchedPlaces, deviceCoords)
+        // !searchText && deviceCoords && makingHttpGetRequestForSearch(null, handleSearchedPlaces, deviceCoords)
+        !searchText && deviceCoords && makingHttpGetRequest(handlePlacesData, deviceCoords)
+        !searchText && setSearchText(null)
+        // !searchText && deviceCoords && makingHttpGetRequestForSearch('Dhaka', handleSearchedPlaces, deviceCoords)
     }, [searchText])
 
     // console.log(placesData, 'places!!', allNearByPlaces, deviceCoords)
-    console.log(searchText, '<search text>', searchedPlaces)
+    console.log(searchedPlacesRefined, searchText, '<search text>', searchedPlaces, searchText==null, allNearByPlaces)
 
-    return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} />
+    // return allNearByPlaces && <TagLocationModalUI foundPlaces={(searchText && searchText.length > 1) ? searchedPlaces : allNearByPlaces} searchText={searchText} currentUser={currentUser} handleSearch={handleSearchText} />
+    return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI searchText={searchText} foundPlaces={ (searchText && searchedPlaces) ? searchedPlaces : allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} />
     // return allNearByPlaces && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} />
     // return <TagLocationModalUI nearbyPlaces={allNearByPlaces} />
 }

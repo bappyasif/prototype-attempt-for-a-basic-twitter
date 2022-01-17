@@ -3,59 +3,106 @@ import { useHistory } from 'react-router-dom'
 import { useEffect } from 'react/cjs/react.development'
 import { removeIconSvg, searchIconSvg, tickMarkIconSvg } from '..'
 
-let TagLocationModalUI = ({ foundPlaces, currentUser, handleSearch }) => {
+let TagLocationModalUI = ({ foundPlaces, currentUser, handleSearch, searchText }) => {
     // console.log(nearbyPlaces, 'data ready')
     let [selectedPlace, setSelectedPlace] = useState(null)
 
     let [showScroll, setShowScroll] = useState(false)
 
+    // let hash = {}
+    // let [hash, setHash] = useState({})
+
     let handleSelectedPlace = name => setSelectedPlace(name)
 
+    // useEffect(() => {
+    //     let placesWrapper = document.querySelector('#nearby-places-wrapper');
+    //     Array.from(placesWrapper.childNodes).forEach(node => node.removeChild(node))
+    // }, [])
+
+
     useEffect(() => {
+        // let placesWrapper = document.querySelector('#nearby-places-wrapper');
+        // Array.from(placesWrapper.childNodes).forEach(node => {
+        //     // node && node.remove()
+        //     // node && node.removeChild(node)
+        //     // console.log(node, '!!!!')
+        // })
+        
         foundPlaces.length > 8 ? setShowScroll(true) : setShowScroll(false)
+        // let filtered = foundPlaces.map((v, i, arr) => )
+        // foundPlaces && foundPlaces.forEach(item => {
+        //     console.log(item.title, '?!')
+        //     // hash[item.title] = item
+        //     setHash(prevHash => prevHash[item.title] = item)
+        //     // setHash({...hash, item[title] = item})
+        //     // console.log(item.title, '?!', hash)
+        // })
     }, [foundPlaces])
 
+    // useEffect(() => !searchText && (foundPlaces = []), [searchText])
+
     // console.log(showScroll, '<chainging>')
-    console.log(selectedPlace, 'selected place')
+    console.log(selectedPlace, 'selected place', foundPlaces, searchText)
 
     return (
         <div id='tag-location-container' style={{ overflowY: showScroll ? 'scroll' : 'hidden', height: showScroll && '546px' }}>
             <ModalHeader currentUser={currentUser} />
             <SearchComponent handleSearch={handleSearch} />
-            <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedPlace} />
+            {/* <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedPlace} /> */}
+            <RenderNearByPlaces searchText={searchText} foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedPlace} />
+            {/* <RenderNearByPlaces foundPlaces={(!searchText || !foundPlaces) ? [] : foundPlaces} handleSelectedPlace={handleSelectedPlace} /> */}
         </div>
     )
 }
 
-let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace }) => {
-    let [placesNodes, setPlacesNodes] = useState(null)
+let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace, searchText }) => {
+    // let listPlaces = () => foundPlaces.map((item) => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />)
+    let listPlaces = () => foundPlaces.map((item, _, arr) => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} arr={arr} />)
+    // let listPlaces02 =  !searchText ? [].map((item, _, arr) => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} arr={arr} />) : listPlaces()
+    
+    let [test, setTest] = useState(null)
     
     // useEffect(() => {
-    //     setPlacesNodes(null)
-    // }, [])
-    
+    //     !searchText && setTest([].map(item => <RenderPlace />))
+    // }, [searchText])
+    // let placesWrapper = document.querySelector('#nearby-places-wrapper');
+
+    // useEffect(() => {
+    //     let placesWrapper = document.querySelector('#nearby-places-wrapper');
+    //     // placesWrapper.childNodes.forEach(node => node.remove())
+    //     // let placesWrapper = document.querySelector('#nearby-places-wrapper');
+    //     placesWrapper.childNodes.forEach(node => node.textContent = '')
+    //     let testFilter = Array.from(placesWrapper.childNodes).filter(node => node != '')
+    //     console.log(testFilter, testFilter.length)
+    //     // if(!searchText) {
+    //     //     let placesWrapper = document.querySelector('#nearby-places-wrapper');
+    //     //     // console.log(placesWrapper)
+    //     //     // placesWrapper.textContent = '';
+    //     //     placesWrapper.childNodes.forEach(node => node.textContent = '')
+    //     // }
+    // }, [searchText])
+
     useEffect(() => {
-        // let nodes = foundPlaces.map(item => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />)
-        let nodes = foundPlaces.map((item, idx) => <RenderPlace key={idx} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />)
-        setPlacesNodes(nodes)
+        setTest(foundPlaces.map((item) => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />))
     }, [foundPlaces])
     
-    console.log(placesNodes, '<check>')
-    // let listPlaces = () => foundPlaces.map(item => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />)
     return (
         <div id='nearby-places-wrapper'>
+            {test}
             {/* {listPlaces()} */}
-            {placesNodes}
+            {/* {listPlaces02} */}
         </div>
     )
 }
 
-let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace }) => {
+let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace, arr }) => {
     let [clicked, setClicked] = useState(false)
     let [distanceSanitized, setDistanceSanitized] = useState(null)
 
-    let handleClicked = () => {
+    let handleClicked = (evt) => {
         setClicked(!clicked)
+        // console.log(evt.target.querySelector('.place-name'), name, arr.findIndex(item => item.title == name))
+        // console.log(arr, '?!')
     }
 
     useEffect(() => {
@@ -74,6 +121,7 @@ let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace }) => {
     }, [name])
 
     // console.log(distance >= 100, distance, ((distance)/1000).toFixed(2))
+    // console.log(name, '?!>!')
 
     return (
         <div className='render-place-wrapper' onClick={handleClicked}>
