@@ -15,9 +15,9 @@ import { RenderUserTweetText } from '../reuseable-helper-functions'
 import { RenderTweetBottomIcons } from '../tweet-bottom'
 import TagLocation from './tag-location'
 
-function ShowTweetThread({ threadedTweetData, currentUser, uniqueID, updateData }) {
+function ShowTweetThread({ threadedTweetData, currentUser, uniqueID, updateData, primaryTweetText, setPrimaryTweetText, selectedFile, setSelectedFile, selectedGif, setSelectedGif, selectedTaggedPlace, handleSelectedTaggedPlace }) {
     let { created, quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...threadedTweetData }
-    let [repliedTweetsIDs, setRepliedTweetsIDs] = useState(null)    
+    let [repliedTweetsIDs, setRepliedTweetsIDs] = useState(null)
 
     // let [clicked, setClicked] = useState(false)
     // let handleClicked = () => setClicked(!clicked)
@@ -27,7 +27,7 @@ function ShowTweetThread({ threadedTweetData, currentUser, uniqueID, updateData 
         <div id='show-tweet-thread-container'>
             <HeaderComponent />
             {tweetText && <TweetComponent tweetText={tweetText} createdDate={created} />}
-            <ReplyThreadComponent currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} handleLoadingTweetsIDs={handleLoadingTweetsIDs} />
+            <ReplyThreadComponent currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} handleLoadingTweetsIDs={handleLoadingTweetsIDs} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
             <RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} />
         </div>
     )
@@ -67,7 +67,7 @@ let RenderRepliedTweet = ({ docID, currentUser, idx }) => {
     }, [docID])
 
     if (dataset) {
-        let {created, quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = {...dataset}
+        let { created, quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...dataset }
         // console.log(docID, 'repliedTweetID!!', dataset, tweetText, )
         // markup = <RenderTweetDataComponent content={dataset} />
         // return (markup)
@@ -94,19 +94,23 @@ let RenderAddAnotherTweet = () => {
     )
 }
 
-let ReplyThreadComponent = ({ currentUser, threadedTweetData, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs}) => {
+let ReplyThreadComponent = ({ currentUser, threadedTweetData, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs, primaryTweetText, setPrimaryTweetText, selectedFile, setSelectedFile, selectedGif, setSelectedGif, selectedTaggedPlace, handleSelectedTaggedPlace }) => {
     let [clicked, setClicked] = useState(false)
 
     let handleClicked = () => setClicked(!clicked)
-    
+
     return (
         <div id='reply-tweet-thread-wrapper' style={{ marginBottom: '20px' }}>
-            {clicked ? <AfterClickedMarkup handleClicked={handleClicked} handleLoadingTweetsIDs={handleLoadingTweetsIDs} currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} /> : <BeforeClickedMarkup handleClicked={handleClicked} />}
+            {(clicked || primaryTweetText)
+                ?
+                <AfterClickedMarkup handleClicked={handleClicked} handleLoadingTweetsIDs={handleLoadingTweetsIDs} currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
+                :
+                <BeforeClickedMarkup handleClicked={handleClicked} setSelectedFile={setSelectedFile} setSelectedGif={setSelectedGif} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />}
         </div>
     )
 }
 
-let AfterClickedMarkup = ({handleClicked, currentUser, threadedTweetData, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs}) => {
+let AfterClickedMarkup = ({ handleClicked, currentUser, threadedTweetData, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs, primaryTweetText, setPrimaryTweetText, selectedFile, setSelectedFile, selectedGif, setSelectedGif, selectedTaggedPlace, handleSelectedTaggedPlace }) => {
     let [tweetText, setTweetText] = useState('')
 
     let [imgFile, setImgFile] = useState(null);
@@ -121,18 +125,35 @@ let AfterClickedMarkup = ({handleClicked, currentUser, threadedTweetData, unique
 
     let handleGifFile = (gif, evt) => {
         evt.preventDefault();
-        setGifFile(gif)
+        setGifFile(gif);
+        setSelectedGif(gif);
         handleShowGifPickerModal();
     }
 
     let handleShowGifPickerModal = () => setShowGifPickerModal(!showGifPickerModal)
-    
+
     let imgRef = useRef()
 
-    let handleImgFileChanges = evt => setImgFile(evt.target.files[0])
-    
-    let handleTweetText = evt => setTweetText(evt.target.value)
-    
+    let tweetTextRef = useRef()
+
+    useEffect(() => {
+        // feeding from already existing data from container component for data consistency after a route change
+        setTweetText(primaryTweetText || '')
+        setImgFile(selectedFile || null)
+        setGifFile(selectedGif || null)
+        tweetTextRef.current.focus();
+    }, [])
+
+    let handleImgFileChanges = evt => {
+        setImgFile(evt.target.files[0])
+        setSelectedFile(evt.target.files[0])
+    }
+
+    let handleTweetText = evt => {
+        setTweetText(evt.target.value)
+        setPrimaryTweetText(evt.target.value); // updating primary tweet text, which is necessary for handling this data to firestore and throughout other components
+    }
+
     let handleUnicodeFromEmoji = data => {
         setTweetText(data)
         // console.log(data, '<<<<data>>>>>')
@@ -140,6 +161,15 @@ let AfterClickedMarkup = ({handleClicked, currentUser, threadedTweetData, unique
 
     let handleRemoveExistingText = () => {
         setTweetText('')
+        setPrimaryTweetText('')
+
+        setImgFile(null)
+        setSelectedFile(null)
+        
+        setGifFile(null)
+        setSelectedGif(null)
+
+        // handleSelectedTaggedPlace('') // not sure it is required at this point to remove this after replying a tweet from thread
         // console.log('<hererererer>')
     }
 
@@ -149,16 +179,16 @@ let AfterClickedMarkup = ({handleClicked, currentUser, threadedTweetData, unique
             <div id='user-tweet'>
                 <img className='profile-pic' src='https://picsum.photos/200/300' />
                 <label htmlFor='tweet-reply' />
-                <input id='tweet-reply' placeholder='Tweet your reply' onChange={handleTweetText} maxLength={100} value={tweetText} />
+                <input ref={tweetTextRef} id='tweet-reply' placeholder='Tweet your reply' onChange={handleTweetText} maxLength={100} value={tweetText} />
             </div>
             {(imgFile || gifFile) && <ContentInComposeTweet selectedFile={imgFile} gifFile={gifFile} gifWidth={gifFile && 423} />}
             {showTagLocationModal && <TagLocation />}
-            <ReplyTweetBottomUI handleTagLocationModal={handleTagLocationModal} showGifPickerModal={showGifPickerModal} handleShowGifPickerModal={handleShowGifPickerModal} gifFile={gifFile} handleGifFile={handleGifFile} imgFile={imgFile} handleImgFileChanges={handleImgFileChanges} imgRef={imgRef} replyingTweetText={tweetText} handleUnicodeFromEmoji={handleUnicodeFromEmoji} cleanupRepliedTweetText={handleRemoveExistingText} handleClicked={handleClicked} handleLoadingTweetsIDs={handleLoadingTweetsIDs} currentUser={currentUser} threadedTweetData={threadedTweetData} tweetText={tweetText} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} />
+            <ReplyTweetBottomUI selectedTaggedPlace={selectedTaggedPlace} handleTagLocationModal={handleTagLocationModal} showGifPickerModal={showGifPickerModal} handleShowGifPickerModal={handleShowGifPickerModal} gifFile={gifFile} handleGifFile={handleGifFile} imgFile={imgFile} handleImgFileChanges={handleImgFileChanges} imgRef={imgRef} replyingTweetText={tweetText} handleUnicodeFromEmoji={handleUnicodeFromEmoji} cleanupRepliedTweetText={handleRemoveExistingText} handleClicked={handleClicked} handleLoadingTweetsIDs={handleLoadingTweetsIDs} currentUser={currentUser} threadedTweetData={threadedTweetData} tweetText={tweetText} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} />
         </div>
     )
 }
 
-let ReplyTweetBottomUI = ({handleTagLocationModal, showGifPickerModal, handleShowGifPickerModal, gifFile, handleGifFile, imgFile, handleImgFileChanges, imgRef, replyingTweetText, handleUnicodeFromEmoji, cleanupRepliedTweetText, handleClicked, currentUser, threadedTweetData, tweetText, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs}) => {
+let ReplyTweetBottomUI = ({ selectedTaggedPlace, handleTagLocationModal, showGifPickerModal, handleShowGifPickerModal, gifFile, handleGifFile, imgFile, handleImgFileChanges, imgRef, replyingTweetText, handleUnicodeFromEmoji, cleanupRepliedTweetText, handleClicked, currentUser, threadedTweetData, tweetText, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs }) => {
     let [showEmojiPicker, setShowEmojiPicker] = useState(false);
     // let [showGifPickerModal, setShowGifPickerModal] = useState(false)
     let [isUploadPictureToStorageDone, setIsUploadPictureToStorageDone] = useState(false)
@@ -170,7 +200,7 @@ let ReplyTweetBottomUI = ({handleTagLocationModal, showGifPickerModal, handleSho
     //     setGifFile(gif)
     //     handleShowGifPickerModal();
     // }
-    
+
     // let handleShowGifPickerModal = () => setShowGifPickerModal(!showGifPickerModal)
 
     let handleImgFileUrl = value => setImgFileUrl(value)
@@ -178,18 +208,18 @@ let ReplyTweetBottomUI = ({handleTagLocationModal, showGifPickerModal, handleSho
     let handleDoneStorageUpload = () => setIsUploadPictureToStorageDone(true)
 
     let handleShowEmojiPicker = () => setShowEmojiPicker(!showEmojiPicker)
-    
+
     // needs to use a writeDataIntoFirestore along with updateDataIntoFirestore to update replyCount and recently replied tweet ID to repliedTweetIDs
     let handleInThreadReply = () => {
-        if(!imgFile) {
+        if (!imgFile) {
             // console.log('??!!', gifFile)
             theseHappensInEveryInThreadReplies();
-            writeDataIntoCollection({tweetText: tweetText, quoteTweetID: threadedTweetData.ID, tweetPrivacy: threadedTweetData.tweetPrivacy, extraPoll:[{choice01: '', choice02: '', choice03: '', choice04: ''}], tweetPoll: [{choice01: '', choice02: '', choice03: '', choice04: ''}], extraTweet: null, gifItem: gifFile && gifFile, extraGifItem: null, imgFile: imgFile, extraImgFile: null, firstTweetHasMedia: null, secondTweetHasMedia: null, scheduledTimeStamp: null}, uniqueID, null, updateData, currentUser )
+            writeDataIntoCollection({ tweetText: tweetText, quoteTweetID: threadedTweetData.ID, tweetPrivacy: threadedTweetData.tweetPrivacy, extraPoll: [{ choice01: '', choice02: '', choice03: '', choice04: '' }], tweetPoll: [{ choice01: '', choice02: '', choice03: '', choice04: '' }], extraTweet: null, gifItem: gifFile && gifFile, extraGifItem: null, imgFile: imgFile, extraImgFile: null, firstTweetHasMedia: null, secondTweetHasMedia: null, scheduledTimeStamp: null, selectedTaggedPlace: selectedTaggedPlace }, uniqueID, null, updateData, currentUser)
             // console.log(gifFile, '<<fromgif>>', gifFile.id)
         } else if (imgFile) {
             // uploading picture to storage
             uploadTweetPictureUrlToStorage(imgFile, uniqueID, handleDoneStorageUpload)
-        } 
+        }
         // else if(gifFile) {
         //     console.log(gifFile, '<<fromgif>>', gifFile.id)
         //     theseHappensInEveryInThreadReplies();
@@ -200,22 +230,22 @@ let ReplyTweetBottomUI = ({handleTagLocationModal, showGifPickerModal, handleSho
     // gifFile && console.log(gifFile, '<<fromgif>>')
 
     useEffect(() => {
-        isUploadPictureToStorageDone && downloadTweetPictureUrlFromStorage(uniqueID, handleImgFileUrl )
+        isUploadPictureToStorageDone && downloadTweetPictureUrlFromStorage(uniqueID, handleImgFileUrl)
     }, [isUploadPictureToStorageDone])
-    
+
     // its now creating a new tweet entry, but in thread only tweet text is showing up but no media file!!
     useEffect(() => {
         // imgFileUrl && console.log('ready, roll')
-        if(imgFileUrl) {
+        if (imgFileUrl) {
             // console.log('ready, roll')
             theseHappensInEveryInThreadReplies();
-            writeDataIntoCollection({tweetText: tweetText, quoteTweetID: threadedTweetData.ID, tweetPrivacy: threadedTweetData.tweetPrivacy, extraPoll:[{choice01: '', choice02: '', choice03: '', choice04: ''}], tweetPoll: [{choice01: '', choice02: '', choice03: '', choice04: ''}], extraTweet: null, gifItem: null, extraGifItem: null, imgFile: imgFileUrl, extraImgFile: null, firstTweetHasMedia: null, secondTweetHasMedia: null, scheduledTimeStamp: null}, uniqueID, null, updateData, currentUser )
+            writeDataIntoCollection({ tweetText: tweetText, quoteTweetID: threadedTweetData.ID, tweetPrivacy: threadedTweetData.tweetPrivacy, extraPoll: [{ choice01: '', choice02: '', choice03: '', choice04: '' }], tweetPoll: [{ choice01: '', choice02: '', choice03: '', choice04: '' }], extraTweet: null, gifItem: null, extraGifItem: null, imgFile: imgFileUrl, extraImgFile: null, firstTweetHasMedia: null, secondTweetHasMedia: null, scheduledTimeStamp: null }, uniqueID, null, updateData, currentUser)
         }
     }, [imgFileUrl])
 
     let theseHappensInEveryInThreadReplies = () => {
-        updateDataInFirestore(currentUser, threadedTweetData.ID, {replyCount: Number(repliedTweetsIDs.length + 1)})
-        updateDataInFirestore(currentUser, threadedTweetData.ID, {repliedTweets: [...repliedTweetsIDs, uniqueID]})
+        updateDataInFirestore(currentUser, threadedTweetData.ID, { replyCount: Number(repliedTweetsIDs.length + 1) })
+        updateDataInFirestore(currentUser, threadedTweetData.ID, { repliedTweets: [...repliedTweetsIDs, uniqueID] })
         handleLoadingTweetsIDs(prevIDs => [...prevIDs, uniqueID])
         handleClicked()
         cleanupRepliedTweetText()
@@ -245,15 +275,15 @@ let RenderIcon = ({ item, handleTagLocationModal, handleShowEmojiPicker, imgRef,
     let handleClicked = () => {
         // console.log(item.name)
         // setClicked(item.name)
-        if(item.name == 'Tag Location') history.push('/compose/tweet/place_picker')
+        if (item.name == 'Tag Location') history.push('/compose/tweet/place_picker')
         // if(item.name == 'Tag Location') handleTagLocationModal()
-        if(item.name == 'GIF') handleShowGifPickerModal()
-        if(item.name == 'media') imgRef.current.click()
+        if (item.name == 'GIF') handleShowGifPickerModal()
+        if (item.name == 'media') imgRef.current.click()
         item.name == 'emoji' && handleShowEmojiPicker()
     }
     let handleHovered = () => setHovered(item.name)
     let handleHoveredReversed = () => setHovered(null)
-    
+
     // useEffect(() => {
     //     if(clicked == 'media') {
     //         console.log('todo....media')

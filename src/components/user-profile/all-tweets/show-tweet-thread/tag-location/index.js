@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import TagLocationModalUI from './ui-logic'
 
-function TagLocation({currentUser}) {
+function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlace, primaryTweetText}) {
     let [placesData, setPlacesData] = useState(null)
 
     let [allNearByPlaces, setAllNearByPlaces] = useState(null)
@@ -13,7 +13,14 @@ function TagLocation({currentUser}) {
 
     let [searchedPlaces, setSearchedPlaces] = useState(null)
 
+    let [taggedPlaceData, setTaggedPlaceData] = useState(null)
+
     // let handleSearchedPlaces = dataset => setSearchedPlaces(dataset[0].items)  // filter this data set, and see if this resolves this issue!!
+
+    let handleTaggedPlaceData = item => {
+        setTaggedPlaceData(item[0].items)
+        console.log(item[0].items, 'taggedPlaceData!!')
+    }
 
     let handleSearchedPlaces = dataset => {
         let data = dataset[0].items;
@@ -27,7 +34,18 @@ function TagLocation({currentUser}) {
 
     let handleDeviceCoords = data => setDeviceCoords(data)
 
-    let handleAllNearbyPlaces = data => setAllNearByPlaces(data)
+    let handleAllNearbyPlaces = data => {
+        // let adjustedData = selectedTaggedPlace ? [selectedTaggedPlace, ...data] : data
+        let adjustedData = selectedTaggedPlace ? [taggedPlaceData && taggedPlaceData[0], ...data] : data
+        console.log(adjustedData, 'adjustedData!!', taggedPlaceData, selectedTaggedPlace)
+        // setAllNearByPlaces(adjustedData)
+
+        setAllNearByPlaces(data)
+    }
+
+    useEffect(() => {
+        taggedPlaceData && setAllNearByPlaces(prevData => [taggedPlaceData, ...prevData])
+    }, [taggedPlaceData])
 
     let handlePlacesData = value => setPlacesData(value);
 
@@ -42,19 +60,29 @@ function TagLocation({currentUser}) {
     //     searchedPlaces && setSearchedPlaces([])
     // }, [])
 
-    useEffect(() => deviceCoords && makingHttpGetRequest(handlePlacesData, deviceCoords), [deviceCoords])
+    useEffect(() => {
+        deviceCoords && makingHttpGetRequest(handlePlacesData, deviceCoords)
+        selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+    }, [deviceCoords])
+
+    // when there is a tagged location already exists in profile or post, retriving all necessary data before passing it along to search and nearby places calls
+    // useEffect(() => {
+    //     selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+    //     selectedTaggedPlace && deviceCoords && alert('!!')
+    // }, [selectedTaggedPlace])
 
     // useEffect(() => searchText && deviceCoords && makingHttpGetRequestForSearch(searchText, handleSearchedPlaces, deviceCoords), [searchText])
     useEffect(() => {
         searchText && deviceCoords && makingHttpGetRequestForSearch(searchText, handleSearchedPlaces, deviceCoords)
         !searchText && deviceCoords && makingHttpGetRequestForSearch('Dhaka', handleSearchedPlaces, deviceCoords)
+        // selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
         !searchText && deviceCoords && setSearchedPlaces([])
     }, [searchText])
 
     // console.log(placesData, 'places!!', allNearByPlaces, deviceCoords)
-    console.log(searchText, '<search text>', searchedPlaces)
+    console.log(searchText, '<search text>', searchedPlaces, taggedPlaceData)
 
-    return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} />
+    return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} />
     // return allNearByPlaces && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} />
     // return <TagLocationModalUI nearbyPlaces={allNearByPlaces} />
 }
@@ -74,6 +102,7 @@ let makingHttpGetRequestAndHandlingResponseData = (xhr, url, dataUpdater) => {
         for (let i in obj) {
             res.push(obj[i])
         }
+        // console.log(res, '!!')
         return res;
     }
 }

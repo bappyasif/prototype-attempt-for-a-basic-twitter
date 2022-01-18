@@ -29,7 +29,7 @@ import ShowListExistingMembers from '../user-profile/all-tweets/tweet-top/add-me
 import ShowTweetThread from '../user-profile/all-tweets/show-tweet-thread';
 import TagLocation from '../user-profile/all-tweets/show-tweet-thread/tag-location';
 
-function AllRoutes({repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -185,11 +185,11 @@ function AllRoutes({repliedTweets, threadedTweetData, handleThreadedTweetData, p
                 </Route>
 
                 <Route exact path={'/status/tweetID'}>
-                    <ShowTweetThread threadedTweetData={threadedTweetData} currentUser={currentUser} uniqueID={uniqueID} updateData={updateData} />
+                    <ShowTweetThread threadedTweetData={threadedTweetData} currentUser={currentUser} uniqueID={uniqueID} updateData={updateData} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={gifFile} setSelectedGif={setGifFile} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
                 </Route>
 
                 <Route exact path={'/compose/tweet/place_picker'}>
-                    <TagLocation currentUser={currentUser} />
+                    <TagLocation currentUser={currentUser} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
                 </Route>
 
                 {/* {
@@ -403,6 +403,7 @@ function AllRoutes({repliedTweets, threadedTweetData, handleThreadedTweetData, p
                                 handlePollVotesCount={handlePollVotesCount}
                                 handleThreadedTweetData={handleThreadedTweetData}
                                 repliedTweets={repliedTweets}
+                                selectedTaggedPlace={selectedTaggedPlace}
                             />
                         </Route>
                         :

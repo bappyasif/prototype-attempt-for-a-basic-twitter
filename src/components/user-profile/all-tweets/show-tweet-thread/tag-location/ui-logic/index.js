@@ -3,26 +3,29 @@ import { useHistory } from 'react-router-dom'
 import { useEffect } from 'react/cjs/react.development'
 import { removeIconSvg, searchIconSvg, tickMarkIconSvg } from '..'
 
-let TagLocationModalUI = ({ foundPlaces, currentUser, handleSearch }) => {
+let TagLocationModalUI = ({ foundPlaces, currentUser, handleSearch, selectedTaggedPlace, handleSelectedTaggedPlace, primaryTweetText }) => {
     // console.log(nearbyPlaces, 'data ready')
-    let [selectedPlace, setSelectedPlace] = useState(null)
+    // let [selectedPlace, setSelectedPlace] = useState(null)
 
     let [showScroll, setShowScroll] = useState(false)
 
-    let handleSelectedPlace = name => setSelectedPlace(name)
+    // let handleSelectedPlace = name => setSelectedPlace(name)
 
     useEffect(() => {
         foundPlaces.length > 8 ? setShowScroll(true) : setShowScroll(false)
     }, [foundPlaces])
 
+    // let handleTweetText = (data) => setPrimaryTweetText(data)
+
     // console.log(showScroll, '<chainging>')
-    console.log(selectedPlace, 'selected place')
+    console.log(selectedTaggedPlace, 'selected place')
 
     return (
         <div id='tag-location-container' style={{ overflowY: showScroll ? 'scroll' : 'hidden', height: showScroll && '546px' }}>
             <ModalHeader currentUser={currentUser} />
             <SearchComponent handleSearch={handleSearch} />
-            <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedPlace} />
+            {/* <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedPlace} /> */}
+            <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedTaggedPlace} />
         </div>
     )
 }
@@ -53,9 +56,11 @@ let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace }) => {
 let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace }) => {
     let [clicked, setClicked] = useState(false)
     let [distanceSanitized, setDistanceSanitized] = useState(null)
+    let history = useHistory()
 
     let handleClicked = () => {
         setClicked(!clicked)
+        history.goBack()
     }
 
     useEffect(() => {
@@ -111,7 +116,7 @@ let SearchComponent = ({ handleSearch }) => {
     return (
         <div id='search-component-wrapper'>
             <label htmlFor='search-input'>
-                {focused ? inputAfterFocused() : inputBeforeFocused()}
+                {(focused) ? inputAfterFocused() : inputBeforeFocused()}
             </label>
         </div>
     )
