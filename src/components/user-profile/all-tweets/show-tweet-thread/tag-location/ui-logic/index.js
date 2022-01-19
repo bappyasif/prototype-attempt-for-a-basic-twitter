@@ -25,12 +25,12 @@ let TagLocationModalUI = ({ foundPlaces, currentUser, handleSearch, selectedTagg
             <ModalHeader currentUser={currentUser} />
             <SearchComponent handleSearch={handleSearch} />
             {/* <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedPlace} /> */}
-            <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedTaggedPlace} />
+            <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedTaggedPlace} selectedTaggedPlace={selectedTaggedPlace} />
         </div>
     )
 }
 
-let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace }) => {
+let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace, selectedTaggedPlace }) => {
     let [placesNodes, setPlacesNodes] = useState(null)
     
     // useEffect(() => {
@@ -39,7 +39,7 @@ let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace }) => {
     
     useEffect(() => {
         // let nodes = foundPlaces.map(item => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />)
-        let nodes = foundPlaces.map((item, idx) => <RenderPlace key={idx} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />)
+        let nodes = foundPlaces.map((item, idx) => <RenderPlace key={idx} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} selectedTaggedPlace={selectedTaggedPlace} />)
         setPlacesNodes(nodes)
     }, [foundPlaces])
     
@@ -53,7 +53,7 @@ let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace }) => {
     )
 }
 
-let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace }) => {
+let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace, selectedTaggedPlace }) => {
     let [clicked, setClicked] = useState(false)
     let [distanceSanitized, setDistanceSanitized] = useState(null)
     let history = useHistory()
@@ -64,8 +64,9 @@ let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace }) => {
     }
 
     useEffect(() => {
-        clicked && handleSelectedPlace(name)
-        !clicked && handleSelectedPlace('')
+        clicked && handleSelectedPlace({name: name})
+        // clicked && handleSelectedPlace(name)
+        // !clicked && handleSelectedPlace('')
     }, [clicked])
 
     useEffect(() => {
@@ -89,7 +90,9 @@ let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace }) => {
                 <div className='distance' style={{marginLeft: '11px'}}>{distanceSanitized} away</div>
                 {/* <div className='distance'>{distanceSanitized} km away</div> */}
             </div>
-            {clicked && <div id='svg-icon'>{tickMarkIconSvg()}</div>}
+            {/* {clicked && <div id='svg-icon'>{tickMarkIconSvg()}</div>} */}
+            {/* {(clicked || (name == (selectedTaggedPlace && selectedTaggedPlace[0].name))) && <div id='svg-icon'>{tickMarkIconSvg()}</div>} */}
+            {(clicked || name == selectedTaggedPlace) && <div id='svg-icon'>{tickMarkIconSvg()}</div>}
         </div>
     )
 }

@@ -286,6 +286,13 @@ export let getSomeDataFromUserMainDocument = (userID, dataLoader, whichData) => 
     }).catch(err => console.log('could not extract data from given docuement', err.message))
 }
 
+export let updateSomeDataWithinUserMainDocument = (userID, whichData) => {
+    let docRef = doc(db, 'tweets-user', userID)
+    updateDoc(docRef, whichData)
+    .then(() => console.log('data been updated successfuly into user main document'))
+    .catch(err=>console.log('user main document data update has been failed', err.code, err.message))
+}
+
 export let deleteDocFromFirestore = (userID, docID) => {
     let docRef = doc(db, 'tweets-user', userID, userID, docID)
     deleteDoc(docRef)

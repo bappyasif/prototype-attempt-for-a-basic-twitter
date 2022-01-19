@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import TagLocationModalUI from './ui-logic'
 
-function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlace, primaryTweetText}) {
+function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlace, primaryTweetText, taggedPlaceInfoInUserProfile}) {
     let [placesData, setPlacesData] = useState(null)
 
     let [allNearByPlaces, setAllNearByPlaces] = useState(null)
@@ -15,76 +15,79 @@ function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlac
 
     let [taggedPlaceData, setTaggedPlaceData] = useState(null)
 
-    // let handleSearchedPlaces = dataset => setSearchedPlaces(dataset[0].items)  // filter this data set, and see if this resolves this issue!!
+    let [runOnce, setRunOnce] = useState(true)
+
+    taggedPlaceInfoInUserProfile &&  console.log(taggedPlaceInfoInUserProfile, 'hererererrereer')
 
     let handleTaggedPlaceData = item => {
-        setTaggedPlaceData(item[0].items)
-        console.log(item[0].items, 'taggedPlaceData!!')
+        setTaggedPlaceData(item[0].items[0])
+        let coords = item[0].items[0].position
+        console.log(item[0].items[0], 'taggedPlaceData!!', coords)
+        runOnce && handleSelectedTaggedPlace({position: coords})
     }
 
     let handleSearchedPlaces = dataset => {
         let data = dataset[0].items;
-        let filteredData = data.filter((val, idx, self) => 
-        idx == self.findIndex(t=> t.title == val.title))
-        console.log(filteredData, 'data!!', data)
-        setSearchedPlaces(dataset[0].items)
+        setSearchedPlaces(data)
     }  // filter this data set, and see if this resolves this issue!!
 
     let handleSearchText = evt => setSearchText(evt.target.value)
 
     let handleDeviceCoords = data => setDeviceCoords(data)
 
-    let handleAllNearbyPlaces = data => {
-        // let adjustedData = selectedTaggedPlace ? [selectedTaggedPlace, ...data] : data
-        let adjustedData = selectedTaggedPlace ? [taggedPlaceData && taggedPlaceData[0], ...data] : data
-        console.log(adjustedData, 'adjustedData!!', taggedPlaceData, selectedTaggedPlace)
-        // setAllNearByPlaces(adjustedData)
+    let handlePlacesData = value => setPlacesData(value);
 
+    // this would be called from useEffects to decide which dataset to render on DOM, is it without previously selected tagged place or not
+    let handleAllNearbyPlaces = data => {
         setAllNearByPlaces(data)
+        // making sure previously hekd dataset to be nullified so that it  cant run multiple time from useEffects
+        taggedPlaceData && setTaggedPlaceData(null)
+        placesData && setPlacesData(null)
     }
 
     useEffect(() => {
-        taggedPlaceData && setAllNearByPlaces(prevData => [taggedPlaceData, ...prevData])
+        // in this if block we're making sure only filtered item goes through so that selected place doesnt show up in list multiple time/s
+        if(taggedPlaceData) {
+            let fd = allNearByPlaces.filter(item => item.title != selectedTaggedPlace[0].name)
+            handleAllNearbyPlaces([taggedPlaceData, ...fd])
+            // console.log(selectedTaggedPlace, fd)
+        } 
     }, [taggedPlaceData])
 
-    let handlePlacesData = value => setPlacesData(value);
-
-    useEffect(() => placesData && handleAllNearbyPlaces(placesData[0].items))
+    useEffect(() => {
+        placesData && handleAllNearbyPlaces(placesData[0].items)
+    }, [placesData])
 
     useEffect(() => {
-        // makingHttpGetRequest(handlePlacesData);
         getUserCurrentLocation(handleDeviceCoords)
     }, [])
 
-    // useEffect(() => {
-    //     searchedPlaces && setSearchedPlaces([])
-    // }, [])
+    // when there is a tagged location already exists in profile or post, retriving all necessary data before passing it along to search and nearby places calls
+    useEffect(() => {
+        runOnce && selectedTaggedPlace && console.log(selectedTaggedPlace, 'isit!!!!')
+        // runOnce && selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+        runOnce && (selectedTaggedPlace[0]) && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace[0].name, handleTaggedPlaceData, deviceCoords)
+        runOnce && selectedTaggedPlace && deviceCoords && setRunOnce(false)
+    }, [allNearByPlaces])
 
+    // making a http get request for all nearby placess to render on DOM
     useEffect(() => {
         deviceCoords && makingHttpGetRequest(handlePlacesData, deviceCoords)
-        selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
     }, [deviceCoords])
 
-    // when there is a tagged location already exists in profile or post, retriving all necessary data before passing it along to search and nearby places calls
-    // useEffect(() => {
-    //     selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
-    //     selectedTaggedPlace && deviceCoords && alert('!!')
-    // }, [selectedTaggedPlace])
-
-    // useEffect(() => searchText && deviceCoords && makingHttpGetRequestForSearch(searchText, handleSearchedPlaces, deviceCoords), [searchText])
+    // useEffect(() => taggedPlaceInfoInUserProfile && makingHttpGetRequest())
+    
+    // whenever user starts to type in a location name to search for, render resulting dataset on DOM
     useEffect(() => {
         searchText && deviceCoords && makingHttpGetRequestForSearch(searchText, handleSearchedPlaces, deviceCoords)
         !searchText && deviceCoords && makingHttpGetRequestForSearch('Dhaka', handleSearchedPlaces, deviceCoords)
         // selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
-        !searchText && deviceCoords && setSearchedPlaces([])
+        !searchText && deviceCoords && setSearchedPlaces(null)
     }, [searchText])
 
-    // console.log(placesData, 'places!!', allNearByPlaces, deviceCoords)
-    console.log(searchText, '<search text>', searchedPlaces, taggedPlaceData)
-
-    return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} />
-    // return allNearByPlaces && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} />
-    // return <TagLocationModalUI nearbyPlaces={allNearByPlaces} />
+    // return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} />
+    // return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace[0] && selectedTaggedPlace[0].name} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} />
+    return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace[0] && selectedTaggedPlace[0].name} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} />
 }
 
 let makingHttpGetRequestAndHandlingResponseData = (xhr, url, dataUpdater) => {
@@ -169,6 +172,137 @@ export let tickMarkIconSvg = () => <svg width={'24px'} height={'24px'}><g><path 
 export default TagLocation
 
 /**
+ * 
+ * 
+ function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlace, primaryTweetText}) {
+    let [placesData, setPlacesData] = useState(null)
+
+    let [allNearByPlaces, setAllNearByPlaces] = useState(null)
+
+    let [deviceCoords, setDeviceCoords] = useState(null)
+
+    let [searchText, setSearchText] = useState('')
+
+    let [searchedPlaces, setSearchedPlaces] = useState(null)
+
+    let [taggedPlaceData, setTaggedPlaceData] = useState(null)
+
+    let [runOnlyOnceFlag, setRunOnlyOnceFlag] = useState(false)
+
+    // let handleSearchedPlaces = dataset => setSearchedPlaces(dataset[0].items)  // filter this data set, and see if this resolves this issue!!
+
+    let handleTaggedPlaceData = item => {
+        setTaggedPlaceData(item[0].items[0])
+        // console.log(item[0].items[0], 'taggedPlaceData!!')
+    }
+
+    let handleSearchedPlaces = dataset => {
+        let data = dataset[0].items;
+        setSearchedPlaces(data)
+        // let filteredData = data.filter((val, idx, self) => 
+        // idx == self.findIndex(t=> t.title == val.title))
+        // console.log(filteredData, 'data!!', data)
+        // setSearchedPlaces(dataset[0].items)
+    }  // filter this data set, and see if this resolves this issue!!
+
+    let handleSearchText = evt => setSearchText(evt.target.value)
+
+    let handleDeviceCoords = data => setDeviceCoords(data)
+
+    // this would be called from useEffects to decide which dataset to render on DOM, is it without previously selected tagged place or not
+    let handleAllNearbyPlaces = data => {
+        setAllNearByPlaces(data)
+    }
+
+    // let handleAllNearbyPlaces = data => {
+    //     // let adjustedData = selectedTaggedPlace ? [selectedTaggedPlace, ...data] : data
+    //     // let adjustedData = selectedTaggedPlace ? [taggedPlaceData && taggedPlaceData[0], ...data] : data
+    //     // let adjustedData = taggedPlaceData ? [taggedPlaceData[0], ...data] : data
+    //     // console.log(adjustedData, 'adjustedData!!', taggedPlaceData, selectedTaggedPlace)
+    //     // adjustedData && setAllNearByPlaces(adjustedData)
+        
+    //     // let adjustedData = taggedPlaceData ? [taggedPlaceData[0], ...data] : data
+    //     // setAllNearByPlaces(adjustedData)
+
+    //     setAllNearByPlaces(data)
+
+    //     // (taggedPlaceData) ? setAllNearByPlaces(data) : setAllNearByPlaces(data)
+    // }
+
+    useEffect(() => {        
+        // taggedPlaceData && setAllNearByPlaces(prevData => [taggedPlaceData, ...prevData])
+        // if(allNearByPlaces) {
+        //     let filtered = allNearByPlaces.filter(item => item.title == selectedTaggedPlace)
+        //     console.log(filtered, 'filtered?!!?!')
+        // }
+        taggedPlaceData && handleAllNearbyPlaces([taggedPlaceData, ...allNearByPlaces])
+        // taggedPlaceData && setTaggedPlaceData(null)
+        taggedPlaceData && setTaggedPlaceData(prevData => null)
+    }, [taggedPlaceData])
+
+    // useEffect(() => {
+    //     if(taggedPlaceData && runOnlyOnceFlag) {
+    //         let filterData = allNearByPlaces.filter(item => item.title == selectedTaggedPlace)
+    //         console.log(selectedTaggedPlace, 'filteredData!!', filterData)
+    //     }
+    //     // taggedPlaceData && setAllNearByPlaces(prevData => [taggedPlaceData, ...prevData])
+    //     !runOnlyOnceFlag && taggedPlaceData && setAllNearByPlaces(prevData => [taggedPlaceData, ...prevData])
+    //     taggedPlaceData && !runOnlyOnceFlag && setRunOnlyOnceFlag(true)
+    //     // taggedPlaceData && console.log('<<<<adjustedDataReady>>>>')
+    // }, [taggedPlaceData])
+
+    let handlePlacesData = value => setPlacesData(value);
+
+    useEffect(() => placesData && handleAllNearbyPlaces(placesData[0].items), [placesData])
+
+    useEffect(() => {
+        // makingHttpGetRequest(handlePlacesData);
+        getUserCurrentLocation(handleDeviceCoords)
+        // selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+        // selectedTaggedPlace && deviceCoords && console.log(selectedTaggedPlace, deviceCoords, 'what what!!')
+    }, [])
+
+    // when there is a tagged location already exists in profile or post, retriving all necessary data before passing it along to search and nearby places calls
+    useEffect(() => {
+        selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+        // selectedTaggedPlace && deviceCoords && console.log(selectedTaggedPlace, deviceCoords, 'what what!!')
+    }, [allNearByPlaces])
+    // useEffect(() => {
+    //     selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+    //     // selectedTaggedPlace && deviceCoords && console.log(selectedTaggedPlace, deviceCoords, 'what what!!')
+    // }, [searchedPlaces, allNearByPlaces])
+
+    // making a http get request for all nearby placess to render on DOM
+    useEffect(() => {
+        deviceCoords && makingHttpGetRequest(handlePlacesData, deviceCoords)
+        // selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+        // selectedTaggedPlace && deviceCoords && console.log(selectedTaggedPlace, deviceCoords, 'what what!!')
+    }, [deviceCoords])
+
+    // useEffect(() => {
+    //     selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+    //     selectedTaggedPlace && deviceCoords && alert('!!')
+    // }, [selectedTaggedPlace])
+
+    // useEffect(() => searchText && deviceCoords && makingHttpGetRequestForSearch(searchText, handleSearchedPlaces, deviceCoords), [searchText])
+    
+    // whenever user starts to type in a location name to search for, render resulting dataset on DOM
+    useEffect(() => {
+        searchText && deviceCoords && makingHttpGetRequestForSearch(searchText, handleSearchedPlaces, deviceCoords)
+        !searchText && deviceCoords && makingHttpGetRequestForSearch('Dhaka', handleSearchedPlaces, deviceCoords)
+        // selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+        !searchText && deviceCoords && setSearchedPlaces([])
+        // selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+        // selectedTaggedPlace && deviceCoords && console.log(selectedTaggedPlace, deviceCoords, 'what what!!')
+    }, [searchText])
+
+    // console.log(placesData, 'places!!', allNearByPlaces, deviceCoords)
+    // console.log(searchText, '<search text>', searchedPlaces, taggedPlaceData)
+
+    return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} />
+    // return allNearByPlaces && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} />
+    // return <TagLocationModalUI nearbyPlaces={allNearByPlaces} />
+}
  * 
  * 
  let makingHttpGetRequest = (handlePlacesData, deviceCoords) => {

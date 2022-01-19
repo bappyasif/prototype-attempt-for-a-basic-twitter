@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React, { Component, useEffect, useState } from 'react'
 import AllRoutes from './all-routes'
 import FirebaseApp from './firebase-configs';
-import { addSpecificDataIntoFirestoreCollection, getDataFromFirestoreSubCollection, createSubCollectionForCurrentUser, deleteDocFromFirestore, getAllDocsOnce, getSomeDataFromUserMainDocument, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime, updateDataInFirestore } from './firestore-methods';
+import { addSpecificDataIntoFirestoreCollection, getDataFromFirestoreSubCollection, createSubCollectionForCurrentUser, deleteDocFromFirestore, getAllDocsOnce, getSomeDataFromUserMainDocument, readDataDescendingOrder, readDataInDescendingORderFromSubCollection, readDataInRealtime, updateDataInFirestore, updateSomeDataWithinUserMainDocument } from './firestore-methods';
 import { v4 as uuid } from 'uuid'
 import LandingPageUILogics from './landing-page/ui-logics';
 
@@ -40,14 +40,25 @@ function ComponentsContainer() {
     let [pollVotesCount, setPollVotesCount] = useState({})
     let [threadedTweetData, setThreadedTweetData] = useState(null)
     let [repliedTweets, setRepliedTweets] = useState(null)
-    let [selectedTaggedPlace, setselectedTaggedPlace] = useState(null)
+    let [selectedTaggedPlace, setselectedTaggedPlace] = useState([])
+    let [taggedPlaceInfoInUserProfile, setTaggedPlaceInfoInProfile] = useState(null)
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
 
-    let handleSelectedTaggedPlace = name => setselectedTaggedPlace(name)
+    let handleTaggedPlaceInfoInProfile = (value) => {
+        console.log(value, 'taggedPlaceValueCheck')
+        setTaggedPlaceInfoInProfile(value);
+    }
+
+    let handleSelectedTaggedPlace = data => {
+        console.log(data, 'whatitseemslike?!')
+        setselectedTaggedPlace(prevData => [...prevData, data])
+        // setselectedTaggedPlace({...selectedTaggedPlace, data})
+        // setselectedTaggedPlace(name)
+    }
 
     let handleRepliedTweets = values => {
-        console.log(values, 'chk01')
+        // console.log(values, 'chk01')
         setRepliedTweets([...values])
     }
 
@@ -100,6 +111,24 @@ function ComponentsContainer() {
     //     console.log('<< ::fromWhere:: >>', frmWhr)
     // }
 
+    useEffect(() => {
+        currentUser && selectedTaggedPlace[0] && getSomeDataFromUserMainDocument(currentUser, handleTaggedPlaceInfoInProfile, 'deviceLocation')
+        
+        // currentUser && selectedTaggedPlace[0] && taggedPlaceNameInUserProfile && updateSomeDataWithinUserMainDocument(currentUser, {deviceLocation: selectedTaggedPlace})
+    }, [selectedTaggedPlace])
+
+    useEffect(() => {
+        if(!taggedPlaceInfoInUserProfile) {
+            // console.log('here here!!!!')
+            currentUser && updateSomeDataWithinUserMainDocument(currentUser, {deviceLocation: selectedTaggedPlace})
+        } else {
+            console.log(taggedPlaceInfoInUserProfile, 'tagged place data found!!')
+        }
+        // currentUser && updateSomeDataWithinUserMainDocument(currentUser, {deviceLocation: selectedTaggedPlace})
+
+        // currentUser && selectedTaggedPlace[0] && taggedPlaceNameInUserProfile && updateSomeDataWithinUserMainDocument(currentUser, {deviceLocation: selectedTaggedPlace})
+    }, [taggedPlaceInfoInUserProfile])
+
     useEffect(() => currentList && setMembersList([]), [currentList])
 
     // useEffect(() => rerenderDOM && makingDataReadyInDescendingOrder(), [rerenderDOM])
@@ -133,6 +162,7 @@ function ComponentsContainer() {
         currentUser && makingDataReadyFromSubCollectionInDescendingOrder(currentUser)
         // search for pinned tweet, in firestore user collection
         currentUser && getSomeDataFromUserMainDocument(currentUser, handleInitialPinnedTweetDataLoader, 'pinnedTweet')
+        currentUser && getSomeDataFromUserMainDocument(currentUser, handleTaggedPlaceInfoInProfile, 'deviceLocation')
     }, [currentUser])
 
     let updateData = data => {
@@ -323,12 +353,13 @@ function ComponentsContainer() {
     // pinnedTweetID && console.log(pinnedTweetID, 'tweet ID', userDocs)
     // currentList && console.log(currentList, 'currentList')
     // console.log(pollVotesCount, '?!')
-    console.log(repliedTweets, '!!repliedTweets', threadedTweetData)
+    // console.log(repliedTweets, '!!repliedTweets', threadedTweetData)
+    console.log(selectedTaggedPlace, 'selectedTaggedPlace', taggedPlaceInfoInUserProfile)
 
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={(selectedTaggedPlace) || taggedPlaceInfoInUserProfile} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )
