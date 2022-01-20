@@ -42,17 +42,26 @@ function ComponentsContainer() {
     let [repliedTweets, setRepliedTweets] = useState(null)
     let [selectedTaggedPlace, setselectedTaggedPlace] = useState([])
     let [taggedPlaceInfoInUserProfile, setTaggedPlaceInfoInProfile] = useState(null)
+    let [runOnce, setRunOnce] = useState(false)
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
+
+    let handleInitialDeviceLocation = value => {
+        console.log('initially loading device location', value)
+        setselectedTaggedPlace(value)
+    }
 
     let handleTaggedPlaceInfoInProfile = (value) => {
         console.log(value, 'taggedPlaceValueCheck')
         setTaggedPlaceInfoInProfile(value);
+        // setRunOnce(true)
     }
 
     let handleSelectedTaggedPlace = data => {
         console.log(data, 'whatitseemslike?!')
-        setselectedTaggedPlace(prevData => [...prevData, data])
+        setselectedTaggedPlace([].concat(data))
+        // selectedTaggedPlace.length > 3 ? setselectedTaggedPlace(null) : setselectedTaggedPlace(prevData => [...prevData, data])
+        // setselectedTaggedPlace(prevData => [...prevData, data])
         // setselectedTaggedPlace({...selectedTaggedPlace, data})
         // setselectedTaggedPlace(name)
     }
@@ -112,17 +121,22 @@ function ComponentsContainer() {
     // }
 
     useEffect(() => {
-        currentUser && selectedTaggedPlace[0] && getSomeDataFromUserMainDocument(currentUser, handleTaggedPlaceInfoInProfile, 'deviceLocation')
+        currentUser && selectedTaggedPlace && selectedTaggedPlace[0] && getSomeDataFromUserMainDocument(currentUser, handleTaggedPlaceInfoInProfile, 'deviceLocation')
         
+        currentUser && selectedTaggedPlace && console.log(selectedTaggedPlace, 'tagged?!')
+        // selectedTaggedPlace[3] && setselectedTaggedPlace([])
         // currentUser && selectedTaggedPlace[0] && taggedPlaceNameInUserProfile && updateSomeDataWithinUserMainDocument(currentUser, {deviceLocation: selectedTaggedPlace})
     }, [selectedTaggedPlace])
 
     useEffect(() => {
         if(!taggedPlaceInfoInUserProfile) {
-            // console.log('here here!!!!')
+            console.log('tagged place data undefined!!!!')
             currentUser && updateSomeDataWithinUserMainDocument(currentUser, {deviceLocation: selectedTaggedPlace})
         } else {
             console.log(taggedPlaceInfoInUserProfile, 'tagged place data found!!')
+            // setselectedTaggedPlace(taggedPlaceInfoInUserProfile)
+            // runOnce && setselectedTaggedPlace(taggedPlaceInfoInUserProfile)
+            // runOnce && setRunOnce(false)
         }
         // currentUser && updateSomeDataWithinUserMainDocument(currentUser, {deviceLocation: selectedTaggedPlace})
 
@@ -156,13 +170,17 @@ function ComponentsContainer() {
         // creating some dummy list to use when needed
         handleCurrentList({name: 'test list', description: 'listDescription', isPrivate: true, listPictureUrl: 'https://picsum.photos/200/300'})
         handleCurrentList({name: 'list test', description: 'listDescription', isPrivate: false, listPictureUrl: 'https://picsum.photos/200/300'})
+
+        // looking for initially set device place location, and when found updating selectedTagedPLace state
+
     }, [])
 
     useEffect(() => {
         currentUser && makingDataReadyFromSubCollectionInDescendingOrder(currentUser)
         // search for pinned tweet, in firestore user collection
         currentUser && getSomeDataFromUserMainDocument(currentUser, handleInitialPinnedTweetDataLoader, 'pinnedTweet')
-        currentUser && getSomeDataFromUserMainDocument(currentUser, handleTaggedPlaceInfoInProfile, 'deviceLocation')
+        // currentUser && getSomeDataFromUserMainDocument(currentUser, handleTaggedPlaceInfoInProfile, 'deviceLocation')
+        currentUser && getSomeDataFromUserMainDocument(currentUser, handleInitialDeviceLocation, 'deviceLocation')
     }, [currentUser])
 
     let updateData = data => {

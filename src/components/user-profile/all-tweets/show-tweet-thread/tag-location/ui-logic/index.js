@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { useEffect } from 'react/cjs/react.development'
 import { removeIconSvg, searchIconSvg, tickMarkIconSvg } from '..'
 
-let TagLocationModalUI = ({ foundPlaces, currentUser, handleSearch, selectedTaggedPlace, handleSelectedTaggedPlace, primaryTweetText }) => {
+let TagLocationModalUI = ({ foundPlaces, currentUser, handleSearch, selectedTaggedPlace, handleSelectedTaggedPlace, primaryTweetText, setTaggedPlaceName }) => {
     // console.log(nearbyPlaces, 'data ready')
     // let [selectedPlace, setSelectedPlace] = useState(null)
 
@@ -25,12 +25,12 @@ let TagLocationModalUI = ({ foundPlaces, currentUser, handleSearch, selectedTagg
             <ModalHeader currentUser={currentUser} />
             <SearchComponent handleSearch={handleSearch} />
             {/* <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedPlace} /> */}
-            <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedTaggedPlace} selectedTaggedPlace={selectedTaggedPlace} />
+            <RenderNearByPlaces foundPlaces={foundPlaces} handleSelectedPlace={handleSelectedTaggedPlace} selectedTaggedPlace={selectedTaggedPlace && selectedTaggedPlace} setTaggedPlaceName={setTaggedPlaceName} />
         </div>
     )
 }
 
-let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace, selectedTaggedPlace }) => {
+let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace, selectedTaggedPlace, setTaggedPlaceName }) => {
     let [placesNodes, setPlacesNodes] = useState(null)
     
     // useEffect(() => {
@@ -39,7 +39,7 @@ let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace, selectedTaggedPlac
     
     useEffect(() => {
         // let nodes = foundPlaces.map(item => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />)
-        let nodes = foundPlaces.map((item, idx) => <RenderPlace key={idx} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} selectedTaggedPlace={selectedTaggedPlace} />)
+        let nodes = foundPlaces.map((item, idx) => <RenderPlace key={idx} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} selectedTaggedPlace={selectedTaggedPlace} setTaggedPlaceName={setTaggedPlaceName} />)
         setPlacesNodes(nodes)
     }, [foundPlaces])
     
@@ -53,9 +53,10 @@ let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace, selectedTaggedPlac
     )
 }
 
-let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace, selectedTaggedPlace }) => {
+let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace, selectedTaggedPlace, setTaggedPlaceName }) => {
     let [clicked, setClicked] = useState(false)
     let [distanceSanitized, setDistanceSanitized] = useState(null)
+    let [deviceLocation, setDeviceLocation] = useState(null)
     let history = useHistory()
 
     let handleClicked = () => {
@@ -63,8 +64,11 @@ let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace, selectedTagg
         history.goBack()
     }
 
+    useEffect(() => selectedTaggedPlace && setDeviceLocation(selectedTaggedPlace), [selectedTaggedPlace])
+
     useEffect(() => {
-        clicked && handleSelectedPlace({name: name})
+        // clicked && handleSelectedPlace({name: name})
+        clicked && setTaggedPlaceName(name)
         // clicked && handleSelectedPlace(name)
         // !clicked && handleSelectedPlace('')
     }, [clicked])
@@ -80,6 +84,7 @@ let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace, selectedTagg
     }, [name])
 
     // console.log(distance >= 100, distance, ((distance)/1000).toFixed(2))
+    console.log(name == selectedTaggedPlace, name, selectedTaggedPlace, name == deviceLocation)
 
     return (
         <div className='render-place-wrapper' onClick={handleClicked}>
