@@ -15,25 +15,25 @@ import { RenderUserTweetText } from '../reuseable-helper-functions'
 import { RenderTweetBottomIcons } from '../tweet-bottom'
 import TagLocation from './tag-location'
 
-function ShowTweetThread({ threadedTweetData, currentUser, uniqueID, updateData, primaryTweetText, setPrimaryTweetText, selectedFile, setSelectedFile, selectedGif, setSelectedGif, selectedTaggedPlace, handleSelectedTaggedPlace }) {
+function ShowTweetThread({ repliedTweetsIDs, handleLoadingTweetsIDs, removeSpeceficArrayItem, threadedTweetData, currentUser, uniqueID, updateData, primaryTweetText, setPrimaryTweetText, selectedFile, setSelectedFile, selectedGif, setSelectedGif, selectedTaggedPlace, handleSelectedTaggedPlace }) {
     let { created, quotedTweetID, ID, scheduledTime, tweetText, extraTweet, gifFile, extraGifFile, pictureFile, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...threadedTweetData }
-    let [repliedTweetsIDs, setRepliedTweetsIDs] = useState(null)
+    // let [repliedTweetsIDs, setRepliedTweetsIDs] = useState(null)
 
     // let [clicked, setClicked] = useState(false)
     // let handleClicked = () => setClicked(!clicked)
-    let handleLoadingTweetsIDs = data => setRepliedTweetsIDs(data)
-    console.log(ID, tweetText, tweetPrivacy, created, uniqueID, '::::', threadedTweetData)
+    // let handleLoadingTweetsIDs = data => setRepliedTweetsIDs(data)
+    console.log(ID, tweetText, tweetPrivacy, created, uniqueID, '<<<<::::>>>>', threadedTweetData, selectedTaggedPlace)
     return (
         <div id='show-tweet-thread-container'>
             <HeaderComponent />
             {tweetText && <TweetComponent tweetText={tweetText} createdDate={created} />}
             <ReplyThreadComponent currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} handleLoadingTweetsIDs={handleLoadingTweetsIDs} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
-            <RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} />
+            <RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} removeSpeceficArrayItem={removeSpeceficArrayItem} />
         </div>
     )
 }
 
-let RenderAlreadyRepliedTweets = ({ currentUser, tweetThreadID, repliedTweetsIDs, handleLoadingTweetsIDs }) => {
+let RenderAlreadyRepliedTweets = ({ currentUser, tweetThreadID, repliedTweetsIDs, handleLoadingTweetsIDs, removeSpeceficArrayItem }) => {
     // let [repliedTweetsIDs, setRepliedTweetsIDs] = useState(null)
     // let handleLoadingTweetsIDs = data => setRepliedTweetsIDs(data)
     // let content = {
@@ -45,7 +45,7 @@ let RenderAlreadyRepliedTweets = ({ currentUser, tweetThreadID, repliedTweetsIDs
     useEffect(() => tweetThreadID && getDataFromFirestoreSubCollection(currentUser, tweetThreadID, 'repliedTweets', handleLoadingTweetsIDs), [])
     // console.log(repliedTweetsIDs, '<< replied tweets IDs >>', tweetThreadID, currentUser)
 
-    let alreadyRepliedTweetsList = () => repliedTweetsIDs && repliedTweetsIDs.map((item, idx) => <RenderRepliedTweet key={item} docID={item} currentUser={currentUser} idx={idx} />)
+    let alreadyRepliedTweetsList = () => repliedTweetsIDs && repliedTweetsIDs.map((item, idx) => <RenderRepliedTweet key={item} docID={item} currentUser={currentUser} idx={idx} removeSpeceficArrayItem={removeSpeceficArrayItem} />)
     return (
         <div id='already-replied-tweets-wrapper'>
             {/* <RenderTweetDataComponent content={content} /> */}
@@ -56,7 +56,7 @@ let RenderAlreadyRepliedTweets = ({ currentUser, tweetThreadID, repliedTweetsIDs
     )
 }
 
-let RenderRepliedTweet = ({ docID, currentUser, idx }) => {
+let RenderRepliedTweet = ({ docID, currentUser, idx, removeSpeceficArrayItem }) => {
     let [dataset, setDataset] = useState(null)
     let handleDataset = (data) => setDataset(data)
 
@@ -72,10 +72,10 @@ let RenderRepliedTweet = ({ docID, currentUser, idx }) => {
         // markup = <RenderTweetDataComponent content={dataset} />
         // return (markup)
 
-        console.log('<<<<checkpoint01>>>>', dataset)
+        console.log('<<<<checkpoint01>>>>', dataset, docID, idx)
 
         markup = <div className='tweet-ui-wrapper'>
-            <RenderTweetDataComponent content={sanitizeDatasetForRendering(dataset)} currentUser={currentUser} fromTweetThread={true} />
+            <RenderTweetDataComponent content={sanitizeDatasetForRendering(dataset)} currentUser={currentUser} fromTweetThread={true} removeSpeceficArrayItem={removeSpeceficArrayItem} />
             {idx == 0 && <RenderAddAnotherTweet />}
         </div>
         return (markup)
@@ -169,7 +169,8 @@ let AfterClickedMarkup = ({ handleClicked, currentUser, threadedTweetData, uniqu
         setGifFile(null)
         setSelectedGif(null)
 
-        // handleSelectedTaggedPlace('') // not sure it is required at this point to remove this after replying a tweet from thread
+        // its safer to remove previously held tagged place data fom state variable, so that it doesnt include same tagge place info to other tweets
+        handleSelectedTaggedPlace(null) // not sure it is required at this point to remove this after replying a tweet from thread
         // console.log('<hererererer>')
     }
 

@@ -143,7 +143,7 @@ export let sanitizeDatasetForRendering = item => {
         tweetPoll: item.tweetPoll,
         extraPoll: item.extraPoll,
         scheduledTime: item.scheduledTimeStamp,
-        ID: item.ID,
+        ID: item.id,
         quotedTweetID: item.quoteTweetID,
         created: item.created
     }
@@ -182,7 +182,7 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
     let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} replyCount={replyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} fromTweetThread={fromTweetThread} />)
     
-    console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture)
+    console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture, ID)
 
     let history = useHistory()
 

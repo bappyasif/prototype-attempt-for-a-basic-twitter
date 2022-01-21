@@ -32,17 +32,17 @@ let TagLocationModalUI = ({ foundPlaces, currentUser, handleSearch, selectedTagg
 
 let RenderNearByPlaces = ({ foundPlaces, handleSelectedPlace, selectedTaggedPlace, setTaggedPlaceName }) => {
     let [placesNodes, setPlacesNodes] = useState(null)
-    
+
     // useEffect(() => {
     //     setPlacesNodes(null)
     // }, [])
-    
+
     useEffect(() => {
         // let nodes = foundPlaces.map(item => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />)
         let nodes = foundPlaces.map((item, idx) => <RenderPlace key={idx} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} selectedTaggedPlace={selectedTaggedPlace} setTaggedPlaceName={setTaggedPlaceName} />)
         setPlacesNodes(nodes)
     }, [foundPlaces])
-    
+
     console.log(placesNodes, '<check>')
     // let listPlaces = () => foundPlaces.map(item => <RenderPlace key={item.title} name={item.title} distance={item.distance} vicinity={item.vicinity} handleSelectedPlace={handleSelectedPlace} />)
     return (
@@ -90,9 +90,9 @@ let RenderPlace = ({ name, distance, vicinity, handleSelectedPlace, selectedTagg
         <div className='render-place-wrapper' onClick={handleClicked}>
             <div className='place-name'>{name}</div>
             <div className='related-infos'>
-                <div className='vicinity' style={{marginRight: '11px'}}>{vicinity.split('<')[0]}</div>
+                <div className='vicinity' style={{ marginRight: '11px' }}>{vicinity.split('<')[0]}</div>
                 -
-                <div className='distance' style={{marginLeft: '11px'}}>{distanceSanitized} away</div>
+                <div className='distance' style={{ marginLeft: '11px' }}>{distanceSanitized} away</div>
                 {/* <div className='distance'>{distanceSanitized} km away</div> */}
             </div>
             {/* {clicked && <div id='svg-icon'>{tickMarkIconSvg()}</div>} */}
@@ -145,8 +145,12 @@ let ModalHeader = ({ currentUser }) => {
     let rightSide = () => {
         return (
             <div id='right-side'>
-                <div id='remove' onClick={handleClick}>Remove</div>
-                <div id='done'>Done</div>
+                {/* <div id='remove' onClick={handleClick}>Remove</div> */}
+                <div id='remove-div' onClick={handleClick}>
+                    <div id='remove2'>Remove</div>
+                    <div id='line'></div>
+                </div>
+                <div id='done' onClick={handleClick}>Done</div>
             </div>
         )
     }

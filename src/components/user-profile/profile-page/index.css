@@ -3,6 +3,10 @@
 
 }
 
+#components-container {
+  position: relative;
+}
+
 #all-tweets-container {
   position: absolute;
   left: 29.69%;
@@ -1374,6 +1378,12 @@
 #components-container #tag-location-container {
   width: 470px;
   background-color: whitesmoke;
+
+  overflow-y: scroll;
+  height: 546px;
+  position: absolute;
+  right: 32.4%;
+
   /* overflow-y: scroll; */
   /* height: 546px; */
 }
@@ -1401,7 +1411,7 @@
 
 #components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #tag-location-container #modal-header-wrapper #right-side,
 #components-container #tag-location-container #modal-header-wrapper #right-side {
-  width: 141px;
+  width: 153px;
   justify-content: space-between;
 }
 
@@ -1411,6 +1421,22 @@
   padding-bottom: .3px;
   line-height: 2em;
   padding: 0px 6px 0px 6px;
+}
+
+#components-container #tag-location-container #modal-header-wrapper #right-side #remove-div {
+  line-height: 1.5em;
+  padding: 6px 11px 6px 11px;
+  border-radius: 20px;
+}
+
+#components-container #tag-location-container #modal-header-wrapper #right-side #remove-div:hover {
+  background-color: lightgrey;
+}
+
+#components-container #tag-location-container #modal-header-wrapper #right-side #remove-div #line {
+  width: 60px;
+  height: 2px;
+  background-color: silver;
 }
 
 #components-container #tag-location-container #modal-header-wrapper #right-side #remove:hover {

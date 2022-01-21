@@ -21,15 +21,13 @@ function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlac
 
     let [runOnce, setRunOnce] = useState(true)
 
-    taggedPlaceInfoInUserProfile &&  console.log(taggedPlaceInfoInUserProfile, 'hererererrereer', selectedTaggedPlace, taggedPlaceName, taggedPlaceCoords)
+    taggedPlaceInfoInUserProfile &&  console.log(taggedPlaceInfoInUserProfile, 'hererererrereer', selectedTaggedPlace, taggedPlaceName )
 
     let handleTaggedPlaceData = item => {
         setTaggedPlaceData(item[0].items[0])
         let coords = item[0].items[0].position
         let name = item[0].items[0].title
-        console.log(item[0].items[0], 'taggedPlaceData!!', coords)
-        // runOnce && handleSelectedTaggedPlace({position: coords})
-        // runOnce && setTaggedPlaceCoords(coords)
+        // console.log(item[0].items[0], 'taggedPlaceData!!', coords)
         handleSelectedTaggedPlace({name: taggedPlaceName || name, position: coords})
     }
 
@@ -43,7 +41,7 @@ function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlac
     let handleDeviceCoords = data => setDeviceCoords(data)
 
     let handlePlacesData = value => {
-        console.log('places data!!', value)
+        // console.log('places data!!', value)
         setPlacesData(value);
         // deviceCoords ? setPlacesData(value) : setInitiallyFoundDeviceLocation(value)
         // deviceCoords ? setPlacesData(value) : setTaggedPlaceData(value)
@@ -52,7 +50,6 @@ function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlac
     // this would be called from useEffects to decide which dataset to render on DOM, is it without previously selected tagged place or not
     let handleAllNearbyPlaces = data => {
         setAllNearByPlaces(data)
-        console.log('runs this!!')
         // making sure previously hekd dataset to be nullified so that it  cant run multiple time from useEffects
         taggedPlaceData && setTaggedPlaceData(null)
         placesData && setPlacesData(null)
@@ -78,9 +75,7 @@ function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlac
 
     useEffect(() => {
         placesData && handleAllNearbyPlaces(placesData[0].items)
-        // deviceCoords && placesData && handleAllNearbyPlaces(placesData[0].items)
-        // !deviceCoords && placesData && setTaggedPlaceData
-        placesData && console.log('runs too!!', placesData, deviceCoords, selectedTaggedPlace)
+        // placesData && console.log('runs too!!', placesData, deviceCoords, selectedTaggedPlace)
     }, [placesData])
 
     useEffect(() => {
@@ -88,34 +83,22 @@ function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlac
     }, [])
 
     useEffect(() => {
-        selectedTaggedPlace && console.log('running block!!!!', selectedTaggedPlace)
-        // selectedTaggedPlace && makingHttpGetRequest(handlePlacesData, deviceCoords)
+        // selectedTaggedPlace && console.log('running block!!!!', selectedTaggedPlace)
         selectedTaggedPlace && selectedTaggedPlace[0] && makingHttpGetRequest(handlePlacesData, selectedTaggedPlace[0].position)
-        // selectedTaggedPlace && runOnce && setRunOnce(false)
     }, [selectedTaggedPlace])
 
     // when there is a tagged location already exists in profile or post, retriving all necessary data before passing it along to search and nearby places calls
     useEffect(() => {
-        runOnce && selectedTaggedPlace && console.log(selectedTaggedPlace, 'isit!!!!')
-        // runOnce && selectedTaggedPlace && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace, handleTaggedPlaceData, deviceCoords)
+        // runOnce && selectedTaggedPlace && console.log(selectedTaggedPlace, 'isit!!!!')
         runOnce && selectedTaggedPlace && (selectedTaggedPlace[0]) && deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace[0].name, handleTaggedPlaceData, deviceCoords)
-        
-        // // for initial tagged place, running this effect so that resulting dataset gets filtered and rendered accordingly on DOM with found device location being at top and tick marked
-        // runOnce && selectedTaggedPlace[0] && !deviceCoords && makingHttpGetRequestForSearch(selectedTaggedPlace[0].name, handleTaggedPlaceData, selectedTaggedPlace[1])
-        
-        // runOnce && selectedTaggedPlace[0] && console.log('checkpoint!!', selectedTaggedPlace[1])
-
         runOnce && selectedTaggedPlace && deviceCoords && setRunOnce(false)
     }, [allNearByPlaces])
 
     // making a http get request for all nearby placess to render on DOM
     useEffect(() => {
         deviceCoords && makingHttpGetRequest(handlePlacesData, deviceCoords)
-        deviceCoords && console.log(deviceCoords, '<>><>')
-        // selectedTaggedPlace[0] && !deviceCoords && makingHttpGetRequest(handlePlacesData, selectedTaggedPlace[1])
+        // deviceCoords && console.log(deviceCoords, '<>><>')
     }, [deviceCoords])
-
-    // useEffect(() => taggedPlaceInfoInUserProfile && makingHttpGetRequest())
     
     // whenever user starts to type in a location name to search for, render resulting dataset on DOM
     useEffect(() => {
@@ -125,10 +108,6 @@ function TagLocation({currentUser, selectedTaggedPlace, handleSelectedTaggedPlac
         !searchText && deviceCoords && setSearchedPlaces(null)
     }, [searchText])
 
-    // return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} />
-    // return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace[0] && selectedTaggedPlace[0].name} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} />
-    // return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={(selectedTaggedPlace[0] && selectedTaggedPlace[0].name || taggedPlaceInfoInUserProfile && taggedPlaceInfoInUserProfile[0].name)} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} />
-    // return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace[0].name && selectedTaggedPlace[0].name} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} setTaggedPlaceName={setTaggedPlaceName} />
     return (searchedPlaces || allNearByPlaces) && <TagLocationModalUI foundPlaces={searchedPlaces || allNearByPlaces} currentUser={currentUser} handleSearch={handleSearchText} selectedTaggedPlace={selectedTaggedPlace && selectedTaggedPlace[0] && selectedTaggedPlace[0].name} handleSelectedTaggedPlace={handleSelectedTaggedPlace} primaryTweetText={primaryTweetText} setTaggedPlaceName={setTaggedPlaceName} />
 }
 

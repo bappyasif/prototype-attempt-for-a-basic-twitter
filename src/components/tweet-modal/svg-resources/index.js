@@ -120,5 +120,5 @@ export let replyTweetModalIcons = () => {
 }
 
 export {
-  giphyIcon, deleteIconForGif, tagIcon, descriptionIcon, copyIcon, deleteIcon, everybodyIcon, gifIcon, imageIcon, mentionedIcon, peopleIcon, pollIcon, scheduleIcon, selectIcon
+  giphyIcon, deleteIconForGif, tagIcon, descriptionIcon, copyIcon, deleteIcon, everybodyIcon, gifIcon, imageIcon, mentionedIcon, peopleIcon, pollIcon, scheduleIcon, selectIcon, locationTagIcon
 }

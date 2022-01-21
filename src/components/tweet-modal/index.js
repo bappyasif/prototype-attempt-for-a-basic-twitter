@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { copyIcon, deleteIcon, deleteIconForGif, descriptionIcon, everybodyIcon, gifIcon, imageIcon, mentionedIcon, peopleIcon, pollIcon, scheduleIcon, tagIcon } from './svg-resources';
+import { copyIcon, deleteIcon, deleteIconForGif, descriptionIcon, everybodyIcon, gifIcon, imageIcon, locationTagIcon, mentionedIcon, peopleIcon, pollIcon, scheduleIcon, tagIcon } from './svg-resources';
 import './tweet-modal.css'
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Grid, Gif } from '@giphy/react-components';
@@ -8,7 +8,7 @@ import EmojiPicker from './emoji-picker';
 import TweetScheduler from './schedule-tweet';
 import TweetWordCount from './tweet-word-count';
 import ContentInComposeTweet from '../compose-tweet/content-in-compose-tweet';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { RenderAnalysingUserTweet, RenderUserTweet } from '../user-profile/all-tweets/tweet-top/analytics-ui';
 import GifModal from './gif-modal';
 
@@ -50,9 +50,12 @@ function TweetModal({ handlePollVotesCount, pollVotesCount, handleQuoteTweetID, 
 
     }, [tweetOptions])
 
+    // initial module loading usecases
     useEffect(() => {
-        setTweetText('')
-        setExtraTweetText('')
+        setTweetText(tweetText || '')
+        setExtraTweetText(extraTweetText || '')
+        setGifFile(gifFile || '')
+        setSelectedFile(selectedFile || '')
     }, [])
 
     // when gif is added in tweets, deciding which part of tweet its been added
@@ -403,6 +406,7 @@ function TweetModal({ handlePollVotesCount, pollVotesCount, handleQuoteTweetID, 
 }
 
 let TweetMediaOptions = ({ gifFile, selectedFile, inputRef, setIsGifIconClicked, isGifIconClicked, handleToggle, isPollIconClicked, isEmojiIconClicked, showPicker, scheduleToggler }) => {
+    let history = useHistory(null)
 
     let onImageIconClicked = evt => inputRef.current.click();
 
@@ -414,8 +418,10 @@ let TweetMediaOptions = ({ gifFile, selectedFile, inputRef, setIsGifIconClicked,
         scheduleToggler();
     }
 
+    let HandleLocation = () => history.push('/compose/tweet/place_picker')
+
     // return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{ pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto' }}>{imageIcon()}</div> <div id='gif-icon' style={{ pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto' }} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{ pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto' }} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div> <div id='schedule-icon' onClick={handleScheduleToggler}>{scheduleIcon()}</div></div>
-    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{ pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto' }}>{imageIcon()}</div> <div id='gif-icon' style={{ pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto' }} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{ pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto' }} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div><Link to='/tweet/compose/schedule' id='schedule-icon' >{scheduleIcon()}</Link></div>
+    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{ pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto' }}>{imageIcon()}</div> <div id='gif-icon' style={{ pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto' }} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{ pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto' }} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div><Link to='/tweet/compose/schedule' id='schedule-icon' >{scheduleIcon()}</Link><div id='handle-location' onClick={HandleLocation} style={{fill: 'rgb(29, 155, 240)'}}>{locationTagIcon()}</div></div>
 }
 
 
