@@ -190,6 +190,10 @@
   width: 100%;
 }
 
+#footer-section #privacy-tagged-location-wrapper {
+  display: flex;
+}
+
 #options-selected {
   display: flex;
   justify-content: left;

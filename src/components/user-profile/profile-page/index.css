@@ -1541,11 +1541,40 @@
   width: max-content;
 }
 
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #show-tagged-place-wrapper,
+#compose-tweet-container #tweet-modal #middle-content #footer-section #privacy-tagged-location-wrapper #show-tagged-place-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 76px;
+  width: fit-content;
+  line-height: 2em;
+  padding: 0px 11px 0px 6px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #show-tagged-place-wrapper:hover,
+#compose-tweet-container #tweet-modal #middle-content #footer-section #privacy-tagged-location-wrapper #show-tagged-place-wrapper:hover {
+  background-color: rgba(29, 155, 240, .6);
+  border-radius: 17px;
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #show-tagged-place-wrapper #tagged-place-name,
+#compose-tweet-container #tweet-modal #middle-content #footer-section #privacy-tagged-location-wrapper #show-tagged-place-wrapper #tagged-place-name {
+  margin-left: 17px;
+  color: rgb(29, 155, 240);
+}
+
+#components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #after-clicked-markup-wrapper #show-tagged-place-wrapper #svg-icon,
+#compose-tweet-container #tweet-modal #middle-content #footer-section #privacy-tagged-location-wrapper #show-tagged-place-wrapper #svg-icon {
+  fill: rgb(29, 155, 240);
+  display: flex;
+}
+
 #components-container #tag-location-container #nearby-places-wrapper .render-place-wrapper #svg-icon {
   position: absolute;
   right: 11px;
   top: 11px;
-  fill: aqua;
+  fill: rgb(29, 155, 240);
 }
 
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper {

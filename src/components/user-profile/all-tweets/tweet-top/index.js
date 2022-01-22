@@ -29,7 +29,7 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     
     let handlewhichPrivacyOption = value => setPrivacyOption(value)
 
-    useEffect(() =>  showListModal && history.push('/i/lists/add_member'))
+    useEffect(() =>  showListModal && history.push('/i/lists/add_member'), [showListModal])
     
     // useEffect(() => whichPrivacy && updateTweetPrivacy(ID, whichPrivacy), [whichPrivacy])
     useEffect(() => {
