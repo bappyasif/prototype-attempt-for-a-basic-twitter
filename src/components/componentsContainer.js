@@ -161,6 +161,8 @@ function ComponentsContainer() {
 
     useEffect(() => currentList && setMembersList([]), [currentList])
 
+    useEffect(() => repliedTweetsIDs && handleReplyCount(repliedTweetsIDs.length), [repliedTweetsIDs])
+
     // useEffect(() => rerenderDOM && makingDataReadyInDescendingOrder(), [rerenderDOM])
 
     useEffect(() => {

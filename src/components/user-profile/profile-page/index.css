@@ -1258,6 +1258,14 @@
   margin-left: 33px;
 }
 
+#components-container #show-tweet-thread-container #tweet-component-wrapper #tweet-media-files-wrapper {
+  margin: 2px 4px 20px 4px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #tweet-media-files-wrapper img {
+  border-radius: 20px;
+}
+
 #components-container #show-tweet-thread-container #reply-tweet-thread-wrapper #before-clicked-markup-wrapper {
   display: flex;
   justify-content: space-evenly;

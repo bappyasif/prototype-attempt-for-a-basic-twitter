@@ -24,7 +24,7 @@ function UserProfile({setPrimaryTweetText, setExtraTweetText, selectedTaggedPlac
 
     let updateExtraPictureUploadingStatus = () => setDoneExtraUrlUploading(true)
 
-    currentUser && console.log(currentUser, 'from userProfile')
+    currentUser && console.log(currentUser, 'from userProfile', replyCount, repliedTweets)
     
     let setUrl = (url) => {
         setPictureUrl(url);
@@ -84,6 +84,7 @@ function UserProfile({setPrimaryTweetText, setExtraTweetText, selectedTaggedPlac
 
         // when there is a tweet quoted by user, and posted it on profile, updating that count on Firestore
         newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: Number(replyCount + 1)})
+        // newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: repliedTweets.length + 1})
         // quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: Number(replyCount + 1)})
         newDataStatus && quoteTweetID && repliedTweets && updateDataInFirestore(currentUser, quoteTweetID, {repliedTweets: [...repliedTweets, uniqueID]})
         // newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {repliedTweets: [].concat(uniqueID)})

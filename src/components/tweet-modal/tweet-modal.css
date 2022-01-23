@@ -113,24 +113,32 @@
 
 #middle-content #analysing-user-tweet-wrapper .quoted-picture {
   height: 279px;
-  width: 413px;
+  width: 464px;
   display: flex;
   border-radius: 20px;
   justify-content: center;
-  margin: auto;
+  margin-left: 47px;
+  /* margin: auto; */
 }
 
 #middle-content #analysing-user-tweet-wrapper a {
-  width: 481px;
+  /* width: 481px; */
   /* height: 290px;
   margin: auto; */
   display: flex;
   justify-content: flex-end;
   border-radius: 20px;
+  width: auto;
+}
+
+#middle-content #analysing-user-tweet-wrapper a div {
+  width: 434px;
 }
 
 #middle-content #analysing-user-tweet-wrapper a div picture img {
   border-radius: 20px;
+  width: -webkit-fill-available;
+  margin-left: -31px;
 }
 
 #middle-content #analysing-user-tweet-wrapper #user-info-wrapper {

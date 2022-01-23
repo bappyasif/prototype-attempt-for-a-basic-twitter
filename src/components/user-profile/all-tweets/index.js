@@ -178,11 +178,13 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
     let [initialReplyCount, setInitialReplyCount] = useState(null)
 
+    // useEffect(() => fromTweetThread && setInitialReplyCount(replyCount || null), [fromTweetThread])
+
     let handleInitialReplyCount = (val) => setInitialReplyCount(val)
 
     let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} replyCount={replyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} fromTweetThread={fromTweetThread} />)
     
-    console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture)
+    console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture, replyCount)
 
     let history = useHistory()
 

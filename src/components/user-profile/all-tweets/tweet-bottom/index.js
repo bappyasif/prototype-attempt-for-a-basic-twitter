@@ -23,6 +23,7 @@ export let RenderTweetBottomIcons = ({ fromTweetThread, elem, extraTwee, extraEe
     // }
 
     let handleInitialReplyCount = val => {
+        console.log(val, 'val!!!!')
         setCounter(val)
         feedParentInitialReplyCount(val)
     }
@@ -48,6 +49,9 @@ export let RenderTweetBottomIcons = ({ fromTweetThread, elem, extraTwee, extraEe
     }, [iconClicked])
 
     // useEffect(() => replyCount && history.push('/tweet/compose'), [replyCount])
+
+    // when its rendering from tweet thread, reply count if there is any should be visibile as well, and it sdong so by updating found replyCount and setting it as counter value
+    useEffect(() => replyCount && elem.id == 'reply' && setCounter(replyCount), [tweetData.ID])
 
     useEffect(() => replyRouteReady && history.push('/tweet/compose'), [replyRouteReady])
 
@@ -109,7 +113,7 @@ export let RenderTweetBottomIcons = ({ fromTweetThread, elem, extraTwee, extraEe
         console.log('checkpointy 1', currentUser, tweetData.ID)
     }
 
-    replyCount && console.log(replyCount, 'replyCount!!')
+    replyCount && console.log(replyCount, 'replyCount!!', counter)
 
     return (
         <div
