@@ -1099,7 +1099,8 @@
 }
 
 /* tweet bottom icon extended functionalities styles here */
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper,
+#show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #retweet .retweet-modal-wrapper {
   position: absolute;
   top: -4px;
   left: -12px;
@@ -1107,21 +1108,25 @@
   z-index: 99;
 }
 
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper,
+#show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #retweet .retweet-modal-wrapper .action-ui-wrapper {
   display: flex;
   align-items: center;
   padding: 2px 4px 0px 2px;
 }
 
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper:hover {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper:hover,
+#show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #retweet .retweet-modal-wrapper .action-ui-wrapper:hover {
   background-color: darkgray;
 }
 
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper .action-svg {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper .action-svg,
+#show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #retweet .retweet-modal-wrapper .action-ui-wrapper .action-svg {
   transform: scale(.92);
 }
 
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper .action-name {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons #retweet .retweet-modal-wrapper .action-ui-wrapper .action-name,
+#show-tweet-thread-container #tweet-component-wrapper #more-options-wrapper #retweet .retweet-modal-wrapper .action-ui-wrapper .action-name {
   font-size: medium;
   padding-bottom: 4px;
   margin-left: 4px;

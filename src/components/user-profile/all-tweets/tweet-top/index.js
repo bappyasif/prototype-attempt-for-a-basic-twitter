@@ -5,8 +5,9 @@ import { analyticsIcon, moreIcon } from '../../profile-page/svg-resources'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 import { getDataFromFirestoreSubCollection } from '../../../firestore-methods'
 import { Redirect, useHistory } from 'react-router-dom'
+import { convertTimestampIntoTokens, RenderTweetPostedTimestamp } from '../show-tweet-thread'
 
-export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handlePinnedTweetID }) => {
+export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handlePinnedTweetID, currentUserProfileInfo, createdDate }) => {
     let [clicked, setClicked] = useState(false)
     let [whichPrivacy, setWhichPrivacy] = useState('')
     let [privacyOption, setPrivacyOption] = useState('')
@@ -17,29 +18,29 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     let history = useHistory()
 
     let handleShowListModal = () => setShowListModal(!showListModal)
-    
+
     let handleShowPinModal = () => setShowPinModal(!showPinModal)
 
     let handleClicked = () => setClicked(!clicked)
     // let rederDropdown = () => moreOptions.map(item => <Rend)
-    
+
     let handleWhoCanReply = () => setChangedWhoCanReply(!changedWhoCanReply)
-    
+
     let handleWhichPrivacy = value => setWhichPrivacy(value)
-    
+
     let handlewhichPrivacyOption = value => setPrivacyOption(value)
 
-    useEffect(() =>  showListModal && history.push('/i/lists/add_member'), [showListModal])
-    
+    useEffect(() => showListModal && history.push('/i/lists/add_member'), [showListModal])
+
     // useEffect(() => whichPrivacy && updateTweetPrivacy(ID, whichPrivacy), [whichPrivacy])
     useEffect(() => {
         // recording newly selected privacy option and updating it both on DOM and Firestore
         whichPrivacy && updateTweetPrivacy(ID, convertOptionsToPrivacy())
-        
+
         // neutralising intial privacy settings
         whichPrivacy && setPrivacyOption(null)
         whichPrivacy && setExistingPrivacy(null)
-        
+
         // whichPrivacy && console.log('privacy running', whichPrivacy, convertOptionsToPrivacy())
     }, [whichPrivacy])
     // console.log(whichPrivacy, 'which privcy')
@@ -50,20 +51,31 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     }, [])
 
     // converting intial privacyOption to DOM readable text so that chekc mark visibility gets shown on DOM
-    useEffect(() => {  
+    useEffect(() => {
         // privacyOption && updateTweetPrivacy(ID, privacyOption)
         privacyOption && setExistingPrivacy(convertOptionToText())
     }, [privacyOption])
 
     // converting initial privacy option to text
     let convertOptionToText = () => privacyOption == '01' ? 'Everybody' : privacyOption == '02' ? 'People who you follow' : privacyOption == '03' && 'Only you'
-    
+
     // converting selected privacy text to server compatible option number
     let convertOptionsToPrivacy = () => whichPrivacy == 'Only you' ? '03' : whichPrivacy == 'People who you follow' ? '02' : whichPrivacy == 'Everybody' && '01'
 
+    console.log(currentUserProfileInfo, createdDate, 'from TweetTop')
+
+    let timeSpanStyles = {
+        color: 'silver',
+        fontSize: 'smaller',
+        display: 'flex',
+        lineHeight: '1.43em',
+        height: 'min-content'
+    }
+
     return (
         <div className='tweet-top'>
-            <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
+            {/* <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div> */}
+            <div className='user-info' style={{ display: 'flex' }}>{currentUserProfileInfo ? currentUserProfileInfo[0].content : 'User Name'}<span>@profile handle</span> <span>-</span><span style={timeSpanStyles}>{createdDate ? <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(createdDate)} /> : 'time here'}</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
             {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} handleShowListModal={handleShowListModal} />}
             {changedWhoCanReply && <RenderDropdownForWhoCanReply handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />}
             {showPinModal && <PinTweetConfirmationModal handleShowPinModal={handleShowPinModal} ID={ID} handlePinnedTweetID={handlePinnedTweetID} />}
@@ -108,15 +120,15 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
 //     )
 // }
 
-let PinTweetConfirmationModal = ({handleShowPinModal, ID, handlePinnedTweetID}) => {
+let PinTweetConfirmationModal = ({ handleShowPinModal, ID, handlePinnedTweetID }) => {
     let ref = useRef()
-    
+
     let handleModal = () => {
         handleShowPinModal()
     }
 
     useOnClickOutside(ref, handleModal)
-    
+
     return (
         <div className='pin-tweet-modal-container' ref={ref}>
             <div className='modal-header'>Pin Tweet to profile?</div>
@@ -127,12 +139,12 @@ let PinTweetConfirmationModal = ({handleShowPinModal, ID, handlePinnedTweetID}) 
     )
 }
 
-let ClickableDiv = ({name, handleShowPinModal, ID, handlePinnedTweetID}) => {
+let ClickableDiv = ({ name, handleShowPinModal, ID, handlePinnedTweetID }) => {
     let handleClick = () => {
-        if(name == 'Pin') {
+        if (name == 'Pin') {
             handlePinnedTweetID(ID)
             handleShowPinModal()
-        } else if(name == 'Cancel') {
+        } else if (name == 'Cancel') {
             handleShowPinModal()
         }
     }
@@ -141,7 +153,7 @@ let ClickableDiv = ({name, handleShowPinModal, ID, handlePinnedTweetID}) => {
     )
 }
 
-let RenderDropdownForWhoCanReply = ({handleClicked, handleWhoCanReply, whichPrivacy, handleWhichPrivacy, existingPrivacy}) => {
+let RenderDropdownForWhoCanReply = ({ handleClicked, handleWhoCanReply, whichPrivacy, handleWhichPrivacy, existingPrivacy }) => {
     let [isClickedOutside, setIsClickedOutside] = useState(true)
     let clcikedRef = useRef()
 
@@ -156,7 +168,7 @@ let RenderDropdownForWhoCanReply = ({handleClicked, handleWhoCanReply, whichPriv
     let renderPrivacy = privacyOptions().map((item, idx) => <RenderPrivacyOption key={item.name} item={item.privacyType} type={item.name} handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />)
 
     return (
-        <div className='who-can-reply-container' ref={clcikedRef} style={{display: !isClickedOutside && 'none'}}>
+        <div className='who-can-reply-container' ref={clcikedRef} style={{ display: !isClickedOutside && 'none' }}>
             <div className='header-text'>Who can reply?</div>
             <div className='subheading-text' style={{ fontSize: 'smaller', color: 'sienna' }}>Choose who can reply to this Tweet. Anyone mentioned can always reply.</div>
             <div className='privacy-options' style={{ marginTop: '8px' }}>
@@ -199,7 +211,7 @@ let RenderDropdownForTweetMoreOptions = ({ ID, removeSpeceficArrayItem, handleWh
     let renderOptions = moreOptions.map(item => <RenderOptions key={item.title} item={item} ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} handleShowListModal={handleShowListModal} />)
 
     return (
-        <div id='more-options-dropdown-container' ref={clcikedRef} style={{display: !isClickedOutside && 'none'}}>
+        <div id='more-options-dropdown-container' ref={clcikedRef} style={{ display: !isClickedOutside && 'none' }}>
             {renderOptions}
         </div>
     )
@@ -237,10 +249,10 @@ let RenderOptions = ({ item, ID, removeSpeceficArrayItem, handleWhoCanReply, han
         } else if (test.textContent == 'Delete') {
             // setTweetID(ID)
             // console.log(ID, 'delete')
-            removeSpeceficArrayItem(ID)            
+            removeSpeceficArrayItem(ID)
         } else if (test.textContent == 'Pin to your profile') {
             handleShowPinModal()
-        } else if(test.textContent == 'Add/Remove @username from Lists') {
+        } else if (test.textContent == 'Add/Remove @username from Lists') {
             handleShowListModal()
         }
 
@@ -266,4 +278,4 @@ let replySvg = () => <svg className='profile-page-svg-icons'><g><path d="M14.046
 let embedSvg = () => <svg className='profile-page-svg-icons'><g><path d="M23.804 11.5l-6.496-7.25c-.278-.31-.752-.334-1.06-.06-.308.277-.334.752-.058 1.06L22.238 12l-6.047 6.75c-.275.308-.25.782.06 1.06.142.127.32.19.5.19.204 0 .41-.084.558-.25l6.496-7.25c.252-.28.258-.713 0-1zm-23.606 0l6.496-7.25c.278-.31.752-.334 1.06-.06.308.277.334.752.058 1.06L1.764 12l6.047 6.75c.277.308.25.782-.057 1.06-.143.127-.322.19-.5.19-.206 0-.41-.084-.56-.25L.197 12.5c-.252-.28-.257-.713 0-1zm9.872 12c-.045 0-.09-.004-.135-.012-.407-.073-.68-.463-.605-.87l3.863-21.5c.074-.407.466-.674.87-.606.408.073.68.463.606.87l-3.864 21.5c-.065.363-.38.618-.737.618z"></path></g></svg>
 let moreOptions = [{ title: 'Delete', icon: deleteSvg() }, { title: 'Pin to your profile', icon: pinSvg() }, { title: 'Add/Remove @username from Lists', icon: listSvg() }, { title: 'Change who can reply', icon: replySvg() }, { title: 'Embed tweet', icon: embedSvg() }, { title: 'Analytics', icon: analyticsIcon() }]
 // let privacyOptions = [{name: 'Everybody', privacyType: tweetPrivacySelected01('white') }, { name: 'People who you follow', privacyType: tweetPrivacySelected02('white')}, {name: 'Only you', privacyType: tweetPrivacySelected03('white')}]
-let privacyOptions = () => [{name: 'Everybody', privacyType: tweetPrivacySelected01('white') }, { name: 'People who you follow', privacyType: tweetPrivacySelected02('white')}, {name: 'Only you', privacyType: tweetPrivacySelected03('white')}]
+let privacyOptions = () => [{ name: 'Everybody', privacyType: tweetPrivacySelected01('white') }, { name: 'People who you follow', privacyType: tweetPrivacySelected02('white') }, { name: 'Only you', privacyType: tweetPrivacySelected03('white') }]

@@ -48,7 +48,7 @@ let MakeReadyGifPicture = ({gifId}) => {
     .then(res => setGifData(res))
     .catch(err=>console.log(err.message, 'from media-gallery giphy fetch'))
 
-    return gifData && <img key={gifId} className='gallery-view' src={handleMediaFileChecks(gifData)} />
+    return gifData ? <img key={gifId} className='gallery-view' src={handleMediaFileChecks(gifData)} /> : null
 }
 
 let handleMediaFileChecks = (mediaFile) => {

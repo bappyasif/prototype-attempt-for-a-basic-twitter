@@ -45,13 +45,16 @@ function ComponentsContainer() {
     let [removeFromTweetThread, setRemoveFromTweetThread] = useState(false)
     let [repliedTweetsIDs, setRepliedTweetsIDs] = useState(null)
     let [updateRepliedTweetsOnThread, setUpdateRepliedTweetsOnThread] = useState(null)
+    let [currentUserProfileInfo, setCurrentUserProfileInfo] = useState(null)
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
 
     // console.log(repliedTweets, '<<<<repliedTweets list from Container>>>>')
 
+    let handleCurrentUserProfileInfo = dataset => setCurrentUserProfileInfo(dataset)
+
     let handleLoadingTweetsIDs = data => {
-        // console.log(data, '<<<<repliedTweets list from Container>>>>')
+        console.log(data, '<<<<repliedTweets list from Container>>>>')
         setRepliedTweetsIDs(data)
     }
 
@@ -77,8 +80,9 @@ function ComponentsContainer() {
     }
 
     let handleRepliedTweets = values => {
-        // console.log(values, 'chk01')
+        console.log(values, 'chk01 from componentContainer!!')
         setRepliedTweets([...values])
+        handleReplyCount(values.length)
     }
 
     let handleThreadedTweetData = (dataset) => setThreadedTweetData(dataset)
@@ -113,7 +117,10 @@ function ComponentsContainer() {
 
     let handlePinnedTweetData = dataset => setPinnedTweetData(dataset)
 
-    let handleReplyCount = (val) => setReplyCount(val);
+    let handleReplyCount = (val) => {
+        console.log(val, 'hadnleReplyCount!!')
+        setReplyCount(val);
+    }
 
     let handleQuoteTweetID = value => setQuoteTweetID(value)
 
@@ -131,9 +138,19 @@ function ComponentsContainer() {
     // }
 
     useEffect(() => {
+        repliedTweetsIDs && console.log(threadedTweetData, repliedTweetsIDs, 'repliedTweetsIDs from Container')
+        repliedTweetsIDs && threadedTweetData && updateDataInFirestore(currentUser, threadedTweetData.ID, {repliedTweets: repliedTweetsIDs})
+        repliedTweetsIDs && threadedTweetData && updateDataInFirestore(currentUser, threadedTweetData.ID, {replyCount: repliedTweetsIDs.length})
+        // repliedTweetsIDs && threadedTweetData && updateDataInFirestore(currentUser, threadedTweetData.quotedTweetID, {repliedTweets: repliedTweetsIDs})
+        // repliedTweetsIDs && threadedTweetData && updateDataInFirestore(currentUser, threadedTweetData.quotedTweetID, {replyCount: repliedTweetsIDs.length})
+    }, [repliedTweetsIDs])
+
+    useEffect(() => {
         let filteredList =  removeFromTweetThread && threadedTweetData && repliedTweetsIDs && repliedTweetsIDs.filter(id => id != removeFromTweetThread);
-        filteredList && console.log(filteredList, '!!!!')
+        filteredList && console.log(filteredList, '!!!!', threadedTweetData)
         filteredList && setRepliedTweetsIDs(filteredList)
+        // currentUser && filteredList && threadedTweetData && updateDataInFirestore(currentUser, threadedTweetData.quotedTweetID, {repliedTweets: filteredList})
+        // currentUser && filteredList && threadedTweetData && updateDataInFirestore(currentUser, threadedTweetData.quotedTweetID, {replyCount: filteredList.length})
     }, [removeFromTweetThread])
 
     useEffect(() => {
@@ -161,7 +178,7 @@ function ComponentsContainer() {
 
     useEffect(() => currentList && setMembersList([]), [currentList])
 
-    useEffect(() => repliedTweetsIDs && handleReplyCount(repliedTweetsIDs.length), [repliedTweetsIDs])
+    // useEffect(() => quoteTweetData && repliedTweetsIDs && handleReplyCount(repliedTweetsIDs.length), [repliedTweetsIDs])
 
     // useEffect(() => rerenderDOM && makingDataReadyInDescendingOrder(), [rerenderDOM])
 
@@ -199,6 +216,8 @@ function ComponentsContainer() {
         currentUser && getSomeDataFromUserMainDocument(currentUser, handleInitialPinnedTweetDataLoader, 'pinnedTweet')
         // currentUser && getSomeDataFromUserMainDocument(currentUser, handleTaggedPlaceInfoInProfile, 'deviceLocation')
         currentUser && getSomeDataFromUserMainDocument(currentUser, handleInitialDeviceLocation, 'deviceLocation')
+        // getting user profile info, so that information is available throughtout component!!
+        currentUser && getSomeDataFromUserMainDocument(currentUser, handleCurrentUserProfileInfo, 'profileInfo')
     }, [currentUser])
 
     let updateData = data => {
@@ -401,7 +420,7 @@ function ComponentsContainer() {
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={(selectedTaggedPlace) || taggedPlaceInfoInUserProfile} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={(selectedTaggedPlace) || taggedPlaceInfoInUserProfile} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} currentUserProfileInfo={currentUserProfileInfo} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )
