@@ -16,7 +16,7 @@ import { ShowCurrentlyTaggedPlace } from '../user-profile/all-tweets/show-tweet-
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 // var giphyQueryURL = "https://api.giphy.com/v1/gifs/search?";
 
-function TweetModal({ selectedTaggedPlace, handlePollVotesCount, pollVotesCount, handleQuoteTweetID, quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
+function TweetModal({ quotedFromRetweetModal, selectedTaggedPlace, handlePollVotesCount, pollVotesCount, handleQuoteTweetID, quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -185,15 +185,17 @@ function TweetModal({ selectedTaggedPlace, handlePollVotesCount, pollVotesCount,
 
             <div id='middle-content'>
                 {scheduleStamp && scheduleStamp}
-                {quoteTweetData && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} forModal={true} />}
-                {quoteTweetData && <div id='addtional-tweet-line'></div>}
+                {quoteTweetData && !quotedFromRetweetModal && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} forModal={true} />}
+                {quoteTweetData && !quotedFromRetweetModal && <div id='addtional-tweet-line'></div>}
                 {/* {quoteTweetData && <div id='addtional-tweet-line' style={{height: ((quoteTweetData.medias.gif && quoteTweetData.medias.gif) || (quoteTweetData.medias.picture && quoteTweetData.medias.picture)) && '324px'}} ></div>} */}
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />
 
                     {/* <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{isPollIconClicked ? <TweetTextInput height="42.6px" placeholderText="Ask a question" tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} /> : <TweetTextInput height="81.6px" placeholderText="What's happening?" tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} />}</div> */}
-                    <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{<TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question" : (quoteTweetData && quoteTweetData.length) ? 'Add another Tweet' : "What's happening?"} tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} />}</div>
+                    <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{<TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={quotedFromRetweetModal ? 'Add a comment' : isPollIconClicked ? "Ask a question" : (quoteTweetData && quoteTweetData.length) ? 'Add another Tweet' : "What's happening?"} tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} quotedFromRetweetModal={quotedFromRetweetModal} />}</div>
                 </div>
+
+                {quoteTweetData && quotedFromRetweetModal && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} forModal={true} quotedFromRetweetModal={quotedFromRetweetModal} />}
 
                 {/* connecting two existing tweets, on load default connector */}
                 {(!selectedFile || !gifFile || !firstTweetHasPoll || !firstTweetHasGif) && <p id='line-extension' style={{ display: addExtraTweetClicked && !isPrimaryTweetClicked && !firstTweetHasPoll ? 'block' : 'none' }}></p>}
@@ -479,7 +481,7 @@ let TweetPrivacySelected = ({ setTweetOptions, tweetPrivacy, setTweetPrivacy }) 
     return <span id='options-selected'>{tweetPrivacy == '01' ? tweetPrivacySelected01() : tweetPrivacy == '02' ? tweetPrivacySelected02() : tweetPrivacySelected03()}</span>
 }
 
-let TweetTextInput = ({ primaryTweetOnFocused, height, placeholderText, tweetText, setTweetText, setPrimaryTweetClicked, setExtraTweetClicked, setBoth }) => {
+let TweetTextInput = ({ quotedFromRetweetModal, primaryTweetOnFocused, height, placeholderText, tweetText, setTweetText, setPrimaryTweetClicked, setExtraTweetClicked, setBoth }) => {
     // let testRef = useRef();
     let handleTweetTextChanges = evt => {
         adjustHeight(evt);
@@ -488,12 +490,12 @@ let TweetTextInput = ({ primaryTweetOnFocused, height, placeholderText, tweetTex
 
     useEffect(() => {
         let tweetInput = document.querySelector('#tweet-input');
-        tweetInput.style.height = height;
+        !quotedFromRetweetModal && (tweetInput.style.height = height);
         // setTweetText('')
         // tweetInput.focus()
         // !primaryTweetOnFocused && document.querySelectorAll('#tweet-input')[1].focus()
         // primaryTweetOnFocused && tweetInput.focus()
-    }, [])
+    }, [height])
 
     let adjustHeight = (evt) => {
         let element = evt.target;
@@ -520,7 +522,7 @@ let TweetTextInput = ({ primaryTweetOnFocused, height, placeholderText, tweetTex
         evt.target.parentNode.style.opacity = '1';
     }
 
-    return <textarea rows='4' id='tweet-input' type='text' maxLength='20' onFocus={handleTextareaWhenFocused} value={tweetText} onChange={handleTweetTextChanges} placeholder={placeholderText} />
+    return <textarea style={{backgroundColor: 'transparent', border: 'solid 1px silver', borderRadius: '4px'}} rows={quotedFromRetweetModal ? '2' : '4'} id='tweet-input' type='text' maxLength='200' onFocus={handleTextareaWhenFocused} value={tweetText} onChange={handleTweetTextChanges} placeholder={placeholderText} />
 }
 
 export let tweetPrivacySelected01 = (color, text) => <span className='privacy-spans'>{text != ' ' && <span className='privacy-svg'>{everybodyIcon(color ? color : 'none')}</span>}<span className='privacy-text'>{text || 'Everybody can reply'}</span></span>

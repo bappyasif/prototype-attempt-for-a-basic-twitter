@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 import { getDataFromFirestoreSubCollection, updateDataInFirestore } from '../../../firestore-methods'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 
-export let RenderTweetBottomIcons = ({ fromTweetThread, elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount, repliedTweetsIDs }) => {
+export let RenderTweetBottomIcons = ({ handleQuotedFromRetweetModal, fromTweetThread, elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount, repliedTweetsIDs }) => {
     let [hoveredID, setHoveredID] = useState('')
     let [iconClicked, setIconClicked] = useState('')
     let [showModal, setShowModal] = useState(false)
@@ -142,7 +142,7 @@ export let RenderTweetBottomIcons = ({ fromTweetThread, elem, extraTwee, extraEe
             {
                 showModal
                 &&
-                <ShowRetweetModalUI handleShowModal={handleShowModal} handleUndoTweet={handleUndoTweet} undoRetweet={undoRetweet} />
+                <ShowRetweetModalUI handleShowModal={handleShowModal} handleUndoTweet={handleUndoTweet} undoRetweet={undoRetweet} handleQuoteTweetID={handleQuoteTweetID} tweetData={tweetData} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />
             }
         </div>
     )
@@ -161,12 +161,12 @@ export let RenderTweetBottomIcons = ({ fromTweetThread, elem, extraTwee, extraEe
 //     return ''
 // }
 
-let ShowRetweetModalUI = ({ handleShowModal, undoRetweet, handleUndoTweet }) => {
+let ShowRetweetModalUI = ({ handleShowModal, undoRetweet, handleUndoTweet, handleQuoteTweetID, tweetData, handleQuotedFromRetweetModal }) => {
     let ref = useRef()
     // clocing modal when clicked outside this wrapper with this custom hook
     useOnClickOutside(ref, handleShowModal)
 
-    let renderModalItems = retweetModalItems.map(item => <RenderRetweetModalItem key={item.name} item={item} handleShowModal={handleShowModal} undoRetweet={undoRetweet} handleUndoTweet={handleUndoTweet} />)
+    let renderModalItems = retweetModalItems.map(item => <RenderRetweetModalItem key={item.name} item={item} handleShowModal={handleShowModal} undoRetweet={undoRetweet} handleUndoTweet={handleUndoTweet} handleQuoteTweetID={handleQuoteTweetID} tweetData={tweetData} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />)
 
     return (
         <div className='retweet-modal-wrapper' ref={ref}>
@@ -175,10 +175,17 @@ let ShowRetweetModalUI = ({ handleShowModal, undoRetweet, handleUndoTweet }) => 
     )
 }
 
-let RenderRetweetModalItem = ({ item, handleShowModal, handleUndoTweet, undoRetweet }) => {
+let RenderRetweetModalItem = ({ item, handleShowModal, handleUndoTweet, undoRetweet, handleQuoteTweetID, tweetData, handleQuotedFromRetweetModal }) => {
+    let history = useHistory(null);
 
     let handleClick = (evt) => {
         // console.log(evt.target.parentNode.id)
+        let nodeID = evt.target.parentNode.id
+        if(nodeID == 'Quote') {
+            handleQuoteTweetID(tweetData.ID)
+            history.push('/tweet/compose')
+            handleQuotedFromRetweetModal()
+        }
         if (evt.target.parentNode.id == 'Retweet') handleUndoTweet()
         handleShowModal()
     }

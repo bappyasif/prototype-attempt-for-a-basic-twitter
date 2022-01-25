@@ -82,9 +82,9 @@ export let getGiphyGifObject = async (gifId) => {
     }
 }
 
-export let RenderUserTweetText = ({tweetText}) => {
+export let RenderUserTweetText = ({tweetText, quotedFromRetweetModal}) => {
     return (
-        <div id='analysing-tweet-text-wrapper' style={{marginBottom: '11px'}}>
+        <div id={quotedFromRetweetModal ? 'analysing-tweet-text-wrapper-from-retweet' : 'analysing-tweet-text-wrapper'} style={{marginBottom: '11px'}}>
             {tweetText || 'user Tweet'}
         </div>
     )

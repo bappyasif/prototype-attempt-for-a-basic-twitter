@@ -840,6 +840,24 @@
   font-weight: bolder;
 }
 
+.rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper {
+  margin-left: 0px !important;
+}
+
+.rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #user-info-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 308px;
+}
+
+.rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #user-info-wrapper #profile-pic-for-retweet-quote-tweet {
+  border-radius: 50%;
+}
+
+.rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper-from-retweet {
+  margin-bottom: 0px !important;
+}
+
 .rendering-tweet-data-container .right-side .privacy-spans {
   margin-bottom: 9px;
 }

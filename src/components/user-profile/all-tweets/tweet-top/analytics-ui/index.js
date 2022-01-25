@@ -135,14 +135,15 @@ let RenderAnalysingTweetMarker = ({ item }) => {
     )
 }
 
-export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, handlePollVotesCount, forModal}) => {
+export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, handlePollVotesCount, forModal, quotedFromRetweetModal}) => {
     let [userProfileData, setUserProfileData] = useState(null)
     
     let [neededInfo, setNeededInfo] = useState([])
 
     let handleDataLoading = (dataset) => setUserProfileData(dataset)
 
-    let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText, id} = speceficTweetData && {...speceficTweetData[0]}
+    // let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText, id} = speceficTweetData && {...speceficTweetData[0]}
+    let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText, id} = Object.keys(speceficTweetData) && {...speceficTweetData[0]}
     
     useEffect(() => currentUser && getUserProfileData(currentUser, handleDataLoading), [])
 
@@ -153,19 +154,31 @@ export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, h
 
     useEffect(() => userProfileData && filterProfileData(), [userProfileData])
     
-    let numberOfPollOptions = Object.values(tweetPoll[0]).filter(val=>val).length
-    console.log(id, '<><>', pollVotesCount, tweetPoll.length, tweetPoll[0], numberOfPollOptions)
+    let numberOfPollOptions = tweetPoll && Object.values(tweetPoll[0]).filter(val=>val).length
+    // console.log(id, '<><>', pollVotesCount, tweetPoll.length, tweetPoll[0], numberOfPollOptions)
     // neededInfo && created && userProfileData && console.log(tweetText, created, userProfileData, neededInfo)
 
+    console.log(speceficTweetData, 'speceficTweetData!!', created, tweetText, speceficTweetData.created, speceficTweetData.tweetText)
+
+    let retweetModalQuoteStyles = {
+        border: 'solid 1px silver',
+        marginLeft: '80px',
+        padding: '11px 11px 4px 17px',
+        marginTop: '11px',
+        borderRadius: '20px',
+        lineHeight: '1.5em'
+    }
+
     return (
-        <div id='analysing-user-tweet-wrapper'>
-            <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={created && created.seconds} />
+        <div id='analysing-user-tweet-wrapper' style={quotedFromRetweetModal && retweetModalQuoteStyles}>
+            <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={(created && created.seconds) || (speceficTweetData.created.seconds)} quotedFromRetweetModal={quotedFromRetweetModal} />
             {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
-            <RenderUserTweetText tweetText={tweetText} />
-            <div id='addtional-tweet-line' style={{height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px'}} ></div>
-            <div id='poll-tweet-line-extension' style={{height: numberOfPollOptions == 3 ? '153px' : numberOfPollOptions == 4 && '194px'}}></div>
-            {((medias.gif && medias.gif) || (medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />}
+            <RenderUserTweetText tweetText={tweetText || speceficTweetData.tweetText} quotedFromRetweetModal={quotedFromRetweetModal} />
+            {!quotedFromRetweetModal && <div id='addtional-tweet-line' style={{height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px'}} ></div>}
+            {!quotedFromRetweetModal && <div id='poll-tweet-line-extension' style={{height: numberOfPollOptions == 3 ? '153px' : numberOfPollOptions == 4 && '194px'}}></div>}
+            {((medias && medias.gif && medias.gif) || (medias && medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />}
             {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} forModal={forModal} />}
+            {quotedFromRetweetModal && <div id='show-this-thread-text'>Show this thread</div>}
         </div>
     )
 }
@@ -193,7 +206,7 @@ let RenderUserTweetMedias = ({medias}) => {
 //     )
 // }
 
-let RenderTweetUserInfo = ({name, profileHandle, tweetPostedDate}) => {
+let RenderTweetUserInfo = ({ name, profileHandle, tweetPostedDate, quotedFromRetweetModal }) => {
     // let dateFormatted = ''
 
     let processCreatedDateFormat = () => {
@@ -207,7 +220,7 @@ let RenderTweetUserInfo = ({name, profileHandle, tweetPostedDate}) => {
     }
     return (
         <div id='user-info-wrapper'>
-            <img style={{width: '20px', height: '20px'}} src='https://picsum.photos/200/300' />
+            <img id={quotedFromRetweetModal && 'profile-pic-for-retweet-quote-tweet'} style={{width: '20px', height: '20px'}} src='https://picsum.photos/200/300' />
             <div id='profile-name'>{name || 'profile name'}</div>
             <div id='profile-handle'>{profileHandle || 'profile handle'}</div>
             <div id='text-separator'>-</div>

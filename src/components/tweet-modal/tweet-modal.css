@@ -145,6 +145,7 @@
   display: flex;
   justify-content: space-between;
   width: 56%;
+  align-items: center;
 }
 
 #middle-content #analysing-user-tweet-wrapper #user-info-wrapper img {
@@ -153,9 +154,32 @@
   border-radius: 50%;
 }
 
-#middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper {
+#middle-content #analysing-user-tweet-wrapper #user-info-wrapper #published-date {
+  color: silver;
+  font-size: smaller;
+}
+
+#middle-content #analysing-user-tweet-wrapper #user-info-wrapper #profile-pic-for-retweet-quote-tweet {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50%;
+}
+
+#middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper,
+#middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper-from-retweet {
       margin-top: 0px !important;
       margin-left: 51px !important;
+}
+
+#middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper-from-retweet {
+  margin-left: 29px !important;
+  margin-bottom: 0px !important;
+}
+
+#middle-content #analysing-user-tweet-wrapper #show-this-thread-text {
+    margin-left: 29px;
+    color: rgba(29, 155, 240, .6);
+    pointer-events: none;
 }
 
 #middle-content #annnounce-schedule {

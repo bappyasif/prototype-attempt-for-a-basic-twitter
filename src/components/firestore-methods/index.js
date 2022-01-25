@@ -10,7 +10,7 @@ let db = getFirestore();
 
 // set data into firestore
 export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, userID) => {
-    let {selectedTaggedPlace, quoteTweetID, scheduledTimeStamp, extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
+    let { retweetedQuote, selectedTaggedPlace, quoteTweetID, scheduledTimeStamp, extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
 
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
@@ -31,6 +31,8 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, us
     refinedData.repliedTweets = []; // bringing in repliedTweets into firestore subcollection as well
 
     refinedData.selectedTaggedPlace = selectedTaggedPlace ? selectedTaggedPlace : null; // binging in tagged location information too
+
+    refinedData.retweetedQuote = retweetedQuote; // bringing in retweetedQuote property so that when tweets gets rendered on DOM initially DOM can style it differently than it does for quotedTweets
 
     if(gifItem || imgFile || tweetText || extraTweet || extraImgFile || extraGifItem) {
         // let docRef = doc(db, 'tweets-data/', docID);
@@ -309,10 +311,12 @@ export let updateDataInFirestore = (userID, docID, data) => {
 
 export let readDocumentFromFirestoreSubCollection = (userID, docID, dataLoader) => {
     let docRef = doc(db, 'tweets-user', userID, userID, docID)
+    // console.log(userID, docID, 'firestore!!')
     getDoc(docRef)
     .then(docSnap => {
         if(docSnap.exists) {
             let dataset = docSnap.data();
+            // console.log(dataset, 'fromfirestore!!')
             dataset && dataLoader(dataset)
             dataset && console.log('document loading was successful')
         } else {
