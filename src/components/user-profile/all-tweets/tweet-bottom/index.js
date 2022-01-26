@@ -46,6 +46,7 @@ export let RenderTweetBottomIcons = ({ handleQuotedFromRetweetModal, fromTweetTh
         } else if(iconClicked == 'analytics') {
             // alert('here!!')
             handleAnalysingTweetID(ID);
+            console.log(ID, 'foundhere!!', tweetData)
             history.push('/analytics')
         }
     }, [iconClicked])

@@ -10,7 +10,7 @@ let db = getFirestore();
 
 // set data into firestore
 export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, userID) => {
-    let { retweetedQuote, selectedTaggedPlace, quoteTweetID, scheduledTimeStamp, extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
+    let { listOfRetweetedQuotes, retweetedQuote, selectedTaggedPlace, quoteTweetID, scheduledTimeStamp, extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
 
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
@@ -34,6 +34,8 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, us
 
     refinedData.retweetedQuote = retweetedQuote; // bringing in retweetedQuote property so that when tweets gets rendered on DOM initially DOM can style it differently than it does for quotedTweets
 
+    refinedData.listOfRetweetedQuotes = listOfRetweetedQuotes; // also bringing in listOfRetweetedQuotes so that whenever it gets quoted from retweet modal component can look for its data when needed
+    
     if(gifItem || imgFile || tweetText || extraTweet || extraImgFile || extraGifItem) {
         // let docRef = doc(db, 'tweets-data/', docID);
         let docRef = doc(db, 'tweets-user', userID, userID, docID)

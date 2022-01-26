@@ -842,20 +842,34 @@
 
 .rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper {
   margin-left: 0px !important;
+  margin-bottom: 11px;
 }
 
 .rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #user-info-wrapper {
   display: flex;
   justify-content: space-between;
-  width: 308px;
+  width: fit-content;
+}
+
+.rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #user-info-wrapper #timestamp-wrapper {
+  color: silver;
+  font-size: smaller;
+}
+
+.rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #show-this-thread-text {
+  color: rgb(29, 155, 240);
+  /* pointer-events: none; */
+  margin-left: 29px;
 }
 
 .rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #user-info-wrapper #profile-pic-for-retweet-quote-tweet {
   border-radius: 50%;
+  margin-right: 9px;
 }
 
 .rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper-from-retweet {
   margin-bottom: 0px !important;
+  margin-left: 29px;
 }
 
 .rendering-tweet-data-container .right-side .privacy-spans {
@@ -1165,6 +1179,17 @@
   font-size: larger;
   padding-bottom: 2px;
   margin-left: 42px;
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #thread-quote-count-wrapper {
+  text-align: left;
+  border-bottom: 1px solid;
+  line-height: 2em;  
+}
+
+#components-container #show-tweet-thread-container #tweet-component-wrapper #thread-quote-count-wrapper:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #user-info-wrapper {

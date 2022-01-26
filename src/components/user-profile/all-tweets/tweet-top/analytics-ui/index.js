@@ -3,26 +3,31 @@ import {useHistory} from 'react-router-dom'
 import { likeloveIcon, replyIcon, retweetIcon } from '../../../profile-page/svg-resources'
 import './styles.css'
 import useOnClickOutside from '../../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
-import {getUserProfileData} from '../../../../firestore-methods'
+import {getUserProfileData, updateDataInFirestore} from '../../../../firestore-methods'
 import { Gif } from '@giphy/react-components'
 import { GiphyFetch } from '@giphy/js-fetch-api'
 import { handleMediaFileChecks } from '../../../../compose-tweet/content-in-compose-tweet'
 import { MakeGifObjectAvailable, RenderPolls, RenderUserTweetText } from '../../reuseable-helper-functions'
+import { convertTimestampIntoTokens, RenderTweetPostedTimestamp } from '../../show-tweet-thread'
+import { sanitizeDatasetForRendering } from '../..'
 // import { RenderPolls } from '../..'
 // import { getGiphyGifObject, MakeGifObjectAvailable } from '../../../all-tweets'
 
 function AnalyticsUI({analysingTweetID, analysingTweetData, currentUser}) {
+    // console.log(analysingTweetData, 'analysingTweetData!!', analysingTweetID)
     return (
-        analysingTweetID
+        (analysingTweetID
         &&
-        analysingTweetData
-        &&
+        analysingTweetData)
+        ?
         <div id='tweet-analytics-ui-container'>
             <RenderAnalyticsHeaderSection />
             <RenderAnalyticsDataSection analysingTweetData={analysingTweetData} currentUser={currentUser} />
             <RenderTweetAnalyticMetrics analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} />
             <RenderAnalyticsFooterSection />
         </div>
+        :
+        null
     )
 }
 
@@ -135,10 +140,19 @@ let RenderAnalysingTweetMarker = ({ item }) => {
     )
 }
 
-export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, handlePollVotesCount, forModal, quotedFromRetweetModal}) => {
+export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, handlePollVotesCount, forModal, quotedFromRetweetModal, handleThreadedTweetData}) => {
     let [userProfileData, setUserProfileData] = useState(null)
     
     let [neededInfo, setNeededInfo] = useState([])
+
+    let history = useHistory(null)
+
+    let handleShowThisThread = () => {
+        console.log(speceficTweetData, 'from showthisthread')
+        handleThreadedTweetData(sanitizeDatasetForRendering(speceficTweetData))
+        updateDataInFirestore(currentUser, speceficTweetData.id, {hasRetweetedThread: true})
+        setTimeout(() => history.push('/status/tweetID'), 800)
+    }
 
     let handleDataLoading = (dataset) => setUserProfileData(dataset)
 
@@ -158,7 +172,7 @@ export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, h
     // console.log(id, '<><>', pollVotesCount, tweetPoll.length, tweetPoll[0], numberOfPollOptions)
     // neededInfo && created && userProfileData && console.log(tweetText, created, userProfileData, neededInfo)
 
-    console.log(speceficTweetData, 'speceficTweetData!!', created, tweetText, speceficTweetData.created, speceficTweetData.tweetText)
+    // console.log(speceficTweetData, 'speceficTweetData!!', created, tweetText, speceficTweetData.created, speceficTweetData.tweetText)
 
     let retweetModalQuoteStyles = {
         border: 'solid 1px silver',
@@ -178,7 +192,7 @@ export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, h
             {!quotedFromRetweetModal && <div id='poll-tweet-line-extension' style={{height: numberOfPollOptions == 3 ? '153px' : numberOfPollOptions == 4 && '194px'}}></div>}
             {((medias && medias.gif && medias.gif) || (medias && medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />}
             {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} forModal={forModal} />}
-            {quotedFromRetweetModal && <div id='show-this-thread-text'>Show this thread</div>}
+            {quotedFromRetweetModal && <div id='show-this-thread-text' onClick={handleShowThisThread}>Show this thread</div>}
         </div>
     )
 }
@@ -220,11 +234,12 @@ let RenderTweetUserInfo = ({ name, profileHandle, tweetPostedDate, quotedFromRet
     }
     return (
         <div id='user-info-wrapper'>
-            <img id={quotedFromRetweetModal && 'profile-pic-for-retweet-quote-tweet'} style={{width: '20px', height: '20px'}} src='https://picsum.photos/200/300' />
-            <div id='profile-name'>{name || 'profile name'}</div>
-            <div id='profile-handle'>{profileHandle || 'profile handle'}</div>
-            <div id='text-separator'>-</div>
-            <div id='published-date'>{processCreatedDateFormat() || 'Month day'}</div>
+            <img id={quotedFromRetweetModal && 'profile-pic-for-retweet-quote-tweet'} style={{width: '20px', height: '20px', marginRight: '9px'}} src='https://picsum.photos/200/300' />
+            <div id='profile-name' style={{marginRight: '8px'}}>{name || 'profile name'}</div>
+            <div id='profile-handle' style={{marginRight: '8px'}}>{profileHandle || 'profile handle'}</div>
+            <div id='text-separator'style={{marginRight: '8px'}}> - </div>
+            {!quotedFromRetweetModal && <div id='published-date'>{processCreatedDateFormat() || 'Month day'}</div>}
+            {quotedFromRetweetModal && <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(tweetPostedDate)} />}
         </div>
     )
 }

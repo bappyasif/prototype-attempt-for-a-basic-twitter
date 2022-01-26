@@ -144,7 +144,7 @@
 #middle-content #analysing-user-tweet-wrapper #user-info-wrapper {
   display: flex;
   justify-content: space-between;
-  width: 56%;
+  width: fit-content;
   align-items: center;
 }
 
