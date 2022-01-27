@@ -1185,6 +1185,7 @@
   text-align: left;
   border-bottom: 1px solid;
   line-height: 2em;  
+  padding: 2px 2px 2px 4px;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #thread-quote-count-wrapper:hover {

@@ -7,7 +7,7 @@ import { updateDataInFirestore, writeDataIntoCollection } from '../firestore-met
 import TweetModal, { tweetPrivacySelected01, tweetPrivacySelected02, tweetPrivacySelected03 } from '../tweet-modal'
 import AllTweetsPage from './all-tweets';
 
-function UserProfile({ quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, setPrimaryTweetText, setExtraTweetText, selectedTaggedPlace, repliedTweets, handleThreadedTweetData, handlePollVotesCount, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, handleAnalysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, setScheduledTimeStamp, scheduledTimeStamp, currentUser, handleUpdateStatus, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08 }) {
+function UserProfile({ updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, setPrimaryTweetText, setExtraTweetText, selectedTaggedPlace, repliedTweets, handleThreadedTweetData, handlePollVotesCount, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, handleAnalysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, setScheduledTimeStamp, scheduledTimeStamp, currentUser, handleUpdateStatus, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, updateData, newID, uniqueID, setChangeLayout, newDataStatus, setNewDataStatus, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetData, setTweetData, primaryTweetText, extraTweetText, tweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08 }) {
     let [pictureUrl, setPictureUrl] = useState('');
 
     let [extraPictureUrl, setExtraPictureUrl] = useState('');
@@ -24,7 +24,8 @@ function UserProfile({ quotesListFromRetweet, handleQuotesListFromRetweet, quote
 
     let updateExtraPictureUploadingStatus = () => setDoneExtraUrlUploading(true);
 
-    currentUser && console.log(currentUser, 'from userProfile', replyCount, repliedTweets);
+    // currentUser && console.log(currentUser, 'from userProfile', quotedFromRetweetModal, replyCount, repliedTweets, quotesListFromRetweet, quoteTweetID, quoteTweetData);
+    currentUser && console.log(quotedFromRetweetModal, quotesListFromRetweet, quoteTweetID, quoteTweetData, 'from userProfile')
     
     let setUrl = (url) => {
         setPictureUrl(url);
@@ -83,14 +84,19 @@ function UserProfile({ quotesListFromRetweet, handleQuotesListFromRetweet, quote
         }
 
         // when there is a tweet quoted by user, and posted it on profile, updating that count on Firestore
-        !quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: replyCount ? Number(replyCount + 1) : replyCount});
+        repliedTweets && !quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: repliedTweets ? (repliedTweets.length + 1) : 0});
+        // !quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: replyCount ? Number(replyCount + 1) : replyCount});
+        // !quotedFromRetweetModal && newDataStatus && quoteTweetID && !quotesListFromRetweet && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: replyCount ? Number(replyCount + 1) : replyCount});
         // newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: repliedTweets.length + 1})
         // quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: Number(replyCount + 1)})
-        !quotedFromRetweetModal && newDataStatus && quoteTweetID && repliedTweets && updateDataInFirestore(currentUser, quoteTweetID, {repliedTweets: [...repliedTweets, uniqueID]});
+        !quotedFromRetweetModal && newDataStatus && quoteTweetID && repliedTweets && updateDataInFirestore(currentUser, quoteTweetID, {repliedTweets: repliedTweets.length ? [...repliedTweets, uniqueID] : [uniqueID]});
         // newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {repliedTweets: [].concat(uniqueID)})
         
         // updating list references in quoted tweet this about to be added (quoted from retweet modal), so that when required these references can be used for generating data
-        quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {listOfRetweetedQuotes: [...quotesListFromRetweet, uniqueID]});
+        // quotesListFromRetweet && quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {listOfRetweetedQuotes: [...quotesListFromRetweet, uniqueID]});
+        quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {listOfRetweetedQuotes: quotesListFromRetweet ? [...quotesListFromRetweet, uniqueID] : [uniqueID]});
+
+        quotedFromRetweetModal && newDataStatus && quoteTweetID && updateSomeDataInUserDocs(quoteTweetID, 'listOfRetweetedQuotes', quotesListFromRetweet ? [...quotesListFromRetweet, uniqueID] : [uniqueID])
         
         // resetting previous reply count to zero, so that it doesnt invoke route forwarding from tweet bottom 'who can reply' functionality
         quoteTweetID && handleReplyCount(0);
@@ -98,6 +104,9 @@ function UserProfile({ quotesListFromRetweet, handleQuotesListFromRetweet, quote
         // making previously held quoteTweetID reset to null
         newDataStatus && quoteTweetID && handleQuoteTweetID(false);
         // newDataStatus && quoteTweetID && alert('here!!')
+
+        // quotedFromRetweetModal && newDataStatus && quoteTweetID && console.log(repliedTweets,'repliedTweets!!??', quotesListFromRetweet)
+        repliedTweets && !quotedFromRetweetModal && newDataStatus && quoteTweetID && updateSomeDataInUserDocs(quoteTweetID, 'replyCount', repliedTweets.length + 1)
         
 
         // setFirstTweetHasMedia(false)
@@ -109,7 +118,11 @@ function UserProfile({ quotesListFromRetweet, handleQuotesListFromRetweet, quote
         setPrimaryTweetText('');
         setExtraTweetText('');
         quotedFromRetweetModal && handleQuotedFromRetweetModal();
-        quotedFromRetweetModal && handleQuotesListFromRetweet([]);
+        // quotedFromRetweetModal && handleQuotesListFromRetweet([]);
+        // quotesListFromRetweet && handleQuotesListFromRetweet([]);
+        quotesListFromRetweet && handleQuotesListFromRetweet([]);
+        // repliedTweets && handleRepliedTweets([]);
+        
         
         setSelectedFile('');
         setExtraSelectedFile('');

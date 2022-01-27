@@ -70,7 +70,7 @@ function AllTweetsPage({ handleQuotedFromRetweetModal, currentUserProfileInfo, h
             //     created: item.created
             // }
         } else {
-            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID, quotedTweetID: item.quoteTweetID, created: item.created, retweetedQuote: item.retweetedQuote, hasRetweetedThread: item.hasRetweetedThread, replyCount: item.replyCount }
+            content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID, quotedTweetID: item.quoteTweetID, created: item.created, retweetedQuote: item.retweetedQuote, hasRetweetedThread: item.hasRetweetedThread, replyCount: item.replyCount, listOfRetweetedQuotes: item.listOfRetweetedQuotes, repliedTweets: item.repliedTweets }
         }
 
         return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} handlePollVotesCount={handlePollVotesCount} handleThreadedTweetData={handleThreadedTweetData} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />
@@ -149,7 +149,9 @@ export let sanitizeDatasetForRendering = item => {
         created: item.created,
         retweetedQuote: item.retweetedQuote,
         hasRetweetedThread: item.hasRetweetedThread,
-        replyCount: item.replyCount
+        replyCount: item.replyCount,
+        listOfRetweetedQuotes: item.listOfRetweetedQuotes,
+        repliedTweets: item.repliedTweets,
     }
 }
 
@@ -197,7 +199,7 @@ let ShowRetweetedQuote = ({quoteTweetID, currentUser, handleThreadedTweetData}) 
 }
 
 export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount, handleThreadedTweetData, fromTweetThread, currentUserProfileInfo, handleQuotedFromRetweetModal, isQuotedFromRetweeted }) => {
-    let {retweetedQuote, quotedTweetID, ID, scheduledTime, created, tweetText, extraTweet, gifFile, extraGifFile, picture, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
+    let { repliedTweets, listOfRetweetedQuotes, retweetedQuote, quotedTweetID, ID, scheduledTime, created, tweetText, extraTweet, gifFile, extraGifFile, picture, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (picture || extraPictureFile) ? showImg(extra != 'extra' ? picture : extraPictureFile) : ''
 
@@ -207,9 +209,10 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
     let handleInitialReplyCount = (val) => setInitialReplyCount(val)
 
-    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} replyCount={replyCount || content.replyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />)
+    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} changedCount={content.replyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} currentCountInFirestore={content.repliedTweets && content.repliedTweets.length} />)
     
-    console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture, replyCount, retweetedQuote, content, fromTweetThread)
+    repliedTweets && console.log(repliedTweets, replyCount, content.replyCount, 'some checks', ID)
+    // console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture, replyCount, retweetedQuote, content, fromTweetThread)
 
     let history = useHistory()
 
@@ -242,7 +245,7 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
                 <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons()}</div>
 
-                {(initialReplyCount && !isQuotedFromRetweeted) > 0 && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>}
+                {(((content.repliedTweets && content.repliedTweets.length) || content.replyCount) && !isQuotedFromRetweeted) > 0 && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>}
             </div>
         </div>
         {/* {(initialReplyCount) > 0 && <div id='show-tweet-thread'>Show this thread</div>} */}
