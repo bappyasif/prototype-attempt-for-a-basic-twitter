@@ -62,8 +62,33 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     // converting selected privacy text to server compatible option number
     let convertOptionsToPrivacy = () => whichPrivacy == 'Only you' ? '03' : whichPrivacy == 'People who you follow' ? '02' : whichPrivacy == 'Everybody' && '01'
 
-    console.log(currentUserProfileInfo, createdDate, 'from TweetTop')
+    // console.log(currentUserProfileInfo, createdDate, 'from TweetTop')
 
+    // let timeSpanStyles = {
+    //     color: 'silver',
+    //     fontSize: 'smaller',
+    //     display: 'flex',
+    //     lineHeight: '1.43em',
+    //     height: 'min-content'
+    // }
+
+    return (
+        <div className='tweet-top'>
+            {/* <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div> */}
+            {/* <div className='user-info' style={{ display: 'flex' }}>{currentUserProfileInfo ? currentUserProfileInfo[0].content : 'User Name'}<span>@profile handle</span> <span>-</span><span style={timeSpanStyles}>{createdDate ? <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(createdDate)} /> : 'time here'}</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div> */}
+            <RenderUserInfo currentUserProfileInfo={currentUserProfileInfo} createdDate={createdDate} />
+            <div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
+
+            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} handleShowListModal={handleShowListModal} />}
+            {changedWhoCanReply && <RenderDropdownForWhoCanReply handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />}
+            {showPinModal && <PinTweetConfirmationModal handleShowPinModal={handleShowPinModal} ID={ID} handlePinnedTweetID={handlePinnedTweetID} />}
+            {/* {showListModal && <AddToListModal />} */}
+        </div>
+    )
+}
+
+let RenderUserInfo = ({currentUserProfileInfo, createdDate}) => {
+    
     let timeSpanStyles = {
         color: 'silver',
         fontSize: 'smaller',
@@ -72,15 +97,18 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
         height: 'min-content'
     }
 
+    // console.log(createdDate, 'createdDate!!')
+
     return (
-        <div className='tweet-top'>
-            {/* <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div> */}
-            <div className='user-info' style={{ display: 'flex' }}>{currentUserProfileInfo ? currentUserProfileInfo[0].content : 'User Name'}<span>@profile handle</span> <span>-</span><span style={timeSpanStyles}>{createdDate ? <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(createdDate)} /> : 'time here'}</span></div><div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
-            {clicked && !changedWhoCanReply && <RenderDropdownForTweetMoreOptions ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} handleWhoCanReply={handleWhoCanReply} handleClicked={handleClicked} handleAnalysingTweetID={handleAnalysingTweetID} handleShowPinModal={handleShowPinModal} handleShowListModal={handleShowListModal} />}
-            {changedWhoCanReply && <RenderDropdownForWhoCanReply handleClicked={handleClicked} handleWhoCanReply={handleWhoCanReply} whichPrivacy={whichPrivacy} handleWhichPrivacy={handleWhichPrivacy} existingPrivacy={existingPrivacy} />}
-            {showPinModal && <PinTweetConfirmationModal handleShowPinModal={handleShowPinModal} ID={ID} handlePinnedTweetID={handlePinnedTweetID} />}
-            {/* {showListModal && <AddToListModal />} */}
+        <div className='user-info' style={{ display: 'flex' }}>
+            {currentUserProfileInfo ? currentUserProfileInfo[0].content : 'User Name'}
+            <span>@profile handle</span>
+            <span>-</span>
+            <span style={timeSpanStyles}>
+                {createdDate ? <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(createdDate.seconds)} /> : 'time here'}
+            </span>
         </div>
+        // <div className='icon-svg' onClick={handleClicked}>{moreIcon()}</div>
     )
 }
 

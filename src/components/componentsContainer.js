@@ -51,10 +51,13 @@ function ComponentsContainer() {
     let [existingRepliedTweetIDs, setExistingRepliedTweetIDs] = useState(null)
     let [nowDeletingTweetID, setNowDeletingTweetID] = useState(null)
     let [deletingTweetQuotedID, setDeletingTweetQuotedID] = useState(null)
+    let [existingRetweetedQuotesList, setExistingRetweetedQuotesList] = useState(null)
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
 
     // console.log(repliedTweets, '<<<<repliedTweets list from Container>>>>')
+
+    let handleExistingRetweetedQuotesList = dataset => setExistingRetweetedQuotesList(dataset)
 
     let handleExistingRepliedTweetIDs = (foundIDs) => setExistingRepliedTweetIDs(foundIDs)
 
@@ -176,6 +179,15 @@ function ComponentsContainer() {
             updateDataInFirestore(currentUser, deletingTweetQuotedID, {repliedTweets: newList})
         }
     }, [existingRepliedTweetIDs])
+
+    useEffect(() => {
+        if(nowDeletingTweetID && deletingTweetQuotedID && existingRetweetedQuotesList) {
+            let newList = existingRetweetedQuotesList.filter(id => id != nowDeletingTweetID)
+            updateDataInFirestore(currentUser, deletingTweetQuotedID, {listOfRetweetedQuotes: newList})
+            updateSomeDataInUserDocs(deletingTweetQuotedID, 'listOfRetweetedQuotes', newList, 'from retweet quotes delete')
+            console.log(newList, 'newList from retweet!!')
+        }
+    }, [existingRetweetedQuotesList])
 
     useEffect(() => quotedFromRetweetModal && quoteTweetID && currentUser && getDataFromFirestoreSubCollection(currentUser, quoteTweetID, 'listOfRetweetedQuotes', handleQuotesListFromRetweet), [quotedFromRetweetModal])
 
@@ -319,24 +331,62 @@ function ComponentsContainer() {
 
     let generateOneNewID = () => setUniqueID(uuid())
 
+    // let removeFromListOfRetweetedQuotesForQuotedTweetDocument = speceficData => {
+    //     let newList
+    // }
+
+    let removeFromRepliedListInFirestoreFromQuotedTweetDocument = (idx) => {
+        let specificData = userDocs.filter(item => item.id == idx)
+        // console.log(specificData, specificData[0].replyCount, 'found!!', quoteTweetID)
+        let speceficValue = userDocs.filter(item => item.id == specificData[0].quoteTweetID)
+        // updateSomeDataInUserDocs(idx, 'replyCount', (specificData[0].replyCount - 1))
+        // console.log(speceficValue, speceficValue[0].replyCount, 'found!!', quoteTweetID)
+        let decideNewValue = (speceficValue[0] && speceficValue[0].replyCount > 0) ? (speceficValue[0].replyCount - 1) : 0
+        // console.log(speceficValue, 'speceficValue!!', specificData)
+        // if(speceficValue[0] && !speceficValue[0].retweetedQuote)
+        if(speceficValue[0]) {
+            console.log(speceficValue, speceficValue[0].replyCount, 'found!!', quoteTweetID)
+            // updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+            // updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+            // getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+            
+            speceficValue[0].retweetedQuote && updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+            speceficValue[0].retweetedQuote && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+            speceficValue[0].retweetedQuote && getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+
+            !speceficValue[0].retweetedQuote && getDataFromFirestoreSubCollection(currentUser, speceficValue[0].id, 'listOfRetweetedQuotes', handleExistingRetweetedQuotesList)
+            // !speceficValue[0].retweetedQuote && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'listOfRetweetedQuotes', decideNewValue, 'from delete')
+            
+            // !speceficValue[0].retweetedQuote && updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+            // !speceficValue[0].retweetedQuote && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+            // !speceficValue[0].retweetedQuote && getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+            setNowDeletingTweetID(idx)
+            setDeletingTweetQuotedID(speceficValue[0].id)
+        } 
+        // else {
+        //     removeFromListOfRetweetedQuotesForQuotedTweetDocument(speceficValue[0])
+        // }
+    }
+
     let removeSpeceficArrayItem = idx => {
         // idx = 'fb34e41b-60ab-4541-a99e-65d2d6181102'
         console.log(threadedTweetData, idx, '<<<<from remove!!>>>>', repliedTweetsIDs)
         idx && setRemoveFromTweetThread(idx)
 
-        let specificData = userDocs.filter(item => item.id == idx)
-        // console.log(specificData, specificData[0].replyCount, 'found!!', quoteTweetID)
-        let speceficValue = userDocs.filter(item => item.id == specificData[0] && specificData[0].quoteTweetID)
-        // updateSomeDataInUserDocs(idx, 'replyCount', (specificData[0].replyCount - 1))
-        // console.log(speceficValue, speceficValue[0].replyCount, 'found!!', quoteTweetID)
-        let decideNewValue = (speceficValue[0] && speceficValue[0].replyCount > 0) ? (speceficValue[0].replyCount - 1) : 0
-        if(speceficValue[0]) {
-            updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
-            updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
-            getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
-            setNowDeletingTweetID(idx)
-            setDeletingTweetQuotedID(speceficValue[0].id)
-        }
+        // let specificData = userDocs.filter(item => item.id == idx)
+        // let speceficValue = userDocs.filter(item => item.id == specificData[0].quoteTweetID)
+        // // updateSomeDataInUserDocs(idx, 'replyCount', (specificData[0].replyCount - 1))
+        // let decideNewValue = (speceficValue[0] && speceficValue[0].replyCount > 0) ? (speceficValue[0].replyCount - 1) : 0
+        // if(speceficValue[0]) {
+        //     updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+        //     updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+        //     getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+        //     setNowDeletingTweetID(idx)
+        //     setDeletingTweetQuotedID(speceficValue[0].id)
+        // }
+
+        // removing this intended tweet to be removed from quoted tweet repliedTweets list so that it gets flushed out and not causing in adjusting correct reply count for next add or remove process
+        removeFromRepliedListInFirestoreFromQuotedTweetDocument(idx);
 
         setUserDocs(prevData => {
             let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)

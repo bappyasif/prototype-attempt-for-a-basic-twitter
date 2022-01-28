@@ -1164,13 +1164,38 @@
   margin-left: 4px;
 }
 
+/* retweeted quotes thread styles */
+#components-container #retweeted-quote-thread-container {
+  width: 542px;
+  border: solid;
+}
+
+#components-container #retweeted-quote-thread-container #component-wrapper {
+  padding-left: 11px;
+  border-bottom: 1px solid;
+  margin-bottom: 4px;
+  margin-left: 0px !important;
+}
+
+#components-container #retweeted-quote-thread-container #component-wrapper #svg-icon {
+  margin-right: 40px;
+}
+
+#components-container #retweeted-quote-thread-container #quotes-with-comments-wrapper .rendering-tweet-data-container {
+  margin-left: 0px !important;
+  padding-bottom: 11px !important;
+  border-bottom: 1px solid;
+  margin-bottom: 4px;
+}
+
 /* tweet thread styles here */
 #components-container #show-tweet-thread-container {
   width: 515px;
   border: solid;
 }
 
-#components-container #show-tweet-thread-container #component-wrapper {
+#components-container #show-tweet-thread-container #component-wrapper,
+#components-container #retweeted-quote-thread-container #component-wrapper {
   display: flex;
   align-items: center;
 }
@@ -1297,8 +1322,8 @@
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #privacy-announcement-wrapper .profile-page-svg-icons {
-  stroke: white;
-  fill: white;
+  /* stroke: white; */
+  /* fill: white; */
   margin-left: 11px;
 }
 

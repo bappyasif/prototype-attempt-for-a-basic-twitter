@@ -9,7 +9,7 @@ import { getDataFromFirestoreSubCollection, readDocumentFromFirestoreSubCollecti
 import { tweetPrivacySelected01, UploadFile, GridDemo } from '../../../tweet-modal'
 import EmojiPicker from '../../../tweet-modal/emoji-picker'
 import GifModal from '../../../tweet-modal/gif-modal'
-import { locationTagIcon, replyTweetModalIcons } from '../../../tweet-modal/svg-resources'
+import { everybodyIcon, locationTagIcon, peopleIcon, replyTweetModalIcons } from '../../../tweet-modal/svg-resources'
 import TweetWordCount from '../../../tweet-modal/tweet-word-count'
 import { analyticsIcon, backIcon, tweetAdditionalIconsArray } from '../../profile-page/svg-resources'
 import { MakeGifObjectAvailable, RenderUserTweetText } from '../reuseable-helper-functions'
@@ -23,12 +23,12 @@ function ShowTweetThread({ quotesListFromRetweet, handleQuotedFromRetweetModal, 
     // let [clicked, setClicked] = useState(false)
     // let handleClicked = () => setClicked(!clicked)
     // let handleLoadingTweetsIDs = data => setRepliedTweetsIDs(data)
-    console.log(ID, tweetText, tweetPrivacy, created, uniqueID, '<<<<::::>>>>', threadedTweetData, selectedTaggedPlace, hasRetweetedThread)
+    // console.log(ID, tweetText, tweetPrivacy, created, uniqueID, '<<<<::::>>>>', threadedTweetData, selectedTaggedPlace, hasRetweetedThread)
 
     return (
         <div id='show-tweet-thread-container'>
-            <HeaderComponent />
-            {hasRetweetedThread && <RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet quotedTweetID={quotedTweetID} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />}
+            <HeaderComponent headerText={'Thread'} />
+            {hasRetweetedThread && <RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet quotedTweetID={quotedTweetID} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} isQuotedFromRetweeted={true} />}
             {tweetText && <TweetComponent tweetText={tweetText} createdDate={created} handleQuoteTweetID={handleQuoteTweetID} threadedTweetData={threadedTweetData} currentUser={currentUser} currentUserProfileInfo={currentUserProfileInfo} repliedTweetsIDs={repliedTweetsIDs} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} hasRetweetedThread={hasRetweetedThread} quotesListFromRetweet={quotesListFromRetweet} />}
             <ReplyThreadComponent currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} handleLoadingTweetsIDs={handleLoadingTweetsIDs} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
             <RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />
@@ -36,13 +36,13 @@ function ShowTweetThread({ quotesListFromRetweet, handleQuotedFromRetweetModal, 
     )
 }
 
-let RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet = ({quotedTweetID, currentUser, handleAnalysingTweetID, handleQuoteTweetID, handleQuotedFromRetweetModal}) => {
+export let RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet = ({quotedTweetID, currentUser, handleAnalysingTweetID, handleQuoteTweetID, handleQuotedFromRetweetModal, isQuotedFromRetweeted, handleThreadedTweetData}) => {
     let [dataset, setDataset] = useState(null);
     let handleLoadingDataset = items => setDataset(items)
     useEffect(() => quotedTweetID && readDocumentFromFirestoreSubCollection(currentUser, quotedTweetID, handleLoadingDataset), [quotedTweetID])
-    console.log(dataset, 'fromThreadExistingQuote')
+    // console.log(dataset, 'fromThreadExistingQuote')
     return (
-        dataset ? <RenderTweetDataComponent content={sanitizeDatasetForRendering(dataset)} currentUser={currentUser} isQuotedFromRetweeted={true} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} /> : null
+        dataset ? <RenderTweetDataComponent content={sanitizeDatasetForRendering(dataset)} currentUser={currentUser} isQuotedFromRetweeted={isQuotedFromRetweeted} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} handleThreadedTweetData={handleThreadedTweetData} /> : null
     )
 }
 
@@ -114,7 +114,7 @@ let RenderRepliedTweet = ({ docID, currentUser, idx, removeSpeceficArrayItem, ha
         // markup = <RenderTweetDataComponent content={dataset} />
         // return (markup)
 
-        console.log('<<<<checkpoint01>>>>', dataset, docID, idx, dataset.replyCount)
+        // console.log('<<<<checkpoint01>>>>', dataset, docID, idx, dataset.replyCount)
 
         markup = <div className='tweet-ui-wrapper'>
             <RenderTweetDataComponent content={sanitizeDatasetForRendering(dataset)} currentUser={currentUser} fromTweetThread={true} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} replyCount={dataset.replyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />
@@ -145,7 +145,7 @@ let RenderAddAnotherTweet = ({docID, currentUser, handleQuoteTweetID, handleRepl
         setClicked(!clicked)
         // handleQuoteTweetID(docID)
         // handleQuoteTweetID(datasetForAddAnother.id)
-        console.log('get data and update dataset so that it can be rerendered on DOM reflecting reply functionality on DOM and firestore', docID)
+        // console.log('get data and update dataset so that it can be rerendered on DOM reflecting reply functionality on DOM and firestore', docID)
     }
 
     useEffect(() => datasetForAddAnother && handleQuoteTweetID(datasetForAddAnother.id), [datasetForAddAnother])
@@ -162,7 +162,7 @@ let RenderAddAnotherTweet = ({docID, currentUser, handleQuoteTweetID, handleRepl
         readyForReRoute && history.push('/tweet/compose')
     }, [readyForReRoute])
 
-    datasetForAddAnother && console.log(datasetForAddAnother, 'datasetForAddAnother')
+    // datasetForAddAnother && console.log(datasetForAddAnother, 'datasetForAddAnother')
 
     return (
         <div id='add-another-tweet-wrapper'>
@@ -432,7 +432,7 @@ let TweetComponent = ({ tweetText, createdDate, handleQuoteTweetID, threadedTwee
     // let timestamp = new Date(createdDate.seconds * 1000)
     // let timestampTokens = String(timestamp).split(' ').slice(1, 5)
     // console.log(timestampTokens, '?!', timestamp)
-    currentUserProfileInfo && console.log(currentUserProfileInfo, 'currentUserProfileInfo')
+    // currentUserProfileInfo && console.log(currentUserProfileInfo, 'currentUserProfileInfo')
     return (
         <div id='tweet-component-wrapper'>
             <UserInfo currentUserProfileInfo={currentUserProfileInfo} />
@@ -441,21 +441,27 @@ let TweetComponent = ({ tweetText, createdDate, handleQuoteTweetID, threadedTwee
             {/* <RenderTweetPostedTimestamp timestampTokens={timestampTokens} /> */}
             <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(createdDate.seconds)} fromTweetThread={true} />
             <RenderTweetAnalyticsActivity />
-            {hasRetweetedThread && <RenderThreadQuoteCount />}
+            {hasRetweetedThread && <RenderThreadQuoteCount handleQuoteTweetID={handleQuoteTweetID} threadedTweetData={threadedTweetData} />}
             <RenderMoreOptions handleQuoteTweetID={handleQuoteTweetID} threadedTweetData={threadedTweetData} currentUser={currentUser} handleReplyCount={handleReplyCount} repliedTweetsIDs={repliedTweetsIDs} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} />
-            <RenderTweetPrivacyAnouncement />
+            <RenderTweetPrivacyAnouncement tweetPrivacy={threadedTweetData.tweetPrivacy} profileName={currentUserProfileInfo[0].content} />
         </div>
     )
 }
 
-let RenderThreadQuoteCount = ({quoteCount}) => {
+let RenderThreadQuoteCount = ({quoteCount, handleQuoteTweetID, threadedTweetData}) => {
+    let history = useHistory(null)
+    let handleClick = () => {
+        handleQuoteTweetID(threadedTweetData.ID)
+        console.log(threadedTweetData, 'from quote count wrapper')
+        history.push('/retweets/with_comments/')
+    }
     return (
-        <div id='thread-quote-count-wrapper'>{quoteCount || 1} Quote Tweet</div>
+        <div id='thread-quote-count-wrapper' onClick={handleClick}>{quoteCount || 1} Quote Tweet</div>
     )
 }
 
 let RenderTweetMediaFiles = ({tweetData}) => {
-    console.log(tweetData, 'RenderTweetMediaFiles!!')
+    // console.log(tweetData, 'RenderTweetMediaFiles!!')
     let mediaFile;
     mediaFile = tweetData.picture ? showImg(tweetData.picture) : tweetData.gifFile && <MakeGifObjectAvailable gifId={tweetData.gifFile} />
     return (
@@ -463,13 +469,24 @@ let RenderTweetMediaFiles = ({tweetData}) => {
     )
 }
 
-let RenderTweetPrivacyAnouncement = () => {
+let RenderTweetPrivacyAnouncement = ({tweetPrivacy, profileName}) => {
+    // console.log(tweetPrivacy, 'tweetPrivacy!!')
+    // let decideSvg = () => tweetPrivacy == '01' ? everybodyIcon('aqua') : tweetPrivacy == '02' ? peopleIcon('aqua') : tweetPrivacy == '03' && poepleMentionePrivacySvg()
+    let decideSvg = () => tweetPrivacy == '01' ? everybodyIcon() : tweetPrivacy == '02' ? peopleIcon('rgb(29, 155, 240)') : tweetPrivacy == '03' && poepleMentionePrivacySvg('rgb(29, 155, 240)')
+    
+    let privacyText = () => tweetPrivacy == '01' ? '' : 'You can reply'
+
+    let privacySubtext = () => tweetPrivacy == '01' ? '' : tweetPrivacy == '02' ? 'follow' : tweetPrivacy == '03' && 'mentioned'
+    
     return (
         <div id='privacy-announcement-wrapper'>
-            {poepleMentionePrivacySvg()}
+            {/* {poepleMentionePrivacySvg()} */}
+            {decideSvg()}
             <div id='announcement-texts'>
-                <div id='privacy-type-text'>You can reply</div>
-                <div id='privacy-sub-text'>People @profile_handel mentioned can reply</div>
+                {/* <div id='privacy-type-text'>You can reply</div> */}
+                <div id='privacy-type-text'>{privacyText()}</div>
+                {/* <div id='privacy-sub-text'>People @profile_handel mentioned can reply</div> */}
+                <div id='privacy-sub-text'>{profileName || User} @profile_handle {privacySubtext()} can reply</div>
             </div>
         </div>
     )
@@ -539,17 +556,17 @@ let UserInfo = ({currentUserProfileInfo}) => {
     )
 }
 
-let HeaderComponent = () => {
+export let HeaderComponent = ({headerText}) => {
     let history = useHistory()
     return (
         <div id='component-wrapper'>
             <div id='svg-icon' onClick={() => history.goBack()}>{backIcon()}</div>
-            <div id='component-title'>Thread</div>
+            <div id='component-title'>{headerText}</div>
         </div>
     )
 }
 
-export let poepleMentionePrivacySvg = () => <svg className='profile-page-svg-icons'><g><path d="M17.23 8.6c0-.85-.69-1.55-1.55-1.55-.37 0-.73.14-1.02.39-.6-.45-1.54-.92-2.85-.92-2.97 0-5.12 2.45-5.12 5.84 0 2.62 1.88 4.75 4.19 4.75 1.42 0 2.48-.53 3.17-1.03.54.62 1.53 1.26 3.32 1.26.05 0 5.05-.06 5.05-5.34 0-5.75-4.67-10.42-10.42-10.42S1.58 6.25 1.58 12 6.25 22.42 12 22.42c2.18 0 3.92-.53 5.65-1.72.28-.19.48-.49.56-.86.06-.35-.01-.68-.21-.97-.19-.29-.5-.49-.85-.54-.36-.06-.72.01-.98.19-1.28.88-2.57 1.27-4.17 1.27-4.29 0-7.79-3.5-7.79-7.79S7.71 4.21 12 4.21s7.79 3.5 7.79 7.79c0 2.15-1.19 2.91-2.31 2.91 0 0-.68 0-.98-.35-.15-.17-.19-.45-.13-.82.86-4.96.86-5.06.86-5.14zm-3.5 2.53v.14c0 .73-.22 1.44-.63 2.02-.4.59-.95.91-1.6.94-1 0-1.67-.75-1.71-1.9-.03-.86.26-1.69.81-2.28.42-.45.96-.71 1.51-.73.95 0 1.57.7 1.62 1.81z"></path></g></svg>
+export let poepleMentionePrivacySvg = (color) => <svg className='profile-page-svg-icons' fill={color && color}><g><path d="M17.23 8.6c0-.85-.69-1.55-1.55-1.55-.37 0-.73.14-1.02.39-.6-.45-1.54-.92-2.85-.92-2.97 0-5.12 2.45-5.12 5.84 0 2.62 1.88 4.75 4.19 4.75 1.42 0 2.48-.53 3.17-1.03.54.62 1.53 1.26 3.32 1.26.05 0 5.05-.06 5.05-5.34 0-5.75-4.67-10.42-10.42-10.42S1.58 6.25 1.58 12 6.25 22.42 12 22.42c2.18 0 3.92-.53 5.65-1.72.28-.19.48-.49.56-.86.06-.35-.01-.68-.21-.97-.19-.29-.5-.49-.85-.54-.36-.06-.72.01-.98.19-1.28.88-2.57 1.27-4.17 1.27-4.29 0-7.79-3.5-7.79-7.79S7.71 4.21 12 4.21s7.79 3.5 7.79 7.79c0 2.15-1.19 2.91-2.31 2.91 0 0-.68 0-.98-.35-.15-.17-.19-.45-.13-.82.86-4.96.86-5.06.86-5.14zm-3.5 2.53v.14c0 .73-.22 1.44-.63 2.02-.4.59-.95.91-1.6.94-1 0-1.67-.75-1.71-1.9-.03-.86.26-1.69.81-2.28.42-.45.96-.71 1.51-.73.95 0 1.57.7 1.62 1.81z"></path></g></svg>
 
 
 export default ShowTweetThread

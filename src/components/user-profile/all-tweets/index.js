@@ -21,7 +21,7 @@ function AllTweetsPage({ handleQuotedFromRetweetModal, currentUserProfileInfo, h
 
     let handleNoMoreTweets = () => {
         setShowNoMoreTweets(true)
-        console.log('no more!!')
+        // console.log('no more!!')
     }
 
     let handleShowMoreTweets = () => {
@@ -187,7 +187,7 @@ let ShowRetweetedQuote = ({quoteTweetID, currentUser, handleThreadedTweetData}) 
     useEffect(() => {
         quoteTweetID && readDocumentFromFirestoreSubCollection(currentUser, quoteTweetID, handleLoadingQuotedTweetData)
     }, [quoteTweetID])
-    console.log(quotedTweetData, 'quotedTweetData!!', quoteTweetID, currentUser)
+    // console.log(quotedTweetData, 'quotedTweetData!!', quoteTweetID, currentUser)
 
     // let markup;
 
@@ -211,7 +211,7 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
     let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} changedCount={content.replyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} currentCountInFirestore={content.repliedTweets && content.repliedTweets.length} />)
     
-    repliedTweets && console.log(repliedTweets, replyCount, content.replyCount, 'some checks', ID)
+    // repliedTweets && console.log(repliedTweets, replyCount, content.replyCount, 'some checks', ID, created)
     // console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture, replyCount, retweetedQuote, content, fromTweetThread)
 
     let history = useHistory()

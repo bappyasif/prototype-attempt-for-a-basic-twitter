@@ -96,8 +96,15 @@ function UserProfile({ updateSomeDataInUserDocs, handleRepliedTweets, quotesList
         // quotesListFromRetweet && quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {listOfRetweetedQuotes: [...quotesListFromRetweet, uniqueID]});
         quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {listOfRetweetedQuotes: quotesListFromRetweet ? [...quotesListFromRetweet, uniqueID] : [uniqueID]});
 
+        // updating listOfRetweetedCounts in userDocs for DOM
         quotedFromRetweetModal && newDataStatus && quoteTweetID && updateSomeDataInUserDocs(quoteTweetID, 'listOfRetweetedQuotes', quotesListFromRetweet ? [...quotesListFromRetweet, uniqueID] : [uniqueID])
         
+        // updating retweetable quote status for retweeted quoted tweet ID bearing document  (its rather useful for retweet with comment tweet which is about to be created)
+        // quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {retweetedQuote: quotedFromRetweetModal})
+
+        // updating retweetable quote status in user docs too for DOM rendering cycle after creation (userdocs gets it from tweet creation by default so no need to manually update this from here)
+        // quotedFromRetweetModal && newDataStatus && quoteTweetID && updateSomeDataInUserDocs(uniqueID, 'retweetedQuote', quotedFromRetweetModal)
+
         // resetting previous reply count to zero, so that it doesnt invoke route forwarding from tweet bottom 'who can reply' functionality
         quoteTweetID && handleReplyCount(0);
 

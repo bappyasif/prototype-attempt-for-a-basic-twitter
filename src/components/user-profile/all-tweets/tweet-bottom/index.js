@@ -14,7 +14,7 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
     // let [replyCountFlag, setCountReplyFlag] = useState(false)
     let history = useHistory()
 
-    changedCount && console.log(changedCount, 'changedCount!!', repliedTweetsIDs)
+    // changedCount && console.log(changedCount, 'changedCount!!', repliedTweetsIDs)
 
     // let handleReplyCount = (val) => {
     //     // setReplyCount(val ? val : 1)
@@ -25,7 +25,7 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
     // }
 
     let handleInitialReplyCount = val => {
-        console.log(val, 'val!!!!')
+        // console.log(val, 'val!!!!')
         // setCounter(val)
         // feedParentInitialReplyCount(val)
     }
@@ -66,6 +66,8 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
 
     useEffect(() => replyRouteReady && history.push('/tweet/compose'), [replyRouteReady])
 
+    useEffect(() => currentUser && elem.id == 'retweet' && listOfRetweetedQuotes && setCounter(listOfRetweetedQuotes.length), [listOfRetweetedQuotes])
+
     useEffect(() => {
         undoRetweet && handleIncreaseCount()
         counter && !undoRetweet && handleDecreaseCount()
@@ -79,7 +81,7 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
 
     useEffect(() => {
         // currentUser && elem.id == 'reply' && loadInitialReplyCount();
-        currentUser && elem.id == 'retweet' && listOfRetweetedQuotes && setCounter(listOfRetweetedQuotes.length)
+        // currentUser && elem.id == 'retweet' && listOfRetweetedQuotes && setCounter(listOfRetweetedQuotes.length)
     }, [])
 
     let findWhichIconId = evt => {
@@ -124,10 +126,10 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
 
     let handleQuoteTweetCount = () => {
         getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleReplyCount )
-        console.log('checkpointy 1', currentUser, tweetData.ID)
+        // console.log('checkpointy 1', currentUser, tweetData.ID)
     }
 
-    replyCount && console.log(replyCount, 'replyCount!!', counter)
+    // replyCount && console.log(replyCount, 'replyCount!!', counter)
 
     return (
         <div
