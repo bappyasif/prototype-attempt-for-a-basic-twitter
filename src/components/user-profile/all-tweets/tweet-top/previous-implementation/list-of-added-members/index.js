@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { ListModalHeader } from '../add-members-into-lists/ui'
+import { ListModalHeader } from '../add-members-into-lists'
 import { leftArrowSvg } from '../create-lists'
 import { adjustMembersNumber, ModalOptions, RenderMembersList, SearchComponent } from '../suggested-members'
 

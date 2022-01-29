@@ -30,7 +30,7 @@ import ShowTweetThread from '../user-profile/all-tweets/show-tweet-thread';
 import TagLocation from '../user-profile/all-tweets/show-tweet-thread/tag-location';
 import RetweetsWithCommentsThread from '../user-profile/all-tweets/retweet-with-comments-thread';
 
-function AllRoutes({ updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({ updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -166,7 +166,7 @@ function AllRoutes({ updateSomeDataInUserDocs, handleRepliedTweets, quotesListFr
                 </Route>
 
                 <Route exact path={'/i/lists/add_member'}>
-                    <AddMemebersIntoLists currentList={currentList} currentUser={currentUser} />
+                    <AddMemebersIntoLists currentList={currentList} currentUser={currentUser} updateExistingListData={updateExistingListData} />
                 </Route>
 
                 <Route exact path={'/i/lists/create'}>
@@ -174,7 +174,7 @@ function AllRoutes({ updateSomeDataInUserDocs, handleRepliedTweets, quotesListFr
                 </Route>
 
                 <Route exact path={'/i/list/members/'}>
-                    <ShowListExistingMembers handleMembersList={handleMembersRemoval} currentMembers={membersList} checkMemberExists={checkMemberExists} currentList={currentList} />
+                    <ShowListExistingMembers currentList={currentList} handleMembersList={handleMembersRemoval} currentMembers={membersList} checkMemberExists={checkMemberExists} currentList={currentList} />
                 </Route>
 
                 <Route exact path={'/i/lists/members/'}>

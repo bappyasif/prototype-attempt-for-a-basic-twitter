@@ -54,11 +54,12 @@ let FooterSectionLowerDeck = ({ number }) => {
 }
 
 let RenderAnalyticsDataSection = ({analysingTweetData, currentUser}) => {
+    console.log(analysingTweetData, 'analysingTweetData!!')
     return (
         <div id='analytics-data-section-container'>
             {/* <RenderAnalysingUserTweet analysingTweetData={analysingTweetData} currentUser={currentUser} /> */}
             <RenderUserTweet speceficTweetData={analysingTweetData} currentUser={currentUser} />
-            <RenderAnalysingTweetLikeRetweetReplyNumbersUI />
+            <RenderAnalysingTweetLikeRetweetReplyNumbersUI analysingTweetData={analysingTweetData} />
             {/* <RenderTweetAnalyticMetrics /> */}
         </div>
     )
@@ -122,8 +123,8 @@ let RenderMetricTooltipModal = ({tooltip, closeTooltip}) => {
     )
 }
 
-let RenderAnalysingTweetLikeRetweetReplyNumbersUI = () => {
-    let renderMarkers = tweetMarkers.map(item => <RenderAnalysingTweetMarker key={item.name} item={item} />)
+let RenderAnalysingTweetLikeRetweetReplyNumbersUI = ({analysingTweetData}) => {
+    let renderMarkers = tweetMarkers.map(item => <RenderAnalysingTweetMarker key={item.name} item={item} analysingTweetData={analysingTweetData} />)
     return (
         <div id='like-retweet-reply-numbers-ui-wrapper'>
             {renderMarkers}
@@ -131,11 +132,16 @@ let RenderAnalysingTweetLikeRetweetReplyNumbersUI = () => {
     )
 }
 
-let RenderAnalysingTweetMarker = ({ item }) => {
+let RenderAnalysingTweetMarker = ({ item, analysingTweetData }) => {
+    let [count, setCount] = useState(null)
+    useEffect(() => {
+        item && setCount(item.name == 'reply' ? analysingTweetData[0].replyCount : item.name == 'retweet' ? analysingTweetData[0].listOfRetweetedQuotes.length : item.number)
+    }, [item])
     return (
         <div className='marker-wrapper'>
             <div className='svg-icon'>{item.icon}</div>
-            <div className='marker-number'>{item.number}</div>
+            {/* <div className='marker-number'>{item.number}</div> */}
+            <div className='marker-number'>{count}</div>
         </div>
     )
 }

@@ -14,11 +14,10 @@ function useOnHoverOutside(ref, handler) {
             console.log(ref, "02")
         }
 
-        document.addEventListener('mouseleave', listener)
+        document.addEventListener('mouseenter', listener)
         console.log(ref, "??")
 
         return () => {
-            // document.removeEventListener('mouseout', listener)
             document.removeEventListener('mouseleave', listener)
         }
 

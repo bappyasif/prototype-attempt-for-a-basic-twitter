@@ -3,11 +3,11 @@ import { useHistory } from 'react-router-dom'
 import { removeIconSvg } from '..'
 import { RenderMembersList } from '../../suggested-members'
 
-function ShowListExistingMembers({handleMembersList, currentMembers, checkMemberExists, currentUser, currentList}) {
+function ShowListExistingMembers({handleMembersList, currentMembers, checkMemberExists, currentUser}) {
     return (
         <div id='list-existing-members-container'>
             <HeaderModal />
-            <RenderMembersList currentList={currentList} isMember={true} handleMembersList={handleMembersList} membersList={currentMembers} checkMemberExists={checkMemberExists} />
+            <RenderMembersList isMember={true} handleMembersList={handleMembersList} membersList={currentMembers} checkMemberExists={checkMemberExists} />
         </div>
     )
 }
