@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { lockIconSvg, tickMarkSvg } from "..";
 import useOnHoverOutside from "../useOnHoverOutside";
 
-export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag, initialNumbers, updateExistingListData }) => {
+export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag, initialNumbers, updateExistingListData, handleListName }) => {
     let [addToList, setAddToList] = useState(false)
 
     let [showThumbnail, setShowThumbnail] = useState(false)
@@ -60,9 +60,13 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
     }
 
     let handleModal = () => setShowThumbnail(!showThumbnail)
+
+    let ref = useRef(null);
+
+    useOnHoverOutside(ref, handleModal)
     
     return (
-        <div className='list-wrapper' onClick={handleAddToList}>
+        <div className='list-wrapper' onClick={handleAddToList} ref={ref}>
             <div className='first-half' onMouseEnter={handleModal}>
                 <div className='img-div'></div>
                 <div className='list-info'>
@@ -72,28 +76,29 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
             </div>
             {addToList && <div className='tick-mark-svg'>{tickMarkSvg()}</div>}
             {/* {((list.name == hovered) && showThumbnail) && <ShowListThumbnailCard list={list} handleHovered={handleHovered} />} */}
-            {showThumbnail && <ShowListThumbnailCard list={list} handleModal={handleModal} />}
+            {showThumbnail && <ShowListThumbnailCard list={list} handleModal={handleModal} handleListName={handleListName} />}
         </div>
     )
 }
 
-let ShowListThumbnailCard = ({list, handleModal}) => {
+let ShowListThumbnailCard = ({list, handleModal, handleListName}) => {
     let history = useHistory();
     
-    let ref = useRef(null);
+    // let ref = useRef(null);
 
-    useOnHoverOutside(ref, handleModal)
+    // useOnHoverOutside(ref, handleModal)
 
     console.log(list, '?!')
 
     let handleClick = () => {
         // !!!!DO THIS!!!! now we need to store this selected list name into a variable so that it can be later used by 'showexistingmemebers' route for rendering memebers list from its dataset
+        handleListName(list.name)
         history.push('/i/list/members/')
     }
     
     return (
         // <div className='thumbnail-card-wrapper' onMouseLeave={handleHovered} onClick={() => history.push('/i/list/members/')}>
-        <div className='thumbnail-card-wrapper' onClick={handleClick} ref={ref}>
+        <div className='thumbnail-card-wrapper' onClick={handleClick} onMouseLeave={handleModal}>
             <div className='cover-img'></div>
             <div className='card-info'>
                 <div className='list-name'>{list.name}</div>
@@ -112,22 +117,22 @@ let ShowListThumbnailCard = ({list, handleModal}) => {
     )
 }
 
-export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction, modalActionFlag }) => {
+// export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction, modalActionFlag }) => {
 
-    let iconAction = () => history.goBack()
+//     let iconAction = () => history.goBack()
     
-    // console.log(saveFlag, 'saveflag', flagTest)
+//     // console.log(saveFlag, 'saveflag', flagTest)
     
-    return (
-        <div id='list-header-wrapper'>
+//     return (
+//         <div id='list-header-wrapper'>
             
-            <div id='first-half'>
-                <div id='svg-icon' onClick={iconAction}>{icon}</div>
+//             <div id='first-half'>
+//                 <div id='svg-icon' onClick={iconAction}>{icon}</div>
      
-                <div id='action-header'>{modalTitle}</div>
-            </div>
+//                 <div id='action-header'>{modalTitle}</div>
+//             </div>
 
-            <div id='other-half' onClick={modalAction} style={{backgroundColor: modalActionFlag ? 'darkslategray' : 'silver', pointerEvents: !modalActionFlag && 'none'}}>{action}</div>
-        </div>
-    )
-}
+//             <div id='other-half' onClick={modalAction} style={{backgroundColor: modalActionFlag ? 'darkslategray' : 'silver', pointerEvents: !modalActionFlag && 'none'}}>{action}</div>
+//         </div>
+//     )
+// }

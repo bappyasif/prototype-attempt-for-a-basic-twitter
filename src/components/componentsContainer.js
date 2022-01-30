@@ -53,10 +53,14 @@ function ComponentsContainer() {
     let [nowDeletingTweetID, setNowDeletingTweetID] = useState(null)
     let [deletingTweetQuotedID, setDeletingTweetQuotedID] = useState(null)
     let [existingRetweetedQuotesList, setExistingRetweetedQuotesList] = useState(null)
+    let [listName, setListName] = useState(null)
+    let [adjustListData, setAdjustListData] = useState(false)
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
 
     // console.log(repliedTweets, '<<<<repliedTweets list from Container>>>>')
+
+    let handleListName = value => setListName(value)
 
     let handleExistingRetweetedQuotesList = dataset => setExistingRetweetedQuotesList(dataset)
 
@@ -107,42 +111,99 @@ function ComponentsContainer() {
         setPollVotesCount({...pollVotesCount, [elem]: value+1});
     }
 
-    let updateExistingListData = (name) => {
+    let updateExistingListData = (name, newData) => {
         // console.log('from update::', name)
         let newList = currentList.map(item => {
             // console.log(item, item.name, name, 'cheks u[date')
             if(item.name == name) {
-                item.members = membersList.length;
-                item.membersList = membersList;
-                console.log(item, item.name, 'cheks update', membersList)
+                item.members = (newData && newData.length) || membersList.length;
+                item.membersList = newData || membersList;
+                console.log(item, item.name, 'cheks update', membersList, newData)
             }
             return item
         })
         console.log(newList, 'newList?>?>', whichListIsUpdated)
         setCurrentList(newList)
+        // setMembersList([])
     }
 
     // console.log(membersList, currentList, 'list fromContainer!!', whichListIsUpdated)
 
-    let handleMembersRemoval = name => {
-        let idx = membersList.findIndex(item => item == name)
-        // console.log(membersList, idx, name)
-        setMembersList(prevList => prevList.slice(0, idx).concat(prevList.slice(idx+1)))
-        // setWhichListIsUpdated()
-        // updateExistingListData()
+    // let handleMembersRemoval = name => {
+    //     let idx = membersList.findIndex(item => item == name)
+    //     // console.log(membersList, idx, name)
+    //     setMembersList(prevList => prevList.slice(0, idx).concat(prevList.slice(idx+1)))
+    //     // setWhichListIsUpdated()
+    //     // updateExistingListData()
+    //     // listName && updateExistingListData(listName)
+    //     listName && setAdjustListData(true) 
+    // }
+    let handleMembersRemoval = (membersName, listName) => {
+        // when members removal is happening for a specefic list from given currentList, it will go through if block or else when its happening for general memebers removal from adding memebers route it will go through else block
+        if (listName) {
+            let filteredListCurrentMembers = currentList.filter(item => item.name == listName).map(item => item.membersList)[0]
+            let idx = filteredListCurrentMembers.findIndex(item => item == membersName);
+            let afterRemovalMembersList = filteredListCurrentMembers.slice(0, idx).concat(filteredListCurrentMembers.slice(idx+1))
+            setMembersList(afterRemovalMembersList)
+            // updateExistingListData(listName)
+            updateExistingListData(listName, afterRemovalMembersList)
+            console.log(membersName, listName, 'here heerrr!!', afterRemovalMembersList)
+        } else {
+            let idx = membersList.findIndex(item => item == name)
+
+            setMembersList(prevList => prevList.slice(0, idx).concat(prevList.slice(idx+1))) 
+        }
+        // let idx = membersList.findIndex(item => item == name)
+
+        // setMembersList(prevList => prevList.slice(0, idx).concat(prevList.slice(idx+1)))
+
+        listName && setAdjustListData(true);
     }
 
-    let checkMemberExists = (name) => {
-        let idx = membersList.findIndex(item => item == name)
+    // let checkMemberExists = (name) => {
+    //     let idx = membersList.findIndex(item => item == name)
+    //     // console.log(idx)
+    //     return idx
+    // }
+    let checkMemberExists = (memberName, listName) => {
+        let idx;
+
+        if(listName) {
+            let filteredListCurrentMembers = currentList.filter(item => item.name == listName).map(item => item.membersList)[0]
+            idx = filteredListCurrentMembers.findIndex(item => item == memberName)
+        } else {
+            idx = membersList.findIndex(item => item == memberName) 
+        }
+        
+        // let idx = membersList.findIndex(item => item == memberName)
+        // let idx = filteredListCurrentMembers.findIndex(item => item == memberName)
         // console.log(idx)
+        console.log(idx, memberName, listName, 'checkMember!!', membersList)
         return idx
     }
 
-    let handleMembersList = (name) => {
-        setMembersList(prevList => prevList.findIndex(item => item == name) != -1 ? prevList : prevList.concat(name))
-        // setWhichListIsUpdated(name)
-        // membersList.length && updateExistingListData()
-        // updateExistingListData()        
+    // let handleMembersList = (name) => {
+    //     setMembersList(prevList => prevList.findIndex(item => item == name) != -1 ? prevList : prevList.concat(name))
+    //     // setWhichListIsUpdated(name)
+    //     // membersList.length && updateExistingListData()
+    //     // updateExistingListData()
+    //     // listName && updateExistingListData(listName) 
+    //     listName && setAdjustListData(true)       
+    // }
+    let handleMembersList = (membersName, listName) => {
+        if(listName) {
+            let filteredListCurrentMembers = currentList.filter(item => item.name == listName).map(item => item.membersList)[0]
+            let manipulatedList = filteredListCurrentMembers.findIndex((item, _, arr) => item == membersName) != -1 ? arr : arr.concat(membersName)
+            setMembersList(manipulatedList)
+            console.log('here here!!')
+        } else if(!membersName && !listName) {
+            setMembersList([])
+        } else {
+            setMembersList(prevList => prevList.findIndex(item => item == membersName) != -1 ? prevList : prevList.concat(membersName))
+        }
+        // setMembersList(prevList => prevList.findIndex(item => item == name) != -1 ? prevList : prevList.concat(name))
+
+        listName && setAdjustListData(true)       
     }
 
     let handleMembersAddedCount = (added) => setCountAddedMembers(prevCount => added ? prevCount + 1 : prevCount - 1)
@@ -195,6 +256,12 @@ function ComponentsContainer() {
         setUserDocs(newlyMappedUserDocs);
         // console.log(newlyMappedUserDocs, 'newlyMappedUserDocs', whichData, idx, newValue, checkStr)
     }
+
+    useEffect(() => {
+        adjustListData && membersList && listName && updateExistingListData(listName)
+        adjustListData && !membersList.length && listName && setAdjustListData(false)
+        adjustListData && membersList && listName && setMembersList([])
+    }, [adjustListData])
 
     // useEffect(() => countAddedMembers && whichListIsUpdated && updateExistingListData(whichListIsUpdated), [countAddedMembers])
     // useEffect(() => membersList.length && whichListIsUpdated && updateExistingListData(whichListIsUpdated), [membersList])
@@ -568,10 +635,12 @@ function ComponentsContainer() {
     // console.log(updateRepliedTweetsOnThread, 'updateRepliedTweetsOnThread!!')
     // console.log(quotesListFromRetweet, 'quotesListFromRetweet', quotedFromRetweetModal, threadedTweetData)
 
+    console.log(listName, 'listName!!')
+
     return (
         <div id='components-container' style={{ display: 'flex', justifyContent: changeLayout ? 'space-between' : 'space-around', paddingRight: changeLayout ? '69px' : '' }}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={(selectedTaggedPlace) || taggedPlaceInfoInUserProfile} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotedFromRetweetModal={quotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} handleQuotesListFromRetweet={handleQuotesListFromRetweet} handleRepliedTweets={handleRepliedTweets} updateSomeDataInUserDocs={updateSomeDataInUserDocs} updateExistingListData={updateExistingListData} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={(selectedTaggedPlace) || taggedPlaceInfoInUserProfile} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotedFromRetweetModal={quotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} handleQuotesListFromRetweet={handleQuotesListFromRetweet} handleRepliedTweets={handleRepliedTweets} updateSomeDataInUserDocs={updateSomeDataInUserDocs} updateExistingListData={updateExistingListData} listName={listName} handleListName={handleListName} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )

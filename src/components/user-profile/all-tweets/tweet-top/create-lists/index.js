@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom';
-import { ListModalHeader } from '../add-members-into-lists/ui';
+import { ListModalHeader } from '../lists-reusable-helper-components';
+// import { ListModalHeader } from '../add-members-into-lists/ui';
 
 import { ListCoverPhoto, MakeListPrivate, TextareaComponentWithCount } from './ui';
 
-function CreateLists({handleCurrentList}) {
+function CreateLists({handleCurrentList, handleMembersList}) {
     let [listName, setListName] = useState('');
     let [listDescription, setListDescription] = useState('')
     let [isListPrivate, setIsListPrivate] = useState(false);
@@ -25,8 +26,12 @@ function CreateLists({handleCurrentList}) {
     // let makingDataReady = () => [].concat({name: listName, description: listDescription, isPrivate: isListPrivate, listPictureUrl: 'https://picsum.photos/200/300'})
 
     let handleModalAction = () => {
-        history.push('/i/lists/members/suggested')
+        // clearing out previously held members list
+        handleMembersList()
+        // making ready initial list with data
         handleCurrentList({name: listName, description: listDescription, isPrivate: isListPrivate, pictureUrl: 'https://picsum.photos/200/300'})
+        // and then moving onto suggested users route so that list can add dummy members into it
+        history.push('/i/lists/members/suggested')
     }
 
     // console.log(listName, listDescription, isListPrivate)

@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import useOnClickOutside from '../../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
-import { ListModalHeader, RenderList } from './ui'
+import { ListModalHeader } from '../lists-reusable-helper-components'
+// import { ListModalHeader, RenderList } from './ui'
+import { RenderList } from './ui'
 import useOnHoverOutside from './useOnHoverOutside'
 
-function AddMemebersIntoLists({ currentList, currentUser, updateExistingListData }) {
+function AddMemebersIntoLists({ currentList, currentUser, updateExistingListData, handleListName }) {
 
-    return <AddToExistingList currentList={currentList} currentUser={currentUser} updateExistingListData={updateExistingListData} />
+    return <AddToExistingList currentList={currentList} currentUser={currentUser} updateExistingListData={updateExistingListData} handleListName={handleListName} />
 }
 
-let AddToExistingList = ({ currentList, currentUser, updateExistingListData }) => {
+let AddToExistingList = ({ currentList, currentUser, updateExistingListData, handleListName }) => {
     let [saveFlag, setSaveFlag] = useState(false)
     let history = useHistory()
     
@@ -28,13 +30,13 @@ let AddToExistingList = ({ currentList, currentUser, updateExistingListData }) =
         <div id='add-to-list-container'>
             <ListModalHeader icon={removeIconSvg()} action={'Save'} modalTitle={'Pick a list'} history={history} modalAction={handleSave} modalActionFlag={saveFlag} />
             <CreateNewList />
-            <ShowAvailableListItems updateExistingListData={updateExistingListData} currentList={currentList} handleSaveFlag={handleSaveFlag} toggleSavedFlag={handleSavedFlagReversal} />
+            <ShowAvailableListItems updateExistingListData={updateExistingListData} currentList={currentList} handleSaveFlag={handleSaveFlag} toggleSavedFlag={handleSavedFlagReversal} handleListName={handleListName} />
             {/* <ShowAvailableListItems currentList={currentList} savedFlagToggler={saveFlagToggler} saveFlag={saveFlag} /> */}
         </div>
     )
 }
 
-export let ShowAvailableListItems = ({ currentList, handleSaveFlag, toggleSavedFlag, updateExistingListData }) => {
+export let ShowAvailableListItems = ({ currentList, handleSaveFlag, toggleSavedFlag, updateExistingListData, handleListName }) => {
     let [initialNumbers, setInitialNumbers] = useState([])
     
     // useEffect(() => {
@@ -44,7 +46,7 @@ export let ShowAvailableListItems = ({ currentList, handleSaveFlag, toggleSavedF
     
     console.log(currentList, 'currentlist', initialNumbers)
     
-    let renderLists = currentList.map((list, _, arr) => <RenderList key={list.name} list={list} arr={arr} handleSaveFlag={handleSaveFlag} toggleSavedFlag={toggleSavedFlag} initialNumbers={initialNumbers} updateExistingListData={updateExistingListData} />)
+    let renderLists = currentList.map((list, _, arr) => <RenderList key={list.name} list={list} arr={arr} handleSaveFlag={handleSaveFlag} toggleSavedFlag={toggleSavedFlag} initialNumbers={initialNumbers} updateExistingListData={updateExistingListData} handleListName={handleListName} />)
     
     return <div id='available-list-items-container'>{renderLists}</div>
 }

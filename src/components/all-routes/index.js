@@ -30,7 +30,7 @@ import ShowTweetThread from '../user-profile/all-tweets/show-tweet-thread';
 import TagLocation from '../user-profile/all-tweets/show-tweet-thread/tag-location';
 import RetweetsWithCommentsThread from '../user-profile/all-tweets/retweet-with-comments-thread';
 
-function AllRoutes({ updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({ listName, handleListName, updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -166,23 +166,23 @@ function AllRoutes({ updateExistingListData, updateSomeDataInUserDocs, handleRep
                 </Route>
 
                 <Route exact path={'/i/lists/add_member'}>
-                    <AddMemebersIntoLists currentList={currentList} currentUser={currentUser} updateExistingListData={updateExistingListData} />
+                    <AddMemebersIntoLists handleListName={handleListName} currentList={currentList} currentUser={currentUser} updateExistingListData={updateExistingListData} />
                 </Route>
 
                 <Route exact path={'/i/lists/create'}>
-                    <CreateLists handleCurrentList={handleCurrentList} />
+                    <CreateLists handleCurrentList={handleCurrentList} handleMembersList={handleMembersList} />
                 </Route>
 
                 <Route exact path={'/i/list/members/'}>
-                    <ShowListExistingMembers currentList={currentList} handleMembersList={handleMembersRemoval} currentMembers={membersList} checkMemberExists={checkMemberExists} currentList={currentList} />
+                    <ShowListExistingMembers updateExistingListData={updateExistingListData} listName={listName} currentList={currentList} handleMembersList={handleMembersRemoval} currentMembers={membersList} checkMemberExists={checkMemberExists} currentList={currentList} />
                 </Route>
 
                 <Route exact path={'/i/lists/members/'}>
-                    <ListOfAddedMembers currentList={currentList} currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} currentMembers={membersList} checkMemberExists={checkMemberExists} handleMembersList={handleMembersRemoval} currentList={currentList} />
+                    <ListOfAddedMembers listName={listName} currentList={currentList} currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} currentMembers={membersList} checkMemberExists={checkMemberExists} handleMembersList={handleMembersRemoval} currentList={currentList} />
                 </Route>
 
                 <Route exact path={'/i/lists/members/suggested'}>
-                    <SuggestedMembersForList currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} currentMembers={membersList} currentList={currentList} />
+                    <SuggestedMembersForList listName={listName} currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} currentMembers={membersList} currentList={currentList} />
                 </Route>
 
                 <Route exact path={'/status/tweetID'}>
