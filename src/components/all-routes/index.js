@@ -178,7 +178,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                 </Route>
 
                 <Route exact path={'/i/lists/members/'}>
-                    <ListOfAddedMembers listName={listName} currentList={currentList} currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} currentMembers={membersList} checkMemberExists={checkMemberExists} handleMembersList={handleMembersRemoval} currentList={currentList} />
+                    <ListOfAddedMembers listName={listName} currentList={currentList} currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} currentMembers={membersList} checkMemberExists={checkMemberExists} handleMembersRemoval={handleMembersRemoval} currentList={currentList} />
                 </Route>
 
                 <Route exact path={'/i/lists/members/suggested'}>

@@ -149,7 +149,7 @@ function ComponentsContainer() {
             updateExistingListData(listName, afterRemovalMembersList)
             console.log(membersName, listName, 'here heerrr!!', afterRemovalMembersList)
         } else {
-            let idx = membersList.findIndex(item => item == name)
+            let idx = membersList.findIndex(item => item == membersName)
 
             setMembersList(prevList => prevList.slice(0, idx).concat(prevList.slice(idx+1))) 
         }
@@ -178,7 +178,7 @@ function ComponentsContainer() {
         // let idx = membersList.findIndex(item => item == memberName)
         // let idx = filteredListCurrentMembers.findIndex(item => item == memberName)
         // console.log(idx)
-        console.log(idx, memberName, listName, 'checkMember!!', membersList)
+        // console.log(idx, memberName, listName, 'checkMember!!', membersList)
         return idx
     }
 

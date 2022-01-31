@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
-import { userLoginWithFirebase, userLoginWithPhone, userSignInWithSessionPersistence } from "../firebase-auths";
+import { beginRecaptchaForVerification, userLoginWithFirebase, userLoginWithPhone, userSignInWithSessionPersistence } from "../firebase-auths";
 import "./styles/index.css";
 // import { userLoginWithFirebase } from "./user-login-with-firebase";
 // import { userLoginWithPhone } from "./user-login-with-phone";
@@ -76,6 +76,9 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser, handleAnnounceme
   let [signinDone, setIsSigninDone] = useState(false)
   let [profileCompleted, setIsProfileCompleted] = useState(false);
   let [loginWithPhoneNumber, setIsLoginWithPhoneNumber] = useState(false)
+  let [showOtpModal, setShowOtpModal] = useState(false)
+
+  let handleShowOtpModal = () => setShowOtpModal(!showOtpModal)
 
   let handleSigninStatus = () => setIsSigninDone(true);
 
@@ -98,7 +101,9 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser, handleAnnounceme
     // !loginWithPhoneNumber && userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser, handleAnnouncement)
     !loginWithPhoneNumber && userSignInWithSessionPersistence(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser, handleAnnouncement)
     // console.log(evt.target, '??')
-    loginWithPhoneNumber && userLoginWithPhone(userID, evt.target)
+    // loginWithPhoneNumber && userLoginWithPhone(userID, evt.target)
+    loginWithPhoneNumber && beginRecaptchaForVerification(window.document)
+    loginWithPhoneNumber && handleShowOtpModal()
   }
 
   return (
@@ -110,6 +115,11 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser, handleAnnounceme
       {/* <button onClick={confirmLogin} style={{ opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent  && 'none' }} id='login-btn'>Login</button> */}
       {/* <Link onClick={confirmLogin} style={{opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none'}} id='login-btn'>Login</Link> */}
 
+      {/* when mobile number is used for login get a otp code before proceeding from user */}
+      {
+        showOtpModal && <GetOtpFromUser userID={userID} handleSigninStatus={handleSigninStatus} handleProfileCompletion={handleProfileCompletion} handleCurrentUser={handleCurrentUser} />
+      }
+      
       {
         // currentUser && signinDone && profileCompleted && <Redirect to='/username/' />
         currentUser && signinDone && profileCompleted && <Redirect to={`/${currentUser}`} />
@@ -136,6 +146,23 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser, handleAnnounceme
 
   // <input placeholder={name} value={value} onChange={handleChange} onFocus={handleFocus} />
 
+}
+
+let GetOtpFromUser = ({userID, handleSigninStatus, handleProfileCompletion, handleCurrentUser}) => {
+  let [code, setCode] = useState(null)
+  let handleCodeInput = evt => setCode(evt.target.value)
+  let handleClick = evt => {
+    console.log('go gogogo', code, userID)
+    userLoginWithPhone(userID, code, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
+  }
+  return (
+    <div id="user-otp-verification-wrapper">
+      <label htmlFor="otp-input">
+        <input id="otp-input" onChange={handleCodeInput} placeholder="enter 6 digit otp right here!!" />
+      </label>
+      <div id="opt-submit" onClick={handleClick}>Done</div>
+    </div>
+  )
 }
 
 let ReturnAnInputElement = ({ name, elemID, setID, setPassword, updateIfItsNumber }) => {

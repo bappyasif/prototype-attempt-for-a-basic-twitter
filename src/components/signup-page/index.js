@@ -131,7 +131,7 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
         step == 1 && focusedWhich == 'Birth date' && birthRef.current.focus()
     }, [step])
 
-    console.log(step, 'which step')
+    console.log(step, 'which step', isPhoneNumberUsed)
 
     return (
         <div id='signup-page-container' onSubmit={(evt) => evt.preventDefault()}>
@@ -223,8 +223,10 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
             }
 
             {
-                step == 6 || (step == 5 && isPhoneNumberUsed)
+                // step == 6 || (step == 5 && isPhoneNumberUsed)
                 // step == 6
+                // (step == 5 && isPhoneNumberUsed) || step == 5
+                step == 5
                 &&
                 <div id='visit-user-profile-container'>
                     {
@@ -235,7 +237,20 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
                     
                     {/* <div id='loader-spinner'></div> */}
                     {/* {signupDone != 'done' && <div id='loader-spinner'></div>} */}
-                    {signupDone == 'done' && <div id='loader-spinner'></div>}
+                    {/* {signupDone == 'done' && <div id='loader-spinner'></div>} */}
+                    
+                    {/* trying to make sure spinner showing up when phone number is used and user didnt have to use password for account rather just OTP verification */}
+                    {(signupDone == 'done' || currentUser) && <div id='loader-spinner'></div>}
+                    {/* when user is using mobile number to signup, they directly goes to login phase, no password is required */}
+                    {!signupDone && currentUser && <CategorySelections handleData={handleData} sanitizedData={sanitizedData} updateComlpetionStatus={handleInterestsSelectionUpdate} currentUser={currentUser} />}
+                    
+                    {/* when mobile number is used for signup */}
+                    {
+                        isInterestsSelectionDone
+                        &&
+                        // <Redirect to='/username/profile'/>
+                        <Redirect to={`/${currentUser}/profile`} />
+                    }
                     
                     {
                         signupDone != 'done' && signupDone != ''
@@ -254,6 +269,7 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
                         currentUser && <CategorySelections handleData={handleData} sanitizedData={sanitizedData} updateComlpetionStatus={handleInterestsSelectionUpdate} currentUser={currentUser} />
                     }
 
+                    {/* when email address is used for signup */}
                     {
                         signupDone == 'done' && isInterestsSelectionDone
                         &&
