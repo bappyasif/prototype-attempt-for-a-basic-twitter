@@ -1,4 +1,4 @@
-import {getAuth, GoogleAuthProvider, sendPasswordResetEmail, signInWithPopup, signInWithPhoneNumber, RecaptchaVerifier, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, GoogleAuthProvider, sendPasswordResetEmail, signInWithPopup, signInWithPhoneNumber, RecaptchaVerifier, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword } from 'firebase/auth'
 import { createFirestoreCollectionDocument, findUserDocumentFromFirestore } from '../firestore-methods';
 
 let auth = getAuth();
@@ -142,8 +142,8 @@ export let userLoginWithFirebase = (userId, password, handleSigninStatus, handle
 // user login with OTP (modified version)
 // let userLoginWithPhone = (phoneNumber, signInButton, otpCode)
 export let userLoginWithPhone = (phoneNumber, otpCode, handleSigninStatus, handleProfileCompletion, handleCurrentUser) => {
-    let auth = getAuth();
-    auth.languageCode = 'it';
+    // let auth = getAuth();
+    // auth.languageCode = 'it';
     // console.log(signInButton)
 
     // window.recaptchaVerifier = new RecaptchaVerifier(signInButton, {
@@ -171,7 +171,7 @@ export let userLoginWithPhone = (phoneNumber, otpCode, handleSigninStatus, handl
             .then(result => {
                 // user = result.user
                 let user = result.user.uid
-                console.log('is it here!!!!')
+                console.log('is it here!!!! chk01')
                 if(user) {
                     findUserDocumentFromFirestore(user, handleCurrentUser, handleProfileCompletion)
                     console.log('valid user!!')
@@ -288,8 +288,9 @@ export let phoneVerification = (number, recaptchaContainer) => {
         });
 }
 
-export let beginRecaptchaForVerification = (recaptchaContainer) => {
+export let beginRecaptchaForVerification = (recaptchaContainer, phoneNumber, handleShowOtpModal) => {
     console.log(recaptchaContainer, 'recaptchaContainer!!')
+    // this will enable recaptch in invisible mode on browser
     window.recaptchaVerifier = new RecaptchaVerifier(recaptchaContainer, {
         'size': 'invisible',
         'callback': (response) => {
@@ -298,4 +299,27 @@ export let beginRecaptchaForVerification = (recaptchaContainer) => {
             alert('verification code is sent, check your mobile for sms with secret code')
         }
     }, auth);
+
+    const appVerifier = window.recaptchaVerifier;
+
+    // this will send verification code to user device
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+    .then((confirmationResult) => {
+      // SMS sent. Prompt user to type the code from the message, then sign the
+      // user in with confirmationResult.confirm(code).
+      window.confirmationResult = confirmationResult;
+      // ...
+      handleShowOtpModal()
+      alert('a 6 digit otp has been sent to your device, once recieved enter it in designated textbox to proceed with login process')
+    }).catch((error) => {
+      // Error; SMS not sent
+      // ...
+      console.log('sms could not be sent to user device', error.code, error.message)
+    });
+
+    // if vereification code could not be sent to user device, we can use this to resend code again
+    // window.recaptchaVerifier.render()
+    // .then((widgetId) => {
+    //     grecaptcha.reset(widgetId);
+    // })
 }

@@ -102,23 +102,44 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser, handleAnnounceme
     !loginWithPhoneNumber && userSignInWithSessionPersistence(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser, handleAnnouncement)
     // console.log(evt.target, '??')
     // loginWithPhoneNumber && userLoginWithPhone(userID, evt.target)
-    loginWithPhoneNumber && beginRecaptchaForVerification(window.document)
-    loginWithPhoneNumber && handleShowOtpModal()
+    loginWithPhoneNumber && beginRecaptchaForVerification(evt.target, userID, handleShowOtpModal)
+    // loginWithPhoneNumber && handleShowOtpModal()
+  }
+  let renderMarkup = () => {
+    return (
+      showOtpModal
+      ?
+      <div id="login-info">
+        <GetOtpFromUser userID={userID} handleSigninStatus={handleSigninStatus} handleProfileCompletion={handleProfileCompletion} handleCurrentUser={handleCurrentUser} />
+      </div>
+      :
+      <div id="login-info">
+        <ReturnAnInputElement name='Mobile, email or username' elemID='user-id' setID={setUserID} updateIfItsNumber={handleLoginWithPhone} />
+        {!loginWithPhoneNumber && <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} updateIfItsNumber={handleLoginWithPhone} />}
+        <button onClick={confirmLogin} style={{ opacity: (loginWithPhoneNumber || bothPresent) ? 1 : .5, cursor: (!loginWithPhoneNumber && !bothPresent) && 'pointer', pointerEvents: (!loginWithPhoneNumber && !bothPresent) && 'none' }} id='login-btn'>Login</button>
+      </div>
+    )
   }
 
   return (
     <div id="login-info">
-      <ReturnAnInputElement name='Mobile, email or username' elemID='user-id' setID={setUserID} updateIfItsNumber={handleLoginWithPhone} />
+      {/* <ReturnAnInputElement name='Mobile, email or username' elemID='user-id' setID={setUserID} updateIfItsNumber={handleLoginWithPhone} /> */}
+      
       {/* <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} /> */}
-      {!loginWithPhoneNumber && <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} updateIfItsNumber={handleLoginWithPhone}/>}
-      <button onClick={confirmLogin} style={{ opacity: (loginWithPhoneNumber || bothPresent) ? 1 : .5, cursor: (!loginWithPhoneNumber && !bothPresent) && 'pointer', pointerEvents: (!loginWithPhoneNumber && !bothPresent) && 'none' }} id='login-btn'>Login</button>
+      {/* {!loginWithPhoneNumber && <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} updateIfItsNumber={handleLoginWithPhone}/>} */}
+      
+      {/* <button onClick={confirmLogin} style={{ opacity: (loginWithPhoneNumber || bothPresent) ? 1 : .5, cursor: (!loginWithPhoneNumber && !bothPresent) && 'pointer', pointerEvents: (!loginWithPhoneNumber && !bothPresent) && 'none' }} id='login-btn'>Login</button> */}
       {/* <button onClick={confirmLogin} style={{ opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent  && 'none' }} id='login-btn'>Login</button> */}
       {/* <Link onClick={confirmLogin} style={{opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none'}} id='login-btn'>Login</Link> */}
 
       {/* when mobile number is used for login get a otp code before proceeding from user */}
-      {
+      {/* {
         showOtpModal && <GetOtpFromUser userID={userID} handleSigninStatus={handleSigninStatus} handleProfileCompletion={handleProfileCompletion} handleCurrentUser={handleCurrentUser} />
-      }
+      } */}
+
+      {/* <GetOtpFromUser userID={userID} handleSigninStatus={handleSigninStatus} handleProfileCompletion={handleProfileCompletion} handleCurrentUser={handleCurrentUser} /> */}
+
+      {renderMarkup()}
       
       {
         // currentUser && signinDone && profileCompleted && <Redirect to='/username/' />

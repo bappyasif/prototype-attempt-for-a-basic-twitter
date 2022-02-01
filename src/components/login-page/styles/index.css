@@ -116,6 +116,21 @@ input[type='submit'] {
     /* display: none; */
 }
 
+#login-container #login-info #user-otp-verification-wrapper #otp-input {
+    border: solid 1px silver;
+    border-radius: 11px;
+    padding-left: 6px;
+    font-size: x-large;
+}
+
+#login-container #login-info #user-otp-verification-wrapper #opt-submit {
+    background: aqua;
+    margin-top: 4px;
+    border-radius: 20px;
+    line-height: 2em;
+    font-size: x-large;
+}
+
 /* svg {
     position: absolute;
     left: 80%;
