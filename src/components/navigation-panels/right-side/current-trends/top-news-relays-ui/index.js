@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function TopNewsRelaysUI({ newsCategory, showDouble }) {
+function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
     let [newsData, setNewsData] = useState(null)
 
     let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
@@ -28,9 +28,9 @@ function TopNewsRelaysUI({ newsCategory, showDouble }) {
         return (
             showDouble
                 ?
-                newsData && newsData.map((item, idx) => (idx == 0) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} />)
+                newsData && newsData.map((item, idx) => (idx == 0) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} />)
                 :
-                newsData && newsData.map((item, idx) => (idx < 2) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} />)
+                newsData && newsData.map((item, idx) => (idx < 2) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} />)
         )
     }
     // console.log(rndNum, 'rndNum!!')
@@ -42,9 +42,9 @@ function TopNewsRelaysUI({ newsCategory, showDouble }) {
     )
 }
 
-let ShowNewsReelHeadlines = ({ newsItem }) => {
+let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators }) => {
     let [hovered, setHovered] = useState(false)
-    let { slug_name, subsection, section } = { ...newsItem };
+    let { slug_name, subsection, section, byline, multimedia } = { ...newsItem };
     let tokenizing = slug_name.split(/[0-9]/);
     let tokenizingHyphens = tokenizing[tokenizing.length - 1].split('-');
     let adjustedSlug = tokenizingHyphens.join(' ');
@@ -54,7 +54,17 @@ let ShowNewsReelHeadlines = ({ newsItem }) => {
     // console.log(adjustSlug , 'adjust!!', tokenizing, tokenizingHyphens)
     // console.log(slug_name, newsItem, 'what what!!')
 
+    useEffect(() => console.log(newsItem, 'what what!!'), [])
+
     let handleHover = () => setHovered(!hovered)
+
+    let adjustContentCreatorName = byline.split('BY')[1] && (byline.split('BY')[1]).split(' ').filter(name => name).map(name=>name.toLowerCase())
+    adjustContentCreatorName = adjustContentCreatorName && adjustContentCreatorName.map(name => name[0].toUpperCase()+name.slice(1)).join(' ')
+    // console.log(adjustContentCreatorName)
+    // handleContentCreators(adjustContentCreatorName)
+
+    // useEffect(() => byline && handleContentCreators(adjustContentCreatorName), [byline])
+    useEffect(() => multimedia && byline && handleContentCreators({name: adjustContentCreatorName, imgUrl: newsItem.multimedia[0].url}), [byline])
 
     // adjustedSlug && headlinesCount()
 

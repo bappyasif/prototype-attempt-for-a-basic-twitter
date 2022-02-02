@@ -1,25 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { useHistory } from 'react-router-dom';
 import { deleteIcon } from '../../../../tweet-modal/svg-resources';
 import { ListModalHeader } from '../../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components';
 
 function TrendsModal() {
+    let history = useHistory()
     let renderSettingsUI = () => trendsSettingsOptions.map(item => <RenderSettingsOption key={item.name} item={item} />)
     return (
         <div id='trends-modal-container'>
-            <ListModalHeader modalTitle={'Trends'} icon={deleteIcon()} />
+            <ListModalHeader modalTitle={'Trends'} icon={deleteIcon()} history={history} />
             {renderSettingsUI()}
         </div>
     )
 }
 
 let RenderSettingsOption = ({ item }) => {
+    let [checked, setChecked] = useState(false)
+    let handleClick = () => setChecked(!checked)
     return (
         <div className='settings-option-wrapper'>
             <div id='left-side'>
                 <div className='title-text'>{item.actionText}</div>
                 <div className='sub-text'>{item.explanation}</div>
             </div>
-            <input type={'checkbox'} />
+            <div id='right-side' onClick={handleClick}>
+                {/* as checkbox native checkbox is persistent to built in styling, we need to manually remove or hide it from DOM and replace it with out intended styled component instaed */}
+                <input type={'checkbox'} checked={checked} onChange={handleClick} />
+                <span className={checked ? 'checked' : null} id='changed-checkbox'></span>
+            </div>
         </div>
     )
 }

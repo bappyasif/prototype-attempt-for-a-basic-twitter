@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import TopNewsRelaysUI from './top-news-relays-ui';
 
-function CurrentTrends() {
+function CurrentTrends({handleContentCreators}) {
 
     let [showLess, setShowLess] = useState(true)
 
@@ -28,9 +28,9 @@ function CurrentTrends() {
         return (
             showLess
             ?
-            newsCategories.map((name, idx) => (idx < 6) && <TopNewsRelaysUI key={name} newsCategory={name} showDouble={showLess} />)
+            newsCategories.map((name, idx) => (idx < 6) && <TopNewsRelaysUI key={name} newsCategory={name} showDouble={showLess} handleContentCreators={handleContentCreators} />)
             :
-            newsCategories.map(name => <TopNewsRelaysUI key={name} newsCategory={name} showDouble={showLess} />)
+            newsCategories.map(name => <TopNewsRelaysUI key={name} newsCategory={name} showDouble={showLess} handleContentCreators={handleContentCreators} />)
         )
     }
     
