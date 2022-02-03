@@ -1807,6 +1807,50 @@
   transform: rotate(45deg);
 }
 
+/* suggested people route styles */
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion,
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side {
+  display: flex;
+  align-items: center;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion {
+  justify-content: space-between;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-img {
+  width: 51px;
+  height: 45px;
+  border-radius: 20px;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-infos {
+  margin-left: 20px;
+  text-align: left;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-infos #author-name {
+  font-size: smaller;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #book-review {
+  margin-left: 72px;
+  width: 450px;
+  text-align: left;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper {
+  margin-bottom: 8px;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #follow-btn {
+  line-height: 2em;
+  background-color: aqua;
+  padding: 0px 11px 0px 11px;
+  border-radius: 13px;
+  margin-left: 6px;
+}
+
 /* scrollbar custom styling tryouts */
 
 /* ::-webkit-scrollbar-button:single-button:vertical:increment {
