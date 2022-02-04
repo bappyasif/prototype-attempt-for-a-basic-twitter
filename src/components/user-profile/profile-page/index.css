@@ -1841,14 +1841,64 @@
 
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper {
   margin-bottom: 8px;
+  position: relative;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #follow-btn {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #follow-btn,
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
   line-height: 2em;
-  background-color: aqua;
+  background-color: silver;
   padding: 0px 11px 0px 11px;
   border-radius: 13px;
   margin-left: 6px;
+}
+
+#components-container #lengthy-follow-list-container #list-header-wrapper #first-half {
+  display: flex;
+  align-items: center;
+  font-size: x-large;
+}
+
+#components-container #lengthy-follow-list-container #list-header-wrapper #first-half svg {
+  transform: scale(1.5);
+}
+
+#components-container #lengthy-follow-list-container #list-header-wrapper #first-half #action-header {
+  padding-bottom: 11px;
+  margin-left: 40px;
+}
+
+#components-container #lengthy-follow-list-container #header-text {
+  text-align: left;
+  font-size: larger;
+  margin-bottom: 13px;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper {
+  position: absolute;
+  background-color: silver;
+  z-index: 99;
+  width: 351px;
+  top: 0px;
+  left: 72px;
+  padding: 11px 11px 11px 11px;
+  border-radius: 11px;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section {
+  text-align: left;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header,
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-action-description {
+  margin-bottom: 6px;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
+  background: lightslategray;
+  padding-left: 0px;
+  margin-left: 0px;
+  margin-bottom: 6px;
 }
 
 /* scrollbar custom styling tryouts */

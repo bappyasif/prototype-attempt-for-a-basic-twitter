@@ -31,6 +31,7 @@ import TagLocation from '../user-profile/all-tweets/show-tweet-thread/tag-locati
 import RetweetsWithCommentsThread from '../user-profile/all-tweets/retweet-with-comments-thread';
 import TrendsModal from '../navigation-panels/right-side/current-trends/trends-modal';
 import RenderLengthyFollowList from '../navigation-panels/right-side/follow-suggested-people-component/show-lengthy-follow-list';
+import RenderHomePageView from '../navigation-panels/left-side/home-page';
 
 function AllRoutes({ listName, handleListName, updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
@@ -162,6 +163,9 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                         currentUser={currentUser}
                         handleCurrentUser={handleCurrentUser}
                     />
+                </Route>
+                <Route exact path={'/home'}>
+                    <RenderHomePageView />
                 </Route>
                 <Route exact path={'/analytics'}>
                     <AnalyticsUI analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} currentUser={currentUser} handlePollVotesCount={handlePollVotesCount} />

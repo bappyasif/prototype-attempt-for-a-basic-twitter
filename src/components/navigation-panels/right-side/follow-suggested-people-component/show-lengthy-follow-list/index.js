@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { ListModalHeader } from '../../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components';
 
 function RenderLengthyFollowList() {
+    let history = useHistory(null)
 
     let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
 
@@ -10,7 +13,7 @@ function RenderLengthyFollowList() {
 
     // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?title=${item.title}&api-key=${apik}`
 
-    let fetchUrls = [{url: url01, category: 'science'}, {url: url02, category: 'sports'}];
+    let fetchUrls = [{ url: url01, category: 'science' }, { url: url02, category: 'sports' }];
 
     let renderDataFromFetches = () => fetchUrls.map((item, idx) => <RenderDataFromFetch key={idx} url={item.url} apik={apik} category={item.category} />)
 
@@ -25,12 +28,14 @@ function RenderLengthyFollowList() {
         <div id='lengthy-follow-list-container'>
             {/* <RenderFirstHalf url={url01} apik={apik} />
             <RenderSecondHalf url={url02} apik={apik} /> */}
+            <ListModalHeader icon={backSvgIcon()} modalTitle={'Connect'} history={history} />
+            <div id='header-text'>Suggested for you</div>
             {renderDataFromFetches()}
         </div>
     )
 }
 
-let RenderDataFromFetch = ({url, apik, category}) => {
+let RenderDataFromFetch = ({ url, apik, category }) => {
     let [dataset, setDataset] = useState(null)
 
     let [updatedDataset, setUpdatedDataset] = useState(null)
@@ -45,8 +50,9 @@ let RenderDataFromFetch = ({url, apik, category}) => {
             }
             return item;
         })
-        console.log(newList, 'newList!!')
+        // console.log(newList, 'newList!!')
         setUpdatedDataset(newList)
+        // category == 'science' && setUpdatedDataset(newList)
     }
 
     let fetchData = (url, updater) => {
@@ -58,36 +64,349 @@ let RenderDataFromFetch = ({url, apik, category}) => {
 
     useEffect(() => fetchData(url, handleDataset), [url])
 
+    // this works but individually
     let makeBookReviewCall = (item) => {
-        let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?title=${item.title}&api-key=${apik}`
+        // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?title=${item.title}&api-key=${apik}`
+        // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?isbn=${item.primary_isbn13}&api-key=${apik}`
+        let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?author=${item.author.split(' ').join('+')}&api-key=${apik}`
+        console.log(reviewUrl, 'reviewUrl', item)
         fetch(reviewUrl)
             .then(response => response.json())
             .then(data => {
-                // data.num_results && {...item, reviewList: data.results[0].summary}
-                // data.num_results && console.log(data.results[0].summary)
-                // let sanitizeStr = (data.results[0].summary).replace(/[\uE000-\uF8FF]/g, '')
-                let sanitizeStr = (data.results[0].summary).replace(/[\ud800-\udfff]/g, "")
-                data.num_results && console.log(sanitizeStr.toString())
-                // data.num_results && updateDataset(item.title, data.results[0].summary)
-                data.num_results && updateDataset(item.title, (data.results[0].summary).toString())
-                // setFlag(true)
+                data.num_results && updateDataset(item.title, (data.results[data.results.length ? data.results.length - 1 : 0].summary).toString())
             })
             .catch(err => console.log(err.code, err.message))
     }
+
     useEffect(() => {
         let handles;
-        if(category == 'science') {
+        if (category == 'science') {
             handles = dataset && dataset.map((item, idx) => {
                 setTimeout(() => makeBookReviewCall(item), 6000 * idx)
             })
             return () => handles && handles.forEach(handle => clearTimeout(handle))
         } else {
+            // let idx = 11;
             handles = dataset && dataset.map((item, idx) => {
-                setTimeout(() => makeBookReviewCall(item), (10 * 6000) + (idx * 6000) )
+                let carry = 10 * 6000;
+                setTimeout(() => {
+                    makeBookReviewCall(item);
+                }, (carry + idx * 6000))
+            })
+
+            return () => handles && handles.forEach(handle => clearTimeout(handle))
+        }
+    }, [dataset])
+
+    console.log(dataset, 'dataset!!')
+
+    let renderBookRelatedInfos = () => {
+        return updatedDataset ? updatedDataset.map(item => <RenderBookRelatedInfos key={item.title} item={item} />) : dataset && dataset.map(item => <RenderBookRelatedInfos key={item.title} item={item} />)
+    }
+
+    return (
+        <div id='suggested-first-half-wrapper'>
+            {renderBookRelatedInfos()}
+        </div>
+    )
+}
+
+let RenderBookRelatedInfos = ({ item }) => {
+    let { reviewList } = { ...item }
+
+    let [suggestedName, setSuggestedName] = useState(null)
+
+    let [follow, setFollow] = useState(false)
+
+    let [actionName, setActionName] = useState(null)
+
+    let handleFollow = evt => {
+        // console.log(evt.target.textContent, 'checks!!')
+        setActionName(evt.target.textContent)
+
+        setSuggestedName(item.title)
+    }
+
+    useEffect(() => {
+        setFollow(actionName == 'Follow' ? true : actionName == 'Unfollow' ? false : actionName && true)
+    }, [actionName])
+
+    return (
+        <div id='book-related-infos-wrapper'>
+            <div id='top-portion'>
+                <div id='left-side'>
+                    <img id='book-img' src={item.book_image} />
+                    <div id='book-infos'>
+                        <div id='book-name'>{item.title}</div>
+                        <div id='author-name'>{item.author}</div>
+                    </div>
+                </div>
+                {/* <div id='follow-btn' onClick={handleFollow} style={{ backgroundColor: follow == 'Follow' && 'rgba(29, 155, 240, 1)' }}>{follow == 'Follow' ? 'Following' : 'Follow'}</div> */}
+                <div id='follow-btn' onClick={handleFollow} style={{ backgroundColor: follow && 'rgba(29, 155, 240, 1)' }}>{follow ? 'Following' : 'Follow'}</div>
+            </div>
+            {/* <div id='book-review'>{item.reviewList || 'book review awaits or was not found at this moment....'}</div> */}
+            <div id='book-review'>{reviewList || 'book review awaits or was not found at this moment....'}</div>
+            {actionName == 'Following' && <RenderUnfollowModal handleFollow={handleFollow} suggestedName={suggestedName} />}
+        </div>
+    )
+}
+
+let RenderUnfollowModal = ({ handleFollow, suggestedName }) => {
+    let actionBtns = ['Unfollow', 'Cancel']
+
+    let renderActionNames = () => actionBtns.map(name => <ActionButton key={name} actionName={name} handleFollow={handleFollow} />)
+
+    return (
+        <div id='unfollow-modal-wrapper'>
+            <div id='modal-top-section'>
+                <div id='modal-header'>Unfollow @{suggestedName}</div>
+                <div id='modal-action-description'>Their Tweets will no longer show up in your home timeline. You can still view their profile, unless their Tweets are protected.</div>
+            </div>
+            <div id='action-btns-wrapper'>
+                {renderActionNames()}
+            </div>
+        </div>
+    )
+}
+
+let ActionButton = ({ actionName, handleFollow }) => {
+    return (
+        <div className='action-btns' id={'action-btn-' + actionName} onClick={handleFollow} >{actionName}</div>
+    )
+}
+
+export let backSvgIcon = () => <svg width={'24px'} height={'24px'}><g><path d="M20 11H7.414l4.293-4.293c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0l-6 6c-.39.39-.39 1.023 0 1.414l6 6c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L7.414 13H20c.553 0 1-.447 1-1s-.447-1-1-1z"></path></g></svg>
+
+
+
+
+// let RenderDataFromFetch = ({ url, apik, category }) => {
+//     let [dataset, setDataset] = useState(null)
+
+//     let [updatedDataset, setUpdatedDataset] = useState(null)
+
+//     let [cycleCompleted, setCycleCompleted] = useState(false)
+
+//     // let [reviewUrls, setReviewUrls] = useState()
+
+//     let handleDataset = items => setDataset(items)
+
+//     useEffect(() => {
+//         cycleCompleted && console.log(cycleCompleted, 'cycleCompleted!!', dataset, updatedDataset)
+//         cycleCompleted && setDataset(updatedDataset)
+//     }, [cycleCompleted])
+
+//     let updateDataset = (title, newData) => {
+//         console.log(title, newData, 'foundReview!!')
+//         let newList = dataset.map(item => {
+//             if (item.title == title) {
+//                 item.reviewList = newData
+//             }
+//             return item;
+//         })
+//         // console.log(newList, 'newList!!')
+//         setUpdatedDataset(newList)
+//         // category == 'science' && setUpdatedDataset(newList)
+//     }
+
+//     let fetchData = (url, updater) => {
+//         fetch(url)
+//             .then(response => response.json())
+//             .then(data => updater(data.results.books))
+//             .catch(err => console.log('fetch request has failed', err.code, err.message))
+//     }
+
+//     useEffect(() => fetchData(url, handleDataset), [url])
+
+//     // this works but individually
+//     let makeBookReviewCall = (item) => {
+//         // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?title=${item.title}&api-key=${apik}`
+//         let reviewUrl02 = `https://api.nytimes.com/svc/books/v3/reviews.json?isbn=${item.primary_isbn13}&api-key=${apik}`
+//         let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?author=${item.author.split(' ').join('+')}&api-key=${apik}`
+//         console.log(cycleCompleted ? reviewUrl02 : reviewUrl, 'reviewUrl', item)
+//         fetch(cycleCompleted ? reviewUrl02 : reviewUrl)
+//             .then(response => response.json())
+//             .then(data => {
+//                 data.num_results && updateDataset(item.title, (data.results[data.results.length ? data.results.length - 1 : 0].summary).toString())
+//             })
+//             .catch(err => console.log(err.code, err.message))
+//     }
+
+//     useEffect(() => {
+//         let handles;
+//         if (category == 'science') {
+//             handles = dataset && dataset.map((item, idx) => {
+//                 setTimeout(() => makeBookReviewCall(item), 6000 * idx)
+//             })
+//             return () => handles && handles.forEach(handle => clearTimeout(handle))
+//         } else {
+//             // let idx = 11;
+//             handles = dataset && dataset.map((item, idx) => {
+//                 let carry = 10 * 6000;
+//                 setTimeout(() => {
+//                     makeBookReviewCall(item);
+//                     !cycleCompleted && category == 'sports' && idx == 9 && setCycleCompleted(true)
+//                 }, (carry + idx * 6000))
+//             })
+//             return () => handles && handles.forEach(handle => clearTimeout(handle))
+//         }
+//     }, [dataset])
+
+//     console.log(dataset, 'dataset!!')
+
+//     let renderBookRelatedInfos = () => {
+//         return updatedDataset ? updatedDataset.map(item => <RenderBookRelatedInfos key={item.title} item={item} />) : dataset && dataset.map(item => <RenderBookRelatedInfos key={item.title} item={item} />)
+//     }
+
+//     return (
+//         <div id='suggested-first-half-wrapper'>
+//             {renderBookRelatedInfos()}
+//         </div>
+//     )
+// }
+
+// let makeBookReviewCall = (item) => {
+//     let urls = [`https://api.nytimes.com/svc/books/v3/reviews.json?isbn=${item.primary_isbn13}&api-key=${apik}`, `https://api.nytimes.com/svc/books/v3/reviews.json?author=${item.author.split(' ').join('+')}&api-key=${apik}`]
+//     // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?title=${item.title}&api-key=${apik}`
+//     // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?isbn=${item.primary_isbn13}&api-key=${apik}`
+//     // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?author=${item.author.split(' ').join('+')}&api-key=${apik}`
+//     // console.log(reviewUrl, 'reviewUrl', item)
+//     fetch(urls[0])
+//         .then(response => response.json())
+//         .then(data => {
+//             // data.num_results && updateDataset(item.title, (data.results[data.results.length ? data.results.length - 1 : 0].summary).toString())
+//             if (data.num_results) {
+//                 updateDataset(item.title, (data.results[data.results.length ? data.results.length - 1 : 0].summary).toString())
+//             } else {
+//                 let handle = setTimeout(() => {
+//                     fetch(urls[1])
+//                         .then(resp => resp.json())
+//                         .then(data => {
+//                             data.num_results ? updateDataset(item.title, (data.results[data.results.length ? data.results.length - 1 : 0].summary).toString()) : null
+//                         }, 9000)
+//                     return () => clearTimeout(handle) 
+//                 })
+//                 console.log('here!!')
+//             }
+//         })
+//         .catch(err => console.log(err.code, err.message))
+// }
+
+
+/**
+ * 
+ * 
+ let RenderDataFromFetch = ({ url, apik, category }) => {
+    let [dataset, setDataset] = useState(null)
+
+    let [updatedDataset, setUpdatedDataset] = useState(null)
+
+    let [urlCounter, setUrlCounter] = useState(0);
+
+    let [bookItem, setBookItem] = useState({})
+
+    let handleDataset = items => setDataset(items)
+
+    let reviewUrls = [`https://api.nytimes.com/svc/books/v3/reviews.json?author=${bookItem.author && bookItem.author.split(' ').join('+')}&api-key=${apik}`, `https://api.nytimes.com/svc/books/v3/reviews.json?isbn=${bookItem.primary_isbn13}&api-key=${apik}`,`https://api.nytimes.com/svc/books/v3/reviews.json?title=${bookItem.title}&api-key=${apik}`]
+
+    let updateDataset = (title, newData) => {
+        console.log(title, newData, 'foundReview!!')
+        let newList = dataset.map(item => {
+            if (item.title == title) {
+                item.reviewList = newData
+            }
+            return item;
+        })
+        // console.log(newList, 'newList!!')
+        setUpdatedDataset(newList)
+        // category == 'science' && setUpdatedDataset(newList)
+    }
+
+    let fetchData = (url, updater) => {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => updater(data.results.books))
+            .catch(err => console.log('fetch request has failed', err.code, err.message))
+    }
+
+    useEffect(() => fetchData(url, handleDataset), [url])
+    
+    let makeThisFetchRequest = (url, item) => {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // data.num_results ? updateDataset(item.title, (data.results[data.results.length ? data.results.length - 1 : 0].summary).toString()) : makeThisFetchRequest()
+                if (data.num_results) {
+                    updateDataset(item.title, (data.results[data.results.length ? data.results.length - 1 : 0].summary).toString())
+                } else {
+                    if (urlCounter <= 2) {
+                        setTimeout(() => makeThisFetchRequest(reviewUrls[urlCounter], item), 6000)
+                    setUrlCounter(urlCounter + 1)
+                    } else {
+                        return
+                    }
+                }
+            })
+            .catch(err => console.log(err.code, err.message))
+    }
+
+    let makeBookReviewCall = (item) => {
+        // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?title=${item.title}&api-key=${apik}`
+        // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?isbn=${item.primary_isbn13}&api-key=${apik}`
+        // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?author=${item.author.split(' ').join('+')}&api-key=${apik}`
+        
+        // console.log(reviewUrl, 'reviewUrl', item)
+        
+        makeThisFetchRequest(reviewUrls[urlCounter])
+        
+        setUrlCounter(urlCounter + 1)
+
+        // fetch(reviewUrl)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         data.num_results && updateDataset(item.title, (data.results[data.results.length ? data.results.length - 1 : 0].summary).toString())
+        //     })
+        //     .catch(err => console.log(err.code, err.message))
+    }
+    
+    // this works but individually
+    // let makeBookReviewCall = (item) => {
+    //     // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?title=${item.title}&api-key=${apik}`
+    //     // let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?isbn=${item.primary_isbn13}&api-key=${apik}`
+    //     let reviewUrl = `https://api.nytimes.com/svc/books/v3/reviews.json?author=${item.author.split(' ').join('+')}&api-key=${apik}`
+    //     console.log(reviewUrl, 'reviewUrl', item)
+    //     fetch(reviewUrl)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             data.num_results && updateDataset(item.title, (data.results[data.results.length ? data.results.length - 1 : 0].summary).toString())
+    //         })
+    //         .catch(err => console.log(err.code, err.message))
+    // }
+
+    useEffect(() => {
+        let handles;
+        if (category == 'science') {
+            handles = dataset && dataset.map((item, idx) => {
+                setTimeout(() => {
+                    setBookItem(item)
+                    makeBookReviewCall(item)
+                }, 6000 * idx)
+            })
+            return () => handles && handles.forEach(handle => clearTimeout(handle))
+        } else {
+            // let idx = 11;
+            handles = dataset && dataset.map((item, idx) => {
+                let carry = 10 * 6000;
+                setTimeout(() => {
+                    setBookItem(item)
+                    makeBookReviewCall(item);
+                    // idx++;
+                    // console.log(idx, 'idx!!')
+                }, (carry + idx * 6000))
             })
             return () => handles && handles.forEach(handle => clearTimeout(handle))
         }
-        
+
     }, [dataset])
 
     // useEffect(() => {
@@ -111,27 +430,8 @@ let RenderDataFromFetch = ({url, apik, category}) => {
         </div>
     )
 }
+ */
 
-let RenderBookRelatedInfos = ({ item }) => {
-    let { reviewList } = { ...item }
-    // console.log(reviewList, 'reviewList!!')
-    return (
-        <div id='book-related-infos-wrapper'>
-            <div id='top-portion'>
-                <div id='left-side'>
-                    <img id='book-img' src={item.book_image} />
-                    <div id='book-infos'>
-                        <div id='book-name'>{item.title}</div>
-                        <div id='author-name'>{item.author}</div>
-                    </div>
-                </div>
-                <div id='follow-btn'>Follow</div>
-            </div>
-            {/* <div id='book-review'>{item.reviewList || 'book review awaits or was not found at this moment....'}</div> */}
-            <div id='book-review'>{reviewList || 'book review awaits or was not found at this moment....'}</div>
-        </div>
-    )
-}
 
 // let RenderFirstHalf = ({ url, apik }) => {
 //     let [dataset, setDataset] = useState(null)
