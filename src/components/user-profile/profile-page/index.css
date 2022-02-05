@@ -1901,6 +1901,72 @@
   margin-bottom: 6px;
 }
 
+#components-container #home-page-view-container #tweet-modal {
+  margin-bottom: 38px;
+  width: -webkit-fill-available;
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper {
+  width: 681px;
+  margin: auto;
+  margin-bottom: 11px;
+  position: relative;
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper #article-info {
+  text-align: left;
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper #article-info #top-section {
+  display: flex;
+  align-items: baseline;
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper #article-info #top-section #authors-info {
+  display: flex;
+  align-items: baseline;
+  margin-right: 11px;
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper #article-info #top-section #authors-info #authors-name {
+  margin-right: 11px;
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper #article-info #top-section #article-timestamp {
+  position: relative;
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper #article-info #top-section #article-timestamp #time-tooltip {
+  display: none;
+  position: absolute;
+  width: max-content;
+  background-color: whitesmoke;
+  padding: 4px;
+  transform: translateX(-63px);
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper #article-info #authors-name {
+  font-size: larger;
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper #article-info #snippet-text {
+  line-height: 1.5em;
+  margin-top: 8px;
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper #article-img {
+  width: 681px;
+  height: 400px;
+  /* position: relative; */
+}
+
+#components-container #home-page-view-container .render-shared-article-wrapper .countdown {
+  position: absolute;
+  top: .1%;
+  left: 29.1%;
+  font-size: 476px;
+}
+
 /* scrollbar custom styling tryouts */
 
 /* ::-webkit-scrollbar-button:single-button:vertical:increment {
