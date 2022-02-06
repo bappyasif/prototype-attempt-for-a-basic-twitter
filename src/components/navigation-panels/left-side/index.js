@@ -14,6 +14,8 @@ function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle, opacit
     let whichLink = evt.target.textContent
     if(whichLink == 'Home') {
       history.push('/home')
+    } else if(whichLink == 'Explore') {
+      history.push('/explore')
     }
   }
 

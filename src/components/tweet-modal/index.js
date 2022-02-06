@@ -16,7 +16,7 @@ import { ShowCurrentlyTaggedPlace } from '../user-profile/all-tweets/show-tweet-
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 // var giphyQueryURL = "https://api.giphy.com/v1/gifs/search?";
 
-function TweetModal({ quotedFromRetweetModal, selectedTaggedPlace, handlePollVotesCount, pollVotesCount, handleQuoteTweetID, quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
+function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace, handlePollVotesCount, pollVotesCount, handleQuoteTweetID, quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -119,7 +119,7 @@ function TweetModal({ quotedFromRetweetModal, selectedTaggedPlace, handlePollVot
         handleTweetModalToggle();
         setScheduleStamp('')
 
-        handleQuoteTweetID(null);
+        !fromHomePage && handleQuoteTweetID(null);
 
         setOpacity(false)
 
@@ -236,6 +236,7 @@ function TweetModal({ quotedFromRetweetModal, selectedTaggedPlace, handlePollVot
                     &&
 
                     <ContentInComposeTweet
+                        gifWidth={fromHomePage && '578px'}
                         gifFile={gifFile}
                         removeGifHandler={removeGifFileHandler}
                         selectedFile={selectedFile}
@@ -291,6 +292,7 @@ function TweetModal({ quotedFromRetweetModal, selectedTaggedPlace, handlePollVot
                     &&
                     <ContentInComposeTweet
                         // gifFile={gifFile}
+                        gifWidth={fromHomePage && '578px'}
                         gifFile={extraGifFile && extraGifFile}
                         removeGifHandler={removeGifFileHandler}
                         // selectedFile={selectedFile}
@@ -315,7 +317,7 @@ function TweetModal({ quotedFromRetweetModal, selectedTaggedPlace, handlePollVot
                     {/* <TweetPrivacySelected setTweetOptions={setTweetOptions} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy} /> */}
                     <PrivacyAndTaggedLocation setTweetOptions={setTweetOptions} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy} selectedTaggedPlace={selectedTaggedPlace} />
 
-                    <div id='tweet-additionals' style={{marginTop: selectedTaggedPlace && '-11px'}}>
+                    <div id='tweet-additionals' style={{ marginTop: selectedTaggedPlace && '-11px' }}>
                         {/* <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} scheduleToggler={handleScheduleIconClicked} /> */}
                         <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} />
 
@@ -386,6 +388,7 @@ function TweetModal({ quotedFromRetweetModal, selectedTaggedPlace, handlePollVot
                     &&
                     <ContentInComposeTweet
                         // gifFile={gifFile}
+                        gifWidth={fromHomePage && '578px'}
                         gifFile={extraGifFile}
                         removeGifHandler={removeGifFileHandler}
                         selectedFile={extraSelectedFile}
@@ -409,17 +412,27 @@ function TweetModal({ quotedFromRetweetModal, selectedTaggedPlace, handlePollVot
     )
 }
 
-let PrivacyAndTaggedLocation = ({setTweetOptions, tweetPrivacy, setTweetPrivacy, selectedTaggedPlace}) => {
+let PrivacyAndTaggedLocation = ({ setTweetOptions, tweetPrivacy, setTweetPrivacy, selectedTaggedPlace }) => {
     return (
-        <div id='privacy-tagged-location-wrapper' style={{height: selectedTaggedPlace && '42px'}}>
-            <TweetPrivacySelected setTweetOptions={setTweetOptions} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy } />
+        <div id='privacy-tagged-location-wrapper' style={{ height: selectedTaggedPlace && '42px' }}>
+            <TweetPrivacySelected setTweetOptions={setTweetOptions} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy} />
             {selectedTaggedPlace && <ShowCurrentlyTaggedPlace selectedTaggedPlace={selectedTaggedPlace} fromTweetModal={true} />}
         </div>
     )
 }
 
 let TweetMediaOptions = ({ gifFile, selectedFile, inputRef, setIsGifIconClicked, isGifIconClicked, handleToggle, isPollIconClicked, isEmojiIconClicked, showPicker, scheduleToggler }) => {
+    let [hovered, setHovered] = useState(null)
+
     let history = useHistory(null)
+
+    let handleHovered = evt => {
+        let hoveredNode = evt.target.id
+        setHovered(hoveredNode)
+        // console.log(evt.target, hoveredNode, 'hoveredNode!!')
+    }
+
+    let handleBlurred = () => setHovered('')
 
     let onImageIconClicked = evt => inputRef.current.click();
 
@@ -431,10 +444,46 @@ let TweetMediaOptions = ({ gifFile, selectedFile, inputRef, setIsGifIconClicked,
         scheduleToggler();
     }
 
+    useEffect(() => setHovered(''), [])
+
     let HandleLocation = () => history.push('/compose/tweet/place_picker')
 
     // return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{ pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto' }}>{imageIcon()}</div> <div id='gif-icon' style={{ pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto' }} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{ pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto' }} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div> <div id='schedule-icon' onClick={handleScheduleToggler}>{scheduleIcon()}</div></div>
-    return <div id='tweet-medias'><div id='image-icon' onClick={onImageIconClicked} style={{ pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto' }}>{imageIcon()}</div> <div id='gif-icon' style={{ pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto' }} onClick={onGifIconClicked}>{gifIcon()}</div> <div id='poll-icon' style={{ pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto' }} onClick={handleToggle}>{pollIcon()}</div> <div id='emoji-icon' onClick={emojiIconClicked}>{copyIcon()}</div><Link to='/tweet/compose/schedule' id='schedule-icon' >{scheduleIcon()}</Link><div id='handle-location' onClick={HandleLocation} style={{fill: 'rgb(29, 155, 240)'}}>{locationTagIcon()}</div></div>
+    return (
+        <div id='tweet-medias'>
+            <div className='media-icons' id='image-icon' onClick={onImageIconClicked} onMouseEnter={handleHovered} onBlur={handleBlurred} style={{ pointerEvents: (isGifIconClicked || isPollIconClicked) ? 'none' : 'auto' }}>
+                {imageIcon()}
+                {hovered == 'image-icon' && <div className='hoveredText'>Picture</div>}
+            </div>
+            {/* {hovered == 'image-icon' && <div className='hoveredText'>Picture</div>} */}
+
+            <div className='media-icons' id='gif-icon' onMouseEnter={handleHovered} onBlur={handleBlurred} style={{ pointerEvents: (selectedFile || isPollIconClicked) ? 'none' : 'auto' }} onClick={onGifIconClicked}>
+                {gifIcon()}
+                {hovered == 'gif-icon' && <div className='hoveredText'>Gif</div>}
+            </div>
+
+            <div className='media-icons' id='poll-icon' onMouseEnter={handleHovered} onBlur={handleBlurred} style={{ pointerEvents: (selectedFile || isGifIconClicked) ? 'none' : 'auto' }} onClick={handleToggle}>
+                {pollIcon()}
+                {hovered == 'poll-icon' && <div className='hoveredText'>Poll</div>}
+            </div>
+
+            <div className='media-icons' id='emoji-icon' onMouseEnter={handleHovered} onBlur={handleBlurred} onClick={emojiIconClicked}>
+                {copyIcon()}
+                {hovered == 'emoji-icon' && <div className='hoveredText'>Emoji</div>}
+            </div>
+
+            <Link className='media-icons' to='/tweet/compose/schedule' id='schedule-icon' onMouseEnter={handleHovered} onBlur={handleBlurred}>
+                {scheduleIcon()}
+                {hovered == 'schedule-icon' && <div className='hoveredText'>Schedule</div>}
+            </Link>
+
+            <div className='media-icons' id='handle-location' onMouseEnter={handleHovered} onBlur={handleBlurred} onClick={HandleLocation} style={{ fill: 'rgb(29, 155, 240)' }}>
+                {locationTagIcon()}
+                {hovered == 'handle-location' && <div className='hoveredText'>Tag Location</div>}
+            </div>
+
+        </div>
+    )
 }
 
 
@@ -522,7 +571,7 @@ let TweetTextInput = ({ quotedFromRetweetModal, primaryTweetOnFocused, height, p
         evt.target.parentNode.style.opacity = '1';
     }
 
-    return <textarea style={{backgroundColor: 'transparent', border: 'solid 1px silver', borderRadius: '4px'}} rows={quotedFromRetweetModal ? '2' : '4'} id='tweet-input' type='text' maxLength='200' onFocus={handleTextareaWhenFocused} value={tweetText} onChange={handleTweetTextChanges} placeholder={placeholderText} />
+    return <textarea style={{ backgroundColor: 'transparent', border: 'solid 1px silver', borderRadius: '4px' }} rows={quotedFromRetweetModal ? '2' : '4'} id='tweet-input' type='text' maxLength='200' onFocus={handleTextareaWhenFocused} value={tweetText} onChange={handleTweetTextChanges} placeholder={placeholderText} />
 }
 
 export let tweetPrivacySelected01 = (color, text) => <span className='privacy-spans'>{text != ' ' && <span className='privacy-svg'>{everybodyIcon(color ? color : 'none')}</span>}<span className='privacy-text'>{text || 'Everybody can reply'}</span></span>

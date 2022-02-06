@@ -1,13 +1,13 @@
 #right-navigation-panel-container {
   display: flex;
   flex-direction: column;
-  /* max-width: 236px; */
-  margin-left: 53px;
+  max-width: 303px;
+  /* margin-left: 53px; */
 }
 
 #search-twitter-container {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   padding: 0px 8px 0px 2px;
   align-items: center;
   border: 0.11em solid lightgray;
@@ -15,8 +15,12 @@
   position: relative;
 }
 
+#search-twitter-container label {
+  width: -webkit-fill-available;
+}
+
 #search-twitter-container #search-in-twitter {
-  width: 166px;
+  width: -webkit-fill-available;
   border: none;
   margin-left: 11px;
 }
@@ -159,6 +163,10 @@
   border-radius: 11px;
 }
 
+#right-navigation-panel-container #current-trends-container {
+  position: relative;
+}
+
 #right-navigation-panel-container #current-trends-container #trends-header {
   display: flex;
   justify-content: space-between;
@@ -208,12 +216,40 @@
 }
 
 #right-navigation-panel-container #top-news-relays-container .news-item-wrapper {
-  padding: 0px 4px 0px 4px; 
+  padding: 0px 4px 0px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #right-navigation-panel-container #top-news-relays-container .news-item-wrapper:hover {
   background-color: lightgray;
   /* color: black; */
+}
+
+#right-navigation-panel-container #top-news-relays-container .news-item-wrapper #category-settings {
+  border-radius: 100%;
+  display: flex;
+}
+
+#right-navigation-panel-container #top-news-relays-container .news-item-wrapper #category-settings:hover {
+  background-color: rgba(29, 155, 240, 1);
+}
+
+#right-navigation-panel-container #top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper {
+  position: absolute;
+  right: 0px;
+  top: 72px;
+  background-color: whitesmoke;
+  border: solid silver 1px;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+#right-navigation-panel-container #top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper #settings-option-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper {

@@ -32,6 +32,7 @@ import RetweetsWithCommentsThread from '../user-profile/all-tweets/retweet-with-
 import TrendsModal from '../navigation-panels/right-side/current-trends/trends-modal';
 import RenderLengthyFollowList from '../navigation-panels/right-side/follow-suggested-people-component/show-lengthy-follow-list';
 import RenderHomePageView from '../navigation-panels/left-side/home-page';
+import RenderExplorePage from '../navigation-panels/left-side/explore-page';
 
 function AllRoutes({ listName, handleListName, updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
@@ -164,9 +165,27 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                         handleCurrentUser={handleCurrentUser}
                     />
                 </Route>
+                
                 <Route exact path={'/home'}>
-                    <RenderHomePageView />
+                    <RenderHomePageView 
+                    currentUser={currentUser} tweetText={primaryTweetText} extraTweetText={extraTweetText} gifFile={gifFile} 
+                    extraGifFile={gifFileSelectedForExtraTweet} selectedFile={selectedFile} extraSelectedFile={selectedPictureFileForExtraTweet} 
+                    setExtraTweetText={setExtraTweetText} setTweetText={setPrimaryTweetText} setGifFile={setGifFile} setExtraGifFile={setGifFileSelectedForExtraTweet} 
+                    setSelectedFile={setSelectedFile} setExtraSelectedFile={setSelectedPictureFileForExtraTweet} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} setTweetPrivacy={setTweetPrivacy} setTweetPublishReady={setTweetPublishReady}
+                    inputTextChoice01={inputTextChoice01} setInputTextChoice01={setInputTextChoice01} inputTextChoice02={inputTextChoice02} setInputTextChoice02={setInputTextChoice02}
+                    inputTextChoice03={inputTextChoice03} setInputTextChoice03={setInputTextChoice03} inputTextChoice04={inputTextChoice04} setInputTextChoice04={setInputTextChoice04}
+                    inputTextChoice05={inputTextChoice05} setInputTextChoice05={setInputTextChoice05} inputTextChoice06={inputTextChoice06} setInputTextChoice06={setInputTextChoice06}
+                    inputTextChoice07={inputTextChoice07} setInputTextChoice07={setInputTextChoice07} inputTextChoice08={inputTextChoice08} setInputTextChoice08={setInputTextChoice08}
+                    scheduleStamp={scheduleStamp} setScheduleStamp={setScheduleStamp} mediaDescriptionText={mediaFileDescriptionText} setMediaDescriptionText={setMediaFileDescriptionText} setNewDataStatus={setNewDataStatus}
+                    firstTweetHasMedia={firstTweetHasMedia} setFirstTweetHasMedia={setFirstTweetHasMedia} secondTweetHasMedia={secondTweetHasMedia} setSecondTweetHasMedia={setSecondTweetHasMedia}
+                    firstTweetHasPoll={firstTweetHasPoll} setFirstTweetHasPoll={setFirstTweetHasPoll} secondTweetHasPoll={secondTweetHasPoll} setSecondTweetHasPoll={setSecondTweetHasPoll}
+                    />
                 </Route>
+
+                <Route exact path={'/explore'}>
+                    <RenderExplorePage />
+                </Route>
+
                 <Route exact path={'/analytics'}>
                     <AnalyticsUI analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} currentUser={currentUser} handlePollVotesCount={handlePollVotesCount} />
                 </Route>
@@ -279,10 +298,10 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                         handleTweetModalToggle={handleTweetModalityToggle}
                         primaryTweetText={primaryTweetText}
                         extraTweetText={extraTweetText}
-                        tweetPrivacy={tweetPrivacy}
-                        tweetPublishReady={tweetPublishReady}
                         setPrimaryTweetText={setPrimaryTweetText}
                         setExtraTweetText={setExtraTweetText}
+                        tweetPrivacy={tweetPrivacy}
+                        tweetPublishReady={tweetPublishReady}
                         setTweetPrivacy={setTweetPrivacy}
                         setTweetPublishReady={setTweetPublishReady}
                         inputTextChoice01={inputTextChoice01}

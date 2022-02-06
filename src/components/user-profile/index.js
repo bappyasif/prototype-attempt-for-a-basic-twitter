@@ -25,7 +25,7 @@ function UserProfile({ updateSomeDataInUserDocs, handleRepliedTweets, quotesList
     let updateExtraPictureUploadingStatus = () => setDoneExtraUrlUploading(true);
 
     // currentUser && console.log(currentUser, 'from userProfile', quotedFromRetweetModal, replyCount, repliedTweets, quotesListFromRetweet, quoteTweetID, quoteTweetData);
-    currentUser && console.log(quotedFromRetweetModal, quotesListFromRetweet, quoteTweetID, quoteTweetData, 'from userProfile')
+    currentUser && console.log(quotedFromRetweetModal, quotesListFromRetweet, quoteTweetID, quoteTweetData, 'from userProfile', inputTextChoice01)
     
     let setUrl = (url) => {
         setPictureUrl(url);
@@ -46,15 +46,22 @@ function UserProfile({ updateSomeDataInUserDocs, handleRepliedTweets, quotesList
         // pictureUrl && console.log('checkpoint!!', pictureUrl)
     }, [doneExtraUrlUploading])
 
-    // usng for image element
+    // using for image element
     useEffect(() => {
+        // pictureUrl && !extraSelectedFile && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile, scheduledTimeStamp: scheduledTimeStamp, quoteTweetID:  quoteTweetID, selectedTaggedPlace: selectedTaggedPlace, retweetedQuote: quotedFromRetweetModal, listOfRetweetedQuotes: [] }, uniqueID, newDataStatus, updateData, currentUser);
         pictureUrl && !extraSelectedFile && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile, scheduledTimeStamp: scheduledTimeStamp, quoteTweetID:  quoteTweetID, selectedTaggedPlace: selectedTaggedPlace, retweetedQuote: quotedFromRetweetModal, listOfRetweetedQuotes: [] }, uniqueID, newDataStatus, updateData, currentUser);
+        if(tweetPublishReady && pictureUrl && !extraSelectedFile ) {
+            cleanupDetails()
+        }
     }, [pictureUrl])
 
     // using effect for extra img element
     useEffect(() => {
         pictureUrl && extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl && pictureUrl, extraImgFile: extraPictureUrl && extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile, scheduledTimeStamp: scheduledTimeStamp, quoteTweetID:  quoteTweetID, selectedTaggedPlace: selectedTaggedPlace, retweetedQuote: quotedFromRetweetModal, listOfRetweetedQuotes: [] }, uniqueID, newDataStatus, updateData, currentUser);
         !pictureUrl && extraPictureUrl && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl && pictureUrl, extraImgFile: extraPictureUrl && extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile, scheduledTimeStamp: scheduledTimeStamp, quoteTweetID:  quoteTweetID, selectedTaggedPlace: selectedTaggedPlace, retweetedQuote: quotedFromRetweetModal, listOfRetweetedQuotes: [] }, uniqueID, newDataStatus, updateData, currentUser);
+        if(pictureUrl && extraPictureUrl && tweetPublishReady) {
+            cleanupDetails()
+        }
     }, [extraPictureUrl])
 
     let resetUrlToNull = () => {
@@ -76,11 +83,34 @@ function UserProfile({ updateSomeDataInUserDocs, handleRepliedTweets, quotesList
 
     // quoteTweetID && alert('here!!')
 
+    let cleanupDetails = () => {
+        setNewDataStatus(false);
+        setScheduledTimeStamp('');
+        setPrimaryTweetText('');
+        setExtraTweetText('');
+
+        setSelectedFile('');
+        setExtraSelectedFile('');
+        setGifFile('');
+        setExtraGifFile('');
+        
+        setInputTextChoice01('');
+        setInputTextChoice02('');
+        setInputTextChoice03('');
+        setInputTextChoice04('');
+
+        setInputTextChoice05('');
+        setInputTextChoice06('');
+        setInputTextChoice07('');
+        setInputTextChoice08('');
+    }
+
 
     // when there is new data to store in firestore and render on DOM
     useEffect(() => {        
         if (!(selectedFile || extraSelectedFile)) {
             newDataStatus && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, gifItem: gifFile, extraGifItem: extraGifFile, scheduledTimeStamp: scheduledTimeStamp, quoteTweetID:  quoteTweetID, selectedTaggedPlace: selectedTaggedPlace, retweetedQuote: quotedFromRetweetModal, listOfRetweetedQuotes: [] }, uniqueID, newDataStatus, updateData, currentUser);
+            cleanupDetails()
         }
 
         // when there is a tweet quoted by user, and posted it on profile, updating that count on Firestore
@@ -120,10 +150,6 @@ function UserProfile({ updateSomeDataInUserDocs, handleRepliedTweets, quotesList
         // setSecondTweetHasMedia(false)
 
         // neutralize previous tweet state variables values
-        setNewDataStatus(false);
-        setScheduledTimeStamp('');
-        setPrimaryTweetText('');
-        setExtraTweetText('');
         quotedFromRetweetModal && handleQuotedFromRetweetModal();
         // quotedFromRetweetModal && handleQuotesListFromRetweet([]);
         // quotesListFromRetweet && handleQuotesListFromRetweet([]);
@@ -131,20 +157,25 @@ function UserProfile({ updateSomeDataInUserDocs, handleRepliedTweets, quotesList
         // repliedTweets && handleRepliedTweets([]);
         
         
-        setSelectedFile('');
-        setExtraSelectedFile('');
-        setGifFile('');
-        setExtraGifFile('');
+        // setSelectedFile('');
+        // setExtraSelectedFile('');
+        // setGifFile('');
+        // setExtraGifFile('');
         
-        setInputTextChoice01('');
-        setInputTextChoice02('');
-        setInputTextChoice03('');
-        setInputTextChoice04('');
+        // setInputTextChoice01('');
+        // setInputTextChoice02('');
+        // setInputTextChoice03('');
+        // setInputTextChoice04('');
 
-        setInputTextChoice05('');
-        setInputTextChoice06('');
-        setInputTextChoice07('');
-        setInputTextChoice08('');
+        // setInputTextChoice05('');
+        // setInputTextChoice06('');
+        // setInputTextChoice07('');
+        // setInputTextChoice08('');
+
+        // setNewDataStatus(false);
+        // setScheduledTimeStamp('');
+        // setPrimaryTweetText('');
+        // setExtraTweetText('');
         
     }, [tweetPublishReady])
 

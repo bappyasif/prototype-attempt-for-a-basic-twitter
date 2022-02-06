@@ -9,7 +9,7 @@
 
 #all-tweets-container {
   position: absolute;
-  left: 29.69%;
+  left: 27.89%;
   top: 445px;
 }
 
@@ -381,7 +381,8 @@
 /* #components-container #list-existing-members-container #list-of-members-wrapper, */
 #components-container #container-for-added-members #list-header-wrapper,
 #components-container #trends-modal-container #list-header-wrapper
-.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons {
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons,
+#all-tweets-container #tweet-container .rendering-tweet-data-container .tweet-info .right-side .tweet-bottom-clickable-icons {
   display: flex;
   justify-content: space-between;
 }
@@ -933,7 +934,14 @@
   /* margin-right: 20px; */
   margin-right: 4px;
   position: relative;
+  display: flex;
+  justify-content: space-between;
 }
+
+/* #all-tweets-container #tweet-container .rendering-tweet-data-container .tweet-info .right-side .tweet-bottom-clickable-icons {
+  display: flex;
+  justify-content: space-between;
+} */
 
 .rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons .hoverable-div {
   position: relative;

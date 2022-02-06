@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { frownFaceSvgIcon, threeDotsSvgIcon } from '..';
 
 function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
     let [newsData, setNewsData] = useState(null)
@@ -44,6 +45,8 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
 
 let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators }) => {
     let [hovered, setHovered] = useState(false)
+    let [clicked, setClicked] = useState(false)
+
     let { slug_name, subsection, section, byline, multimedia } = { ...newsItem };
     let tokenizing = slug_name.split(/[0-9]/);
     let tokenizingHyphens = tokenizing[tokenizing.length - 1].split('-');
@@ -58,13 +61,15 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators }) => {
 
     let handleHover = () => setHovered(!hovered)
 
-    let adjustContentCreatorName = byline.split('BY')[1] && (byline.split('BY')[1]).split(' ').filter(name => name).map(name=>name.toLowerCase())
-    adjustContentCreatorName = adjustContentCreatorName && adjustContentCreatorName.map(name => name[0].toUpperCase()+name.slice(1)).join(' ')
+    let handleClicked = () => setClicked(!clicked)
+
+    let adjustContentCreatorName = byline.split('BY')[1] && (byline.split('BY')[1]).split(' ').filter(name => name).map(name => name.toLowerCase())
+    adjustContentCreatorName = adjustContentCreatorName && adjustContentCreatorName.map(name => name[0].toUpperCase() + name.slice(1)).join(' ')
     // console.log(adjustContentCreatorName)
     // handleContentCreators(adjustContentCreatorName)
 
     // useEffect(() => byline && handleContentCreators(adjustContentCreatorName), [byline])
-    useEffect(() => multimedia && byline && handleContentCreators({name: adjustContentCreatorName, imgUrl: newsItem.multimedia[0].url}), [byline])
+    useEffect(() => multimedia && byline && handleContentCreators({ name: adjustContentCreatorName, imgUrl: newsItem.multimedia[0].url }), [byline])
 
     // adjustedSlug && headlinesCount()
 
@@ -76,12 +81,36 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators }) => {
         adjustedSlug
         &&
         <div className='news-item-wrapper' style={{ marginBottom: '4px' }} onMouseEnter={handleHover} onMouseLeave={handleHover}>
-            <div id='news-category' style={{ color: hovered && 'black' }}>
-                <div id='category-name'>{section} </div>
-                <div id='news-type'> - {subsection || section}</div>
+            <div id='left-side'>
+                <div id='news-category' style={{ color: hovered && 'black' }}>
+                    <div id='category-name'>{section} </div>
+                    <div id='news-type'> - {subsection || section}</div>
+                </div>
+                <div id='slug-name'>#{adjustedSlug}</div>
+                <div id='news-numbers' style={{ color: hovered && 'black' }}>0000 tweets</div>
             </div>
-            <div id='slug-name'>#{adjustedSlug}</div>
-            <div id='news-numbers' style={{ color: hovered && 'black' }}>0000 tweets</div>
+            <div id='category-settings' onClick={handleClicked}>{threeDotsSvgIcon()}</div>
+            {clicked && <ShowSuggestedSettingsModal />}
+        </div>
+    )
+}
+
+let ShowSuggestedSettingsModal = () => {
+    let options = [{icon: frownFaceSvgIcon(), option: 'Not interested in this'}, {icon: frownFaceSvgIcon(), option: 'This trend is harmful or spammy'}]
+    let renderOptions = () => options.map((item, idx) => <RenderSettingsOption key={idx} item={item} />)
+
+    return (
+        <div id='show-suggested-settings-wrapper'>
+            {renderOptions()}
+        </div>
+    )
+}
+
+let RenderSettingsOption = ({item}) => {
+    return (
+        <div id='settings-option-wrapper'>
+            <div id='svg-icon'>{item.icon}</div>
+            <div id='option-text'>{item.option}</div>
         </div>
     )
 }

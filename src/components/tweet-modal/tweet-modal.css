@@ -39,7 +39,8 @@
 
 #middle-content {
   /* width: 551px; */
-  width: 546px;
+  /* width: 546px; */
+  width: -webkit-fill-available;
   margin-top: 11px;
   position: relative;
 }
@@ -195,7 +196,8 @@
 }
 
 #tweet-input {
-  width: 450px;
+  /* width: 450px; */
+  width: -webkit-fill-available;
   /* height: 100%; */
   /* height: 89px; */
   font-size: 20px;
@@ -215,6 +217,11 @@
   word-wrap: break-word;
   padding: 0.2em;
   border-color: transparent;
+}
+
+#middle-content #header-section #primary-tweet-view {
+  width: -webkit-fill-available;
+  padding: 8px 20px 4px 11px;
 }
 
 #footer-section {
@@ -307,11 +314,39 @@
 
 #tweet-medias {
   display: flex;
-  width: 218px;
+  /* width: 218px; */
+  width: -webkit-fill-available;
   justify-content: space-around;
   /* align-content: center; */
   padding: 9px 9px;
   margin-left: 56px;
+}
+#tweet-medias .media-icons {
+  position: relative;
+}
+
+#tweet-medias .hoveredText {
+  position: absolute;
+  color: black;
+  bottom: -17px;
+}
+
+#tweet-medias #handle-location .hoveredText {
+  bottom: -36px;
+  max-width: 51px;
+  right: -4px;
+}
+
+#tweet-medias #schedule-icon .hoveredText {
+  right: -13px;
+}
+
+#tweet-medias #image-icon .hoveredText {
+  right: -6px;
+}
+
+#tweet-medias #emoji-icon .hoveredText {
+  right: -1.3px;
 }
 
 #modal-tweet-div,
@@ -320,6 +355,7 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  margin-left: 40px;
 }
 
 #extra-tweet-view {
@@ -327,6 +363,8 @@
   /* display: flex; */
   /* justify-content: space-evenly; */
   margin-top: 4px;
+  /* width: -webkit-fill-available; */
+  padding: 8px 20px 4px 11px;
 }
 
 #extra-tweet-options .extra-tweet {
@@ -472,6 +510,7 @@
 
 #tweet-compose-container {
   margin-top: -44px;
+  padding-right: 20px;
 }
 
 #image-view img {
