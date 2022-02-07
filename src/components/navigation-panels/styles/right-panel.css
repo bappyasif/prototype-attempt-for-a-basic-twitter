@@ -156,6 +156,7 @@
 }
 
 /* current trends */
+#current-trends-container,
 #right-navigation-panel-container #current-trends-container,
 #right-navigation-panel-container #suggested-people-list-container {
   border: solid 1px silver;
@@ -163,10 +164,13 @@
   border-radius: 11px;
 }
 
-#right-navigation-panel-container #current-trends-container {
+#current-trends-container,
+#right-navigation-panel-container #current-trends-container,
+#right-navigation-panel-container #top-news-relays-container {
   position: relative;
 }
 
+#current-trends-container #trends-header,
 #right-navigation-panel-container #current-trends-container #trends-header {
   display: flex;
   justify-content: space-between;
@@ -176,6 +180,7 @@
   margin-bottom: 6px;
 }
 
+#current-trends-container #show-more,
 #right-navigation-panel-container #current-trends-container #show-more,
 #right-navigation-panel-container #suggested-people-list-container #show-more {
   line-height: 2em;
@@ -186,12 +191,14 @@
   padding: 0px 4px 0px 4px;
 }
 
+#current-trends-container #show-more:hover,
 #right-navigation-panel-container #current-trends-container #show-more:hover,
 #right-navigation-panel-container #suggested-people-list-container #show-more:hover {
   background-color: lightgray;
 }
 
 /* top news relays styles */
+#current-trends-container,
 #right-navigation-panel-container #current-trends-container,
 #right-navigation-panel-container #suggested-people-list-container {
   text-align: left;
@@ -215,6 +222,7 @@
   /* font-size: large; */
 }
 
+#top-news-relays-container .news-item-wrapper,
 #right-navigation-panel-container #top-news-relays-container .news-item-wrapper {
   padding: 0px 4px 0px 4px;
   display: flex;
@@ -222,34 +230,58 @@
   align-items: center;
 }
 
+#top-news-relays-container .news-item-wrapper:hover,
 #right-navigation-panel-container #top-news-relays-container .news-item-wrapper:hover {
   background-color: lightgray;
   /* color: black; */
 }
 
+#top-news-relays-container .news-item-wrapper #category-settings,
 #right-navigation-panel-container #top-news-relays-container .news-item-wrapper #category-settings {
   border-radius: 100%;
   display: flex;
+  /* position: relative; */
+  height: fit-content;
 }
 
+#top-news-relays-container .news-item-wrapper #category-settings:hover,
 #right-navigation-panel-container #top-news-relays-container .news-item-wrapper #category-settings:hover {
   background-color: rgba(29, 155, 240, 1);
 }
 
+#top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper,
 #right-navigation-panel-container #top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper {
   position: absolute;
   right: 0px;
-  top: 72px;
+  top: 36px;
   background-color: whitesmoke;
   border: solid silver 1px;
   border-radius: 4px;
-  padding: 8px;
+  /* padding: 8px; */
+  z-index: 99;
+  width: -webkit-fill-available;
 }
 
-#right-navigation-panel-container #top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper #settings-option-wrapper {
+#top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper .settings-option-wrapper,
+#right-navigation-panel-container #top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper .settings-option-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* margin: 4px; */
+  padding: 11px;
+}
+
+#top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper .settings-option-wrapper:hover,
+#right-navigation-panel-container #top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper .settings-option-wrapper:hover {
+  background-color: lightslategray;
+}
+
+#top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper #announcement-text,
+#right-navigation-panel-container #top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper #announcement-text {
+  line-height: 2em;
+  padding: 11px;
+  background-color: lightslategray;
+  pointer-events: none;
 }
 
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper {

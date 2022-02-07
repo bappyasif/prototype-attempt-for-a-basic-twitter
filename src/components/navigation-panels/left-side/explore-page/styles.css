@@ -1,0 +1,42 @@
+#render-explore-page-container {
+    width: 551px;
+}
+
+#render-explore-page-container #header-segment {
+    color: red;
+}
+
+#render-explore-page-container #trends-header {
+    font-size: xx-large;
+}
+
+#render-explore-page-container #top-news-relays-container .news-item-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+}
+
+#render-explore-page-container #top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper {
+    width: 60%;
+    top: 26px;
+}
+
+#render-explore-page-container #most-trending-news-wrapper {
+    position: relative;
+}
+
+#render-explore-page-container #most-trending-news-wrapper #news-info {
+    position: absolute;
+    bottom: 4px;
+    text-align: left;
+    padding: 13px;
+    /* color: darkseagreen; */
+    font-size: larger;
+    font-weight: bolder;
+    background-color: rgba(29, 155, 240, .45);
+}
+
+#render-explore-page-container #most-trending-news-wrapper #news-info #news-section {
+    font-size: small;
+}

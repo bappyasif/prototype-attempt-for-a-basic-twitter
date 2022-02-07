@@ -1,8 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { frownFaceSvgIcon, threeDotsSvgIcon } from '..';
+import useOnClickOutside from '../../click-outside-utility-hook/useOnClickOutside';
 
 function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
     let [newsData, setNewsData] = useState(null)
+
+    let [removedNewsListTitles, setRemovedNewsListTitles] = useState([])
+
+    let handleRemovedNewsList = title => setRemovedNewsListTitles(prevList => prevList.concat(title))
+
+    let handleRemovedNewsFromList = () => {
+        let newList = newsData.map(item => {
+            let check = removedNewsListTitles.findIndex(title => item.title == title)
+            return check == -1 && item
+            // return removedNewsListTitles.map(title => item.title != title && item)
+        }).filter(item => item)
+        // console.log(newList, 'different?!', newsData, removedNewsListTitles)
+        setNewsData(newList)
+    }
+
+    useEffect(() => removedNewsListTitles.length && handleRemovedNewsFromList(), [removedNewsListTitles])
 
     let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
 
@@ -29,9 +46,9 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
         return (
             showDouble
                 ?
-                newsData && newsData.map((item, idx) => (idx == 0) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} />)
+                newsData && newsData.map((item, idx) => (idx == 0) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} />)
                 :
-                newsData && newsData.map((item, idx) => (idx < 2) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} />)
+                newsData && newsData.map((item, idx) => (idx < 2) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} />)
         )
     }
     // console.log(rndNum, 'rndNum!!')
@@ -43,39 +60,31 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
     )
 }
 
-let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators }) => {
+let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNewsList }) => {
     let [hovered, setHovered] = useState(false)
     let [clicked, setClicked] = useState(false)
+    let [showModal, setShowModal] = useState(false)
 
     let { slug_name, subsection, section, byline, multimedia } = { ...newsItem };
     let tokenizing = slug_name.split(/[0-9]/);
     let tokenizingHyphens = tokenizing[tokenizing.length - 1].split('-');
     let adjustedSlug = tokenizingHyphens.join(' ');
-    // let adjustSlug = '';
-    // let regEx = /[A-Z]|[a-z]/
-    // let adjustSlug = slug_name.match(regEx)
-    // console.log(adjustSlug , 'adjust!!', tokenizing, tokenizingHyphens)
-    // console.log(slug_name, newsItem, 'what what!!')
 
     useEffect(() => console.log(newsItem, 'what what!!'), [])
 
+    let removedNewsFromList = () => handleRemovedNewsList(newsItem.title)
+
     let handleHover = () => setHovered(!hovered)
 
-    let handleClicked = () => setClicked(!clicked)
+    let handleClicked = () => {
+        setClicked(!clicked)
+        setShowModal(true)
+    }
 
     let adjustContentCreatorName = byline.split('BY')[1] && (byline.split('BY')[1]).split(' ').filter(name => name).map(name => name.toLowerCase())
     adjustContentCreatorName = adjustContentCreatorName && adjustContentCreatorName.map(name => name[0].toUpperCase() + name.slice(1)).join(' ')
-    // console.log(adjustContentCreatorName)
-    // handleContentCreators(adjustContentCreatorName)
 
-    // useEffect(() => byline && handleContentCreators(adjustContentCreatorName), [byline])
     useEffect(() => multimedia && byline && handleContentCreators({ name: adjustContentCreatorName, imgUrl: newsItem.multimedia[0].url }), [byline])
-
-    // adjustedSlug && headlinesCount()
-
-    // useEffect(() => {
-    //     adjustedSlug && headlinesCount()
-    // }, [])
 
     return (
         adjustedSlug
@@ -90,25 +99,46 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators }) => {
                 <div id='news-numbers' style={{ color: hovered && 'black' }}>0000 tweets</div>
             </div>
             <div id='category-settings' onClick={handleClicked}>{threeDotsSvgIcon()}</div>
-            {clicked && <ShowSuggestedSettingsModal />}
+            {/* <div id='category-settings' onClick={() => setClicked(true)}>{threeDotsSvgIcon()}</div> */}
+            {clicked && showModal && <ShowSuggestedSettingsModal handleClicked={setShowModal} removedNewsFromList={removedNewsFromList} />}
         </div>
     )
 }
 
-let ShowSuggestedSettingsModal = () => {
+let ShowSuggestedSettingsModal = ({handleClicked, removedNewsFromList}) => {
+    let [announcement, setAnnouncement] = useState(null)
+    let handleClick = () => {
+        setAnnouncement('Thanks, page will take this out from your trends list')
+        let handle = setTimeout(() => {
+            setAnnouncement('')
+            removedNewsFromList()
+        }, 4000)
+        return () => clearTimeout(handle)
+    }
+
+    let ref = useRef(null)
+    useOnClickOutside(ref, () => handleClicked(false))
+    // useOnClickOutside(ref, handleClicked)
+
     let options = [{icon: frownFaceSvgIcon(), option: 'Not interested in this'}, {icon: frownFaceSvgIcon(), option: 'This trend is harmful or spammy'}]
-    let renderOptions = () => options.map((item, idx) => <RenderSettingsOption key={idx} item={item} />)
+    let renderOptions = () => options.map((item, idx) => <RenderSettingsOption key={idx} item={item} removedNewsFromList={handleClick} />)
 
     return (
+        announcement
+        ?
         <div id='show-suggested-settings-wrapper'>
+            <div id='announcement-text'>{announcement}</div> 
+        </div>
+        :
+        <div id='show-suggested-settings-wrapper' ref={ref}>
             {renderOptions()}
         </div>
     )
 }
 
-let RenderSettingsOption = ({item}) => {
+let RenderSettingsOption = ({item, removedNewsFromList}) => {
     return (
-        <div id='settings-option-wrapper'>
+        <div className='settings-option-wrapper' onClick={removedNewsFromList}>
             <div id='svg-icon'>{item.icon}</div>
             <div id='option-text'>{item.option}</div>
         </div>
