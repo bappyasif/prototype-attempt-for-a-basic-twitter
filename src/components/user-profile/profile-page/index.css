@@ -1914,7 +1914,8 @@
   width: -webkit-fill-available;
 }
 
-#components-container #home-page-view-container .render-shared-article-wrapper {
+/* these styles are now moved to resulable compoennts styles */
+/* #components-container #home-page-view-container .render-shared-article-wrapper {
   width: 681px;
   margin: auto;
   margin-bottom: 11px;
@@ -1965,7 +1966,6 @@
 #components-container #home-page-view-container .render-shared-article-wrapper #article-img {
   width: 681px;
   height: 400px;
-  /* position: relative; */
 }
 
 #components-container #home-page-view-container .render-shared-article-wrapper .countdown {
@@ -1973,7 +1973,7 @@
   top: .1%;
   left: 29.1%;
   font-size: 476px;
-}
+} */
 
 /* scrollbar custom styling tryouts */
 

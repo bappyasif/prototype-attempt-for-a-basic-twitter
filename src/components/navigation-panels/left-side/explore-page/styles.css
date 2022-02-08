@@ -1,5 +1,5 @@
 #render-explore-page-container {
-    width: 551px;
+    width: 674px;
 }
 
 #render-explore-page-container #header-segment {
@@ -15,6 +15,8 @@
     justify-content: space-between;
     align-items: flex-start;
     position: relative;
+    font-size: larger;
+    padding: 4px 4px 9px 11px;
 }
 
 #render-explore-page-container #top-news-relays-container .news-item-wrapper #show-suggested-settings-wrapper {
@@ -39,4 +41,54 @@
 
 #render-explore-page-container #most-trending-news-wrapper #news-info #news-section {
     font-size: small;
+}
+
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 17px 0px 11px 0px;
+    position: relative;
+}
+
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #left-side {
+    display: flex;
+    font-size: xx-large;
+}
+
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #left-side #svg-icon {
+    fill: aqua;
+    stroke: black;
+    transform: scale(.8);
+}
+
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-svg {
+    border-radius: 100%;
+  display: flex;
+  /* position: relative; */
+  height: fit-content;
+}
+
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-svg:hover {
+    background-color: rgba(29, 155, 240, 1);
+}
+
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-modal-wrapper {
+    position: absolute;
+    background-color: whitesmoke;
+    z-index: 99;
+    right: 0px;
+    top: 31px;
+}
+
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-modal-wrapper .settings-option-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* margin: 4px; */
+    padding: 11px;
+}
+
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-modal-wrapper .settings-option-wrapper:hover {
+    background-color: lightslategray;
 }

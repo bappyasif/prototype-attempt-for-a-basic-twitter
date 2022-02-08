@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TweetModal from '../../../tweet-modal';
 import { convertingTime12Hours } from '../../../user-profile/all-tweets/show-tweet-thread'
+import { adjustingAuthorsNames, getHowLongSinceThisArticleWasPosted, RenderArticle } from '../reuseable-components';
 
 function RenderHomePageView({ currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText, setNewDataStatus }) {
     let [dataset, setDataset] = useState([])
@@ -20,7 +21,8 @@ function RenderHomePageView({ currentUser, firstTweetHasMedia, setFirstTweetHasM
 
     console.log(dataset, 'datasetHomePage!!')
 
-    let renderMostPopularArtclesShared = () => dataset.filter(item => item && item.media[0]).map(item => <RenderSharedArticle key={item.id} item={item} />)
+    // let renderMostPopularArtclesShared = () => dataset.filter(item => item && item.media[0]).map(item => <RenderSharedArticle key={item.id} item={item} />)
+    let renderMostPopularArtclesShared = () => dataset.filter(item => item && item.media[0]).map(item => <RenderArticle key={item.id} item={item} />)
 
     return (
         <div id='home-page-view-container'>
@@ -40,120 +42,122 @@ function RenderHomePageView({ currentUser, firstTweetHasMedia, setFirstTweetHasM
     )
 }
 
-let RenderSharedArticle = ({ item }) => {
-    let [timeStamp, setTimeStamp] = useState(null)
-    let [showTimeToolTip, setShowTimeToolTip] = useState(false)
-    let [publishedDate, setPublishedDate] = useState(null)
-    let [countdown, setCountdown] = useState(4)
-    let [beginCountdown, setBeginCountdown] = useState(false)
-
-    useEffect(() => item && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate), [item])
-
-    // console.log(item, 'articleItem')
-
-    let beginCountdownToZero = () => {
-        let handle = setTimeout(() => {
-            if(countdown) {
-                setCountdown(countdown - 1)
-            } else {
-                clearTimeout(handle)
-                window.open(item.url, '_target')
-                setBeginCountdown(false)
-                setCountdown(4)
-            }
-        }, 600)
-        return () => clearTimeout(handle)
-    }
-
-    // let handleClick = () => window.open(item.url, '_target')
-    let handleClick = () => setBeginCountdown(true)
-
-    let handleHover = () => setShowTimeToolTip(!showTimeToolTip)
-
-    useEffect(() => {
-        // beginCountdown && countdown > 0 && beginCountdownToZero();
-        beginCountdown && beginCountdownToZero();
-    }, [beginCountdown, countdown])
-
-    return (
-        <div id={item.id} className='render-shared-article-wrapper' onClick={handleClick}>
-            <div id='article-info'>
-                <div id='top-section'>
-                    <div id='authors-info'>
-                        <div id='authors-name'>{item.byline}</div>
-                        <div id='authors-handle'>@{adjustingAuthorsNames(item)}</div>
-                    </div>
-                    <div id='article-timestamp' onMouseEnter={handleHover} onBlur={handleHover}>
-                        <div id='published-time'>{publishedDate}</div>
-                        <div id='time-tooltip' style={{ display: showTimeToolTip && 'block' }}>{timeStamp || '00-00-00 99:99:99'}</div>
-                    </div>
-                </div>
-                <div id='snippet-text'>{item.abstract || item.title}</div>
-            </div>
-            <img id='article-img' style={{opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none'}} src={item.media[0]['media-metadata'][1].url} />
-            {beginCountdown && <div className='countdown'>{countdown}</div>}
-        </div>
-    )
-}
-
-export let adjustingAuthorsNames = (item) => {
-    let readyAdjusts = ''
-
-    let firstInduction = item.byline.split('By ')[1]
-    let secondInduction = firstInduction.split(' and ')
-
-    try {
-        let [firstAuthorName, secondAuthorName] = [...secondInduction]
-
-        readyAdjusts += procuringTokens(firstAuthorName)
-
-        if (secondAuthorName) {
-            readyAdjusts += '_' + procuringTokens(secondAuthorName)
-        }
-
-    } catch (err) {
-        console.log(err, 'error!!')
-    }
-
-    return readyAdjusts
-}
-
-export let getHowLongSinceThisArticleWasPosted = (item, timeStampUpdater, poublishedDateUpdater) => {
-    let months = ['Jan', 'Feb', 'Mar', 'Apr', "Mei", "Jun", "Jul", 'Aug', 'Sep', "Okt", 'Nov', 'Dec']
-    let timeTokens = item.updated.split(' ')
-    let [dateString, timeString] = [...timeTokens]
-
-    let [yy, mm, dd] = dateString.split('-')
-    let [hrs, min, sec] = timeString.split(':')
-
-    let adjustedDateString = `${dd} ${months[mm - 1]}, ${yy}`
-    let adjustedTimeString = convertingTime12Hours(hrs, min)
-
-
-    timeStampUpdater(adjustedTimeString + ', ' + adjustedDateString)
-    poublishedDateUpdater(`${dd} ${months[mm - 1]}`)
-    // console.log(timeTokens, dateString, timeString, '<><>', adjustedDateString, adjustedTimeString, )
-}
-
-export let procuringTokens = (nameString) => {
-    let readyAdjustedString = '';
-
-    let tokens = nameString.split(' ');
-
-    let adjustedTokens = tokens.map(name => name[0].toUpperCase().concat(name.slice(1)))
-
-    adjustedTokens.forEach((name, idx) => {
-        if (idx < adjustedTokens.length - 1) {
-            readyAdjustedString += name[0] + "."
-        } else {
-            readyAdjustedString += name
-        }
-    })
-
-    return readyAdjustedString
-}
-
 export default RenderHomePageView;
+
+// let RenderSharedArticle = ({ item }) => {
+//     let [timeStamp, setTimeStamp] = useState(null)
+//     let [showTimeToolTip, setShowTimeToolTip] = useState(false)
+//     let [publishedDate, setPublishedDate] = useState(null)
+//     let [countdown, setCountdown] = useState(4)
+//     let [beginCountdown, setBeginCountdown] = useState(false)
+
+//     useEffect(() => item && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate), [item])
+
+//     // console.log(item, 'articleItem')
+
+//     let beginCountdownToZero = () => {
+//         let handle = setTimeout(() => {
+//             if(countdown) {
+//                 setCountdown(countdown - 1)
+//             } else {
+//                 clearTimeout(handle)
+//                 window.open(item.url, '_target')
+//                 setBeginCountdown(false)
+//                 setCountdown(4)
+//             }
+//         }, 600)
+//         return () => clearTimeout(handle)
+//     }
+
+//     // let handleClick = () => window.open(item.url, '_target')
+//     let handleClick = () => setBeginCountdown(true)
+
+//     let handleHover = () => setShowTimeToolTip(!showTimeToolTip)
+
+//     useEffect(() => {
+//         // beginCountdown && countdown > 0 && beginCountdownToZero();
+//         beginCountdown && beginCountdownToZero();
+//     }, [beginCountdown, countdown])
+
+//     return (
+//         <div id={item.id} className='render-shared-article-wrapper' onClick={handleClick}>
+//             <div id='article-info'>
+//                 <div id='top-section'>
+//                     <div id='authors-info'>
+//                         <div id='authors-name'>{item.byline}</div>
+//                         <div id='authors-handle'>@{adjustingAuthorsNames(item)}</div>
+//                     </div>
+//                     <div id='article-timestamp' onMouseEnter={handleHover} onBlur={handleHover}>
+//                         <div id='published-time'>{publishedDate}</div>
+//                         <div id='time-tooltip' style={{ display: showTimeToolTip && 'block' }}>{timeStamp || '00-00-00 99:99:99'}</div>
+//                     </div>
+//                 </div>
+//                 <div id='snippet-text'>{item.abstract || item.title}</div>
+//             </div>
+//             <img id='article-img' style={{opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none'}} src={item.media[0]['media-metadata'][1].url} />
+//             {beginCountdown && <div className='countdown'>{countdown}</div>}
+//         </div>
+//     )
+// }
+
+// export let adjustingAuthorsNames = (item) => {
+//     let readyAdjusts = ''
+
+//     let firstInduction = item.byline.split('By ')[1]
+//     let secondInduction = firstInduction.split(' and ')
+
+//     try {
+//         let [firstAuthorName, secondAuthorName] = [...secondInduction]
+
+//         readyAdjusts += procuringTokens(firstAuthorName)
+
+//         if (secondAuthorName) {
+//             readyAdjusts += '_' + procuringTokens(secondAuthorName)
+//         }
+
+//     } catch (err) {
+//         console.log(err, 'error!!')
+//     }
+
+//     return readyAdjusts
+// }
+
+// export let getHowLongSinceThisArticleWasPosted = (item, timeStampUpdater, poublishedDateUpdater) => {
+//     let months = ['Jan', 'Feb', 'Mar', 'Apr', "Mei", "Jun", "Jul", 'Aug', 'Sep', "Okt", 'Nov', 'Dec']
+//     let timeTokens = item.updated.split(' ')
+//     let [dateString, timeString] = [...timeTokens]
+
+//     let [yy, mm, dd] = dateString.split('-')
+//     let [hrs, min, sec] = timeString.split(':')
+
+//     let adjustedDateString = `${dd} ${months[mm - 1]}, ${yy}`
+//     let adjustedTimeString = convertingTime12Hours(hrs, min)
+
+
+//     timeStampUpdater(adjustedTimeString + ', ' + adjustedDateString)
+//     poublishedDateUpdater(`${dd} ${months[mm - 1]}`)
+//     // console.log(timeTokens, dateString, timeString, '<><>', adjustedDateString, adjustedTimeString, )
+// }
+
+// export let procuringTokens = (nameString) => {
+//     let readyAdjustedString = '';
+
+//     let tokens = nameString.split(' ');
+
+//     let adjustedTokens = tokens.map(name => name[0].toUpperCase().concat(name.slice(1)))
+
+//     adjustedTokens.forEach((name, idx) => {
+//         if (idx < adjustedTokens.length - 1) {
+//             readyAdjustedString += name[0] + "."
+//         } else {
+//             readyAdjustedString += name
+//         }
+//     })
+
+//     return readyAdjustedString
+// }
+
+// export default RenderHomePageView;
 
 
 /**

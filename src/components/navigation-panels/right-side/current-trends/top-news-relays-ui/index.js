@@ -136,7 +136,7 @@ let ShowSuggestedSettingsModal = ({handleClicked, removedNewsFromList}) => {
     )
 }
 
-let RenderSettingsOption = ({item, removedNewsFromList}) => {
+export let RenderSettingsOption = ({item, removedNewsFromList}) => {
     return (
         <div className='settings-option-wrapper' onClick={removedNewsFromList}>
             <div id='svg-icon'>{item.icon}</div>
