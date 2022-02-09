@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react"
-import { convertingTime12Hours } from "../../../user-profile/all-tweets/show-tweet-thread"
+import React, { useEffect, useRef, useState } from "react"
+import { convertingTime12Hours } from "../../user-profile/all-tweets/show-tweet-thread"
+import useOnClickOutside from "../right-side/click-outside-utility-hook/useOnClickOutside"
 import './styles.css'
 
 export let RenderArticle = ({ item, fromExplore }) => {
@@ -138,4 +139,58 @@ export let makeGetFetchRequest = (url, dataUpdater) => {
         .then(resp => resp.json())
         .then(data => dataUpdater(data.results))
         .catch(err => console.log(err.code, err.message))
+}
+
+export let ShowSettingsModal = ({handleCloseModal, removedNewsFromList, options, announcementText}) => {
+    let [announcement, setAnnouncement] = useState(null)
+    let handleClick = () => {
+        setAnnouncement(announcementText)
+        console.log(announcementText, 'announcement!!')
+        let handle = setTimeout(() => {
+            setAnnouncement('')
+            removedNewsFromList()
+        }, 4000)
+        return () => clearTimeout(handle)
+    }
+
+    let ref = useRef(null)
+    useOnClickOutside(ref, () => handleCloseModal(false))
+
+    let renderOptions = () => options.map((item, idx) => <RenderSettingsOption key={idx} item={item} removedNewsFromList={handleClick} />)
+
+    console.log(announcement, 'announcement')
+
+    return (
+        announcement
+        ?
+        <div id='show-suggested-settings-wrapper'>
+            <div id='announcement-text'>{announcement}</div> 
+        </div>
+        :
+        <div id='show-suggested-settings-wrapper' ref={ref}>
+            {renderOptions()}
+        </div>
+    )
+}
+
+export let RenderSettingsOption = ({item, removedNewsFromList}) => {
+    return (
+        <div className='settings-option-wrapper' onClick={removedNewsFromList}>
+            <div id='svg-icon'>{item.icon}</div>
+            <div id='option-text'>{item.option}</div>
+        </div>
+    )
+}
+
+export let removeItemFromArrayByTitle = (dataset, removalList, datasetUpdater, fromExplore) => {
+    let newList = dataset.map(item => {
+        // let check = removalList.findIndex(title => item.title == title)
+
+        // when its from fromExplore  dataset is list of category names, otherwise news items list
+        let check = removalList.findIndex(comparable => fromExplore ? item == comparable : item.title == comparable)
+        
+        return check == -1 && item
+    }).filter(item => item)
+    
+    datasetUpdater(newList)
 }

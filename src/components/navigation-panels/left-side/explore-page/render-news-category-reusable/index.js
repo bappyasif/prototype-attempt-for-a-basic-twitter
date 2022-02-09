@@ -1,14 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useOnClickOutside from '../../../right-side/click-outside-utility-hook/useOnClickOutside';
 import { threeDotsSvgIcon } from '../../../right-side/current-trends';
-import { RenderSettingsOption } from '../../../right-side/current-trends/top-news-relays-ui';
-import { makeGetFetchRequest, makeStringWordCased, RenderArticle } from '../../reuseable-components';
 
-function RenderNewsFromThisNewsCategory({ categoryName }) {
+import { makeGetFetchRequest, makeStringWordCased, RenderArticle, RenderSettingsOption, ShowSettingsModal } from '../../../reuseable-components';
+
+
+function RenderNewsFromThisNewsCategory({ categoryName, updateRemoveCategoryList }) {
     let [dataset, setDataset] = useState(null)
     let [adjustedDataset, setAdjustedDataset] = useState(null)
     let [randomIndexes, setRandomIndexes] = useState([])
     let [renderingNews, setRenderingNews] = useState([])
+    let [removeThisCategory, setRemoveThisCategory] = useState(false)
+
+    let handleRemoveThisCategory = () => setRemoveThisCategory(true)
 
     let handleAdjustedDataset = items => setAdjustedDataset(items)
 
@@ -58,6 +62,9 @@ function RenderNewsFromThisNewsCategory({ categoryName }) {
         makeGetFetchRequest(url, handleDataset)
     }, [])
 
+    useEffect(() => removeThisCategory && updateRemoveCategoryList(categoryName), [removeThisCategory])
+    // useEffect(() => removeThisCategory && setTimeout(() => updateRemoveCategoryList(categoryName), 24000), [removeThisCategory])
+
     // console.log(categoryName, 'categoryName!!', dataset, adjustedDataset, randomIndexes, renderingNews)
     console.log(categoryName, 'categoryName!!', adjustedDataset, randomIndexes, renderingNews)
 
@@ -68,7 +75,7 @@ function RenderNewsFromThisNewsCategory({ categoryName }) {
         renderingNews.length
         ?
         <div id='rendering-category-news-container'>
-            <CategoryHeader categoryName={categoryName} />
+            <CategoryHeader categoryName={categoryName} handleRemoveThisCategory={handleRemoveThisCategory} />
             {renderingCategoricalNews()}
         </div>
         :
@@ -76,7 +83,7 @@ function RenderNewsFromThisNewsCategory({ categoryName }) {
     )
 }
 
-let CategoryHeader = ({ categoryName }) => {
+let CategoryHeader = ({ categoryName, handleRemoveThisCategory }) => {
     let [showModal, setShowModal] = useState(false)
     let [isCustomHooked, setIsCustomHooked] = useState(false)
 
@@ -85,6 +92,8 @@ let CategoryHeader = ({ categoryName }) => {
         setIsCustomHooked(true)
     }
     
+    let options = [{option: 'Hide', icon: hideSvgIcon()}, {option: 'Unfollow topic', icon: categorySvgIcon()}]
+
     return (
         <div id='categoty-header-wrapper' onClick={handleClick}>
             <div id='left-side'>
@@ -92,24 +101,53 @@ let CategoryHeader = ({ categoryName }) => {
                 <div id='category-name'>{makeStringWordCased(categoryName)}</div>
             </div>
             <div id='category-option-svg'>{threeDotsSvgIcon()}</div>
-            { showModal && isCustomHooked && <ShowCategoryOptionModal setIsCustomHooked={setIsCustomHooked} /> }
+            {/* { showModal && isCustomHooked && <ShowCategoryOptionModal setIsCustomHooked={setIsCustomHooked} handleRemoveThisCategory={handleRemoveThisCategory} /> } */}
+            { showModal && isCustomHooked && <ShowSettingsModal handleCloseModal={setIsCustomHooked} announcementText={'Thank you, we will show you less of this!!'} removedNewsFromList={handleRemoveThisCategory} options={options} /> }
         </div>
     )
 }
 
-let ShowCategoryOptionModal = ({setIsCustomHooked}) => {
-    let ref = useRef(null)
-    useOnClickOutside(ref, () => setIsCustomHooked(false))
+// let ShowCategoryOptionModal = ({setIsCustomHooked, handleRemoveThisCategory}) => {
+//     let [text, setText] = useState('wtf?!')
+//     let [test, setTest] = useState(false)
 
-    let options = [{option: 'Hide', icon: hideSvgIcon()}, {option: 'Unfollow topic', icon: categorySvgIcon()}]
-    let renderOptions = () => options.map(item => <RenderSettingsOption key={item.option} item={item} />)
+//     let handleClicked = () => {
+//         // setAnnouncementText('Thank you, we will show you less of this')
+//         setText('whatever')
+//         let handle = setTimeout(() => {
+//             setText('')
+//             setTest(true)
+//             handleRemoveThisCategory()
+//             console.log('klkl')
+//         }, 2000)
+//         // console.log('klkl')
+//         return () => clearTimeout(handle)
+//     }
+
+//     useEffect(() => console.log(text, 'announcementText!!', test), [test])
+
+//     let ref = useRef(null)
+//     useOnClickOutside(ref, () => setIsCustomHooked(false))
+
+//     let options = [{option: 'Hide', icon: hideSvgIcon()}, {option: 'Unfollow topic', icon: categorySvgIcon()}]
+//     // let renderOptions = () => options.map(item => <RenderSettingsOption key={item.option} item={item} removedNewsFromList={handleRemoveThisCategory} />)
+//     let renderOptions = () => options.map(item => <RenderSettingsOption key={item.option} item={item} removedNewsFromList={handleClicked} />)
+
+//     // console.log(announcementText, 'announcementText!!')
     
-    return (
-        <div id='category-option-modal-wrapper' ref={ref}>
-            {renderOptions()}
-        </div>
-    )
-}
+//     return (
+//         text != 'wtf?!'
+//         ?
+//         <div id='category-option-modal-wrapper' className='modal-with-announcement'>
+//             <div id='annoucement-text'>{text}</div>
+//             <div id='action-btn'>Undo</div>
+//         </div>
+//         :
+//         <div id='category-option-modal-wrapper' ref={ref}>
+//             {renderOptions()}
+//         </div>
+//     )
+// }
 
 let hideSvgIcon = () => <svg width={'24px'} height={'24px'}><g><path d="M12 1.25C6.072 1.25 1.25 6.072 1.25 12S6.072 22.75 12 22.75 22.75 17.928 22.75 12 17.928 1.25 12 1.25zm0 1.5c2.28 0 4.368.834 5.982 2.207L4.957 17.982C3.584 16.368 2.75 14.282 2.75 12c0-5.1 4.15-9.25 9.25-9.25zm0 18.5c-2.28 0-4.368-.834-5.982-2.207L19.043 6.018c1.373 1.614 2.207 3.7 2.207 5.982 0 5.1-4.15 9.25-9.25 9.25z"></path></g></svg>
 

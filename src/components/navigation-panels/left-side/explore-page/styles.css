@@ -37,6 +37,7 @@
     font-size: larger;
     font-weight: bolder;
     background-color: rgba(29, 155, 240, .45);
+    width: -webkit-fill-available;
 }
 
 #render-explore-page-container #most-trending-news-wrapper #news-info #news-section {
@@ -73,15 +74,18 @@
     background-color: rgba(29, 155, 240, 1);
 }
 
-#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-modal-wrapper {
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-modal-wrapper,
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #show-suggested-settings-wrapper {
     position: absolute;
     background-color: whitesmoke;
     z-index: 99;
     right: 0px;
     top: 31px;
+    width: 200px;
 }
 
-#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-modal-wrapper .settings-option-wrapper {
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-modal-wrapper .settings-option-wrapper,
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #show-suggested-settings-wrapper .settings-option-wrapper{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -89,6 +93,7 @@
     padding: 11px;
 }
 
-#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-modal-wrapper .settings-option-wrapper:hover {
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #category-option-modal-wrapper .settings-option-wrapper:hover,
+#render-explore-page-container #rendering-news-from-categories #rendering-category-news-container #categoty-header-wrapper #show-suggested-settings-wrapper .settings-option-wrapper:hover{
     background-color: lightslategray;
 }

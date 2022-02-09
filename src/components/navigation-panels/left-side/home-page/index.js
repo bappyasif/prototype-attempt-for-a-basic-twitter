@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TweetModal from '../../../tweet-modal';
 import { convertingTime12Hours } from '../../../user-profile/all-tweets/show-tweet-thread'
-import { adjustingAuthorsNames, getHowLongSinceThisArticleWasPosted, RenderArticle } from '../reuseable-components';
+import { adjustingAuthorsNames, getHowLongSinceThisArticleWasPosted, RenderArticle } from '../../reuseable-components';
 
 function RenderHomePageView({ currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, tweetPublishReady, setTweetPublishReady, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText, setNewDataStatus }) {
     let [dataset, setDataset] = useState([])

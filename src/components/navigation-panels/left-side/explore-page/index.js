@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { makeGetFetchRequest, makeStringWordCased, removeItemFromArrayByTitle } from '../../reuseable-components';
 import CurrentTrends from '../../right-side/current-trends';
-import { makeGetFetchRequest, makeStringWordCased } from '../reuseable-components';
+// import { makeGetFetchRequest, makeStringWordCased } from '../reuseable-components';
 import RenderNewsFromThisNewsCategory from './render-news-category-reusable';
 import './styles.css';
 
@@ -23,6 +24,34 @@ let RenderNewsFromSections = () => {
     let [uniqueNewsSectionNames, setUniqueNewsSectionNames] = useState([])
     let [randomIndexes, setRandomIndexes] = useState([])
     let [renderingCategories, setRenderingCategories] = useState([])
+    let [removeCategoryList, setRemoveCategoryList] = useState([])
+    // let [keepingCopyOfInitialRenderingCategories, setKeepingCopyOfInitialRenderingCategories] = useState(null)
+
+    // let updateRemoveCategoryList = categoryName => setRemoveCategoryList(prevList => prevList.concat(categoryName))
+    let updateRemoveCategoryList = categoryName => {
+        setRemoveCategoryList(prevList => prevList.concat(categoryName))
+        // let idx = keepingCopyOfInitialRenderingCategories.findIndex(item => item == categoryName)
+        let idx = renderingCategories.findIndex(item => item == categoryName)
+        // let newIndexs = randomIndexes.filter((v,i) => i != idx)
+        let newIndexs = randomIndexes.filter((v,_,arr) => v != arr[idx])
+
+        setRandomIndexes(newIndexs);
+        console.log(newIndexs, 'is it ?!?!', idx, randomIndexes)
+        // console.log(idx, newIndexes, 'is it?!?!', keepingCopyOfInitialRenderingCategories, renderingCategories)
+    }
+
+    useEffect(() => {
+        removeCategoryList.length && removeItemFromArrayByTitle(renderingCategories, removeCategoryList, setRenderingCategories, 'fromExplore');
+        if (removeCategoryList.length && renderingCategories.length <= 4) {
+            // randomIndexes.forEach(idx => handleRenderingCategories(idx))
+            // handleRenderingCategories(randomIndexes[3])
+
+            // clearing previously held data in renderingCategories, so that newly generated index to replace it can be re render on DOM
+            setRenderingCategories([])
+        }
+    }, [removeCategoryList])
+
+    // useEffect(() => renderingCategories.length == 4 && setKeepingCopyOfInitialRenderingCategories(renderingCategories), [renderingCategories])
 
     let handleData = items => setData(items)
 
@@ -65,6 +94,7 @@ let RenderNewsFromSections = () => {
     useEffect(() => {
         if (randomIndexes.length == 4) {
             randomIndexes.forEach(idx => handleRenderingCategories(idx))
+            console.log('checkbox 01')
         }
     }, [randomIndexes])
 
@@ -110,12 +140,12 @@ let RenderNewsFromSections = () => {
         makeGetFetchRequest(url, handleData)
     }, [])
     // console.log(data, 'data!!', sectionNames, uniqueNewsSectionNames)
-    console.log('data!!', randomIndexes, renderingCategories)
+    console.log('data!!', randomIndexes, renderingCategories, removeCategoryList)
 
     // let renderingNewsFromCategories = () => renderingCategories.map((category, idx) => idx == 0 && <RenderNewsFromThisNewsCategory key={category} categoryName={category} />)
     
     // without timeout, but it requires timeout otherwise too many bad requests error
-    let renderingNewsFromCategories = () => renderingCategories.map((category, idx) => <RenderNewsFromThisNewsCategory key={category} categoryName={category} />)
+    let renderingNewsFromCategories = () => renderingCategories.map((category, idx) => <RenderNewsFromThisNewsCategory key={category} categoryName={category} updateRemoveCategoryList={updateRemoveCategoryList} />)
 
     // let renderingCategoricalNews = () => 
 
@@ -163,7 +193,7 @@ let RenderThisRandomlySelectedNewsItem = ({ item }) => {
     // console.log(item, 'render!!', adjustedSection)
     return (
         <div id='most-trending-news-wrapper'>
-            <img id='trending-news-img' src={item.multimedia[1].url} />
+            <img id='trending-news-img' src={item.multimedia && item.multimedia[1].url} />
             <div id='news-info'>
                 <div id='news-section'>{adjustedSection}</div>
                 <div id='news-headline'>{adjustedSection} : {item.title}</div>
