@@ -73,3 +73,10 @@
   left: 29.1%;
   font-size: 476px;
 }
+
+#rendering-category-news-container #categoty-header-wrapper .settings-action-wrapper {
+  display: flex;
+  width: 380px !important;
+  justify-content: space-between;
+  padding: 8px;
+}

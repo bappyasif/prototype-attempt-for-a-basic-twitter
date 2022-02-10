@@ -141,16 +141,22 @@ export let makeGetFetchRequest = (url, dataUpdater) => {
         .catch(err => console.log(err.code, err.message))
 }
 
-export let ShowSettingsModal = ({handleCloseModal, removedNewsFromList, options, announcementText}) => {
+export let ShowSettingsModal = ({handleCloseModal, removedNewsFromList, options, announcementText, fromExplore }) => {
     let [announcement, setAnnouncement] = useState(null)
+
+    let [timerHandle, setTimerHandle] = useState(null)
+
     let handleClick = () => {
         setAnnouncement(announcementText)
-        console.log(announcementText, 'announcement!!')
+
         let handle = setTimeout(() => {
             setAnnouncement('')
-            removedNewsFromList()
+           removedNewsFromList()
         }, 4000)
-        return () => clearTimeout(handle)
+
+        setTimerHandle(handle)
+
+        return () => clearTimeout(timerHandle)
     }
 
     let ref = useRef(null)
@@ -158,17 +164,42 @@ export let ShowSettingsModal = ({handleCloseModal, removedNewsFromList, options,
 
     let renderOptions = () => options.map((item, idx) => <RenderSettingsOption key={idx} item={item} removedNewsFromList={handleClick} />)
 
-    console.log(announcement, 'announcement')
-
     return (
         announcement
         ?
-        <div id='show-suggested-settings-wrapper'>
-            <div id='announcement-text'>{announcement}</div> 
-        </div>
+        <SettingsModal announcement={announcement} timerHandle={timerHandle} fromExplore={fromExplore} handleCloseModal={handleCloseModal} />
         :
         <div id='show-suggested-settings-wrapper' ref={ref}>
             {renderOptions()}
+        </div>
+    )
+}
+
+let SettingsModal = ({announcement, timerHandle , fromExplore, handleCloseModal}) => {
+    let [undoSuccessful, setUndoSuccessful] = useState(false)
+
+    let handleUndo = () => {
+        // console.log(timerHandle, 'test handle')
+
+        clearTimeout(timerHandle)
+        setUndoSuccessful(true)
+    }
+
+    useEffect(() => {
+        let handle = setTimeout(() => {
+            // setAnnouncement('')
+            handleCloseModal(false)
+        }, 4000)
+        return () => clearTimeout(handle)
+    }, [undoSuccessful])
+
+    return (
+        <div id='show-suggested-settings-wrapper' className="settings-action-wrapper">
+            {/* <div id='announcement-text'>{announcement}</div> */}
+            {!undoSuccessful && <div id='announcement-text'>{announcement}</div>}
+            {!undoSuccessful && <div id="undo-remove" onClick={handleUndo}>{fromExplore ? 'Undo' : null}</div>}
+            {undoSuccessful && <div>Undo successful</div>}
+            {/* <div id="undo-remove" onClick={handleUndo}>{fromExplore ? 'Undo' : null}</div> */}
         </div>
     )
 }
@@ -194,3 +225,68 @@ export let removeItemFromArrayByTitle = (dataset, removalList, datasetUpdater, f
     
     datasetUpdater(newList)
 }
+
+/**
+ * 
+ * 
+ export let ShowSettingsModal = ({handleCloseModal, removedNewsFromList, options, announcementText, fromExplore, handleUndoRemovedCategory}) => {
+    let [announcement, setAnnouncement] = useState(null)
+    let [undo, setUndo] = useState(false)
+
+    // let [handleTest, setHandleTest] = useState(null)
+    let handleTest;
+
+    let handleClick = () => {
+        setAnnouncement(announcementText)
+        // setClicked(true)
+        handleTest = setTimeout(() => {
+            setAnnouncement('')
+            // removedNewsFromList()
+            console.log(undo, 'undo')
+            !undo && removedNewsFromList()
+        }, 4000)
+
+        console.log(handleTest, 'handle!!')
+        
+        return () => clearTimeout(handleTest)
+    }
+
+    // let handleClick = () => {
+    //     setAnnouncement(announcementText)
+    //     // setClicked(true)
+    //     let handle = setTimeout(() => {
+    //         setAnnouncement('')
+    //         removedNewsFromList()
+    //     }, 4000)
+        
+    //     return () => clearTimeout(handle)
+    // }
+
+    let ref = useRef(null)
+    useOnClickOutside(ref, () => handleCloseModal(false))
+
+    console.log('!!undo', handleTest)
+
+    let handleUndo = () => {
+        clearTimeout(handleTest)
+        setUndo(true)
+        console.log('!!undo', handleTest)
+        // handleUndoRemovedCategory()
+    }
+
+    let renderOptions = () => options.map((item, idx) => <RenderSettingsOption key={idx} item={item} removedNewsFromList={handleClick} />)
+
+    return (
+        announcement
+        ?
+        <div id='show-suggested-settings-wrapper' className="settings-action-wrapper">
+            <div id='announcement-text'>{announcement}</div>
+            <div id="undo-remove" onClick={handleUndo}>{fromExplore ? 'Undo' : null}</div>
+        </div>
+        :
+        <div id='show-suggested-settings-wrapper' ref={ref}>
+            {renderOptions()}
+        </div>
+    )
+}
+ */

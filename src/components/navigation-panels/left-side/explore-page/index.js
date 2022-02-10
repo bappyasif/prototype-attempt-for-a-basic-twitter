@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { SearchComponent } from '../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components';
 import { makeGetFetchRequest, makeStringWordCased, removeItemFromArrayByTitle } from '../../reuseable-components';
 import CurrentTrends from '../../right-side/current-trends';
 // import { makeGetFetchRequest, makeStringWordCased } from '../reuseable-components';
 import RenderNewsFromThisNewsCategory from './render-news-category-reusable';
+import SearchSemantics from './search-semantics';
 import './styles.css';
 
 function RenderExplorePage() {
+    let [searchText, setSearchText] = useState(null)
     let [contentCreators, setContentCreators] = useState([])
+    let handleSearchText = value => setSearchText(value)
     let handleContentCreators = name => setContentCreators(prevData => prevData.concat(name))
+
+    console.log(searchText, 'searchText!!')
 
     return (
         <div id='render-explore-page-container'>
+            <SearchComponent fromExplore={true} handleSearchText={handleSearchText} />
+            {searchText && searchText.length >= 2 && <SearchSemantics searchText={searchText} />}
             <MostTrendingNewsDisplay />
             <CurrentTrends handleContentCreators={handleContentCreators} />
             <RenderNewsFromSections />
@@ -26,6 +34,11 @@ let RenderNewsFromSections = () => {
     let [renderingCategories, setRenderingCategories] = useState([])
     let [removeCategoryList, setRemoveCategoryList] = useState([])
     // let [keepingCopyOfInitialRenderingCategories, setKeepingCopyOfInitialRenderingCategories] = useState(null)
+    // let [undoRemovedCategory, setUndoRemovedCategory] = useState(false)
+
+    // let handleUndoRemovedCategory = () => setUndoRemovedCategory(!undoRemovedCategory)
+
+    // useEffect(() => undoRemovedCategory && setRenderingCategories(renderingCategories), [undoRemovedCategory])
 
     // let updateRemoveCategoryList = categoryName => setRemoveCategoryList(prevList => prevList.concat(categoryName))
     let updateRemoveCategoryList = categoryName => {
@@ -36,7 +49,7 @@ let RenderNewsFromSections = () => {
         let newIndexs = randomIndexes.filter((v,_,arr) => v != arr[idx])
 
         setRandomIndexes(newIndexs);
-        console.log(newIndexs, 'is it ?!?!', idx, randomIndexes)
+        // console.log(newIndexs, 'is it ?!?!', idx, randomIndexes)
         // console.log(idx, newIndexes, 'is it?!?!', keepingCopyOfInitialRenderingCategories, renderingCategories)
     }
 
@@ -77,48 +90,25 @@ let RenderNewsFromSections = () => {
     let randomlySelectedIndexes = () => {
         let [idx, isDuplicate] = generateRenderingReadyIndex()
 
-        console.log(idx, isDuplicate, '[][]', randomIndexes)
+        // console.log(idx, isDuplicate, '[][]', randomIndexes)
         // setRandomIndexes(prevIdxs => prevIdxs.concat(checkDouble == -1 ? rndIdx : null))
         isDuplicate != -1 ? randomlySelectedIndexes() : setRandomIndexes(prevIndexes => prevIndexes.concat(idx))
     }
-
-    // let randomlySelectedIndexes = () => {
-    //     let rndIdx = Math.floor(Math.random() * uniqueNewsSectionNames.length)
-    //     let checkDouble = randomIndexes.findIndex(id => id == idx)
-    //     console.log(rndIdx, checkDouble, '[][]', randomIndexes.length)
-    //     setRandomIndexes(prevIdxs => prevIdxs.concat(checkDouble == -1 ? rndIdx : null))
-    // }
 
     let handleRenderingCategories = idx => setRenderingCategories(prevData => prevData.concat(uniqueNewsSectionNames[idx]))
 
     useEffect(() => {
         if (randomIndexes.length == 4) {
             randomIndexes.forEach(idx => handleRenderingCategories(idx))
-            console.log('checkbox 01')
+            // console.log('checkbox 01')
         }
     }, [randomIndexes])
-
-    // useEffect(() => {
-    //     if (randomIndexes.length < 5 && uniqueNewsSectionNames.length) {
-    //         setInterval(randomlySelectedIndexes, 110)
-    //         console.log('er?!', temp)
-    //     }
-    // }, [randomIndexes, uniqueNewsSectionNames])
 
     useEffect(() => {
         uniqueNewsSectionNames.length && randomlySelectedIndexes()
     }, [uniqueNewsSectionNames])
 
     useEffect(() => uniqueNewsSectionNames.length && randomIndexes.length <= 4 && randomlySelectedIndexes(), [randomIndexes])
-
-    // this works
-    // useEffect(() => {
-    //     if(uniqueNewsSectionNames.length) {
-    //         for(let i=0; i<4; i++) {
-    //             randomlySelectedIndexes()
-    //         }
-    //     }
-    // }, [uniqueNewsSectionNames])
 
     useEffect(() => {
         if (sectionNames) {
@@ -127,7 +117,7 @@ let RenderNewsFromSections = () => {
                 let idx = temp.findIndex(n => name == n);
                 idx == -1 ? temp.push(name) : null
             })
-            console.log(temp, 'temp!!')
+            // console.log(temp, 'temp!!')
             temp && setUniqueNewsSectionNames(temp)
         }
     }, [sectionNames])
@@ -140,7 +130,7 @@ let RenderNewsFromSections = () => {
         makeGetFetchRequest(url, handleData)
     }, [])
     // console.log(data, 'data!!', sectionNames, uniqueNewsSectionNames)
-    console.log('data!!', randomIndexes, renderingCategories, removeCategoryList)
+    // console.log('data!!', randomIndexes, renderingCategories, removeCategoryList)
 
     // let renderingNewsFromCategories = () => renderingCategories.map((category, idx) => idx == 0 && <RenderNewsFromThisNewsCategory key={category} categoryName={category} />)
     
@@ -161,6 +151,8 @@ let MostTrendingNewsDisplay = () => {
 
     let [dataset, setDataset] = useState(null)
 
+    let [rndIdx, setRndIdx] = useState(null)
+
     let handleDataset = items => setDataset(items)
 
     let handleRawDataset = items => setRawDataset(items)
@@ -180,18 +172,28 @@ let MostTrendingNewsDisplay = () => {
         }
     }, [rawDataset])
 
-    let randomizeIdx = dataset && Math.floor((Math.random() * dataset.length))
+    // let randomizeIdx = dataset && Math.floor((Math.random() * dataset.length))
     // console.log(randomizeIdx, '??')
 
-    // console.log(rawDataset, 'top news!!', dataset)
+    useEffect(() => {
+        if(dataset) {
+            let randomizeIdx = dataset && Math.floor((Math.random() * dataset.length))
+            setRndIdx(randomizeIdx)
+        }
+    }, [dataset])
 
-    return randomizeIdx != -1 && dataset && dataset.length && <RenderThisRandomlySelectedNewsItem item={randomizeIdx && dataset[randomizeIdx]} />
+    // console.log(rawDataset, 'top news!!', dataset)
+    // console.log(rndIdx, dataset[rndIdx])
+
+    return rndIdx != -1 && dataset && dataset.length && <RenderThisRandomlySelectedNewsItem item={dataset[rndIdx]} />
+    // return randomizeIdx != -1 && dataset && dataset.length && <RenderThisRandomlySelectedNewsItem item={randomizeIdx && dataset[randomizeIdx]} />
 }
 
 let RenderThisRandomlySelectedNewsItem = ({ item }) => {
-    let adjustedSection = makeStringWordCased(item.subsection || item.section)
+    let adjustedSection = makeStringWordCased( item && (item.subsection || item.section))
     // console.log(item, 'render!!', adjustedSection)
     return (
+        item ?
         <div id='most-trending-news-wrapper'>
             <img id='trending-news-img' src={item.multimedia && item.multimedia[1].url} />
             <div id='news-info'>
@@ -199,6 +201,8 @@ let RenderThisRandomlySelectedNewsItem = ({ item }) => {
                 <div id='news-headline'>{adjustedSection} : {item.title}</div>
             </div>
         </div>
+        :
+        null
     )
 }
 

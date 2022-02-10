@@ -10,20 +10,6 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
 
     let handleRemovedNewsList = title => setRemovedNewsListTitles(prevList => prevList.concat(title))
 
-    // let handleRemovedNewsFromList = () => {
-    //     let newList = newsData.map(item => {
-    //         let check = removedNewsListTitles.findIndex(title => item.title == title)
-    //         return check == -1 && item
-    //         // return removedNewsListTitles.map(title => item.title != title && item)
-    //     }).filter(item => item)
-    //     // console.log(newList, 'different?!', newsData, removedNewsListTitles)
-    //     setNewsData(newList)
-    // }
-    // let handleRemovedNewsFromList = () => {
-    //     removeItemFromArray(newsData, removedNewsListTitles, setNewsData)
-    // }
-
-    // useEffect(() => removedNewsListTitles.length && handleRemovedNewsFromList(), [removedNewsListTitles])
     useEffect(() => removedNewsListTitles.length && removeItemFromArrayByTitle(newsData, removedNewsListTitles, setNewsData), [removedNewsListTitles])
 
     let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
@@ -57,6 +43,7 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
         )
     }
     // console.log(rndNum, 'rndNum!!')
+    // console.log(newsData, 'newsData')
 
     return (
         <div id='top-news-relays-container'>
@@ -75,7 +62,7 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNew
     let tokenizingHyphens = tokenizing[tokenizing.length - 1].split('-');
     let adjustedSlug = tokenizingHyphens.join(' ');
 
-    useEffect(() => console.log(newsItem, 'what what!!'), [])
+    // useEffect(() => console.log(newsItem, 'what what!!'), [])
 
     let removedNewsFromList = () => handleRemovedNewsList(newsItem.title)
 
@@ -91,7 +78,7 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNew
 
     useEffect(() => multimedia && byline && handleContentCreators({ name: adjustContentCreatorName, imgUrl: newsItem.multimedia[0].url }), [byline])
 
-    let options = [{icon: frownFaceSvgIcon(), option: 'Not interested in this'}, {icon: frownFaceSvgIcon(), option: 'This trend is harmful or spammy'}]
+    let options = [{ icon: frownFaceSvgIcon(), option: 'Not interested in this' }, { icon: frownFaceSvgIcon(), option: 'This trend is harmful or spammy' }]
 
     return (
         adjustedSlug
@@ -112,6 +99,23 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNew
         </div>
     )
 }
+
+
+// let handleRemovedNewsFromList = () => {
+//     let newList = newsData.map(item => {
+//         let check = removedNewsListTitles.findIndex(title => item.title == title)
+//         return check == -1 && item
+//         // return removedNewsListTitles.map(title => item.title != title && item)
+//     }).filter(item => item)
+//     // console.log(newList, 'different?!', newsData, removedNewsListTitles)
+//     setNewsData(newList)
+// }
+// let handleRemovedNewsFromList = () => {
+//     removeItemFromArray(newsData, removedNewsListTitles, setNewsData)
+// }
+
+// useEffect(() => removedNewsListTitles.length && handleRemovedNewsFromList(), [removedNewsListTitles])
+
 
 // export let ShowSettingsModal = ({handleCloseModal, removedNewsFromList, options, announcementText}) => {
 //     let [announcement, setAnnouncement] = useState(null)
@@ -144,36 +148,36 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNew
 //     )
 // }
 
-let ShowSuggestedSettingsModal = ({handleClicked, removedNewsFromList}) => {
-    let [announcement, setAnnouncement] = useState(null)
-    let handleClick = () => {
-        setAnnouncement('Thanks, page will take this out from your trends list')
-        let handle = setTimeout(() => {
-            setAnnouncement('')
-            removedNewsFromList()
-        }, 4000)
-        return () => clearTimeout(handle)
-    }
+// let ShowSuggestedSettingsModal = ({handleClicked, removedNewsFromList}) => {
+//     let [announcement, setAnnouncement] = useState(null)
+//     let handleClick = () => {
+//         setAnnouncement('Thanks, page will take this out from your trends list')
+//         let handle = setTimeout(() => {
+//             setAnnouncement('')
+//             removedNewsFromList()
+//         }, 4000)
+//         return () => clearTimeout(handle)
+//     }
 
-    let ref = useRef(null)
-    useOnClickOutside(ref, () => handleClicked(false))
-    // useOnClickOutside(ref, handleClicked)
+//     let ref = useRef(null)
+//     useOnClickOutside(ref, () => handleClicked(false))
+//     // useOnClickOutside(ref, handleClicked)
 
-    let options = [{icon: frownFaceSvgIcon(), option: 'Not interested in this'}, {icon: frownFaceSvgIcon(), option: 'This trend is harmful or spammy'}]
-    let renderOptions = () => options.map((item, idx) => <RenderSettingsOption key={idx} item={item} removedNewsFromList={handleClick} />)
+//     let options = [{icon: frownFaceSvgIcon(), option: 'Not interested in this'}, {icon: frownFaceSvgIcon(), option: 'This trend is harmful or spammy'}]
+//     let renderOptions = () => options.map((item, idx) => <RenderSettingsOption key={idx} item={item} removedNewsFromList={handleClick} />)
 
-    return (
-        announcement
-        ?
-        <div id='show-suggested-settings-wrapper'>
-            <div id='announcement-text'>{announcement}</div> 
-        </div>
-        :
-        <div id='show-suggested-settings-wrapper' ref={ref}>
-            {renderOptions()}
-        </div>
-    )
-}
+//     return (
+//         announcement
+//         ?
+//         <div id='show-suggested-settings-wrapper'>
+//             <div id='announcement-text'>{announcement}</div> 
+//         </div>
+//         :
+//         <div id='show-suggested-settings-wrapper' ref={ref}>
+//             {renderOptions()}
+//         </div>
+//     )
+// }
 
 // export let RenderSettingsOption = ({item, removedNewsFromList}) => {
 //     return (

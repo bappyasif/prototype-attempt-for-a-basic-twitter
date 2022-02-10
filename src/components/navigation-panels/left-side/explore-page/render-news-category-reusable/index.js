@@ -5,14 +5,30 @@ import { threeDotsSvgIcon } from '../../../right-side/current-trends';
 import { makeGetFetchRequest, makeStringWordCased, RenderArticle, RenderSettingsOption, ShowSettingsModal } from '../../../reuseable-components';
 
 
-function RenderNewsFromThisNewsCategory({ categoryName, updateRemoveCategoryList }) {
+function RenderNewsFromThisNewsCategory({ categoryName, updateRemoveCategoryList, handleUndoRemovedCategory }) {
     let [dataset, setDataset] = useState(null)
     let [adjustedDataset, setAdjustedDataset] = useState(null)
     let [randomIndexes, setRandomIndexes] = useState([])
     let [renderingNews, setRenderingNews] = useState([])
     let [removeThisCategory, setRemoveThisCategory] = useState(false)
+    // let [duplicateOfRenderingNews, setDuplicateOfRenderingNews] = useState(null)
+    // let [undoRemovedCategory, setUndoRemovedCategory] = useState(false)
 
-    let handleRemoveThisCategory = () => setRemoveThisCategory(true)
+    // let handleUndoRemovedCategory = () => setUndoRemovedCategory(!undoRemovedCategory)
+    
+    // let handleRemoveThisCategory = () => setRemoveThisCategory(true)
+    let handleRemoveThisCategory = () => {
+        // setDuplicateOfRenderingNews(renderingNews)
+        setRemoveThisCategory(true)
+    }
+
+    // useEffect(() => undoRemovedCategory && setDuplicateOfRenderingNews(renderingNews), [undoRemovedCategory])
+
+    // useEffect(() => duplicateOfRenderingNews && setRenderingNews(duplicateOfRenderingNews), [duplicateOfRenderingNews])
+
+    // console.log(duplicateOfRenderingNews, 'duplicate', renderingNews, adjustedDataset)
+
+    // useEffect(() => undoRemovedCategory && setRenderingNews(duplicateOfRenderingNews), [undoRemovedCategory])
 
     let handleAdjustedDataset = items => setAdjustedDataset(items)
 
@@ -30,7 +46,7 @@ function RenderNewsFromThisNewsCategory({ categoryName, updateRemoveCategoryList
     let renderingReadyRandomIndex = () => {
         let idx = randomNumberGenerator();
         let isDuplicate = checkDuplicateOrNot(idx)
-        console.log(isDuplicate, '?!?!')
+        // console.log(isDuplicate, '?!?!')
         return [idx, isDuplicate]
     }
 
@@ -66,12 +82,14 @@ function RenderNewsFromThisNewsCategory({ categoryName, updateRemoveCategoryList
     // useEffect(() => removeThisCategory && setTimeout(() => updateRemoveCategoryList(categoryName), 24000), [removeThisCategory])
 
     // console.log(categoryName, 'categoryName!!', dataset, adjustedDataset, randomIndexes, renderingNews)
-    console.log(categoryName, 'categoryName!!', adjustedDataset, randomIndexes, renderingNews)
+    // console.log(categoryName, 'categoryName!!', adjustedDataset, randomIndexes, renderingNews)
 
 
-    let renderingCategoricalNews = () => adjustedDataset && renderingNews.length && renderingNews.map((item, idx) => <RenderArticle key={idx} item={item} fromExplore={true} />)
+    let renderingCategoricalNews = () => adjustedDataset && renderingNews && renderingNews.length && renderingNews.map((item, idx) => <RenderArticle key={idx} item={item} fromExplore={true} />)
 
     return (
+        renderingNews
+        &&
         renderingNews.length
         ?
         <div id='rendering-category-news-container'>
@@ -87,47 +105,57 @@ let CategoryHeader = ({ categoryName, handleRemoveThisCategory }) => {
     let [showModal, setShowModal] = useState(false)
     let [isCustomHooked, setIsCustomHooked] = useState(false)
 
+    // let [handleTest, setHandle] = useState(null)
+
+    // let [text, setText] = useState('abcd')
+
     let handleClick = () => {
         setShowModal(!showModal)
+        // setShowModal(true)
         setIsCustomHooked(true)
     }
     
     let options = [{option: 'Hide', icon: hideSvgIcon()}, {option: 'Unfollow topic', icon: categorySvgIcon()}]
 
     return (
-        <div id='categoty-header-wrapper' onClick={handleClick}>
+        <div id='categoty-header-wrapper'>
             <div id='left-side'>
                 <div id='svg-icon'>{categorySvgIcon()}</div>
                 <div id='category-name'>{makeStringWordCased(categoryName)}</div>
             </div>
-            <div id='category-option-svg'>{threeDotsSvgIcon()}</div>
+            <div id='category-option-svg' onClick={handleClick}>{threeDotsSvgIcon()}</div>
             {/* { showModal && isCustomHooked && <ShowCategoryOptionModal setIsCustomHooked={setIsCustomHooked} handleRemoveThisCategory={handleRemoveThisCategory} /> } */}
-            { showModal && isCustomHooked && <ShowSettingsModal handleCloseModal={setIsCustomHooked} announcementText={'Thank you, we will show you less of this!!'} removedNewsFromList={handleRemoveThisCategory} options={options} /> }
+            { showModal && isCustomHooked && <ShowSettingsModal handleCloseModal={setIsCustomHooked} announcementText={'Thank you, we will show you less of this!!'} removedNewsFromList={handleRemoveThisCategory} options={options} fromExplore={true} /> }
         </div>
     )
 }
 
 // let ShowCategoryOptionModal = ({setIsCustomHooked, handleRemoveThisCategory}) => {
-//     let [text, setText] = useState('wtf?!')
-//     let [test, setTest] = useState(false)
+//     let [text, setText] = useState(null)
+//     // let [test, setTest] = useState(false)
 
 //     let handleClicked = () => {
 //         // setAnnouncementText('Thank you, we will show you less of this')
-//         setText('whatever')
+//         setText(prev=> prev='whatever')
+//         // setTest(true)
+//         console.log('here here!!', text)
 //         let handle = setTimeout(() => {
 //             setText('')
-//             setTest(true)
-//             handleRemoveThisCategory()
+//             // handleRemoveThisCategory()
 //             console.log('klkl')
-//         }, 2000)
+//         }, 20000)
 //         // console.log('klkl')
 //         return () => clearTimeout(handle)
 //     }
 
-//     useEffect(() => console.log(text, 'announcementText!!', test), [test])
+//     // useEffect(() => console.log(text, 'announcementText!!', test), [test])
+
+//     useEffect(() => setText(''), [])
+
+//     console.log(text, 'text!!')
 
 //     let ref = useRef(null)
-//     useOnClickOutside(ref, () => setIsCustomHooked(false))
+//     // useOnClickOutside(ref, () => setIsCustomHooked(false))
 
 //     let options = [{option: 'Hide', icon: hideSvgIcon()}, {option: 'Unfollow topic', icon: categorySvgIcon()}]
 //     // let renderOptions = () => options.map(item => <RenderSettingsOption key={item.option} item={item} removedNewsFromList={handleRemoveThisCategory} />)
@@ -136,7 +164,7 @@ let CategoryHeader = ({ categoryName, handleRemoveThisCategory }) => {
 //     // console.log(announcementText, 'announcementText!!')
     
 //     return (
-//         text != 'wtf?!'
+//         text
 //         ?
 //         <div id='category-option-modal-wrapper' className='modal-with-announcement'>
 //             <div id='annoucement-text'>{text}</div>

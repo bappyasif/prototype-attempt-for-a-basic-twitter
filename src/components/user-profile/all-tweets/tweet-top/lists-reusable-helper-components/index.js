@@ -18,7 +18,7 @@ export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction, 
     )
 }
 
-export let SearchComponent = ({searchableMembers, handleMemberName}) => {
+export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore, handleSearchText}) => {
     let [inputText, setInputText] = useState(null)
 
     let [focused, setFocused] = useState(false)
@@ -27,7 +27,10 @@ export let SearchComponent = ({searchableMembers, handleMemberName}) => {
     
     let handleInputText = evt => setInputText(evt.target.value)
 
-    useEffect(() => handleMemberName(inputText), [inputText])
+    useEffect(() => {
+        !fromExplore && handleMemberName(inputText)
+        fromExplore && handleSearchText(inputText)
+    }, [inputText])
 
     console.log(searchableMembers, 'searchableMembers!!');
     
