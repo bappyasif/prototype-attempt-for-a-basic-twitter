@@ -166,7 +166,7 @@ let MostTrendingNewsDisplay = () => {
 
     useEffect(() => {
         if (rawDataset) {
-            let newList = rawDataset.map(item => item.multimedia && item.multimedia.length ? item : null).filter(item => item.section)
+            let newList = rawDataset.map(item => item.multimedia && item.multimedia.length ? item : null).filter(item => item && item.section)
             // setDataset(newList)
             handleDataset(newList)
         }

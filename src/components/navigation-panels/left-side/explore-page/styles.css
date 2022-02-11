@@ -131,3 +131,14 @@
     border-radius: 20px;
     background-color: whitesmoke;
 }
+
+#render-explore-page-container #search-semantics-container #company-information-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#render-explore-page-container #search-semantics-container #company-information-wrapper .profile-picture {
+    width: 94px;
+    border-radius: 42%;
+}
