@@ -26,6 +26,7 @@
 
 #render-explore-page-container #most-trending-news-wrapper {
     position: relative;
+    /* width: 99%; */
 }
 
 #render-explore-page-container #most-trending-news-wrapper #news-info {
@@ -122,23 +123,58 @@
 }
 
 #render-explore-page-container #search-semantics-container {
-    border: solid;
+    border: solid 1px silver;
     position: absolute;
-    color: aqua;
+    /* color: aqua; */
     top: 62px;
     z-index: 99;
     width: 668px;
     border-radius: 20px;
     background-color: whitesmoke;
+    height: 400px;
+    overflow-y: auto;
 }
 
 #render-explore-page-container #search-semantics-container #company-information-wrapper {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 8px 4px 8px 8px;
+    margin-right: 0px;
+    /* border-top-right-radius: 8px; */
+}
+
+#render-explore-page-container #search-semantics-container #company-information-wrapper:hover {
+    background-color: lightgrey;
+    border-radius: 8px;
 }
 
 #render-explore-page-container #search-semantics-container #company-information-wrapper .profile-picture {
     width: 94px;
     border-radius: 42%;
+    height: 51px;
+}
+
+#render-explore-page-container #search-semantics-container #company-information-wrapper #company-info {
+    width: 83%;
+    text-align: left;
+}
+
+#render-explore-page-container #search-semantics-container #company-information-wrapper #company-info .company-name {
+    font-size: x-large;
+}
+
+#render-explore-page-container #search-semantics-container #company-information-wrapper #company-info .company-description {
+    line-height: 1.3em;
+    font-size: smaller;
+}
+
+#render-explore-page-container #search-semantics-container #company-information-wrapper #company-info #company-name-verify {
+    display: flex;
+    align-items: center;
+}
+
+#render-explore-page-container #search-semantics-container #company-information-wrapper #company-info #company-name-verify #svg-icon {
+    fill: white;
+    stroke: black;
 }

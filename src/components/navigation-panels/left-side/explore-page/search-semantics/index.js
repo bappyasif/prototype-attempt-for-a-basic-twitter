@@ -1,100 +1,76 @@
 import React, { useEffect, useState } from 'react'
-import { makeGetFetchRequest } from '../../../reuseable-components'
+import { makeGetFetchRequest, verifiedSvgIcon } from '../../../reuseable-components'
+import { SearchComponent } from '../../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components'
 
 function SearchSemantics({ searchText }) {
+    // let [searchText, setSearchText] = useState(null)
+
     let [dataset, setDataset] = useState(null)
-    let [cycles, setCycles] = useState(0)
-    let [handle, setHandle] = useState(null)
+
+    let [firstHalf, setFirstHalf] = useState(null)
+
     let [secondHalf, setSecondHalf] = useState(null)
-    let [rest, setRest] = useState(null)
-    let [pause, setPause] = useState(true)
 
-    // let handleDataset = items => setDataset(items)
+    let [fetchInProgress, setFetchInProgress] = useState(false)
+
+    let [currentlyFetching, setCurrentlyFetching] = useState(null)
+
+    let handleSearchText = value => setSearchText(value)
+
     let handleDataset = items => {
-        let firstHalf = items.slice(0, 8)
-        let otherHalf = items.slice(9, 17)
-        let rest = items.slice(18)
-        setRest(rest)
-        setDataset(firstHalf)
-        setSecondHalf(otherHalf)
+        // let newList = items.filter(item => item.concept_name.toLowerCase().includes(searchText))
+        let newList = items.filter(item => !item.concept_name.includes(';')).filter(item => item.concept_name.split(' ').length <= 5)
+        setDataset(newList)
+        console.log(searchText, newList)
     }
-
-    let semanticsConcepts = ['nytd_org', 'nytd_topic', 'nytd_per', 'nytd_geo', 'nytd_des', 'nytd_ttl', 'nytd_porg']
 
     let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
 
-    let url = `http://api.nytimes.com/svc/semantic/v2/concept/search.json?query=${searchText}&concept_type=${semanticsConcepts[cycles]}&api-key=${apik}`
-
-    let getData = () => {
-        let timer = setTimeout(() => console.log('timer'), cycles == 0 ? 0 : 6000)
-        setHandle(timer)
-    }
-
-    let makeRequest = (url, updater) => {
-        setDataset(null)
-        fetch(url)
-            .then(resp => resp.json())
-            .then(data => {
-                if (data.num_results) {
-                    updater(data.results)
-                    // updater(data)
-                } else {
-                    setCycles(cycles + 1)
-                }
-            }).catch(err => console.log(err.code, err.message))
-    }
-
-    // useEffect(() => pause && pause)
+    let url = `http://api.nytimes.com/svc/semantic/v2/concept/search.json?query=${searchText}&concept_type=nytd_org&api-key=${apik}`
 
     useEffect(() => {
-        let timer = setTimeout(() => console.log('await time for next'), 20000)
-        setPause(timer)
-    }, [secondHalf])
+        // searchText && console.log(url)
+        currentlyFetching != searchText && searchText && !fetchInProgress && makeGetFetchRequestUpdated(url, handleDataset, setFetchInProgress, setCurrentlyFetching, searchText)
+    }, [searchText, fetchInProgress])
+
+    // useEffect(() => searchText && makeGetFetchRequest(url, handleDataset), [])
 
     useEffect(() => {
-        !dataset && cycles == 0 && makeRequest(url, handleDataset)
-        cycles != 0 && handle == 6000 && makeRequest(url, handleDataset)
-        // !dataset && cycles != 0 && handle == 6000 && makeRequest(url, handleDataset)
-        // !dataset && cycles != 0 && handle == 6000 && makeGetFetchRequest(url, handleDataset)
-        handle && clearTimeout(handle)
-    }, [handle])
+        if (dataset) {
+            let slicedArray = dataset.filter((_, i) => i <= 9)
+            setFirstHalf(slicedArray)
+            // setDataset(null)
+        }
+    }, [dataset])
 
-    console.log(handle, 'handle!!', dataset, cycles)
+    console.log(dataset, 'dataset', firstHalf, fetchInProgress)
 
-    useEffect(() => {
-        searchText && getData()
-        // searchText && dataset
-    }, [cycles, searchText])
-
-    // useEffect(() => !startCycle && searchText && getData(), [searchText, startCycle, cycles, dataset])
-
-    // useEffect(() => searchText && getData(), [cycles])
-
-    // useEffect(() => searchText && getData(), [])
-
-    let renderCompaniesFirstHalf = () => dataset && dataset.map((item, idx) => <RenderIndividualCompanyInformation key={item.concept_id} companyName={item.concept_name.split(' &')[0]} item={item} idx={idx} unpause={setPause} />)
-
-    let renderCompaniesSecondHalf = () => secondHalf && secondHalf.map((item, idx) => <RenderIndividualCompanyInformation key={item.concept_id} companyName={item.concept_name.split(' &')[0]} item={item} idx={idx} unpause={setPause} />)
-
-    let renderRestOfCompanies = () => rest.rest.map((item, idx) => <RenderIndividualCompanyInformation key={item.concept_id} companyName={item.concept_name.split(' &')[0]} item={item} idx={idx} unpause={setPause} />)
+    let renderFirstHalfDataset = () => firstHalf.map(item => <RenderIndividualCompanyInformation key={item.concept_id} companyName={item.concept_name} item={item} />)
 
     return (
         <div id='search-semantics-container'>
-            {searchText}
-            {/* <RenderIndividualCompanyInformation companyName={'Boston Buildings'} /> */}
-            {dataset && renderCompaniesFirstHalf()}
-            {/* {secondHalf && pause == 20000 && renderCompaniesSecondHalf()}
-            {secondHalf && pause == 20000 && alert('?!')} */}
-            {/* {!pause && secondHalf && renderCompaniesSecondHalf()} */}
+            {/* <SearchComponent fromExplore={true} handleSearchText={handleSearchText} /> */}
+            {/* {searchText} */}
 
+            {firstHalf && renderFirstHalfDataset()}
         </div>
     )
+}
+
+let makeGetFetchRequestUpdated = (url, updater, callInProgress, currentlyFetching, searchText) => {
+    currentlyFetching(searchText)
+    callInProgress(true)
+    fetch(url)
+        .then(resp => resp.json())
+        .then(data => updater(data.results))
+        .catch(err => console.log(err.code, err.message))
+        .finally(() => callInProgress(false))
 }
 
 // As company companyData itself is producing enough data (at least 10 records for each company name), lets render just top 5 or less from intial organization semantics search
 // and then use them to render related company information on based on those searches
 
-let RenderIndividualCompanyInformation = ({companyName, item, idx, unpause}) => {
+let RenderIndividualCompanyInformation = ({ companyName, item, idx, unpause }) => {
     let [companyData, setCompanyData] = useState(null)
     let [unsplashData, setUnsplashData] = useState(null)
     let [randomIdx, setRandomIdx] = useState(null)
@@ -102,21 +78,30 @@ let RenderIndividualCompanyInformation = ({companyName, item, idx, unpause}) => 
 
     let handleUnsplashData = items => {
         setUnsplashData(items)
-        chooseRandomIdx(items, setRandomIdx)
+        // chooseRandomIdx(items, setRandomIdx)
     }
 
     let handleData = items => setCompanyData(items)
 
-    let rapidApiCrunchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?query=${companyName}`
+    let rapidApiCrunchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?query=${companyName.split(' ').join('%20')}`
+    // let rapidApiCrunchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?query='${companyName}'`
 
     let akey = 'Y523ekZfcrFFNQKeXpbsPlQhe1zW4vGPwrASfRsfJmo'
 
-    let unsplashUrl = `https://api.unsplash.com/search/photos?client_id=${akey}&query=office`
+    // let unsplashUrl = `https://api.unsplash.com/search/photos?client_id=${akey}&query=${companyName}`
+    // let unsplashUrl = `https://api.unsplash.com/search/photos?client_id=${akey}&query=${companyName.split(' ').join('%20')}`
+    let unsplashUrl = `https://api.unsplash.com/search/photos?client_id=${akey}&query=${encodeURIComponent(companyName)}`
 
-    useState(() => idx == 7 && unpause(false))
-    
-    useEffect(() => companyData && makeGetFetchRequest(unsplashUrl, handleUnsplashData), [companyData])
-    
+    useEffect(() => idx == 7 && unpause(false))
+
+    useEffect(() => companyData && chooseRandomIdx(companyData, setRandomIdx), [companyData, companyName])
+
+    // useEffect(() => companyData && makeGetFetchRequest(unsplashUrl, handleUnsplashData), [companyData])
+    useEffect(() => {
+        companyData && makeGetFetchRequest(unsplashUrl, handleUnsplashData)
+        // companyData && chooseRandomIdx(companyData, setRandomIdx)
+    }, [companyData])
+
     // useEffect(() => companyName && makeRequest(rapidApiCrunchbaseUrl, handleData), [companyName])
 
     useEffect(() => item && companyName && makeRequest(rapidApiCrunchbaseUrl, handleData), [item])
@@ -127,40 +112,66 @@ let RenderIndividualCompanyInformation = ({companyName, item, idx, unpause}) => 
     //     }
     // }, [idx])
 
-    console.log(companyData, 'companyData', unsplashData, randomIdx)
-    
+    console.log(unsplashData, unsplashUrl, 'unsplash')
+
+    // console.log(companyData, 'companyData', unsplashData, randomIdx, companyName, item)
+
     return (
         item
-        ?
-        <div id='company-information-wrapper'>
-            <div className='company-name'>{companyName}</div>
-            <div className='company-description'>{item.short_description}</div>
-            <img className='profile-picture' src={unsplashData && randomIdx && unsplashData[randomIdx].urls.regular} />
-        </div>
-        :
-        null
+            ?
+            <div id='company-information-wrapper'>
+                <img className='profile-picture' src={unsplashData && randomIdx != -1 && unsplashData[randomIdx || 0] && unsplashData[randomIdx || 0].urls.regular} />
+                <div id='company-info'>
+                    <div id='company-name-verify'>
+                        <div className='company-name'>{companyName}</div>
+                        <span id='svg-icon'>{verifiedSvgIcon()}</span>
+                    </div>
+                    <div className='comapny-handle'>@{makeCompanyHandle(companyName)}</div>
+                    <div className='company-description'>{companyData && randomIdx != -1 && companyData[randomIdx || 0] && companyData[randomIdx || 0].short_description}</div>
+                </div>
+            </div>
+            :
+            null
     )
+}
+
+let makeCompanyHandle = companyName => {
+    let tokens = companyName.split(' ')
+
+    let handleStr = ''
+
+    if (tokens.length > 1) {
+        tokens.forEach((name, idx, arr) => {
+            if (idx == arr.length - 1) {
+                handleStr += name;
+            } else {
+                handleStr += name[0]
+            }
+        })
+    } else {
+        handleStr = companyName
+    }
+
+    return handleStr;
 }
 
 let makeRequest = (url, updater) => {
     let apik = '16ecb1e169msh1f719a2c940b075p117e09jsn47e729518524'
 
-    fetch(url,{
+    fetch(url, {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "crunchbase-crunchbase-v1.p.rapidapi.com",
             "x-rapidapi-key": `${apik}`
         }
     })
-    .then(resp => {
-        console.log(resp)
-        return resp.json()
-        .then(data => {
-    })
-        console.log(data, 'compData')
-        updater(data.entities)
-    })
-    .catch(err => console.log(err.code, err.message))
+        .then(async resp => {
+            // console.log(resp)
+            const data = await resp.json()
+            console.log(data, 'compData', url)
+            updater(data.entities)
+        })
+        .catch(err => console.log(err.code, err.message))
 }
 
 export let chooseRandomIdx = (dataset, updater) => {
@@ -171,124 +182,3 @@ export let chooseRandomIdx = (dataset, updater) => {
 }
 
 export default SearchSemantics
-
-/**
- * 
- * 
- let RenderIndividualCompanyInformation = ({companyName}) => {
-    let [companyData, setCompanyData] = useState(null)
-    let [unsplashData, setUnsplashData] = useState(null)
-    let [randomIdx, setRandomIdx] = useState(null)
-
-    // let handleUnsplashData = items => setUnsplashData(items)
-    let handleUnsplashData = items => {
-        setUnsplashData(items)
-        chooseRandomIdx(items, setRandomIdx)
-    }
-
-    let handleData = items => setCompanyData(items)
-    
-    // let url = `https://api.crunchbase.com/api/v4/entities/organizations/crunchbase?user_key=INSERT_YOUR_API_KEY_HERE`
-    // let url = `https://api.crunchbase.com/api/v4/autocompletes?user_key=[INSERT_Key]&query=airbnb&collection_ids=organization.companies`
-    let apik = '16ecb1e169msh1f719a2c940b075p117e09jsn47e729518524'
-    // let rapidapiCruchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?user_key=${apik}&query=${companyName}`
-    // let rapidapiCruchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?user_key=${apik}&query=${companyName}`
-    let rapidApiCrunchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?query=${companyName}`
-    
-    let makeRequest = (url, updater) => {
-        fetch(url,{
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "crunchbase-crunchbase-v1.p.rapidapi.com",
-                "x-rapidapi-key": `${apik}`
-            }
-        })
-        .then(resp => {
-            console.log(resp)
-            return resp.json()
-        }).then(data => {
-            console.log(data, 'compData')
-            updater(data.entities)
-        })
-        .catch(err => console.log(err.code, err.message))
-    }
-
-    // let chooseRandomIdx = () => {
-    //     console.log('chkbox 01')
-    //     let rndIdx = Math.floor((Math.random() * unsplashData.length))
-    //     console.log(rndIdx, 'index')
-    //     setRandomIdx(rndIdx)
-    // }
-
-    let akey = 'Y523ekZfcrFFNQKeXpbsPlQhe1zW4vGPwrASfRsfJmo'
-
-    let unsplashUrl = `https://api.unsplash.com/search/photos?client_id=${akey}&query=office`
-    
-    useEffect(() => companyData && makeGetFetchRequest(unsplashUrl, handleUnsplashData), [companyData])
-    
-    useEffect(() => companyName && makeRequest(rapidApiCrunchbaseUrl, handleData), [companyName])
-    // useEffect(() => companyName && makeRequest(rapidapiCruchbaseUrl, handleData), [companyName])
-    // useEffect(() => companyName && makeGetFetchRequest(rapidapiCruchbaseUrl, handleData), [])
-
-    // useEffect(() => unsplashData && chooseRandomIdx(), [unsplashData])
-
-    console.log(companyData, 'companyData', unsplashData, randomIdx)
-    
-    return (
-        <div>
-            {/* <img src={randomIdx != -1 && unsplashData && unsplashData[randomIdx].urls.regular} /> /}
-            {/* <img src={unsplashData && unsplashData[0].urls.regular} /> /}
-            <img src={unsplashData && randomIdx && unsplashData[randomIdx].urls.regular} />
-        </div>
-    )
-}
- * 
- * 
- let getData = () => {
-       let timer = setTimeout(() => console.log('timer'), cycles == 0 ? 0 : 6000)
-       setHandle(timer)
-        // fetch(url)
-        // .then(resp => resp.json())
-        // .then(data => {
-        //     console.log(data, 'data!!')
-        //     if(data.num_results) {
-        //         handleDataset(data.results)
-        //     }
-        // }).catch(err => console.log(err.code, err.message))
-        // .finally(() => {
-        //     setStartCycle(false)
-        //     console.log('finally', startCycle, cycles, handle)
-        // })
-
-    // return () => clearTimeout(handle)
-}
- * 
- * 
- let getData = () => {
-        // setStartCycle(true);
-        // let handle = cycles == 0 ? setTimeout(() => setStartCycle(true), 0) : setTimeout(() => setStartCycle(true), 6000)
-        let handle = cycles == 0 ? setStartCycle(true) : setTimeout(() => setStartCycle(true), 6000)
-
-        console.log(handle, 'handle')
-
-        startCycle && fetch(url)
-        .then(resp => resp.json())
-        .then(data => {
-            console.log(data, 'data!!')
-            if(data.num_results) {
-                handleDataset(data.results)
-            } else {
-                setCycles(cycles + 1)
-                console.log('not found!!')
-                getData()
-            }
-            // setStartCycle(false)
-        }).catch(err => console.log(err.code, err.message))
-        .finally(() => {
-            setStartCycle(false)
-            console.log('finally', startCycle, cycles, handle)
-        })
-
-        return () => clearTimeout(handle)
-    }
- */

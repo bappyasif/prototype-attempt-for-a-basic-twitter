@@ -27,9 +27,14 @@ export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore,
     
     let handleInputText = evt => setInputText(evt.target.value)
 
+    // let handleInputText = evt => {
+    //     setInputText(evt.target.value)
+    //     fromExplore && handleSearchText(evt.target.value)
+    // }
+
     useEffect(() => {
         !fromExplore && handleMemberName(inputText)
-        fromExplore && handleSearchText(inputText)
+        inputText && fromExplore && handleSearchText(inputText)
     }, [inputText])
 
     console.log(searchableMembers, 'searchableMembers!!');
@@ -38,7 +43,7 @@ export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore,
         <div id='search-wrapper' style={{ borderColor: focused && 'rgb(29, 155, 240)' }}>
             <div id='svg-icon'>{searchIconSvg()}</div>
             <label htmlFor='search-suggested-list' />
-            <input id='search-suggested-list' placeholder='Search people' onFocus={handleFocused} onBlur={handleFocused} onChange={handleInputText} />
+            <input id='search-suggested-list' placeholder='Search people' onFocus={handleFocused} onBlur={handleFocused} onChange={handleInputText} autoComplete='off' />
         </div>
     )
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { searchIconSvg } from '../../../user-profile/all-tweets/show-tweet-thread/tag-location';
 import { SearchComponent } from '../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components';
 import { makeGetFetchRequest, makeStringWordCased, removeItemFromArrayByTitle } from '../../reuseable-components';
 import CurrentTrends from '../../right-side/current-trends';
@@ -9,22 +10,57 @@ import './styles.css';
 
 function RenderExplorePage() {
     let [searchText, setSearchText] = useState(null)
+    // let [semanticsData, setSemanticsData] = useState(null)
     let [contentCreators, setContentCreators] = useState([])
+    
+    // let handleSemanticsData = items => {
+    //     let newList = items.filter(item => item.concept_name.toLowerCase().includes(searchText))
+    //     console.log(newList, 'newList', searchText)
+    //     setSemanticsData(newList)
+    // }
     let handleSearchText = value => setSearchText(value)
     let handleContentCreators = name => setContentCreators(prevData => prevData.concat(name))
 
-    console.log(searchText, 'searchText!!')
+    // let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
+
+    // let url = `http://api.nytimes.com/svc/semantic/v2/concept/search.json?query=${searchText}&concept_type=nytd_org&api-key=${apik}`
+
+    // useEffect(() => searchText && makeGetFetchRequest(url, handleSemanticsData), [searchText])
+
+    // console.log(searchText, 'searchText!!', semanticsData)
 
     return (
         <div id='render-explore-page-container'>
             <SearchComponent fromExplore={true} handleSearchText={handleSearchText} />
             {searchText && searchText.length >= 2 && <SearchSemantics searchText={searchText} />}
-            <MostTrendingNewsDisplay />
+            {/* <SearchSemantics /> */}
+            <MostTrendingNewsDisplay searchText={searchText} />
             <CurrentTrends handleContentCreators={handleContentCreators} />
             <RenderNewsFromSections />
         </div>
     )
 }
+
+// let SearchComponent = ({handleSearchText}) => {
+//     let [inputText, setInputText] = useState(null)
+
+//     let [focused, setFocused] = useState(false)
+    
+//     let handleFocused = () => setFocused(!focused)
+    
+//     let handleInputText = evt => {
+//         setInputText(evt.target.value)
+//         handleSearchText(evt.target.value)
+//     }
+
+//     return (
+//         <div id='search-wrapper' style={{ borderColor: focused && 'rgb(29, 155, 240)' }}>
+//             <div id='svg-icon'>{searchIconSvg()}</div>
+//             <label htmlFor='search-suggested-list' />
+//             <input id='search-suggested-list' placeholder='Search people' onFocus={handleFocused} onBlur={handleFocused} onChange={handleInputText} />
+//         </div>
+//     )
+// }
 
 let RenderNewsFromSections = () => {
     let [data, setData] = useState(null)
@@ -146,7 +182,7 @@ let RenderNewsFromSections = () => {
     )
 }
 
-let MostTrendingNewsDisplay = () => {
+let MostTrendingNewsDisplay = ({searchText}) => {
     let [rawDataset, setRawDataset] = useState(null)
 
     let [dataset, setDataset] = useState(null)
@@ -185,16 +221,17 @@ let MostTrendingNewsDisplay = () => {
     // console.log(rawDataset, 'top news!!', dataset)
     // console.log(rndIdx, dataset[rndIdx])
 
-    return rndIdx != -1 && dataset && dataset.length && <RenderThisRandomlySelectedNewsItem item={dataset[rndIdx]} />
+    return rndIdx != -1 && dataset && dataset.length && <RenderThisRandomlySelectedNewsItem item={dataset[rndIdx]} searchText={searchText} />
     // return randomizeIdx != -1 && dataset && dataset.length && <RenderThisRandomlySelectedNewsItem item={randomizeIdx && dataset[randomizeIdx]} />
 }
 
-let RenderThisRandomlySelectedNewsItem = ({ item }) => {
+let RenderThisRandomlySelectedNewsItem = ({ item, searchText }) => {
     let adjustedSection = makeStringWordCased( item && (item.subsection || item.section))
     // console.log(item, 'render!!', adjustedSection)
+    console.log(searchText, 'searchText')
     return (
         item ?
-        <div id='most-trending-news-wrapper'>
+        <div id='most-trending-news-wrapper' style={{width: searchText && searchText.length > 1 ? '99%' : '100%'}}>
             <img id='trending-news-img' src={item.multimedia && item.multimedia[1].url} />
             <div id='news-info'>
                 <div id='news-section'>{adjustedSection}</div>
