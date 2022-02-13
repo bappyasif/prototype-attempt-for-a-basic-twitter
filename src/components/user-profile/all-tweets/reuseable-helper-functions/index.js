@@ -14,7 +14,7 @@ export let RenderPolls = ({ poll, handlePollVotesCount, pollVotesCount, forModal
     //     // setVotesCount(prevData => prevData.map(item => ({...item, [elem]: value})))
     // }
 
-    console.log(pollVotesCount, 'pollVotes')
+    // console.log(pollVotesCount, 'pollVotes')
 
     let handleChange = () => setMaxVotes(maxVotes - 1 >= 0 ? maxVotes - 1 : maxVotes)
     // let handleChange;

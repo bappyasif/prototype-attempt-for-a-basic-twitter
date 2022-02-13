@@ -18,12 +18,17 @@ export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction, 
     )
 }
 
-export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore, handleSearchText}) => {
+export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore, handleSearchText, setSearchResultsModalHook, savingPrevSearchText}) => {
     let [inputText, setInputText] = useState(null)
 
     let [focused, setFocused] = useState(false)
     
-    let handleFocused = () => setFocused(!focused)
+    // let handleFocused = () => setFocused(!focused)
+    let handleFocused = () => {
+        fromExplore && setSearchResultsModalHook(true)
+        // fromExplore && savingPrevSearchText && handleSearchText(savingPrevSearchText)
+        setFocused(!focused)
+    }
     
     let handleInputText = evt => setInputText(evt.target.value)
 
@@ -37,7 +42,7 @@ export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore,
         inputText && fromExplore && handleSearchText(inputText)
     }, [inputText])
 
-    console.log(searchableMembers, 'searchableMembers!!');
+    // console.log(searchableMembers, 'searchableMembers!!');
     
     return (
         <div id='search-wrapper' style={{ borderColor: focused && 'rgb(29, 155, 240)' }}>

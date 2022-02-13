@@ -25,7 +25,7 @@ function UserProfile({ updateSomeDataInUserDocs, handleRepliedTweets, quotesList
     let updateExtraPictureUploadingStatus = () => setDoneExtraUrlUploading(true);
 
     // currentUser && console.log(currentUser, 'from userProfile', quotedFromRetweetModal, replyCount, repliedTweets, quotesListFromRetweet, quoteTweetID, quoteTweetData);
-    currentUser && console.log(quotedFromRetweetModal, quotesListFromRetweet, quoteTweetID, quoteTweetData, 'from userProfile', inputTextChoice01)
+    // currentUser && console.log(quotedFromRetweetModal, quotesListFromRetweet, quoteTweetID, quoteTweetData, 'from userProfile', inputTextChoice01)
     
     let setUrl = (url) => {
         setPictureUrl(url);

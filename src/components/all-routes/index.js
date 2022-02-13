@@ -146,7 +146,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
 
     // console.log(inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04, "showing values from routes")
 
-    console.log(toggleModality, 'from routes', currentUser)
+    // console.log(toggleModality, 'from routes', currentUser)
 
 
     let handleTweetModalityToggle = () => {
@@ -165,25 +165,29 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                         handleCurrentUser={handleCurrentUser}
                     />
                 </Route>
-                
+
                 <Route exact path={'/home'}>
-                    <RenderHomePageView 
-                    currentUser={currentUser} tweetText={primaryTweetText} extraTweetText={extraTweetText} gifFile={gifFile} 
-                    extraGifFile={gifFileSelectedForExtraTweet} selectedFile={selectedFile} extraSelectedFile={selectedPictureFileForExtraTweet} 
-                    setExtraTweetText={setExtraTweetText} setTweetText={setPrimaryTweetText} setGifFile={setGifFile} setExtraGifFile={setGifFileSelectedForExtraTweet} 
-                    setSelectedFile={setSelectedFile} setExtraSelectedFile={setSelectedPictureFileForExtraTweet} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} setTweetPrivacy={setTweetPrivacy} setTweetPublishReady={setTweetPublishReady}
-                    inputTextChoice01={inputTextChoice01} setInputTextChoice01={setInputTextChoice01} inputTextChoice02={inputTextChoice02} setInputTextChoice02={setInputTextChoice02}
-                    inputTextChoice03={inputTextChoice03} setInputTextChoice03={setInputTextChoice03} inputTextChoice04={inputTextChoice04} setInputTextChoice04={setInputTextChoice04}
-                    inputTextChoice05={inputTextChoice05} setInputTextChoice05={setInputTextChoice05} inputTextChoice06={inputTextChoice06} setInputTextChoice06={setInputTextChoice06}
-                    inputTextChoice07={inputTextChoice07} setInputTextChoice07={setInputTextChoice07} inputTextChoice08={inputTextChoice08} setInputTextChoice08={setInputTextChoice08}
-                    scheduleStamp={scheduleStamp} setScheduleStamp={setScheduleStamp} mediaDescriptionText={mediaFileDescriptionText} setMediaDescriptionText={setMediaFileDescriptionText} setNewDataStatus={setNewDataStatus}
-                    firstTweetHasMedia={firstTweetHasMedia} setFirstTweetHasMedia={setFirstTweetHasMedia} secondTweetHasMedia={secondTweetHasMedia} setSecondTweetHasMedia={setSecondTweetHasMedia}
-                    firstTweetHasPoll={firstTweetHasPoll} setFirstTweetHasPoll={setFirstTweetHasPoll} secondTweetHasPoll={secondTweetHasPoll} setSecondTweetHasPoll={setSecondTweetHasPoll}
+                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                    <RenderHomePageView
+                        currentUser={currentUser} tweetText={primaryTweetText} extraTweetText={extraTweetText} gifFile={gifFile}
+                        extraGifFile={gifFileSelectedForExtraTweet} selectedFile={selectedFile} extraSelectedFile={selectedPictureFileForExtraTweet}
+                        setExtraTweetText={setExtraTweetText} setTweetText={setPrimaryTweetText} setGifFile={setGifFile} setExtraGifFile={setGifFileSelectedForExtraTweet}
+                        setSelectedFile={setSelectedFile} setExtraSelectedFile={setSelectedPictureFileForExtraTweet} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} setTweetPrivacy={setTweetPrivacy} setTweetPublishReady={setTweetPublishReady}
+                        inputTextChoice01={inputTextChoice01} setInputTextChoice01={setInputTextChoice01} inputTextChoice02={inputTextChoice02} setInputTextChoice02={setInputTextChoice02}
+                        inputTextChoice03={inputTextChoice03} setInputTextChoice03={setInputTextChoice03} inputTextChoice04={inputTextChoice04} setInputTextChoice04={setInputTextChoice04}
+                        inputTextChoice05={inputTextChoice05} setInputTextChoice05={setInputTextChoice05} inputTextChoice06={inputTextChoice06} setInputTextChoice06={setInputTextChoice06}
+                        inputTextChoice07={inputTextChoice07} setInputTextChoice07={setInputTextChoice07} inputTextChoice08={inputTextChoice08} setInputTextChoice08={setInputTextChoice08}
+                        scheduleStamp={scheduleStamp} setScheduleStamp={setScheduleStamp} mediaDescriptionText={mediaFileDescriptionText} setMediaDescriptionText={setMediaFileDescriptionText} setNewDataStatus={setNewDataStatus}
+                        firstTweetHasMedia={firstTweetHasMedia} setFirstTweetHasMedia={setFirstTweetHasMedia} secondTweetHasMedia={secondTweetHasMedia} setSecondTweetHasMedia={setSecondTweetHasMedia}
+                        firstTweetHasPoll={firstTweetHasPoll} setFirstTweetHasPoll={setFirstTweetHasPoll} secondTweetHasPoll={secondTweetHasPoll} setSecondTweetHasPoll={setSecondTweetHasPoll}
                     />
+                    <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
                 <Route exact path={'/explore'}>
+                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <RenderExplorePage />
+                    <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
                 <Route exact path={'/analytics'}>
@@ -286,63 +290,21 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     {/* {setChangeLayout(true)} */}
                     <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <ComposeTweet
-                        selectedFile={selectedFile}
-                        extraSelectedFile={selectedPictureFileForExtraTweet}
-                        setSelectedFile={setSelectedFile}
-                        setExtraSelectedFile={setSelectedPictureFileForExtraTweet}
-                        gifFile={gifFile}
-                        extraGifFile={gifFileSelectedForExtraTweet}
-                        setGifFile={setGifFile}
-                        setExtraGifFile={setGifFileSelectedForExtraTweet}
-                        toggleModality={toggleModality}
-                        handleTweetModalToggle={handleTweetModalityToggle}
-                        primaryTweetText={primaryTweetText}
-                        extraTweetText={extraTweetText}
-                        setPrimaryTweetText={setPrimaryTweetText}
-                        setExtraTweetText={setExtraTweetText}
-                        tweetPrivacy={tweetPrivacy}
-                        tweetPublishReady={tweetPublishReady}
-                        setTweetPrivacy={setTweetPrivacy}
-                        setTweetPublishReady={setTweetPublishReady}
-                        inputTextChoice01={inputTextChoice01}
-                        setInputTextChoice01={setInputTextChoice01}
-                        inputTextChoice02={inputTextChoice02}
-                        setInputTextChoice02={setInputTextChoice02}
-                        inputTextChoice03={inputTextChoice03}
-                        setInputTextChoice03={setInputTextChoice03}
-                        inputTextChoice04={inputTextChoice04}
-                        setInputTextChoice04={setInputTextChoice04}
-                        inputTextChoice05={inputTextChoice05}
-                        setInputTextChoice05={setInputTextChoice05}
-                        inputTextChoice06={inputTextChoice06}
-                        setInputTextChoice06={setInputTextChoice06}
-                        inputTextChoice07={inputTextChoice07}
-                        setInputTextChoice07={setInputTextChoice07}
-                        inputTextChoice08={inputTextChoice08}
-                        setInputTextChoice08={setInputTextChoice08}
-                        scheduleStamp={scheduleStamp}
-                        setScheduleStamp={setScheduleStamp}
-                        mediaDescriptionText={mediaFileDescriptionText}
-                        setMediaDescriptionText={setMediaFileDescriptionText}
-                        setNewDataStatus={setNewDataStatus}
-                        setChangeLayout={setChangeLayout}
-                        setOpacity={setOpacity}
-                        opacity={opacity}
-                        firstTweetHasMedia={firstTweetHasMedia}
-                        setFirstTweetHasMedia={setFirstTweetHasMedia}
-                        secondTweetHasMedia={secondTweetHasMedia}
-                        setSecondTweetHasMedia={setSecondTweetHasMedia}
-                        firstTweetHasPoll={firstTweetHasPoll}
-                        setFirstTweetHasPoll={setFirstTweetHasPoll}
-                        secondTweetHasPoll={secondTweetHasPoll}
-                        setSecondTweetHasPoll={setSecondTweetHasPoll}
-                        currentUser={currentUser}
-                        quoteTweetData={quoteTweetData}
-                        handleQuoteTweetID={handleQuoteTweetID}
-                        pollVotesCount={pollVotesCount}
-                        handlePollVotesCount={handlePollVotesCount}
-                        selectedTaggedPlace={selectedTaggedPlace}
-                        quotedFromRetweetModal={quotedFromRetweetModal}
+                        selectedFile={selectedFile} extraSelectedFile={selectedPictureFileForExtraTweet} setSelectedFile={setSelectedFile} setExtraSelectedFile={setSelectedPictureFileForExtraTweet} gifFile={gifFile} extraGifFile={gifFileSelectedForExtraTweet} setGifFile={setGifFile} setExtraGifFile={setGifFileSelectedForExtraTweet} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle}
+                        
+                        primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} setPrimaryTweetText={setPrimaryTweetText} setExtraTweetText={setExtraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} setTweetPrivacy={setTweetPrivacy} setTweetPublishReady={setTweetPublishReady}
+                        
+                        inputTextChoice01={inputTextChoice01} setInputTextChoice01={setInputTextChoice01} inputTextChoice02={inputTextChoice02} setInputTextChoice02={setInputTextChoice02} inputTextChoice03={inputTextChoice03} setInputTextChoice03={setInputTextChoice03} inputTextChoice04={inputTextChoice04} setInputTextChoice04={setInputTextChoice04}
+                        
+                        inputTextChoice05={inputTextChoice05} setInputTextChoice05={setInputTextChoice05} inputTextChoice06={inputTextChoice06} setInputTextChoice06={setInputTextChoice06} inputTextChoice07={inputTextChoice07} setInputTextChoice07={setInputTextChoice07} inputTextChoice08={inputTextChoice08} setInputTextChoice08={setInputTextChoice08}
+                        
+                        scheduleStamp={scheduleStamp} setScheduleStamp={setScheduleStamp} mediaDescriptionText={mediaFileDescriptionText} setMediaDescriptionText={setMediaFileDescriptionText}
+                        
+                        setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} setOpacity={setOpacity} opacity={opacity} currentUser={currentUser} quoteTweetData={quoteTweetData} handleQuoteTweetID={handleQuoteTweetID}
+                        
+                        firstTweetHasMedia={firstTweetHasMedia} setFirstTweetHasMedia={setFirstTweetHasMedia} secondTweetHasMedia={secondTweetHasMedia} setSecondTweetHasMedia={setSecondTweetHasMedia} firstTweetHasPoll={firstTweetHasPoll} setFirstTweetHasPoll={setFirstTweetHasPoll} secondTweetHasPoll={secondTweetHasPoll} setSecondTweetHasPoll={setSecondTweetHasPoll}
+                        
+                        pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} selectedTaggedPlace={selectedTaggedPlace} quotedFromRetweetModal={quotedFromRetweetModal}                        
                     />
                     {/* <ProfilePageUpperView /> */}
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
@@ -381,78 +343,33 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                             <ProfilePageUpperView currentUser={currentUser} />
                             <RightSideNavigationPanel tweetData={tweetData} />
                             <UserProfile
-                                selectedFile={selectedFile}
-                                extraSelectedFile={selectedPictureFileForExtraTweet}
-                                setSelectedFile={setSelectedFile}
-                                setExtraSelectedFile={setSelectedPictureFileForExtraTweet}
-                                gifFile={gifFile}
-                                extraGifFile={gifFileSelectedForExtraTweet}
-                                setGifFile={setGifFile}
-                                setExtraGifFile={setGifFileSelectedForExtraTweet}
-                                tweetData={tweetData}
-                                primaryTweetText={primaryTweetText}
-                                setPrimaryTweetText={setPrimaryTweetText}
-                                extraTweetText={extraTweetText}
-                                setExtraTweetText={setExtraTweetText}
-                                tweetPrivacy={tweetPrivacy}
-                                tweetPublishReady={tweetPublishReady}
-                                setTweetPublishReady={setTweetPublishReady}
-                                inputTextChoice01={inputTextChoice01}
-                                setInputTextChoice01={setInputTextChoice01}
-                                inputTextChoice02={inputTextChoice02}
-                                setInputTextChoice02={setInputTextChoice02}
-                                inputTextChoice03={inputTextChoice03}
-                                setInputTextChoice03={setInputTextChoice03}
-                                inputTextChoice04={inputTextChoice04}
-                                setInputTextChoice04={setInputTextChoice04}
-                                inputTextChoice05={inputTextChoice05}
-                                setInputTextChoice05={setInputTextChoice05}
-                                inputTextChoice06={inputTextChoice06}
-                                setInputTextChoice06={setInputTextChoice06}
-                                inputTextChoice07={inputTextChoice07}
-                                setInputTextChoice07={setInputTextChoice07}
-                                inputTextChoice08={inputTextChoice08}
-                                setInputTextChoice08={setInputTextChoice08}
-                                setNewDataStatus={setNewDataStatus}
-                                newDataStatus={newDataStatus}
-                                setChangeLayout={setChangeLayout}
-                                uniqueID={uniqueID}
-                                newID={newID}
-                                updateData={updateData}
-                                firstTweetHasMedia={firstTweetHasMedia}
-                                setFirstTweetHasMedia={setFirstTweetHasMedia}
-                                secondTweetHasMedia={secondTweetHasMedia}
-                                setSecondTweetHasMedia={setSecondTweetHasMedia}
-                                firstTweetHasPoll={firstTweetHasPoll}
-                                setFirstTweetHasPoll={setFirstTweetHasPoll}
-                                secondTweetHasPoll={secondTweetHasPoll}
-                                setSecondTweetHasPoll={setSecondTweetHasPoll}
-                                handleUpdateStatus={handleUpdateStatus}
-                                currentUser={currentUser && currentUser}
-                                scheduledTimeStamp={scheduledTimeStamp}
-                                setScheduledTimeStamp={setScheduledTimeStamp}
-                                removeSpeceficArrayItem={removeSpeceficArrayItem}
-                                updateTweetPrivacy={updateTweetPrivacy}
-                                handleAnalysingTweetID={handleAnalysingTweetID}
-                                handleQuoteTweetID={handleQuoteTweetID}
-                                quoteTweetData={quoteTweetData}
-                                quoteTweetID={quoteTweetID}
-                                handleReplyCount={handleReplyCount}
-                                replyCount={replyCount}
-                                handlePinnedTweetID={handlePinnedTweetID}
-                                showPinnedTweetTag={showPinnedTweetTag}
-                                currentlyPinnedTweetID={currentlyPinnedTweetID}
-                                handlePollVotesCount={handlePollVotesCount}
-                                handleThreadedTweetData={handleThreadedTweetData}
-                                repliedTweets={repliedTweets}
-                                selectedTaggedPlace={selectedTaggedPlace}
-                                currentUserProfileInfo={currentUserProfileInfo}
-                                handleQuotedFromRetweetModal={handleQuotedFromRetweetModal}
-                                quotedFromRetweetModal={quotedFromRetweetModal}
-                                quotesListFromRetweet={quotesListFromRetweet}
-                                handleQuotesListFromRetweet={handleQuotesListFromRetweet}
-                                handleRepliedTweets={handleRepliedTweets}
-                                updateSomeDataInUserDocs={updateSomeDataInUserDocs}
+                                selectedFile={selectedFile} extraSelectedFile={selectedPictureFileForExtraTweet} setSelectedFile={setSelectedFile} setExtraSelectedFile={setSelectedPictureFileForExtraTweet}
+                                
+                                gifFile={gifFile} extraGifFile={gifFileSelectedForExtraTweet} setGifFile={setGifFile} setExtraGifFile={setGifFileSelectedForExtraTweet}
+                                
+                                tweetData={tweetData} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} extraTweetText={extraTweetText}
+                                
+                                setExtraTweetText={setExtraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} setTweetPublishReady={setTweetPublishReady}
+                                
+                                inputTextChoice01={inputTextChoice01} setInputTextChoice01={setInputTextChoice01} inputTextChoice02={inputTextChoice02} setInputTextChoice02={setInputTextChoice02}
+                                
+                                inputTextChoice03={inputTextChoice03} setInputTextChoice03={setInputTextChoice03} inputTextChoice04={inputTextChoice04} setInputTextChoice04={setInputTextChoice04}
+                                
+                                inputTextChoice05={inputTextChoice05} setInputTextChoice05={setInputTextChoice05} inputTextChoice06={inputTextChoice06} setInputTextChoice06={setInputTextChoice06}
+                                
+                                inputTextChoice07={inputTextChoice07} setInputTextChoice07={setInputTextChoice07} inputTextChoice08={inputTextChoice08} setInputTextChoice08={setInputTextChoice08}
+                                
+                                setNewDataStatus={setNewDataStatus} newDataStatus={newDataStatus} setChangeLayout={setChangeLayout} uniqueID={uniqueID} newID={newID} updateData={updateData}
+                                
+                                firstTweetHasMedia={firstTweetHasMedia} setFirstTweetHasMedia={setFirstTweetHasMedia} secondTweetHasMedia={secondTweetHasMedia} setSecondTweetHasMedia={setSecondTweetHasMedia}
+                                
+                                firstTweetHasPoll={firstTweetHasPoll} setFirstTweetHasPoll={setFirstTweetHasPoll} secondTweetHasPoll={secondTweetHasPoll} setSecondTweetHasPoll={setSecondTweetHasPoll} handleUpdateStatus={handleUpdateStatus} currentUser={currentUser && currentUser}
+                                
+                                scheduledTimeStamp={scheduledTimeStamp} setScheduledTimeStamp={setScheduledTimeStamp} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID}
+                                
+                                quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} handlePollVotesCount={handlePollVotesCount} handleThreadedTweetData={handleThreadedTweetData} repliedTweets={repliedTweets}
+                                
+                                selectedTaggedPlace={selectedTaggedPlace} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotedFromRetweetModal={quotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} handleQuotesListFromRetweet={handleQuotesListFromRetweet} handleRepliedTweets={handleRepliedTweets} updateSomeDataInUserDocs={updateSomeDataInUserDocs}                                
                             />
                         </Route>
                         :
@@ -487,7 +404,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)
-                        // <Redirect to='/login' />
+                    // <Redirect to='/login' />
                 }
 
                 {

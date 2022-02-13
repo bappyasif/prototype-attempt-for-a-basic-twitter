@@ -2,6 +2,13 @@
     position: relative;
 }
 
+#container-for-topics-picker {
+    width: 681px;
+    position: absolute;
+    top: 0px;
+    left: 26%;
+}
+
 #topics-picker-container-in-time-line #headings-part,
 #topics-picker-container-in-time-line #bottom-part {
     text-align: left;
@@ -25,7 +32,7 @@
 
 #topics-picker-container-in-time-line #scrolling-part {
     overflow-x: auto;
-    width: 560px;
+    width: 648px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;

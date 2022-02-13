@@ -18,8 +18,8 @@
 }
 
 .left-opaque {
-  opacity: 0.9;
-  background-color: rgba(221, 216, 216, 0.6);
+  opacity: 0.6;
+  /* background-color: rgba(221, 216, 216, 0.6); */
 }
 
 #delete-icon {

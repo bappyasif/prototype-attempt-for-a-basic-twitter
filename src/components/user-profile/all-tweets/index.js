@@ -34,7 +34,7 @@ function AllTweetsPage({ handleQuotedFromRetweetModal, currentUserProfileInfo, h
 
     useEffect(() => (totalTweets) && totalTweets <= 11 && handleNoMoreTweets(), [totalTweets])
 
-    console.log(currentTweetsIndex, totalTweets, showNoMoreTweets)
+    // console.log(currentTweetsIndex, totalTweets, showNoMoreTweets)
 
     useEffect(() => {
         onlyMedias && setTotalTweets(onlyMedias.length)

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { searchIconSvg } from '../../../user-profile/all-tweets/show-tweet-thread/tag-location';
 import { SearchComponent } from '../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components';
 import { makeGetFetchRequest, makeStringWordCased, removeItemFromArrayByTitle } from '../../reuseable-components';
+import useOnClickOutside from '../../right-side/click-outside-utility-hook/useOnClickOutside';
 import CurrentTrends from '../../right-side/current-trends';
 // import { makeGetFetchRequest, makeStringWordCased } from '../reuseable-components';
 import RenderNewsFromThisNewsCategory from './render-news-category-reusable';
@@ -10,8 +11,23 @@ import './styles.css';
 
 function RenderExplorePage() {
     let [searchText, setSearchText] = useState(null)
+    let [savingPrevSearchText, setSavingPrevSearchText] = useState(null)
     // let [semanticsData, setSemanticsData] = useState(null)
     let [contentCreators, setContentCreators] = useState([])
+
+    let [searchResultsModalHook, setSearchResultsModalHook] = useState(false)
+
+    let [showSearchResultsModal, setShowSearchResultsModal] = useState(false)
+
+    let handleSearchResultsModal = () => setShowSearchResultsModal(!showSearchResultsModal)
+
+    let ref = useRef(null)
+
+    useOnClickOutside(ref, () => {
+        setSearchResultsModalHook(false)
+        setSavingPrevSearchText(searchText)
+        setSearchText(null)
+    })
     
     // let handleSemanticsData = items => {
     //     let newList = items.filter(item => item.concept_name.toLowerCase().includes(searchText))
@@ -29,10 +45,19 @@ function RenderExplorePage() {
 
     // console.log(searchText, 'searchText!!', semanticsData)
 
+    // useEffect(() => !searchResultsModalHook && searchText && setSearchResultsModalHook(true), [searchText])
+
+    // useEffect(() => !searchResultsModalHook && setSearchResultsModalHook(true), [searchResultsModalHook])
+
+    // useEffect(() => !searchResultsModalHook && setSearchResultsModalHook(true), [])
+
+    console.log(searchText, searchResultsModalHook, 'hook!!', savingPrevSearchText)
+
     return (
-        <div id='render-explore-page-container'>
-            <SearchComponent fromExplore={true} handleSearchText={handleSearchText} />
-            {searchText && searchText.length >= 2 && <SearchSemantics searchText={searchText} />}
+        <div id='render-explore-page-container' ref={ref}>
+            <SearchComponent fromExplore={true} handleSearchText={handleSearchText} setSearchResultsModalHook={setSearchResultsModalHook} savingPrevSearchText={savingPrevSearchText} />
+            {searchText && searchText.length >= 2 && searchResultsModalHook && <SearchSemantics searchText={searchText} searchResultsModalHook={searchResultsModalHook} setSearchResultsModalHook={setSearchResultsModalHook} />}
+            {/* {searchResultsModalHook && <SearchSemantics searchText={searchText} searchResultsModalHook={searchResultsModalHook} setSearchResultsModalHook={setSearchResultsModalHook} />} */}
             {/* <SearchSemantics /> */}
             <MostTrendingNewsDisplay searchText={searchText} />
             <CurrentTrends handleContentCreators={handleContentCreators} />
@@ -229,9 +254,10 @@ let RenderThisRandomlySelectedNewsItem = ({ item, searchText }) => {
     let adjustedSection = makeStringWordCased( item && (item.subsection || item.section))
     // console.log(item, 'render!!', adjustedSection)
     console.log(searchText, 'searchText')
+    // style={{width: searchText && searchText.length > 1 ? '98%' : '100%'}}
     return (
         item ?
-        <div id='most-trending-news-wrapper' style={{width: searchText && searchText.length > 1 ? '99%' : '100%'}}>
+        <div id='most-trending-news-wrapper'>
             <img id='trending-news-img' src={item.multimedia && item.multimedia[1].url} />
             <div id='news-info'>
                 <div id='news-section'>{adjustedSection}</div>

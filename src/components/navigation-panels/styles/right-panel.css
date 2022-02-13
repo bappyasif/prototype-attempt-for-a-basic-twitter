@@ -1,8 +1,12 @@
 #right-navigation-panel-container {
   display: flex;
   flex-direction: column;
-  max-width: 303px;
+  max-width: 350px;
   /* margin-left: 53px; */
+  opacity: 0.2;
+  position: absolute;
+  right: 72px;
+  top: 0px;
 }
 
 #search-twitter-container {

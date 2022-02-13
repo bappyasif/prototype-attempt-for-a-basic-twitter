@@ -1,6 +1,19 @@
+/* #user-profile-page-container #all-tweets-container */
 #profile-page-container,
 #profile-page-upperview-container {
+  position: absolute;
+  top: 0px;
+  left: 26%;
+}
 
+/* #user-profile-page-container, */
+#user-profile-page-container #all-tweets-container
+.all-tweets-and-replies,
+#all-tweets-container {
+  position: absolute;
+  top: 436px;
+  left: 26%;
+  width: 650px;
 }
 
 #components-container {
@@ -8,9 +21,9 @@
 }
 
 #all-tweets-container {
-  position: absolute;
+  /* position: absolute;
   left: 27.89%;
-  top: 445px;
+  top: 445px; */
 }
 
 /* #profile-page-container  */
@@ -31,7 +44,7 @@
 
 #tweet-container {
   flex-direction: column;
-  width: 557px;
+  /* width: 557px; */
   padding-top: 20px;
 }
 
@@ -412,6 +425,15 @@
 
 .rendering-tweet-data-container .right-side .tweet-top {
   margin: 4px 4px 4px 0px;
+  position: relative;
+}
+
+.rendering-tweet-data-container .right-side .tweet-top #more-options-dropdown-container {
+  /* position: absolute;
+  right: 0px;
+  top: 29px;
+  background-color: whitesmoke;
+  z-index: 99; */
 }
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container,
@@ -1030,7 +1052,8 @@
   background-color: rgba(192, 192, 192, 1);
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container,
+.rendering-tweet-data-container .right-side .tweet-top #more-options-dropdown-container {
   position: absolute;
   right: 0px;
   top: 38px;
@@ -1039,17 +1062,20 @@
   margin: 2px;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container,
+.rendering-tweet-data-container .right-side .tweet-top #more-options-dropdown-container .option-container {
   display: flex;
   align-items: center;
   margin-bottom: 4px;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container:hover {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container:hover,
+.rendering-tweet-data-container .right-side .tweet-top #more-options-dropdown-container .option-container:hover {
   background: rgba(192, 192, 192, .2);
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container .options-svg {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container .options-svg,
+.rendering-tweet-data-container .right-side .tweet-top #more-options-dropdown-container .option-container .options-svg {
   padding-left: 6px;
     /* padding-right: 6px;
     padding-bottom: 2.1px;
@@ -1059,7 +1085,8 @@
   margin-right: 17px;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container:last-child {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top #more-options-dropdown-container .option-container:last-child,
+.rendering-tweet-data-container .right-side .tweet-top #more-options-dropdown-container .option-container:last-child {
   margin-bottom: 2px;
 }
 
@@ -1816,6 +1843,13 @@
 }
 
 /* suggested people route styles */
+#components-container #lengthy-follow-list-container {
+  width: 681px;
+  position: absolute;
+  left: 29%;
+  background-color: whitesmoke;
+}
+
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side {
   display: flex;
@@ -1888,7 +1922,7 @@
   z-index: 99;
   width: 351px;
   top: 0px;
-  left: 72px;
+  left: 161px;
   padding: 11px 11px 11px 11px;
   border-radius: 11px;
 }
@@ -1907,6 +1941,13 @@
   padding-left: 0px;
   margin-left: 0px;
   margin-bottom: 6px;
+}
+
+#components-container #home-page-view-container {
+  position: absolute;
+  width: 681px;
+  top: 0px;
+  left: 25.1%;
 }
 
 #components-container #home-page-view-container #tweet-modal {

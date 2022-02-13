@@ -10,11 +10,13 @@ function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle, opacit
   let clickHandler = () => handleTweetModalToggle()
 
   let otherClickHandler = (evt) => {
-    console.log(evt.target.textContent, '[][]')
+    // console.log(evt.target.textContent, '[][]')
     let whichLink = evt.target.textContent
     if(whichLink == 'Home') {
+      // clickHandler()
       history.push('/home')
     } else if(whichLink == 'Explore') {
+      // clickHandler()
       history.push('/explore')
     }
   }

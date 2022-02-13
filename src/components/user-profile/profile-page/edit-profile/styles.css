@@ -1,8 +1,8 @@
 #edit-profile-container {
   position: absolute;
-  width: 551px;
+  width: 650px;
   top: 110px;
-  left: 429px;
+  left: 445px;
   z-index: 999999;
   background-color: white;
   border-radius: 11px;
@@ -312,7 +312,7 @@
   height: 231px;
   padding: 22px;
   position: absolute;
-  right: 121px;
+  right: 164px;
   top: 69px;
   background: rgba(245,245,245, 1);
   border-radius: 18px;

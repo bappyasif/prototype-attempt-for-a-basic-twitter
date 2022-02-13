@@ -1,5 +1,8 @@
 #render-explore-page-container {
-    width: 674px;
+    position: absolute;
+    width: 681px;
+    top: 0px;
+    left: 25.1%;
 }
 
 #render-explore-page-container #header-segment {
@@ -27,6 +30,11 @@
 #render-explore-page-container #most-trending-news-wrapper {
     position: relative;
     /* width: 99%; */
+    border-radius: 8px;
+}
+
+#render-explore-page-container #most-trending-news-wrapper #trending-news-img {
+    border-radius: 8px;
 }
 
 #render-explore-page-container #most-trending-news-wrapper #news-info {
@@ -128,7 +136,7 @@
     /* color: aqua; */
     top: 62px;
     z-index: 99;
-    width: 668px;
+    /* width: 668px; */
     border-radius: 20px;
     background-color: whitesmoke;
     height: 400px;

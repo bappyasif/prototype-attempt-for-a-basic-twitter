@@ -21,7 +21,7 @@ function EditBirthdate({item, convertDateIntoString, changeData, currentUser, de
             <DateComponent item={item} convertDateIntoString={convertDateIntoString} />
             {/* <div id='remove-birthdate' onClick={handleDelete}>Remove Birthdate</div> */}
             <div id='remove-birthdate' onClick={handleModalVisibility}>Remove Birthdate</div>
-            {showConfirmDeleteModal && <ReuseableModal title='Remove birth date?' description='This will remove it from your profile.' handleAction={handleDelete} handleCancelModal={() => setShowConfirmDeleteModal(false)} /> }
+            {showConfirmDeleteModal && <ReuseableModal title='Remove birth date?' description='This will remove it from your profile.' handleAction={handleDelete} handleCancelModal={() => setShowConfirmDeleteModal(false)} actionText='Confirm' /> }
         </div>
     )
 }

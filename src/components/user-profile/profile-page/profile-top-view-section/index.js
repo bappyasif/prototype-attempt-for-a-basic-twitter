@@ -22,7 +22,7 @@ function ProfilePageTopView({currentUser}) {
 
     }, [userProfileData])
 
-    console.log(userProfileData, 'data ready from topView', currentUser, filteredData, Object.keys(userProfileData))
+    // console.log(userProfileData, 'data ready from topView', currentUser, filteredData, Object.keys(userProfileData))
     
     let renderUserData = () => {
         return (

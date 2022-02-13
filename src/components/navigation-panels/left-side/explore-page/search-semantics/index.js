@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { makeGetFetchRequest, verifiedSvgIcon } from '../../../reuseable-components'
 import { SearchComponent } from '../../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components'
+import useOnClickOutside from '../../../right-side/click-outside-utility-hook/useOnClickOutside'
 
-function SearchSemantics({ searchText }) {
+function SearchSemantics({ searchText, searchResultsModalHook, setSearchResultsModalHook, showSearchResultsModal }) {
     // let [searchText, setSearchText] = useState(null)
 
     let [dataset, setDataset] = useState(null)
@@ -15,11 +16,17 @@ function SearchSemantics({ searchText }) {
 
     let [currentlyFetching, setCurrentlyFetching] = useState(null)
 
-    let handleSearchText = value => setSearchText(value)
+    // let [searchResultsModalHook, setSearchResultsModalHook] = useState(false)
+    
+    // let ref = useRef(null)
+
+    // useOnClickOutside(ref, () => setSearchResultsModalHook(false))
+
+    // let handleSearchText = value => setSearchText(value)
 
     let handleDataset = items => {
         // let newList = items.filter(item => item.concept_name.toLowerCase().includes(searchText))
-        let newList = items.filter(item => !item.concept_name.includes(';')).filter(item => item.concept_name.split(' ').length <= 5)
+        let newList = items.filter(item => !item.concept_name.includes(';')).filter(item => !item.concept_name.includes(',')).filter(item => item.concept_name.split(' ').length <= 5).filter(item => !item.concept_name.includes('('))
         setDataset(newList)
         console.log(searchText, newList)
     }
@@ -40,10 +47,13 @@ function SearchSemantics({ searchText }) {
             let slicedArray = dataset.filter((_, i) => i <= 9)
             setFirstHalf(slicedArray)
             // setDataset(null)
+            // setSearchResultsModalHook(true)
         }
     }, [dataset])
 
-    console.log(dataset, 'dataset', firstHalf, fetchInProgress)
+    // useEffect(() => setSearchResultsModalHook(true), [])
+
+    // console.log(dataset, 'dataset', firstHalf, fetchInProgress)
 
     let renderFirstHalfDataset = () => firstHalf.map(item => <RenderIndividualCompanyInformation key={item.concept_id} companyName={item.concept_name} item={item} />)
 
@@ -52,7 +62,8 @@ function SearchSemantics({ searchText }) {
             {/* <SearchComponent fromExplore={true} handleSearchText={handleSearchText} /> */}
             {/* {searchText} */}
 
-            {firstHalf && renderFirstHalfDataset()}
+            {/* {firstHalf && renderFirstHalfDataset()} */}
+            { searchResultsModalHook && firstHalf && renderFirstHalfDataset()}
         </div>
     )
 }
@@ -81,7 +92,13 @@ let RenderIndividualCompanyInformation = ({ companyName, item, idx, unpause }) =
         // chooseRandomIdx(items, setRandomIdx)
     }
 
-    let handleData = items => setCompanyData(items)
+    // let handleData = items => setCompanyData(items)
+
+    let handleData = items => {
+        let newList = items.filter(item => companyName.split(' ').some(word => item.identifier.value.includes(word)))
+        // setCompanyData(items)
+        setCompanyData(newList)
+    }
 
     let rapidApiCrunchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?query=${companyName.split(' ').join('%20')}`
     // let rapidApiCrunchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?query='${companyName}'`

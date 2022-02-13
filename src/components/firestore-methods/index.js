@@ -14,7 +14,7 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, us
 
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
-    console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, data)
+    // console.log('<<<<<here>>>>>', tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, data)
 
     let refinedData;
     if (extraImgFile && imgFile) {
@@ -89,7 +89,7 @@ export let readDataInDescendingORderFromSubCollection = (userID, updateData) => 
     .then(docs => docs.forEach(doc => data.push(doc.data())))
     .catch(err => console.log('error while sorting data', err.message))
     .finally(() => {
-        data && console.log(data, 'here!!')
+        // data && console.log(data, 'here!!')
         data && updateData(data)
     })
 }
@@ -202,7 +202,7 @@ export let getUserProfileData = (userID, dataLoader) => {
         if(docSnap.exists) {
             let userProfileData = docSnap.data().profileInfo;
             userProfileData && dataLoader(userProfileData)
-            userProfileData && console.log('data is now loaded', userProfileData)
+            // userProfileData && console.log('data is now loaded', userProfileData)
         } else {
             console.log('no such document found')
         }
@@ -283,7 +283,7 @@ export let getSomeDataFromUserMainDocument = (userID, dataLoader, whichData) => 
         if(docSnap.exists) {
             let queriedData = docSnap.data()[whichData];
             dataLoader(queriedData)
-            console.log('data is now loaded')
+            // console.log('data is now loaded')
         } else {
             console.log('no such document found')
         }
@@ -320,7 +320,7 @@ export let readDocumentFromFirestoreSubCollection = (userID, docID, dataLoader) 
             let dataset = docSnap.data();
             // console.log(dataset, 'fromfirestore!!')
             dataset && dataLoader(dataset)
-            dataset && console.log('document loading was successful')
+            // dataset && console.log('document loading was successful')
         } else {
             console.log('document was not found!!')
         }
@@ -337,7 +337,7 @@ export let getDataFromFirestoreSubCollection = (userID, docID, whichData, dataLo
             let data = docSnap.data()[whichData]
             // data && dataLoader(data)
             data ? dataLoader(data) : whichData == 'replyCount' && dataLoader(data)
-            data && console.log('data loaded!!', data)
+            // data && console.log('data loaded!!', data)
         } else {
             console.log('data does not exist!!')
         }

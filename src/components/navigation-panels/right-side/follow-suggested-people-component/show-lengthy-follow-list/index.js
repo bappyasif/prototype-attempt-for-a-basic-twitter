@@ -43,7 +43,7 @@ let RenderDataFromFetch = ({ url, apik, category }) => {
     let handleDataset = items => setDataset(items)
 
     let updateDataset = (title, newData) => {
-        console.log(title, newData, 'foundReview!!')
+        // console.log(title, newData, 'foundReview!!')
         let newList = dataset.map(item => {
             if (item.title == title) {
                 item.reviewList = newData
@@ -98,7 +98,7 @@ let RenderDataFromFetch = ({ url, apik, category }) => {
         }
     }, [dataset])
 
-    console.log(dataset, 'dataset!!')
+    // console.log(dataset, 'dataset!!')
 
     let renderBookRelatedInfos = () => {
         return updatedDataset ? updatedDataset.map(item => <RenderBookRelatedInfos key={item.title} item={item} />) : dataset && dataset.map(item => <RenderBookRelatedInfos key={item.title} item={item} />)

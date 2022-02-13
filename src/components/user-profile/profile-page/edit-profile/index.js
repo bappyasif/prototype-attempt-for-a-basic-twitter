@@ -270,7 +270,7 @@ let ReturnComponent = ({ index, currentUser, item, hovered, setHovered, profileD
             ?
             <EditBirthdate item={item} convertDateIntoString={convertDateIntoString} startEditBirthdate={startEditBirthdate} changeData={changeData} currentUser={currentUser} deleteData={deleteData} />
             :
-            startEditBirthdate  && !showDateComponent && <ReuseableModal title='Edit date of birth?' description='This can only be changed a few times.' handleCancelModal={handleCancelModal} handleAction={handleShowDateComponent} />
+            startEditBirthdate  && !showDateComponent && <ReuseableModal title='Edit date of birth?' description='This can only be changed a few times.' handleCancelModal={handleCancelModal} handleAction={handleShowDateComponent} actionText={'Edit BirthDate'} />
             }
         </div>
     )

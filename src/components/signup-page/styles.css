@@ -1,8 +1,10 @@
 #signup-page-container {
-    width: 560px;
+    width: 650px;
     background-color: whitesmoke;
     border-radius: 11px;
     text-align: left;
+    position: absolute;
+    left: 33%;
 }
 
 #signup-page-container #top-div, 
