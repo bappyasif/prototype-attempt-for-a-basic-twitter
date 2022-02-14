@@ -82,7 +82,7 @@ let RightSide = ({ currentUser, handleCurrentUser }) => {
   let loginsOptions = loginsDomains.map((domain) => (
     <div key={domain.id} className="login-options" onClick={domain.id == 'google' && hasAccount ? handleSigninWithGoogle : domain.id == 'google' && !hasAccount ? handleSignUpWithGoogle : handleSigninWithApple}>
       <img className="login-icons" src={domain.icon} />
-      <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
+      <p style={{ color: domain.id == 'google' ? 'GrayText' : 'black', cursor: domain.id != 'apple' && 'pointer' }}>{'Sign ' + `${hasAccount ? 'in' : 'up'} ` + domain.text}</p>
 
       {
         // !usingSignin && currentUser && redirectJustOnce == 1 && <Redirect to='/username/profile' />

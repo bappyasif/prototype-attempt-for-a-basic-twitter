@@ -20,6 +20,15 @@
   position: relative;
 }
 
+#all-tweets-container #show-more-tweets {
+  line-height: 2em;
+  background-color: whitesmoke;
+  font-size: x-large;
+  font-weight: bolder;
+  display: none;
+  cursor: pointer;
+}
+
 #all-tweets-container {
   /* position: absolute;
   left: 27.89%;
@@ -401,8 +410,28 @@
 }
 
 .rendering-tweet-data-container {
-  padding-bottom: 18px;
+  /* padding-bottom: 18px; */
   position: relative;
+  flex-direction: column; 
+}
+
+.rendering-tweet-data-container #show-tweet-thread {
+  background-color: lightgrey;
+  line-height: 2.7em;
+  font-size: larger;
+  text-align: left;
+  padding-left: 72px;
+}
+
+.rendering-tweet-data-container #show-tweet-thread:hover {
+  background-color: slategray;
+}
+
+.rendering-tweet-data-container #tweet-part {
+  display: flex;
+  justify-content: space-between;
+  width: -webkit-fill-available;
+  margin-bottom: 11px;
 }
 
 .rendering-tweet-data-container .left-side{
@@ -443,7 +472,8 @@
 #components-container #container-for-added-members {
   position: absolute;
   top: 90px;
-  width: 490px;
+  left: 35.3%;
+  width: 560px;
   border: solid;
   background-color: whitesmoke;
   /* padding: 2px 11px 2px 0px; */
@@ -922,6 +952,7 @@
   color: silver;
   font-size: smaller;
   margin-left: 11px;
+  font-weight: bolder;
 }
 
 .rendering-tweet-data-container .right-side .tweet-media-file-content {
@@ -1090,7 +1121,8 @@
   margin-bottom: 2px;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container,
+.rendering-tweet-data-container .right-side .tweet-top .pin-tweet-modal-container {
   position: absolute;
   top: 54px;
   left: 153px;
@@ -1100,18 +1132,21 @@
   padding: 11px 20px 8px 20px;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container .modal-header {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container .modal-header,
+.rendering-tweet-data-container .right-side .tweet-top .pin-tweet-modal-container .modal-header {
   font-size: larger;
   margin-bottom: 2px;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container .explanation-text {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container .explanation-text,
+.rendering-tweet-data-container .right-side .tweet-top .pin-tweet-modal-container .explanation-text {
   color: white;
   margin-bottom: 8px;
   font-size: smaller;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container .clickable-div {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container .clickable-div,
+.rendering-tweet-data-container .right-side .tweet-top .pin-tweet-modal-container .clickable-div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1123,43 +1158,50 @@
   color: white;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Pin {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Pin,
+.rendering-tweet-data-container .right-side .tweet-top .pin-tweet-modal-container #Pin {
   background-color: rgba(192, 192, 192, 1);
   margin-bottom: 11px;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Pin:hover {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Pin:hover,
+.rendering-tweet-data-container .right-side .tweet-top .pin-tweet-modal-container #Pin:hover {
   background-color: rgba(192, 192, 192, .8);
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Cancel {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Cancel,
+.rendering-tweet-data-container .right-side .tweet-top .pin-tweet-modal-container #Cancel {
   background-color: rgba(112, 128, 144, .6);
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Cancel:hover {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .pin-tweet-modal-container #Cancel:hover,
+.rendering-tweet-data-container .right-side .tweet-top .pin-tweet-modal-container #Cancel:hover {
   background-color: rgba(112, 128, 144, 1);
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container,
+.rendering-tweet-data-container .right-side .tweet-top .who-can-reply-container {
   position: absolute;
-  width: 218px;
+  width: 274px;
   right: 0px;
   top: 38px;
   background-color: whitesmoke;
   z-index: 99;
-  padding-left: 2px;
+  padding: 11px 6px 0px 11px;
 }
 
 .rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .privacy-spans .privacy-text {
   /* color: white; */
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container,
+.rendering-tweet-data-container .right-side .tweet-top .who-can-reply-container .privacy-options .option-container {
   display: flex;
   justify-content: space-between;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container:hover {
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .who-can-reply-container .privacy-options .option-container:hover,
+.rendering-tweet-data-container .right-side .tweet-top .who-can-reply-container .privacy-options .option-container:hover {
   background-color: rgba(192, 192, 192, .2);
 }
 
@@ -1232,8 +1274,10 @@
 
 /* tweet thread styles here */
 #components-container #show-tweet-thread-container {
-  width: 515px;
+  width: 650px;
   border: solid;
+  position: absolute;
+  left: 33%;
 }
 
 #components-container #show-tweet-thread-container #component-wrapper,
