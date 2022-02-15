@@ -12,7 +12,7 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
     let [replyRouteReady, setReplyRouteReady] = useState(false)
     // let [replyCount, setReplyCount] = useState(0)
     // let [replyCountFlag, setCountReplyFlag] = useState(false)
-    let history = useHistory()
+    let history = useHistory(null)
 
     // changedCount && console.log(changedCount, 'changedCount!!', repliedTweetsIDs)
 
@@ -47,16 +47,22 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
     useEffect(() => quotesListFromRetweet && elem.id == 'retweet' && setCounter(quotesListFromRetweet.length), [quotesListFromRetweet])
 
     useEffect(() => {
-        if(iconClicked == 'like') {
+        if(iconClicked == "like") {
             handleIncreaseCount()
         } else if(iconClicked == 'reply') {
             // replyCount && history.push('/tweet/compose')
-        } else if(iconClicked == 'analytics') {
+        } else if(iconClicked.includes('analytics')) {
             // alert('here!!')
             handleAnalysingTweetID(ID);
-            console.log(ID, 'foundhere!!', tweetData)
+            // console.log(ID, 'foundhere!!', tweetData)
             history.push('/analytics')
         }
+        // else if(iconClicked == 'analytics') {
+        //     // alert('here!!')
+        //     handleAnalysingTweetID(ID);
+        //     // console.log(ID, 'foundhere!!', tweetData)
+        //     history.push('/analytics')
+        // }
     }, [iconClicked])
 
     // useEffect(() => replyCount && history.push('/tweet/compose'), [replyCount])
@@ -102,14 +108,14 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
 
     let handleClicked = (evt) => {
         // console.log(evt.target.parentNode.parentNode.parentNode)
-        let iconElement = evt.target.parentNode.parentNode.parentNode.id
+        let iconElement = evt.target.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.id
         setIconClicked(iconElement)
-        if(iconClicked == 'retweet') {
+        if(iconElement == 'retweet') {
             handleShowModal()
             // !undoRetweet && handleCount()
-        } else if(iconClicked == 'like') {
+        } else if(iconElement == 'like') {
             handleDecreaseCount()
-        } else if(iconClicked == 'reply') {
+        } else if(iconElement == 'reply') {
             handleQuoteTweetID(tweetData.ID)
             handleQuoteTweetCount()
             setReplyRouteReady(true)
@@ -117,6 +123,7 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
             // updateDataInFirestore(currentUser, tweetData.ID, {replyCount: })
             // history.push('/tweet/compose')
         }
+        console.log(iconElement, 'iconElement')
     }
 
     let loadInitialReplyCount = () => {
@@ -126,7 +133,7 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
 
     let handleQuoteTweetCount = () => {
         getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleReplyCount )
-        // console.log('checkpointy 1', currentUser, tweetData.ID)
+        console.log('checkpointy 1', currentUser, tweetData.ID)
     }
 
     // replyCount && console.log(replyCount, 'replyCount!!', counter)
@@ -199,6 +206,7 @@ let RenderRetweetModalItem = ({ item, handleShowModal, handleUndoTweet, undoRetw
             handleQuoteTweetID(tweetData.ID)
             history.push('/tweet/compose')
             handleQuotedFromRetweetModal()
+            // console.log(nodeID, 'nodeID')
         }
         if (evt.target.parentNode.id == 'Retweet') handleUndoTweet()
         handleShowModal()

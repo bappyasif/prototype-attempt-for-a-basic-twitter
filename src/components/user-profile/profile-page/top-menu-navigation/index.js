@@ -12,6 +12,14 @@ function ProfilePageTopNavigationMenuBar({currentUser}) {
 
     // useEffect(() => setRoute(currentUser), [])
 
+    let findingInitialActiveRoute = () => {
+        let url = window.location.href;
+        let tokenize = url.split('/')
+        setNavID(tokenize[tokenize.length-1])
+    }
+
+    useEffect(() => findingInitialActiveRoute(), [])
+
     useEffect(() => {
         
         let tweetsElement = document.querySelector('#top-navigation-menu-container');

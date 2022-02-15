@@ -4,10 +4,15 @@ import "../styles/left-panel.css";
 import RenderHomePageView from "./home-page";
 import { deleteIcon, iconsArray } from "./svg-resources";
 
-function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle, opacity, currentUser}) {
+function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle, opacity, currentUser, setOpacity}) {
   let history = useHistory(null)
 
-  let clickHandler = () => handleTweetModalToggle()
+  // let clickHandler = () => handleTweetModalToggle()
+  let clickHandler = () => {
+    handleTweetModalToggle()
+    // neutralizePreviouslyHeldOpacity()
+    toggleOpacity()
+  }
 
   let otherClickHandler = (evt) => {
     // console.log(evt.target.textContent, '[][]')
@@ -19,7 +24,16 @@ function LeftSideNavigationPanel({toggleModality, handleTweetModalToggle, opacit
       // clickHandler()
       history.push('/explore')
     }
+    neutralizePreviouslyHeldOpacity()
   }
+
+  // let neutralizePreviouslyHeldOpacity = () => !toggleModality && handleTweetModalToggle()
+  let neutralizePreviouslyHeldOpacity = () => opacity && setOpacity(false)
+  // let neutralizePreviouslyHeldOpacity = () => opacity ? setOpacity(false) : setOpacity(true)
+
+  let toggleOpacity = () => setOpacity(!opacity)
+
+  useEffect(() => neutralizePreviouslyHeldOpacity(), [])
 
   let panelDivs = iconsArray.map((icon) => (
     <div key={icon.id} id={icon.id} onClick={icon.id == 'Tweet' ? clickHandler : otherClickHandler}>

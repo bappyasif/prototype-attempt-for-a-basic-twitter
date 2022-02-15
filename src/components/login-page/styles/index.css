@@ -20,6 +20,7 @@
     border: none;
     /* text-align: center; */
     font-size: x-large;
+    background-color: transparent;
 }
 
 input {
@@ -42,6 +43,17 @@ input {
     border-radius: 8px;
     padding-left: 6px;
     padding-bottom: 4px;
+    position: relative;
+}
+
+#login-container #login-info .user-login .password-masking {
+    /* -webkit-text-security: circle; */
+    -webkit-text-security: disc;
+}
+
+#login-container #login-info .user-login #mask-or-unmask {
+    position: absolute;
+    right: 11px;
 }
 
 #login-container #login-info .user-login .placeholder-div {

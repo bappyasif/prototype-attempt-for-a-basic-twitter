@@ -167,7 +167,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                 </Route>
 
                 <Route exact path={'/home'}>
-                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                    <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <RenderHomePageView
                         currentUser={currentUser} tweetText={primaryTweetText} extraTweetText={extraTweetText} gifFile={gifFile}
                         extraGifFile={gifFileSelectedForExtraTweet} selectedFile={selectedFile} extraSelectedFile={selectedPictureFileForExtraTweet}
@@ -185,7 +185,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                 </Route>
 
                 <Route exact path={'/explore'}>
-                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                    <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <RenderExplorePage />
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
@@ -281,16 +281,16 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                 </Route>
 
                 <Route exact path='/i/topics/picker/home'>
-                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                    <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <TopicsPicker handleData={handleUserInterestsData} sanitizedData={sanitizedInterestsData} currentUser={currentUser} />
                     <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                 </Route>
 
                 <Route exact path='/tweet/compose'>
                     {/* {setChangeLayout(true)} */}
-                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                    <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <ComposeTweet
-                        selectedFile={selectedFile} extraSelectedFile={selectedPictureFileForExtraTweet} setSelectedFile={setSelectedFile} setExtraSelectedFile={setSelectedPictureFileForExtraTweet} gifFile={gifFile} extraGifFile={gifFileSelectedForExtraTweet} setGifFile={setGifFile} setExtraGifFile={setGifFileSelectedForExtraTweet} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle}
+                        selectedFile={selectedFile} extraSelectedFile={selectedPictureFileForExtraTweet} setSelectedFile={setSelectedFile} setExtraSelectedFile={setSelectedPictureFileForExtraTweet} gifFile={gifFile} extraGifFile={gifFileSelectedForExtraTweet} setGifFile={setGifFile} setExtraGifFile={setGifFileSelectedForExtraTweet} toggleModality={toggleModality} handleTweetModalToggle={setToggleModality}
                         
                         primaryTweetText={primaryTweetText} extraTweetText={extraTweetText} setPrimaryTweetText={setPrimaryTweetText} setExtraTweetText={setExtraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} setTweetPrivacy={setTweetPrivacy} setTweetPublishReady={setTweetPublishReady}
                         
@@ -312,7 +312,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                 </Route>
 
                 <Route exact path='/tweet/compose/schedule'>
-                    <LeftSideNavigationPanel opacity={opacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                    <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <TweetScheduler
                         isScheduleIconClicked={isScheduleIconClicked}
                         handleToggle={handleScheduleIconClicked}
@@ -323,7 +323,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                 </Route>
 
                 <Route exact path='/tweet/compose/media'>
-                    <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                    <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                     <EditTweetMediaContents
                         mediaFile={selectedFile}
                         updateMediaFile={setSelectedFile}
@@ -339,7 +339,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                         ?
                         <Route exact path={`/${currentUser}`}>
                             {/* {setChangeLayout(false)} */}
-                            <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                            <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                             <ProfilePageUpperView currentUser={currentUser} />
                             <RightSideNavigationPanel tweetData={tweetData} />
                             <UserProfile
@@ -397,9 +397,9 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                         ?
                         <Route path={`/${currentUser}/tweets-and-replies`}>
                             {/* {tweetPublishReady && setTweetPublishReady(false)} */}
-                            <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                            <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                             {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
-                            <TweetsAndRepliesPage currentUser={currentUser} tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} />
+                            <TweetsAndRepliesPage currentUser={currentUser} tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} handleThreadedTweetData={handleThreadedTweetData} />
                             <RightSideNavigationPanel tweetData={tweetData} />
                         </Route>
                         :
@@ -411,7 +411,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     currentUser
                         ?
                         <Route path={`/${currentUser}/media`}>
-                            <LeftSideNavigationPanel toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                            <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                             {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
                             {/* <AllMedias tweetData={tweetData} handleAnalysingTweetID={handleAnalysingTweetID} /> */}
                             <AllMedias tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />

@@ -12,6 +12,8 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
     
     let [saveFlagTest, setSaveFlagTest] = useState(false)
 
+    let [currentlyHovering, setCurrentlyHovering] = useState(null)
+
     let handleFlag = () => setNumberFlag(!numberFlag)
 
     let handleAddToList = () => {
@@ -59,15 +61,21 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
         setSaveFlagTest(test.length ? true : false)
     }
 
-    let handleModal = () => setShowThumbnail(!showThumbnail)
+    // let handleModal = () => setShowThumbnail(!showThumbnail)
+
+    let handleModal = () => {
+        setShowThumbnail(!showThumbnail)
+        setCurrentlyHovering(list.name)
+    }
 
     let ref = useRef(null);
 
-    useOnHoverOutside(ref, handleModal)
+    // useOnHoverOutside(ref, handleModal)
+    useOnHoverOutside(ref, () => setShowThumbnail(false))
     
     return (
-        <div className='list-wrapper' onClick={handleAddToList} ref={ref}>
-            <div className='first-half' onMouseEnter={handleModal}>
+        <div className='list-wrapper' onClick={handleAddToList} ref={ref} id={list.name + Math.random()} onMouseLeave={() => setShowThumbnail(false)}>
+            <div className='first-half' onMouseEnter={handleModal} onBlur={() => setShowThumbnail(false)}>
                 <div className='img-div'></div>
                 <div className='list-info'>
                     <div className='list-name'>{list.name}</div>
@@ -76,7 +84,7 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
             </div>
             {addToList && <div className='tick-mark-svg'>{tickMarkSvg()}</div>}
             {/* {((list.name == hovered) && showThumbnail) && <ShowListThumbnailCard list={list} handleHovered={handleHovered} />} */}
-            {showThumbnail && <ShowListThumbnailCard list={list} handleModal={handleModal} handleListName={handleListName} />}
+            {showThumbnail && currentlyHovering == list.name && <ShowListThumbnailCard list={list} handleModal={setShowThumbnail} handleListName={handleListName} />}
         </div>
     )
 }
@@ -98,7 +106,7 @@ let ShowListThumbnailCard = ({list, handleModal, handleListName}) => {
     
     return (
         // <div className='thumbnail-card-wrapper' onMouseLeave={handleHovered} onClick={() => history.push('/i/list/members/')}>
-        <div className='thumbnail-card-wrapper' onClick={handleClick} onMouseLeave={handleModal}>
+        <div className='thumbnail-card-wrapper' onClick={handleClick} onMouseLeave={() => handleModal(false)}>
             <div className='cover-img'></div>
             <div className='card-info'>
                 <div className='list-name'>{list.name}</div>

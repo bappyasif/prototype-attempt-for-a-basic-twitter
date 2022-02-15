@@ -42,7 +42,7 @@ export let RenderArticle = ({ item, fromExplore }) => {
     return (
         <div id={item.id} className='render-article-wrapper' onClick={handleClick}>
             <div id='article-info'>
-                <div id='top-section'>
+                <div id='top-section' onMouseLeave={() => setShowTimeToolTip(false)}>
                     <div id='authors-info'>
                         <div id='authors-name'>{item.byline.split('By ')[1] || 'Inhouse Newsdesk'}</div>
                         <div id='authors-handle'>@{adjustingAuthorsNames(item) || 'Inhouse Newsdesk'}</div>

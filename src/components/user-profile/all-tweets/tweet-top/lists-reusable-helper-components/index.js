@@ -145,7 +145,7 @@ export let RenderMember = ({ listName, updateExistingListData, name, handleCount
 
     }, [addedFlag])
 
-    return <div className='member-info-wrapper' onMouseOver={handleHovered} onMouseOut={handleHovered} style={{ backgroundColor: hovered && 'lightgray' }}>
+    return <div className='member-info-wrapper' onMouseOver={handleHovered} onMouseOut={handleHovered} onBlur={() => setHovered(false)} style={{ backgroundColor: hovered && 'lightgray' }}>
         <img className='member-photo' src='https://picsum.photos/200/300' />
 
         <div className='section-wrapper' style={{ textAlign: 'left', marginLeft: '8px' }}>

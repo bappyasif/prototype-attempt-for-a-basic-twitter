@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useRef} from 'react'
-import {useHistory} from 'react-router-dom'
+import React, { useState, useEffect, useRef } from 'react'
+import { useHistory } from 'react-router-dom'
 import { likeloveIcon, replyIcon, retweetIcon } from '../../../profile-page/svg-resources'
 import './styles.css'
 import useOnClickOutside from '../../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
-import {getUserProfileData, updateDataInFirestore} from '../../../../firestore-methods'
+import { getUserProfileData, updateDataInFirestore } from '../../../../firestore-methods'
 import { Gif } from '@giphy/react-components'
 import { GiphyFetch } from '@giphy/js-fetch-api'
 import { handleMediaFileChecks } from '../../../../compose-tweet/content-in-compose-tweet'
@@ -13,21 +13,21 @@ import { sanitizeDatasetForRendering } from '../..'
 // import { RenderPolls } from '../..'
 // import { getGiphyGifObject, MakeGifObjectAvailable } from '../../../all-tweets'
 
-function AnalyticsUI({analysingTweetID, analysingTweetData, currentUser}) {
+function AnalyticsUI({ analysingTweetID, analysingTweetData, currentUser }) {
     // console.log(analysingTweetData, 'analysingTweetData!!', analysingTweetID)
     return (
         (analysingTweetID
-        &&
-        analysingTweetData)
-        ?
-        <div id='tweet-analytics-ui-container'>
-            <RenderAnalyticsHeaderSection />
-            <RenderAnalyticsDataSection analysingTweetData={analysingTweetData} currentUser={currentUser} />
-            <RenderTweetAnalyticMetrics analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} />
-            <RenderAnalyticsFooterSection />
-        </div>
-        :
-        null
+            &&
+            analysingTweetData)
+            ?
+            <div id='tweet-analytics-ui-container'>
+                <RenderAnalyticsHeaderSection />
+                <RenderAnalyticsDataSection analysingTweetData={analysingTweetData} currentUser={currentUser} />
+                <RenderTweetAnalyticMetrics analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} />
+                <RenderAnalyticsFooterSection />
+            </div>
+            :
+            null
     )
 }
 
@@ -53,8 +53,8 @@ let FooterSectionLowerDeck = ({ number }) => {
     )
 }
 
-let RenderAnalyticsDataSection = ({analysingTweetData, currentUser}) => {
-    console.log(analysingTweetData, 'analysingTweetData!!')
+let RenderAnalyticsDataSection = ({ analysingTweetData, currentUser }) => {
+    // console.log(analysingTweetData, 'analysingTweetData!!')
     return (
         <div id='analytics-data-section-container'>
             {/* <RenderAnalysingUserTweet analysingTweetData={analysingTweetData} currentUser={currentUser} /> */}
@@ -65,65 +65,99 @@ let RenderAnalyticsDataSection = ({analysingTweetData, currentUser}) => {
     )
 }
 
-let RenderTweetAnalyticMetrics = ({analysingTweetID, analysingTweetData}) => {
+let RenderTweetAnalyticMetrics = ({ analysingTweetID, analysingTweetData }) => {
     // let [currentTooltip, setCurrentTooltip] = useState(null)
+    let [randomNumberTotal, setRandomNumberTotal] = useState(0)
+    
+    let handleRandomNumberTotal = (value) => {
+        setRandomNumberTotal(prevNum => prevNum + value)
+        // setRandomNumberTotal(randomNumberTotal + value)
+        console.log(value)
+    }
+
+    console.log('total', randomNumberTotal)
+
     let tooltipSvg = informationTooltipSvg()
-    let renderMetrics = analyticMetrics.map(item => <RenderTweetAnalyticMetric key={item.name} item={item} tooltipSvg={tooltipSvg} analysingTweetData={analysingTweetData} />)
+    
+    let renderMetrics = analyticMetrics.map((item, idx) => idx ? <RenderTweetAnalyticMetric key={item.name} item={item} tooltipSvg={tooltipSvg} analysingTweetData={analysingTweetData} handleRandomNumberTotal={handleRandomNumberTotal} /> : null)
     // let renderMetrics = analyticMetrics.map(item => <RenderTweetAnalyticMetric key={item.name} item={item} tooltipSvg={tooltipSvg} currentTooltip={currentTooltip} setCurrentTooltip={setCurrentTooltip} />)
-    analysingTweetID && console.log(analysingTweetID, analysingTweetData)
+    
+    // analysingTweetID && console.log(analysingTweetID, analysingTweetData)
+    let leftItem = { name: 'Impressions', number: '00' }
+    
     return (
         <div id='analytic-metrics-ui-wrapper'>
-            {renderMetrics}
+            <RenderTweetAnalyticMetric item={leftItem} tooltipSvg={tooltipSvg} analysingTweetData={analysingTweetData} randomNumberTotal={randomNumberTotal} handleRandomNumberTotal={handleRandomNumberTotal} />
+            <div id='rests-metrics'>
+                {renderMetrics}
+            </div>
         </div>
     )
 }
 
-let RenderTweetAnalyticMetric = ({ item, tooltipSvg }) => {
+let RenderTweetAnalyticMetric = ({ item, tooltipSvg, handleRandomNumberTotal, randomNumberTotal }) => {
     let [currentTooltip, setCurrentTooltip] = useState(null)
 
+    let [randomNumber, setRandomNumber] = useState(0)
+
+    let generateRandomNumbersAsDummyData = () => {
+        let rndNum = Math.floor(Math.random() * 42)
+        setRandomNumber(rndNum)
+        handleRandomNumberTotal(rndNum)
+    }
+
+    // useEffect(() => {
+    //     randomNumber && handleRandomNumberTotal(randomNumber)
+    //     randomNumber && console.log(randomNumber)
+    // }, [item])
+
+    useEffect(() => generateRandomNumbersAsDummyData(), [])
+
     let handleTooltips = evt => {
-        if(item.name == evt.target.parentNode.parentNode.parentNode.id) {
+        if (item.name == evt.target.parentNode.parentNode.parentNode.id) {
             setCurrentTooltip(item.name)
         }
     }
 
     let closeTooltip = () => setCurrentTooltip(null)
-    
+
     return (
         <div className='metric-wrapper' id={item.name}>
-            {item.name == currentTooltip && <RenderMetricTooltipModal tooltip={currentTooltip} closeTooltip={closeTooltip} />}
-            
+            {item.name == currentTooltip && <RenderMetricTooltipModal tooltip={currentTooltip} closeTooltip={closeTooltip} randomNumber={randomNumber} randomNumberTotal={randomNumberTotal} />}
+
             <div className='upper-deck'>
                 <div className='metric-name'>{item.name}</div>
                 <div className='tooltip-svg' onClick={handleTooltips}>{tooltipSvg}</div>
             </div>
-            
-            <div className='meteric-number'>{item.number}</div>
+
+            <div className='meteric-number'>{ randomNumberTotal || randomNumber || item.number}</div>
         </div>
     )
 }
 
-let RenderMetricTooltipModal = ({tooltip, closeTooltip}) => {
+let RenderMetricTooltipModal = ({ tooltip, closeTooltip, randomNumber, randomNumberTotal }) => {
     let ref = useRef(null);
 
     let handleModal = () => {
         closeTooltip()
     }
-    
+
+    // console.log(randomNumberTotal, 'total!!', random)
+
     useOnClickOutside(ref, handleModal)
 
-    let subText = tooltip == 'Impressions' ? 'Times this tweets was seen on Twitter' : tooltip == 'New followers' ? 'Follows gained directly from this Tweet' : 'Number of profile views from this Tweet'
+    let subText = tooltip == 'Impressions' ? 'Times this tweets was seen on Twitter' : tooltip == 'New followers' ? 'Follows gained directly from this Tweet' : tooltip == 'Profile visits' ? 'Number of profile views from this Tweet' : tooltip == 'Engagements' ? 'Total number of times a user has interacted with a Tweet' : 'Times people viewed the details about this Tweet'
 
     return (
         <div className='tooltip-ui-wrapper' ref={ref}>
             <div className='tooltip-name'>{tooltip}</div>
-            <div className='tooltip-subtext'>{subText}</div>
+            <div className='tooltip-subtext'><span style={{fontSize: 'larger', fontWeight: 'bolder'}}>{randomNumberTotal || randomNumber}</span> {subText}</div>
             <div className='tooltip-modal-btn' onClick={() => closeTooltip()}>OK</div>
         </div>
     )
 }
 
-let RenderAnalysingTweetLikeRetweetReplyNumbersUI = ({analysingTweetData}) => {
+let RenderAnalysingTweetLikeRetweetReplyNumbersUI = ({ analysingTweetData }) => {
     let renderMarkers = tweetMarkers.map(item => <RenderAnalysingTweetMarker key={item.name} item={item} analysingTweetData={analysingTweetData} />)
     return (
         <div id='like-retweet-reply-numbers-ui-wrapper'>
@@ -146,9 +180,9 @@ let RenderAnalysingTweetMarker = ({ item, analysingTweetData }) => {
     )
 }
 
-export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, handlePollVotesCount, forModal, quotedFromRetweetModal, handleThreadedTweetData}) => {
+export let RenderUserTweet = ({ speceficTweetData, currentUser, pollVotesCount, handlePollVotesCount, forModal, quotedFromRetweetModal, handleThreadedTweetData }) => {
     let [userProfileData, setUserProfileData] = useState(null)
-    
+
     let [neededInfo, setNeededInfo] = useState([])
 
     let history = useHistory(null)
@@ -156,15 +190,15 @@ export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, h
     let handleShowThisThread = () => {
         console.log(speceficTweetData, 'from showthisthread')
         handleThreadedTweetData(sanitizeDatasetForRendering(speceficTweetData))
-        updateDataInFirestore(currentUser, speceficTweetData.id, {hasRetweetedThread: true})
+        updateDataInFirestore(currentUser, speceficTweetData.id, { hasRetweetedThread: true })
         setTimeout(() => history.push('/status/tweetID'), 800)
     }
 
     let handleDataLoading = (dataset) => setUserProfileData(dataset)
 
     // let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText, id} = speceficTweetData && {...speceficTweetData[0]}
-    let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText, id} = Object.keys(speceficTweetData) && {...speceficTweetData[0]}
-    
+    let { created, extraPoll, extraTweet, medias, tweetPoll, tweetText, id } = Object.keys(speceficTweetData) && { ...speceficTweetData[0] }
+
     useEffect(() => currentUser && getUserProfileData(currentUser, handleDataLoading), [])
 
     let filterProfileData = () => {
@@ -173,8 +207,8 @@ export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, h
     }
 
     useEffect(() => userProfileData && filterProfileData(), [userProfileData])
-    
-    let numberOfPollOptions = tweetPoll && Object.values(tweetPoll[0]).filter(val=>val).length
+
+    let numberOfPollOptions = tweetPoll && Object.values(tweetPoll[0]).filter(val => val).length
     // console.log(id, '<><>', pollVotesCount, tweetPoll.length, tweetPoll[0], numberOfPollOptions)
     // neededInfo && created && userProfileData && console.log(tweetText, created, userProfileData, neededInfo)
 
@@ -194,8 +228,8 @@ export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, h
             <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={(created && created.seconds) || (speceficTweetData.created.seconds)} quotedFromRetweetModal={quotedFromRetweetModal} />
             {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
             <RenderUserTweetText tweetText={tweetText || speceficTweetData.tweetText} quotedFromRetweetModal={quotedFromRetweetModal} />
-            {!quotedFromRetweetModal && <div id='addtional-tweet-line' style={{height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px'}} ></div>}
-            {!quotedFromRetweetModal && <div id='poll-tweet-line-extension' style={{height: numberOfPollOptions == 3 ? '153px' : numberOfPollOptions == 4 && '194px'}}></div>}
+            {!quotedFromRetweetModal && <div id='addtional-tweet-line' style={{ display: 'none', height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px' }} ></div>}
+            {!quotedFromRetweetModal && <div id='poll-tweet-line-extension' style={{ height: numberOfPollOptions == 3 ? '153px' : numberOfPollOptions == 4 && '194px' }}></div>}
             {((medias && medias.gif && medias.gif) || (medias && medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />}
             {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} forModal={forModal} />}
             {quotedFromRetweetModal && <div id='show-this-thread-text' onClick={handleShowThisThread}>Show this thread</div>}
@@ -203,9 +237,9 @@ export let RenderUserTweet = ({speceficTweetData, currentUser, pollVotesCount, h
     )
 }
 
-let RenderUserTweetMedias = ({medias}) => {
+let RenderUserTweetMedias = ({ medias }) => {
     // let [gifObj, setGifObj] = useState(null)
-    let {gif, picture} = {...medias}
+    let { gif, picture } = { ...medias }
     // console.log(gif, picture, 'media found!!')
     // let getGifFromID = () => {
     //     // getGiphyGifObject(gif)
@@ -231,7 +265,7 @@ let RenderTweetUserInfo = ({ name, profileHandle, tweetPostedDate, quotedFromRet
 
     let processCreatedDateFormat = () => {
         // let dateString =  new Date(created.seconds).toUTCString()
-        let dateString =  new Date(tweetPostedDate).toUTCString()
+        let dateString = new Date(tweetPostedDate).toUTCString()
         let neededPieces = []
         let dateTokens = dateString.split(' ')
         neededPieces.push(dateTokens[1], dateTokens[2])
@@ -240,10 +274,10 @@ let RenderTweetUserInfo = ({ name, profileHandle, tweetPostedDate, quotedFromRet
     }
     return (
         <div id='user-info-wrapper'>
-            <img id={quotedFromRetweetModal && 'profile-pic-for-retweet-quote-tweet'} style={{width: '20px', height: '20px', marginRight: '9px'}} src='https://picsum.photos/200/300' />
-            <div id='profile-name' style={{marginRight: '8px'}}>{name || 'profile name'}</div>
-            <div id='profile-handle' style={{marginRight: '8px'}}>{profileHandle || 'profile handle'}</div>
-            <div id='text-separator'style={{marginRight: '8px'}}> - </div>
+            <img id={quotedFromRetweetModal && 'profile-pic-for-retweet-quote-tweet'} style={{ width: '20px', height: '20px', marginRight: '9px' }} src='https://picsum.photos/200/300' />
+            <div id='profile-name' style={{ marginRight: '8px' }}>{name || 'profile name'}</div>
+            <div id='profile-handle' style={{ marginRight: '8px' }}>{profileHandle || 'profile handle'}</div>
+            <div id='text-separator' style={{ marginRight: '8px' }}> - </div>
             {!quotedFromRetweetModal && <div id='published-date'>{processCreatedDateFormat() || 'Month day'}</div>}
             {quotedFromRetweetModal && <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(tweetPostedDate)} />}
         </div>
@@ -269,7 +303,7 @@ let informationTooltipSvg = () => <svg width={24} height={24}><g><path d="M12 18
 
 let tweetMarkers = [{ name: 'like', number: '00', icon: likeloveIcon() }, { name: 'retweet', number: '00', icon: retweetIcon() }, { name: 'reply', number: '00', icon: replyIcon() }]
 
-let analyticMetrics = [{ name: 'Impressions', number: '00' }, { name: 'New followers', number: '00' }, { name: 'Profile visits', number: '00' }]
+let analyticMetrics = [{ name: 'Impressions', number: '00' }, { name: 'New followers', number: '00' }, { name: 'Profile visits', number: '00' }, { name: 'Engagements', number: '00' }, { name: 'Details expands', number: '00' }]
 
 // let MakeGifObjectAvailable = ({ gifId }) => {
 //     let [gif, setGif] = useState(null)

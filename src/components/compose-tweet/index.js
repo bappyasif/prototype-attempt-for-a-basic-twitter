@@ -11,7 +11,7 @@ function ComposeTweet({ quotedFromRetweetModal, selectedTaggedPlace, handlePollV
     // useEffect(() => setChangeLayout(true), [])
 
     useEffect(() => {
-        handleTweetModalToggle();
+        handleTweetModalToggle(true);
         setChangeLayout(true)
         setOpacity(true)
     }, [])
