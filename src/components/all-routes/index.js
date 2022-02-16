@@ -425,7 +425,9 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     currentUser
                         ?
                         <Route path={`/${currentUser}/likes`}>
-
+                            <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                            <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />
+                            <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)

@@ -10,6 +10,7 @@ function CreateLists({handleCurrentList, handleMembersList}) {
     let [listDescription, setListDescription] = useState('')
     let [isListPrivate, setIsListPrivate] = useState(false);
     let [modalActionFlag, setModalActionFlag] = useState(false);
+    let [coverPhoto, setCoverPhoto] = useState(null)
     let history = useHistory()
 
     useEffect(() => {
@@ -29,17 +30,19 @@ function CreateLists({handleCurrentList, handleMembersList}) {
         // clearing out previously held members list
         handleMembersList()
         // making ready initial list with data
-        handleCurrentList({name: listName, description: listDescription, isPrivate: isListPrivate, pictureUrl: 'https://picsum.photos/200/300'})
+        handleCurrentList({name: listName, description: listDescription, isPrivate: isListPrivate, pictureUrl: 'https://picsum.photos/200/300', coverPhoto: coverPhoto})
         // and then moving onto suggested users route so that list can add dummy members into it
         history.push('/i/lists/members/suggested')
     }
+
+    // console.log(coverPhoto, 'coverPhoto')
 
     // console.log(listName, listDescription, isListPrivate)
     return (
         <div id='create-lists-container'>
             {/* <ListModalHeader icon={leftArrowSvg()} action={'Next'} modalTitle={'Create a new List'} iconAction={handleSvgIconAction} /> */}
             <ListModalHeader icon={leftArrowSvg()} action={'Next'} modalTitle={'Create a new List'} history={history} modalAction={handleModalAction} modalActionFlag={modalActionFlag} />
-            <ListCoverPhoto />
+            <ListCoverPhoto setCoverPic={setCoverPhoto} />
             <ListInformations handleListName={handleListName} handleListDescription={handleListDescription} handleIsListPrivate={handleIsListPrivate} />
         </div>
     )

@@ -114,8 +114,9 @@ input[type='submit'] {
 }
 
 #announcement-div {
-    width: -webkit-fill-available;
+    /* width: -webkit-fill-available; */
     /* margin-left: 2.9px; */
+    width: 292px;
     margin-bottom: .78em;
     background-color: rgb(254, 222, 227);
     padding-top: 12px;

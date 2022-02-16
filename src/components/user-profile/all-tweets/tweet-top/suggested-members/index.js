@@ -32,7 +32,7 @@ function SuggestedMembersForList({ listName, currentUser, currentList, handleCur
     }, [currentMembers])
 
     // console.log(currentList, '....<<>>....', currentMembers)
-    console.log(matchedMembers, 'matchedMembers!!')
+    // console.log(matchedMembers, 'matchedMembers!!')
     
     let history = useHistory()
     let handleDone = () => {
@@ -60,7 +60,7 @@ export let adjustMembersNumber = (currentList, currentMembers) => {
 
     listTOS.members = currentMembers.length;
     listTOS.membersList = currentMembers;
-    console.log(currentList, currentMembers, 'list members!!')
+    // console.log(currentList, currentMembers, 'list members!!')
 }
 
 // dummy list of members to mimic a members list for list to select from

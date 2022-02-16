@@ -32,7 +32,14 @@ function AllTweetsPage({ handleQuotedFromRetweetModal, currentUserProfileInfo, h
 
     useEffect(() => totalTweets && (currentTweetsIndex == totalTweets) && handleNoMoreTweets(), [currentTweetsIndex])
 
-    useEffect(() => (totalTweets) && totalTweets <= 11 && handleNoMoreTweets(), [totalTweets])
+    // useEffect(() => (totalTweets) && totalTweets <= 11 && handleNoMoreTweets(), [totalTweets])
+
+    useEffect(() => {
+        (totalTweets) && totalTweets <= 11 && handleNoMoreTweets()
+        // !totalTweets && handleNoMoreTweets()
+    }, [totalTweets])
+
+    // useEffect(() => handleNoMoreTweets(), [])
 
     // console.log(currentTweetsIndex, totalTweets, showNoMoreTweets, tweetData)
 
@@ -123,7 +130,7 @@ function AllTweetsPage({ handleQuotedFromRetweetModal, currentUserProfileInfo, h
     return (
         <div id='all-tweets-container'>
             {onlyMedias ? renderMediaTweetsOnly : renderingData.length ? renderingData : ''}
-            <div id='show-more-tweets' style={{ display: showNoMoreTweets ? 'none' : 'block' }} onClick={handleShowMoreTweets}>Show more</div>
+            <div id='show-more-tweets' style={{ display: (showNoMoreTweets || !totalTweets) ? 'none' : 'block' }} onClick={handleShowMoreTweets}>Show more</div>
             {/* <div id='show-more-tweets' style={{ display: noMoreTweets && 'none' }} onClick={handleShowMoreTweets}>Show more</div> */}
             <TopicsPickerInTimeline />
         </div>

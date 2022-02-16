@@ -100,12 +100,12 @@ export let RenderMembersList = ({ updateExistingListData, listName, currentList,
     if(isMember) {
         // let selectedList = currentList && currentList.filter(item => item.name == listName && item.membersList)
         let selectedList = currentList && currentList.filter(item => item.name == listName).map(item => item.membersList)[0]
-        console.log(selectedList, 'selectedList!!')
+        // console.log(selectedList, 'selectedList!!')
         renderListOfMembers = selectedList && selectedList.map(name => <RenderMember key={name} name={name} handleCount={handleCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} isMember={isMember} updateExistingListData={updateExistingListData} listName={listName} />)
 
     } else {
         // renderListOfMembers = membersList.map(name => <RenderMember key={name} name={name} handleCount={handleCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} isMember={isMember} />)
-        console.log(membersList, 'list!!')
+        // console.log(membersList, 'list!!')
         // renderListOfMembers = membersList.map(name => <RenderMember key={name} name={name} handleCount={handleCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} />)
         renderListOfMembers = membersList.map(name => <RenderMember key={name} name={name} handleCount={handleCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} />)
     }
@@ -148,7 +148,7 @@ export let RenderMember = ({ listName, updateExistingListData, name, handleCount
     return <div className='member-info-wrapper' onMouseOver={handleHovered} onMouseOut={handleHovered} onBlur={() => setHovered(false)} style={{ backgroundColor: hovered && 'lightgray' }}>
         <img className='member-photo' src='https://picsum.photos/200/300' />
 
-        <div className='section-wrapper' style={{ textAlign: 'left', marginLeft: '8px' }}>
+        <div className='section-wrapper' style={{ textAlign: 'left', marginLeft: '20px' }}>
             
             <div className='member-name'>{name}</div>
 

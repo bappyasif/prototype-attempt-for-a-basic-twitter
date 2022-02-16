@@ -19,10 +19,12 @@ function CategorySelections({ handleData, sanitizedData, updateComlpetionStatus,
 
     // categories && console.log(categories)
     let updateInterestsInFirestore = () => {
-        updateUserInterestsSelection(sanitizedData, currentUser, updateComlpetionStatus)
+        sanitizedData.length && updateUserInterestsSelection(sanitizedData, currentUser, updateComlpetionStatus)
+        // updating completion status when user has not any list for to add in their interest list
+        !sanitizedData.length && updateComlpetionStatus()
     }
 
-    console.log(sanitizedData, 'from signup')
+    // console.log(sanitizedData, 'from signup')
 
     let showText = () => {
         let text;

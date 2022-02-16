@@ -6,6 +6,7 @@ import { testTwilio } from './twilio-configs-for-signup';
 import { Link, Redirect } from 'react-router-dom';
 import CategorySelections from './category-selections';
 import { authenticateUserWithFirebase, phoneVerification, userSignupWithSessionAuthPersistence, verifyUserSmsCode } from '../firebase-auths';
+import { maskPasswordSvgIcon, revealPasswordSvgIcon } from '../login-page';
 
 function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData}) {
     let [isPhoneNumberUsed, setIsPhoneNumberUsed] = useState(false);
@@ -23,10 +24,14 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
     let [signupDone, setSignupDone] = useState('')
     let [signupError, setSignupError] = useState(true);
     let [isInterestsSelectionDone, setIsInterestSelectionDone] = useState(false)
+    let [mask, setMask] = useState(true)
+    let [isHoveredMasking, setIsHoveredMasking] = useState(false)
     let nameRef = React.createRef();
     let epRef = React.createRef();
     let birthDateRef = React.createRef();
     let birthRef = useRef();
+
+    let handleMasking = () => setMask(!mask)
 
     // testTwilio();
 
@@ -214,8 +219,11 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
                 <div id='signup-completed-container'>
                     <label htmlFor='account-password'>
                         Enter password for account:
-                        <input id='account-password' placeholder='Enter password for account' value={userPassword} onChange={(evt) => setUserPassword(evt.target.value)} />
+                        <input className={mask ? 'mask-password' : null} id='account-password' placeholder='Enter password for account' value={userPassword} onChange={(evt) => setUserPassword(evt.target.value)} />
                     </label>
+                    <div className={'mask-or-unmask'} onClick={handleMasking} onMouseEnter={() => setIsHoveredMasking(true)} onMouseLeave={() => setIsHoveredMasking(false)} >{mask ? maskPasswordSvgIcon() : revealPasswordSvgIcon()}</div>
+                    {/* {mask ? <div id='mask-password' className='mask-or-unmask'></div> : <div id='unmask-password'></div>} */}
+                    {isHoveredMasking && <div id='masking-tooltip' onMouseLeave={() => setIsHoveredMasking(false)}>{mask ? 'Reveal password' : 'Mask password'}</div>}
                     <button onClick={revampedAuthetications}>Create your account</button>
                     {/* <p>your profile page will load shortly, wait a moment please....</p>
                     <div id='loader-spinner'></div> */}
@@ -240,7 +248,8 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
                     {/* {signupDone == 'done' && <div id='loader-spinner'></div>} */}
                     
                     {/* trying to make sure spinner showing up when phone number is used and user didnt have to use password for account rather just OTP verification */}
-                    {(signupDone == 'done' || currentUser) && <div id='loader-spinner'></div>}
+                    {signupDone == '' && <div id='loader-spinner'></div>}
+                    {/* {(signupDone == 'done' || currentUser) && <div id='loader-spinner'></div>} */}
                     {/* when user is using mobile number to signup, they directly goes to login phase, no password is required */}
                     {!signupDone && currentUser && <CategorySelections handleData={handleData} sanitizedData={sanitizedData} updateComlpetionStatus={handleInterestsSelectionUpdate} currentUser={currentUser} />}
                     
@@ -260,13 +269,15 @@ function SignupPage({currentUser, handleCurrentUser, handleData, sanitizedData})
 
                     {
                         signupDone == 'done'
-                        &&
+                        ?
                         // <Link id='visit-profile' to='/username'>Click to continue to your profile</Link>
                         // <Link id='visit-profile' to='/username' onClick={handleSignup}>Click to continue to your profile</Link>
                         
                         // currentUser && <Redirect to='/username/profile'/>
                         // choose more added interests for profile
                         currentUser && <CategorySelections handleData={handleData} sanitizedData={sanitizedData} updateComlpetionStatus={handleInterestsSelectionUpdate} currentUser={currentUser} />
+                        :
+                        null
                     }
 
                     {/* when email address is used for signup */}

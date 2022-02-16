@@ -44,7 +44,7 @@ export let ShowAvailableListItems = ({ currentList, handleSaveFlag, toggleSavedF
 
     // }, [currentList])
     
-    console.log(currentList, 'currentlist', initialNumbers)
+    // console.log(currentList, 'currentlist', initialNumbers)
     
     let renderLists = currentList.map((list, _, arr) => <RenderList key={list.name} list={list} arr={arr} handleSaveFlag={handleSaveFlag} toggleSavedFlag={toggleSavedFlag} initialNumbers={initialNumbers} updateExistingListData={updateExistingListData} handleListName={handleListName} />)
     

@@ -19,15 +19,19 @@ function ListOfAddedMembers({ listName, handleCurrentList, listMembersCount, han
     let handleMatchedMembers = list => setMatchedMembers(list)
     
     let handleDone = () => {
-        console.log('handled done')
+        // console.log('handled done')
         adjustMembersNumber(currentList, currentMembers)
         history.push(`/${currentUser}`)
     }
 
-    useEffect(() => memebrName && handleSearchMemberName(memebrName, currentMembers, handleMatchedMembers), [memebrName])
+    // useEffect(() => memebrName && handleSearchMemberName(memebrName, currentMembers, handleMatchedMembers), [memebrName])
+    useEffect(() => {
+        memebrName && handleSearchMemberName(memebrName, currentMembers, handleMatchedMembers)
+        !memebrName && setMatchedMembers(null)
+    }, [memebrName])
     
     // console.log(membersList, 'members!!')
-    console.log(listName, currentList, currentMembers, 'fromAddedMembers!!')
+    // console.log(listName, currentList, currentMembers, 'fromAddedMembers!!')
     // (matchedMembers && matchedMembers.length) ? matchedMembers : currentMembers
     
     return (
@@ -36,7 +40,8 @@ function ListOfAddedMembers({ listName, handleCurrentList, listMembersCount, han
             <SearchComponent searchableMembers={currentMembers} handleMemberName={handleMemberName} />
             <ModalOptions membersCount={currentMembers.length} underlined={'Members'} history={history} routeUrl={'/i/lists/members/suggested'} />
             {/* <RenderMembersList listName={listName} isMember={listName ? true : false} handleMembersList={handleMembersList} handleCount={handleMembersCount} membersList={currentMembers} checkMemberExists={checkMemberExists} /> */}
-            <RenderMembersList listName={listName} isMember={listName ? true : false} handleMembersRemoval={handleMembersRemoval} handleCount={handleMembersCount} membersList={currentMembers} checkMemberExists={checkMemberExists} />
+            {/* <RenderMembersList listName={listName} isMember={listName ? true : false} handleMembersRemoval={handleMembersRemoval} handleCount={handleMembersCount} membersList={currentMembers} checkMemberExists={checkMemberExists} /> */}
+            <RenderMembersList listName={listName} isMember={listName ? true : false} handleMembersRemoval={handleMembersRemoval} handleCount={handleMembersCount} membersList={ matchedMembers || currentMembers } checkMemberExists={checkMemberExists} />
         </div>
     )
 }

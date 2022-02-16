@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { lockIconSvg, tickMarkSvg } from "..";
 import useOnHoverOutside from "../useOnHoverOutside";
+import {handleMediaFileFormats} from '../../create-lists/index'
 
 export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag, initialNumbers, updateExistingListData, handleListName }) => {
     let [addToList, setAddToList] = useState(false)
@@ -96,7 +97,7 @@ let ShowListThumbnailCard = ({list, handleModal, handleListName}) => {
 
     // useOnHoverOutside(ref, handleModal)
 
-    console.log(list, '?!')
+    // console.log(list, '?!')
 
     let handleClick = () => {
         // !!!!DO THIS!!!! now we need to store this selected list name into a variable so that it can be later used by 'showexistingmemebers' route for rendering memebers list from its dataset
@@ -107,12 +108,13 @@ let ShowListThumbnailCard = ({list, handleModal, handleListName}) => {
     return (
         // <div className='thumbnail-card-wrapper' onMouseLeave={handleHovered} onClick={() => history.push('/i/list/members/')}>
         <div className='thumbnail-card-wrapper' onClick={handleClick} onMouseLeave={() => handleModal(false)}>
-            <div className='cover-img'></div>
+            {list.coverPhoto ? <img className='cover-img' src={handleMediaFileFormats(list.coverPhoto)} /> : <div className='cover-img'></div>}
             <div className='card-info'>
                 <div className='list-name'>{list.name}</div>
                 <div className='list-description'>{list.description}</div>
                 <div className='user-info'>
-                    <img className='profile-pic' src={list.pictureUrl}/>
+                    {/* <img className='profile-pic' src={list.pictureUrl}/> */}
+                    <img className='profile-pic' src="https://random.imagecdn.app/500/150" />
                     <div className='user-name'>user name</div>
                     <div className='user-handle'>@user_handle</div>
                 </div>

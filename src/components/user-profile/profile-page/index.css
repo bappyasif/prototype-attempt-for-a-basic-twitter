@@ -13,7 +13,7 @@
   position: absolute;
   top: 436px;
   left: 26%;
-  width: 650px;
+  width: 560px;
 }
 
 #components-container {
@@ -605,18 +605,27 @@
 
 #components-container #list-existing-members-container {
   background-color: whitesmoke;
+  position: absolute;
+  width: 650px;
+  left: 31.5%;
+  top: 38px;
 }
 
 #components-container #list-existing-members-container #modal-header-wrapper {
   display: flex;
   align-items: center;
-  margin-left: 29px;
+  padding: 11px 0px 11px 29px;
+  border-bottom: 2px solid silver;
 }
 
 #components-container #list-existing-members-container #modal-header-wrapper #svg-icon {
   /* display: flex;
   align-items: center; */
   margin-right: 29px;
+}
+
+#components-container #list-existing-members-container #modal-header-wrapper #modal-title {
+  font-size: x-large;
 }
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #list-header-wrapper #first-half #svg-icon:hover,
@@ -659,7 +668,7 @@
 }
 
 #components-container #list-existing-members-container #list-of-members-wrapper {
-  width: 470px;
+  /* width: 470px; */
 }
 
 .rendering-tweet-data-container .right-side .tweet-top #add-to-list-container #create-new-list-wrapper,

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { handleMediaFileFormats } from "..";
 
 export let TextareaComponentWithCount = ({ maxLength, rows, name, feedDataToParent }) => {
     let [textAreaLength, setTextAreaLength] = useState()
@@ -63,7 +64,7 @@ export let CheckboxComponent = ({feedDataToParent}) => {
 }
 
 
-export let ListCoverPhoto = () => {
+export let ListCoverPhoto = ( {setCoverPic} ) => {
     let [photo, setPhoto] = useState();
 
     let photoRef = useRef();
@@ -77,6 +78,8 @@ export let ListCoverPhoto = () => {
         let photoSelected = evt.target.files[0];
         setPhoto(photoSelected)
     }
+
+    useEffect(() => photo && setCoverPic(photo), [photo])
 
     return (
         <div id='list-cover-photo-wrapper'>

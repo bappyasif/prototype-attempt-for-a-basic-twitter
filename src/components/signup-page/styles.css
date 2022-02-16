@@ -15,6 +15,11 @@
     padding: 6px 261px 4px 20px;
 }
 
+#signup-page-container #top-div {
+    border-bottom: solid 1px silver;
+    margin-bottom: 20px;
+}
+
 #signup-page-container #top-div #remove-modal, 
 #signup-page-container #top-div #twitter-logo {
     display: flex;
@@ -248,21 +253,49 @@
     align-items: center;
     justify-content: space-evenly;
     margin-bottom: 20px;
+    width: -webkit-fill-available;
+}
+
+#signup-completed-container label {
+    font-size: x-large;
+    position: relative;
+}
+
+#signup-completed-container .mask-or-unmask,
+#signup-completed-container #masking-tooltip {
+    position: absolute;
+    right: 45px;
+    top: 114px;
+    display: flex;
+}
+
+#signup-completed-container #masking-tooltip {
+    top: 141px;
+    right: 31px;
+    line-height: 2em;
+    border: solid silver 2px;
+    border-radius: 20px;
+    padding: 2px 20px 2px 20px;
+}
+
+#signup-completed-container .mask-password {
+    -webkit-text-security: disc;
 }
 
 #signup-completed-container #account-password {
-    width: 60%;
-    font-size: xx-large;
+    width: -webkit-fill-available;
+    font-size: x-large;
     background-color: transparent;
     border: solid;
     margin-top: 6px;
+    line-height: 2em;
 }
 
 #signup-completed-container button {
     font-size: xx-large;
-    margin-top: 8px;
+    margin-top: 31px;
     border: none;
-    background-color: aqua;
+    background-color: rgba(29, 155, 240, 1);
     border-radius: 8px;
     padding: 13px;
     color: floralwhite;
@@ -295,6 +328,15 @@
       border-radius: 11px;
       font-size: larger;
       font-weight: bolder;
+  }
+
+  #visit-user-profile-container #container-for-category-selections #done-selecting {
+    line-height: 2em;
+    background-color: rgba(29, 155, 240, 1);
+    font-size: x-large;
+    text-align: center;
+    margin: 20px -24px 0px -24px;
+    cursor: pointer;
   }
 
 /* styles for category selctions after signup */
