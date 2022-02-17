@@ -1969,7 +1969,8 @@
   margin-bottom: 13px;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper,
+#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper {
   position: absolute;
   background-color: silver;
   z-index: 99;
@@ -1980,16 +1981,25 @@
   border-radius: 11px;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section,
+#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section {
   text-align: left;
 }
 
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header,
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-action-description {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-action-description,
+#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header,
+#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section #modal-action-description {
   margin-bottom: 6px;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name,
+#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name {
+  font-size: larger;
+}
+
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
+#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
   background: lightslategray;
   padding-left: 0px;
   margin-left: 0px;

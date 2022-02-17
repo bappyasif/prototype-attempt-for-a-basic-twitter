@@ -315,7 +315,7 @@
 
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #follow-btn {
   line-height: 2em;
-  background-color: aqua;
+  background-color: rgba(29, 155, 240, 1);
   padding: 0px 11px 0px 11px;
   border-radius: 13px;
   margin-left: 6px;
@@ -324,4 +324,22 @@
 #right-navigation-panel-container #suggested-people-list-container #header-text {
   font-size: x-large;
   padding-left: 4px;
+}
+
+#right-navigation-panel-container #suggested-people-list-container .render-people-wrapper {
+  position: relative;
+}
+
+#right-navigation-panel-container #suggested-people-list-container .render-people-wrapper #unfollow-modal-wrapper {
+  left: -13px !important;
+}
+
+#right-navigation-panel-container #suggested-people-list-container .render-people-wrapper #unfollow-modal-wrapper #action-btns-wrapper {
+  margin-top: 13px;
+}
+
+#right-navigation-panel-container #suggested-people-list-container .render-people-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
+  text-align: center;
+  font-size: larger;
+  border-radius: 20px;
 }

@@ -151,7 +151,7 @@ let RenderBookRelatedInfos = ({ item }) => {
     )
 }
 
-let RenderUnfollowModal = ({ handleFollow, suggestedName }) => {
+export let RenderUnfollowModal = ({ handleFollow, suggestedName }) => {
     let actionBtns = ['Unfollow', 'Cancel']
 
     let renderActionNames = () => actionBtns.map(name => <ActionButton key={name} actionName={name} handleFollow={handleFollow} />)
@@ -159,7 +159,7 @@ let RenderUnfollowModal = ({ handleFollow, suggestedName }) => {
     return (
         <div id='unfollow-modal-wrapper'>
             <div id='modal-top-section'>
-                <div id='modal-header'>Unfollow @{suggestedName}</div>
+                <div id='modal-header'>Unfollow @<spam id='suggested-name'>{suggestedName}</spam></div>
                 <div id='modal-action-description'>Their Tweets will no longer show up in your home timeline. You can still view their profile, unless their Tweets are protected.</div>
             </div>
             <div id='action-btns-wrapper'>

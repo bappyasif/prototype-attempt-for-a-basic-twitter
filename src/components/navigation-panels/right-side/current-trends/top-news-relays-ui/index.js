@@ -37,7 +37,7 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
         return (
             showDouble
                 ?
-                newsData && newsData.map((item, idx) => (idx == 0) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} />)
+                newsData && newsData.map((item, idx) => (idx == 1) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} />)
                 :
                 newsData && newsData.map((item, idx) => (idx < 2) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} />)
         )
