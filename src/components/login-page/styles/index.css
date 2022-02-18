@@ -31,6 +31,7 @@ input {
     border: none;
     /* text-align: center; */
     /* font-size: x-large; */
+    background-color: transparent;
 }
 
 #login-container #login-info .user-login {

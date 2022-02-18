@@ -16,7 +16,7 @@ function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, remo
     let tweetComposeMediaView = () => <div id='image-view'>
         <span id='remove-image' onClick={selectedFile ? removeImageHandler : removeGifHandler}>{deleteIcon('silver')}</span>
 
-        {selectedFile ? <img width='461px' src={handleMediaFileChecks(selectedFile)} /> : <Gif width={gifWidth ? gifWidth : 461} height={290} gif={gifFile} />}
+        {selectedFile ? <img width='461px' src={handleMediaFileChecks(selectedFile)} /> : <Gif width={gifWidth ? gifWidth : 580} height={290} gif={gifFile} />}
         
         <div id='picture-info'>
             <Link id='tag-div' to='/tweet/compose/media'><span className='picture-svgs'>{selectedFile ? tagIcon() : giphyIcon()}</span><span id='tag-people'>{selectedFile ? 'Tag people' : <span id='gif-via'>via <span id='giphy-text' style={{ color: 'black', fontSize: '1.1em', fontWeight: '800' }}>GIPHY</span></span>}</span></Link>
@@ -25,16 +25,20 @@ function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, remo
     </div>
     
     return (
+        // style={{ marginTop: !selectedFile || !gifFile ? '-20px' : "-44px" }}
+
+        // style={{ marginTop: !selectedFile ? '-20px' : "-44px" }}
+
         (!isPollIconClicked && selectedFile) || (!isPollIconClicked && gifFile)
             ?
-            <div id='tweet-compose-container' style={{ marginTop: !selectedFile || !gifFile ? '-20px' : "-44px" }}>
+            <div id='tweet-compose-container' style={{ marginTop: (!selectedFile || !gifFile) ? '0px' : "-44px" }}>
                 {(selectedFile || gifFile)
                     &&
                     tweetComposeMediaView()
                 }
             </div>
             :
-            <div id='tweet-compose-container' style={{ marginTop: !selectedFile ? '-20px' : "-44px" }}>
+            <div id='tweet-compose-container' style={{ marginTop: (!selectedFile || !gifFile) ? '0px' : "-44px" }}>
                 <TweetPoll
                     isPollIconClicked={isPollIconClicked}
                     handleToggle={handlePollViewToggle}

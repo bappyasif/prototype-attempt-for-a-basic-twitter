@@ -1,5 +1,6 @@
 #compose-tweet-container {
-  position: absolute;
+  /* position: absolute; */
   left: 31%;
   top: 40px;
+  width: 690px;
 }

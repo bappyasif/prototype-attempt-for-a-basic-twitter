@@ -10,7 +10,7 @@
   /* position: absolute;
   left: 324px;
   top: 40px; */
-  width: 560px;
+  /* width: 560px; */
   /* min-height: 258px; */
   border-radius: 11px;
   /* background-color: whitesmoke; */
@@ -26,7 +26,8 @@
   display: flex;
   justify-content: left;
   /* margin: 1.1em; */
-  transform: translate(8px, 4px);
+  /* transform: translate(8px, 4px); */
+  margin-left: 20px;
 }
 
 #middle-content #header-section,
@@ -34,7 +35,7 @@
   display: flex;
   /* justify-content: space-around; */
   justify-content: space-evenly;
-  align-items: center;
+  /* align-items: center; */
 }
 
 #middle-content {
@@ -110,15 +111,16 @@
   text-align: left;
   margin-left: 31px;
   margin-bottom: 20px;
+  margin-right: 20px;
 }
 
 #middle-content #analysing-user-tweet-wrapper .quoted-picture {
   height: 279px;
-  width: 464px;
+  width: 533px;
   display: flex;
   border-radius: 20px;
   justify-content: center;
-  margin-left: 47px;
+  margin-left: 24px;
   /* margin: auto; */
 }
 
@@ -188,11 +190,12 @@
 }
 
 #profile-pic {
-  width: 42px;
-  height: 42px;
-  margin: 1.1em;
+  width: 53px;
+  height: 53px;
+  /* margin: 1.1em; */
+  margin: 11px 4px 1px 20px;
   border-radius: 50%;
-  transform: translate(8px, -29px);
+  /* transform: translate(8px, -29px); */
 }
 
 #tweet-input {
@@ -398,7 +401,7 @@
 }
 
 .extended-modal-view {
-  height: 400px;
+  /* height: 400px; */
 }
 
 .extra-tweet-bottom-view {
@@ -820,8 +823,8 @@
 
 /* tweet scheduler */
 #tweet-scheduler-container {
-  width: 560px;
-  position: absolute;
+  width: 690px;
+  /* position: absolute; */
   /* top: 0px;
   left: 0px; */
   top: 40px;
@@ -849,6 +852,10 @@
   margin-left: -8px;
 }
 
+#tweet-scheduler-container #top-section .left-side .header-text {
+  font-size: larger;
+}
+
 #tweet-scheduler-container #top-section .right-side {
   margin: 8px;
 }
@@ -874,6 +881,7 @@
   background-color: black;
   color: whitesmoke;
   font-weight: bolder;
+  line-height: 2em;
 }
 
 #mid-section {

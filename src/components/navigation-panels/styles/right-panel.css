@@ -1,12 +1,22 @@
 #right-navigation-panel-container {
   display: flex;
   flex-direction: column;
-  max-width: 350px;
+  max-width: 299px;
   /* margin-left: 53px; */
   opacity: 0.2;
-  position: absolute;
+  /* position: absolute; */
   right: 72px;
   top: 0px;
+  /* padding-right: 51px; */
+}
+
+#right-navigation-panel-container #native-panels {
+  position: relative;
+}
+
+#right-navigation-panel-container #programmable-panels {
+  position: absolute;
+  top: 305px;
 }
 
 #search-twitter-container {
@@ -27,6 +37,7 @@
   width: -webkit-fill-available;
   border: none;
   margin-left: 11px;
+  background-color: transparent;
 }
 
 #search-twitter-container #svg-icon {
@@ -166,6 +177,11 @@
   border: solid 1px silver;
   /* padding: 0px 4px 0px 4px; */
   border-radius: 11px;
+  /* max-width: 299px; */
+}
+
+#right-navigation-panel-container #current-trends-container {
+  max-width: 299px;
 }
 
 #current-trends-container,

@@ -1,11 +1,11 @@
 #tweet-analytics-ui-container {
-    width: 650px;
+    width: 690px;
     border: solid;
     /* padding: 8px; */
     background-color: rgba(0, 0, 0, .8);
     color: white;
-    position: absolute;
-    left: 31%;
+    /* position: absolute; */
+    /* left: 31%; */
 }
 
 #tweet-analytics-ui-container #close-svg {

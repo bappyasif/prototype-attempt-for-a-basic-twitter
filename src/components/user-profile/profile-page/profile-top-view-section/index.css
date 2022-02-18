@@ -1,6 +1,6 @@
 #profile-top-view-container {
-  width: 560px;
-  height: 380px;
+  width: 690px;
+  /* height: 380px; */
 }
 
 #profile-top-view-container #header-section,
@@ -15,12 +15,20 @@
 #profile-info-section #profile-reach-info {
   display: flex;
   width: 100%;
+  /* margin-bottom: 8px; */
+  line-height: 1.8em;
+}
+
+#profile-top-view-container #header-section {
+  align-items: flex-start;
 }
 
 #profile-top-view-container #header-section #profile-sneak-peak {
   flex-direction: column;
   text-align: left;
   margin-left: 35px;
+  line-height: 1.3em;
+  margin-bottom: 4px;
 }
 
 #profile-sneak-peak .total-tweets,
@@ -32,6 +40,7 @@
 
 #profile-top-view-container #header-photo-div {
   height: 175px;
+  position: relative;
 }
 
 #header-section #header-photo-div img {
@@ -40,14 +49,19 @@
 }
 
 #profile-top-view-container #edit-details-div {
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  transform: translate(-4px, -78px);
+  /* transform: translate(-4px, -78px); */
+  position: absolute;
+  top: 134px;
+  width: inherit;
+  height: fit-content;
 }
 
 #profile-top-view-container #edit-details-div #profile-pic {
   width: 114px;
   height: 114px;
+  transform: none;
 }
 
 #profile-top-view-container #edit-details-div #edit-profile {
@@ -59,7 +73,7 @@
   border: solid silver 0.11em;
   padding: 0.2em;
   border-radius: 20px;
-  transform: translate(-11px, 31px);
+  /* transform: translate(-11px, 31px); */
   font-weight: 600;
   font-size: smaller;
   color: black;
@@ -74,23 +88,28 @@
 #profile-top-view-container #profile-info-section,
 #profile-info-section #handle-info {
   flex-direction: column;
-  transform: translateY(-47px);
+  /* transform: translateY(-47px); */
+  margin-top: 27px;
 }
 
 #profile-info-section #handle-info {
   text-align: left;
   width: max-content;
+  line-height: 1.3em;
+  margin-top: 20px;
 }
 
 #profile-info-section #profile-bio {
   text-align: left;
-  transform: translateY(-42px);
+  /* transform: translateY(-42px); */
+  margin: 0px 0px 6px 0px;
 }
 
 #profile-info-section #profile-info {
   justify-content: space-between;
   align-items: center;
-  transform: translate(-6px, -40px);
+  /* transform: translate(-6px, -40px); */
+  font-size: larger;
 }
 
 #profile-info-section #profile-info #profile-location,
@@ -98,14 +117,16 @@
 #profile-info-section #profile-info #joined-info {
   align-items: center;
   width: max-content;
+  font-size: large;
 }
 
 #profile-info-section #profile-info svg {
   transform: scale(0.8);
+  display: flex;
 }
 
 #profile-info-section #profile-reach-info {
-  transform: translate(-1px, -38px);
+  /* transform: translate(-1px, -38px); */
 }
 
 #profile-info-section #profile-reach-info a {
@@ -132,6 +153,7 @@
 
 #profile-info-section #profile-reach-info .audience-numbers {
   margin-right: 8px;
+  font-size: large;
 }
 
 #profile-info-section #profile-reach-info .audience-reach-type {

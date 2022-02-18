@@ -1,7 +1,7 @@
 /* #user-profile-page-container #all-tweets-container */
 #profile-page-container,
 #profile-page-upperview-container {
-  position: absolute;
+  /* position: absolute; */
   top: 0px;
   left: 26%;
 }
@@ -10,14 +10,35 @@
 #user-profile-page-container #all-tweets-container
 .all-tweets-and-replies,
 #all-tweets-container {
-  position: absolute;
+  /* position: absolute; */
   top: 436px;
   left: 26%;
-  width: 560px;
+  width: 690px;
 }
 
 #components-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#components-container .constant-view-of-backdrop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: -webkit-fill-available;
+  padding: 0px 27px 0px 27px;
+}
+
+#components-container .constant-view-of-backdrop #left-panel-container .item-divs {
+  line-height: 1.32em;
+}
+
+/* #components-container .all-tweets-and-replies, */
+/* #components-container #user-profile-page-container, */
+#components-container #all-tweets-container {
+  margin-left: -97.8px;
 }
 
 #all-tweets-container #show-more-tweets {
@@ -450,6 +471,7 @@
   /* margin-left: 20px;
   margin-top: 6px; */
   margin: 6px 15px 4px 33px;
+  font-size: larger;
 }
 
 .rendering-tweet-data-container .right-side .tweet-top {
@@ -470,10 +492,10 @@
 #components-container #create-lists-container,
 #components-container #container-for-suggested-members,
 #components-container #container-for-added-members {
-  position: absolute;
+  /* position: absolute; */
   top: 90px;
   left: 35.3%;
-  width: 560px;
+  width: 690px;
   border: solid;
   background-color: whitesmoke;
   /* padding: 2px 11px 2px 0px; */
@@ -774,7 +796,7 @@
 #components-container #create-lists-container #list-cover-photo-wrapper #camera-icon {
   position: absolute;
   top: 27%;
-  left: 49%;
+  left: 46.3%;
   stroke: silver;
 }
 
@@ -1259,8 +1281,8 @@
 
 /* retweeted quotes thread styles */
 #components-container #retweeted-quote-thread-container {
-  width: 542px;
-  border: solid;
+  width: 690px;
+  border: solid 2px silver;
 }
 
 #components-container #retweeted-quote-thread-container #component-wrapper {
@@ -1283,10 +1305,10 @@
 
 /* tweet thread styles here */
 #components-container #show-tweet-thread-container {
-  width: 650px;
-  border: solid;
-  position: absolute;
-  left: 33%;
+  width: 690px;
+  border: solid 2px silver;
+  /* position: absolute; */
+  /* left: 33%; */
 }
 
 #components-container #show-tweet-thread-container #component-wrapper,
@@ -1330,6 +1352,7 @@
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #user-info-wrapper #profile-info {
   margin-left: 29px;
+  text-align: justify;
 }
 
 #components-container #show-tweet-thread-container #tweet-component-wrapper #user-info-wrapper #profile-info #profile-handle {
@@ -1553,12 +1576,12 @@
 }
 
 #components-container #tag-location-container {
-  width: 470px;
+  width: 690px;
   background-color: whitesmoke;
 
   overflow-y: scroll;
   height: 546px;
-  position: absolute;
+  /* position: absolute; */
   right: 32.4%;
 
   /* overflow-y: scroll; */

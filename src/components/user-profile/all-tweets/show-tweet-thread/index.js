@@ -31,7 +31,7 @@ function ShowTweetThread({ quotesListFromRetweet, handleQuotedFromRetweetModal, 
             {hasRetweetedThread && <RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet quotedTweetID={quotedTweetID} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} isQuotedFromRetweeted={true} />}
             {tweetText && <TweetComponent tweetText={tweetText} createdDate={created} handleQuoteTweetID={handleQuoteTweetID} threadedTweetData={threadedTweetData} currentUser={currentUser} currentUserProfileInfo={currentUserProfileInfo} repliedTweetsIDs={repliedTweetsIDs} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} hasRetweetedThread={hasRetweetedThread} quotesListFromRetweet={quotesListFromRetweet} />}
             <ReplyThreadComponent currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} handleLoadingTweetsIDs={handleLoadingTweetsIDs} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
-            <RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />
+            {repliedTweetsIDs && repliedTweetsIDs.length && <RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />}
         </div>
     )
 }
@@ -72,10 +72,10 @@ let RenderAlreadyRepliedTweets = ({ currentUser, tweetThreadID, repliedTweetsIDs
         <div id='already-replied-tweets-wrapper'>
             {/* <RenderTweetDataComponent content={content} /> */}
             {/* {updateRepliedTweetsOnThread && alreadyRepliedTweetsListReRendered()} */}
-            {updateRepliedTweetsOnThread && repliedTweetsIDs.map((item, idx) => <RenderRepliedTweet key={item} docID={item} currentUser={currentUser} idx={idx} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />)}
-            {!updateRepliedTweetsOnThread && alreadyRepliedTweetsList()}
+            {updateRepliedTweetsOnThread ? repliedTweetsIDs.map((item, idx) => <RenderRepliedTweet key={item} docID={item} currentUser={currentUser} idx={idx} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />) : null}
+            {!updateRepliedTweetsOnThread ? alreadyRepliedTweetsList() : null}
             {/* {alreadyRepliedTweetsList()} */}
-            <div id='extra-tweet-extension-line'></div>
+            {repliedTweetsIDs && repliedTweetsIDs.length && <div id='extra-tweet-extension-line'></div>}
             {/* <RenderAddAnotherTweet /> */}
         </div>
     )
