@@ -276,8 +276,8 @@ let RenderTweetUserInfo = ({ name, profileHandle, tweetPostedDate, quotedFromRet
         <div id='user-info-wrapper'>
             <img id={quotedFromRetweetModal && 'profile-pic-for-retweet-quote-tweet'} style={{ width: '20px', height: '20px', marginRight: '9px' }} src='https://picsum.photos/200/300' />
             <div id='profile-name' style={{ marginRight: '8px' }}>{name || 'profile name'}</div>
-            <div id='profile-handle' style={{ marginRight: '8px' }}>{profileHandle || 'profile handle'}</div>
-            <div id='text-separator' style={{ marginRight: '8px' }}> - </div>
+            <div id='profile-handle' style={{ marginRight: '8px' }}>@{profileHandle || 'profile handle'}</div>
+            <div id='text-separator' style={{ marginRight: '8px', fontSize: 'small', color: 'silver' }}> - </div>
             {!quotedFromRetweetModal && <div id='published-date'>{processCreatedDateFormat() || 'Month day'}</div>}
             {quotedFromRetweetModal && <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(tweetPostedDate)} />}
         </div>

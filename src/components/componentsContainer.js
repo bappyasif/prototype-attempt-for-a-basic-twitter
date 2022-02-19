@@ -266,9 +266,9 @@ function ComponentsContainer() {
     // useEffect(() => countAddedMembers && whichListIsUpdated && updateExistingListData(whichListIsUpdated), [countAddedMembers])
     // useEffect(() => membersList.length && whichListIsUpdated && updateExistingListData(whichListIsUpdated), [membersList])
 
-    // repliedTweetsIDs && console.log(repliedTweetsIDs, repliedTweets, 'repliedTweetsIDs!! from cc')
+    // repliedTweetsIDs && console.log(repliedTweetsIDs, repliedTweets, 'repliedTweetsIDs!! from cc', quotesListFromRetweet)
 
-    // console.log(quotesListFromRetweet, threadedTweetData, 'whgats happeninf!!')
+    // console.log(quotesListFromRetweet, threadedTweetData, 'whgats happeninf!!', repliedTweets)
 
     // quotedFromRetweetModal && quoteTweetData && console.log(quoteTweetID, quoteTweetData, 'quotedFromRetweetModal!!', quotesListFromRetweet)
 
@@ -291,7 +291,12 @@ function ComponentsContainer() {
 
     useEffect(() => quotedFromRetweetModal && quoteTweetID && currentUser && getDataFromFirestoreSubCollection(currentUser, quoteTweetID, 'listOfRetweetedQuotes', handleQuotesListFromRetweet), [quotedFromRetweetModal])
 
-    useEffect(() => threadedTweetData && handleQuotesListFromRetweet(threadedTweetData.listOfRetweetedQuotes), [threadedTweetData])
+    // useEffect(() => threadedTweetData && handleQuotesListFromRetweet(threadedTweetData.listOfRetweetedQuotes), [threadedTweetData])
+
+    useEffect(() => {
+        threadedTweetData && handleQuotesListFromRetweet(threadedTweetData.listOfRetweetedQuotes)
+        // threadedTweetData && handleRepliedTweets(threadedTweetData.repliedTweets)
+    }, [threadedTweetData])
     
     // useEffect(() => quotedFromRetweetModal && quoteTweetData && console.log(quoteTweetID, quoteTweetData, 'quotedFromRetweetModal!!'), [quotedFromRetweetModal])
 

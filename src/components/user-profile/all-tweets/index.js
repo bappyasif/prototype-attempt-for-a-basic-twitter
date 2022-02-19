@@ -306,13 +306,16 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
                     <div className='right-side'>
 
-                        <div className='tweet-top'>
+                        {/* <div className='tweet-top'>
                             <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div>
-                        </div>
+                        </div> */}
+
+                        <TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} currentUserProfileInfo={currentUserProfileInfo} createdDate={created} />
 
                         <div className='extra-tweet-text'>{extraTweet}</div>
 
                         {<div className='tweet-media-file-content'>{readyMedia('extra')}</div>}
+                        {/* {<div className='tweet-media-file-content'>{readyMedia()}</div>} */}
 
                         {/* {extraPoll && <RenderPolls poll={extraPoll && extraPoll} />} */}
                         {extraPoll && <RenderPolls poll={extraPoll && extraPoll} handlePollVotesCount={handlePollVotesCount} />}

@@ -87,8 +87,8 @@ export let TweeetTop = ({ ID, removeSpeceficArrayItem, updateTweetPrivacy, curre
     )
 }
 
-let RenderUserInfo = ({currentUserProfileInfo, createdDate}) => {
-    
+let RenderUserInfo = ({ currentUserProfileInfo, createdDate }) => {
+
     let timeSpanStyles = {
         color: 'silver',
         fontSize: 'smaller',
@@ -101,9 +101,11 @@ let RenderUserInfo = ({currentUserProfileInfo, createdDate}) => {
 
     return (
         <div className='user-info' style={{ display: 'flex' }}>
-            {currentUserProfileInfo ? currentUserProfileInfo[0].content : 'User Name'}
-            <span>@profile handle</span>
-            <span>-</span>
+            <div id='user-data'>
+                <span id='name'>{currentUserProfileInfo ? currentUserProfileInfo[0].content : 'User Name'}</span>
+                <span id='handle'>@profile handle</span>
+            </div>
+            <span style={{color: 'silver', fontSize: 'small', marginRight: '8px'}}>-</span>
             <span style={timeSpanStyles}>
                 {createdDate ? <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(createdDate.seconds)} /> : 'time here'}
             </span>

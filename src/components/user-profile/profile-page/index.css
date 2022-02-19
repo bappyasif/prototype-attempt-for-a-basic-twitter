@@ -337,18 +337,21 @@
   color: white;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper {
+.rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper,
+.rendering-tweet-data-container .right-side .replying-to-wrapper {
   display: flex;
   align-items: center;
   margin-top: -13px;
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper .replying-to-text {
+.rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper .replying-to-text,
+.rendering-tweet-data-container .right-side .replying-to-wrapper .replying-to-text {
   color: silver;
   margin: 8px 8px 8px 0px
 }
 
-.rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper .profile-handle {
+.rendering-tweet-data-container .right-side .tweet-info .replying-to-wrapper .profile-handle,
+.rendering-tweet-data-container .right-side .replying-to-wrapper .profile-handle {
   cursor: pointer;
 }
 
@@ -940,6 +943,7 @@
   display: flex;
   justify-content: space-between;
   width: fit-content;
+  align-items: center;
 }
 
 .rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #user-info-wrapper #timestamp-wrapper {
@@ -951,6 +955,7 @@
   color: rgb(29, 155, 240);
   /* pointer-events: none; */
   margin-left: 29px;
+  cursor: pointer;
 }
 
 .rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #user-info-wrapper #profile-pic-for-retweet-quote-tweet {
@@ -965,6 +970,7 @@
 
 .rendering-tweet-data-container .right-side .privacy-spans {
   margin-bottom: 9px;
+  line-height: 2em;
 }
 
 .rendering-tweet-data-container .right-side .privacy-spans svg {
@@ -1096,6 +1102,31 @@
 .rendering-tweet-data-container .when-has-extra-tweet .extended-line-in-tweet {
   height: 107.9px;
   transform: translate(25px, -105.5px);
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .user-info,
+.rendering-tweet-data-container .right-side .tweet-top .user-info {
+  display: flex;
+  /* justify-content: space-between; */
+  /* width: 85%; */
+  align-items: baseline;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .user-info #user-data,
+.rendering-tweet-data-container .right-side .tweet-top .user-info #user-data {
+  margin-right: 11px;
+}
+
+.rendering-tweet-data-container .right-side .tweet-info .tweet-top .user-info #user-data #handle,
+.rendering-tweet-data-container .right-side .tweet-top .user-info #user-data #handle,
+.rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #user-info-wrapper #profile-handle {
+  margin-left: 20px;
+  color: silver;
+  font-size: smaller;
+}
+
+.rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #user-info-wrapper #profile-handle {
+  margin-left: 11px;
 }
 
 .rendering-tweet-data-container .right-side .tweet-info .tweet-top .icon-svg {
@@ -1795,7 +1826,7 @@
   background-color: silver;
   height: 83.9px;
   position: absolute;
-  top: 56px;
+  top: 53px;
   left: 32.3px;
 }
 
@@ -1836,7 +1867,7 @@
 /* #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper .rendering-tweet-data-container, */
 #components-container #show-tweet-thread-container #already-replied-tweets-wrapper .tweet-ui-wrapper {
   /* margin-bottom: 11px; */
-  border-bottom: solid 1px silver;
+  /* border-bottom: solid 1px silver; */
   padding: 2px 0px 2px 0px;
 }
 
