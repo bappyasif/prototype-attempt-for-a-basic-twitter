@@ -22,6 +22,7 @@
     "@giphy/js-fetch-api": "4.0.3",
     "@giphy/js-types": "4.0.1",
     "@giphy/react-components": "3.2.4",
+    "deepai": "^1.0.21",
     "emoji-mart": "^3.0.1",
     "emoji-picker-react": "^3.4.8",
     "firebase": "^9.1.3",

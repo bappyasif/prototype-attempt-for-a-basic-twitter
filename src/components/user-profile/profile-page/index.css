@@ -123,8 +123,10 @@
 #tweet-container #show-connecting-line {
   border-left: .2px solid silver;
   position: absolute;
-  height: 61px;
-  transform: translate(26px, -59.5px);
+  top: 50.1px;
+  left: 24.2px;
+  /* height: 61px; */
+  /* transform: translate(26px, -59.5px); */
 }
 
 #extra-tweet-portion-container,
@@ -1093,10 +1095,12 @@
 .rendering-tweet-data-container .when-has-extra-tweet .tweet-extra-info-twee {
   display: flex;
   /* flex-direction: column; */
+  margin-bottom: 11px;
 }
 
 .rendering-tweet-data-container .when-has-extra-tweet .tweet-extra-info-een {
-  margin-bottom: 11px;
+  /* margin-bottom: 11px; */
+  position: relative;
 }
 
 .rendering-tweet-data-container .when-has-extra-tweet .extended-line-in-tweet {

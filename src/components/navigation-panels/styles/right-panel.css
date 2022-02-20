@@ -329,12 +329,85 @@
   font-size: smaller;
 }
 
-#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #follow-btn {
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #follow-btn,
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper #follow-btn {
   line-height: 2em;
   background-color: rgba(29, 155, 240, 1);
   padding: 0px 11px 0px 11px;
   border-radius: 13px;
   margin-left: 6px;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container {
+  position: absolute;
+  top: 36px;
+  right: 0px;
+  background-color: whitesmoke;
+  z-index: 99;
+  padding: 10px 11px 4px 20px;
+  width: 290px;
+  border-radius: 4px;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 11px;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper #left-side img {
+  width: 42px;
+  height: 38px;
+  border-radius: 50%;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper {
+  margin-bottom: 11px;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers,
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers {
+  margin-top: 11px;
+  margin-bottom: 11px;
+  justify-content: space-between;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper {
+  justify-content: space-between;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper #numbers-denominations {
+  font-size: x-large;
+  color: darkgray;
+  margin-right: 4px;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper #card-name {
+  color: silver;
+  /* font-size: larger; */
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper {
+  color: darkslategray;
+  font-size: smaller;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper #followed-by-people-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+#right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper #followed-by-people-wrapper img {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  margin-right: 11px;
 }
 
 #right-navigation-panel-container #suggested-people-list-container #header-text {

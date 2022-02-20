@@ -1,16 +1,18 @@
+let deepai = require('deepai');
 import React, { useEffect, useState } from 'react';
 import { RenderUnfollowModal } from '../show-lengthy-follow-list';
+import ShowSuggestedPersonModal from './show-suggested-person-modal';
 
 function RenderSuggestedPeopleList({ contentCreators }) {
     let [uniqueContents, setUniqueContents] = useState([])
 
     useEffect(() => contentCreators && setUniqueContents(uniqueObjArray(contentCreators)), [contentCreators])
-    
+
     // console.log(contentCreators, 'contentCreatrors!!', uniqueContents)
     // let renderFollowThesePeople = () => contentCreators.map((item, idx) => idx < 4 && <RenderPeople key={idx} item={item} />)
 
     let renderFollowThesePeople = () => uniqueContents && uniqueContents.map((item, idx) => idx < 4 && <RenderPeople key={idx} item={item} />)
-    
+
     return (
         <div id='follow-suggested-people-container'>
             {renderFollowThesePeople()}
@@ -29,9 +31,13 @@ let RenderPeople = ({ item }) => {
 
     let [followSuggested, setFollowSuggested] = useState(false)
 
+    let [showPersonCardModal, setShowPersonCardModal] = useState(false)
+
     let handleFollowSuggested = (evt) => {
         // setFollowSuggested(!followSuggested)
         setActionName(evt.target.textContent)
+        // console.log(evt.target.textContent)
+        // setActionName(showPersonCardModal && actionName == 'Following' ? 'Unfollow' : evt.target.textContent )
     }
 
     let handleNameAdjust = () => {
@@ -45,18 +51,29 @@ let RenderPeople = ({ item }) => {
         }
     }
 
+    // console.log(item, '!!')
+
     useEffect(() => {
         Math.random() > .51 && setFollows(true)
         handleNameAdjust()
     }, [])
 
     useEffect(() => {
-        setFollowSuggested(actionName == 'Follow' ? true : actionName == 'Unfollow' ? false : actionName && true)
+        // setFollowSuggested(actionName == 'Follow' ? true : actionName == 'Unfollow' ? false : actionName && true)
+        
+        // when its coming from suggested peoople container
+        !showPersonCardModal && setFollowSuggested(actionName == 'Follow' ? true : actionName == 'Unfollow' ? false : actionName && true)
+        
+        // changing action strings appropriately when  its coming from showPersonCardModal
+        showPersonCardModal && setFollowSuggested(actionName == 'Follow' ? true : actionName == 'Following' && false)
+
+        // making action string null so that it doesnt invoke unfollow modal when showPersonCardModal is no longer in view
+        showPersonCardModal && actionName == 'Following' && setActionName('')
     }, [actionName])
 
     return (
-        <div className='render-people-wrapper'>
-            <div id='user-details'>
+        <div className='render-people-wrapper' onMouseLeave={() => setShowPersonCardModal(false)}>
+            <div id='user-details' onMouseEnter={() => setShowPersonCardModal(true)}>
                 <img src={imgUrl} id='user-img' />
                 <div id='profile-info'>
                     <div id='user-name'>{nameAdjusted || name}</div>
@@ -65,7 +82,8 @@ let RenderPeople = ({ item }) => {
             </div>
             {/* <div id='follow-btn'>Follow</div> */}
             <div id='follow-btn' onClick={handleFollowSuggested}>{followSuggested ? 'Following' : 'Follow'}</div>
-            {actionName == 'Following' && <RenderUnfollowModal suggestedName={nameAdjusted || name} handleFollow={handleFollowSuggested} />}
+            {actionName == 'Following' && !showPersonCardModal && <RenderUnfollowModal suggestedName={nameAdjusted || name} handleFollow={handleFollowSuggested} />}
+            {showPersonCardModal && <ShowSuggestedPersonModal updatePersonModal={setShowPersonCardModal} name={nameAdjusted || name} handle={(nameAdjusted || name).toLowerCase()} profilePicUrl={imgUrl} handleFollowSuggested={handleFollowSuggested} followSuggested={followSuggested} />}
         </div>
     )
 }
