@@ -1962,43 +1962,53 @@
 }
 
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion,
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #left-side {
   display: flex;
   align-items: center;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion {
   justify-content: space-between;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-img {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-img,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #left-side #user-img {
   width: 51px;
   height: 45px;
   border-radius: 20px;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-infos {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-infos,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #left-side #user-infos {
   margin-left: 20px;
   text-align: left;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-infos #author-name {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-infos #author-name,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #left-side #user-infos #user-name {
   font-size: smaller;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #book-review {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #book-review,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #description-text {
   margin-left: 72px;
   width: 450px;
   text-align: left;
 }
 
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper {
   margin-bottom: 8px;
   position: relative;
 }
 
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #follow-btn,
-#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
+#components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #follow-btn,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
   line-height: 2em;
   background-color: silver;
   padding: 0px 11px 0px 11px;
@@ -2028,7 +2038,8 @@
 }
 
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper,
-#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper {
+#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper {
   position: absolute;
   background-color: silver;
   z-index: 99;
@@ -2040,10 +2051,13 @@
 }
 
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section,
-#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section {
+#components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section {
   text-align: left;
 }
 
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section #modal-action-description,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-action-description,
 #components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header,
@@ -2051,17 +2065,27 @@
   margin-bottom: 6px;
 }
 
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name,
 #components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name {
   font-size: larger;
 }
 
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
 #components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
   background: lightslategray;
   padding-left: 0px;
   margin-left: 0px;
   margin-bottom: 6px;
+}
+
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
+  background-color: gray;
+}
+
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns:hover {
+  background-color: darkslategray;
 }
 
 #components-container #home-page-view-container {

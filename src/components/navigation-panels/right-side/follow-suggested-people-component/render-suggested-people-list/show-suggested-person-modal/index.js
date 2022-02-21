@@ -3,32 +3,34 @@ let deepai = require('deepai')
 import React, { useEffect, useRef, useState } from 'react'
 import useOnHoverOutside from '../../../../../user-profile/all-tweets/tweet-top/add-members-into-lists/useOnHoverOutside'
 
-let ShowSuggestedPersonModal = ({ updatePersonModal, name, handle, profilePicUrl, handleFollowSuggested, followSuggested }) => {
+let ShowSuggestedPersonModal = ({ updatePersonModal, name, handle, profilePicUrl, handleFollowSuggested, followSuggested, descriptionText }) => {
     let ref = useRef(null)
     useOnHoverOutside(ref, () => updatePersonModal(false))
     // onMouseLeave={() => updatePersonModal(false)}
     return (
         <div id='suggested-person-modal-container' ref={ref} >
             <PersonMoodalTopSection name={name} handle={handle} profilePicUrl={profilePicUrl} handleFollowSuggested={handleFollowSuggested} followSuggested={followSuggested} />
-            <PersonModalDescriptiveInfos name={name} />
+            <PersonModalDescriptiveInfos name={name} descriptionText={descriptionText} />
         </div>
     )
 }
 
-let PersonModalDescriptiveInfos = ({ name }) => {
+let PersonModalDescriptiveInfos = ({ name, descriptionText }) => {
     let [randomText, setRandomtext] = useState(null)
 
-    let makeRequest = () => {
-        let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
-        deepai.setApiKey(apik)
-        deepai.callStandardApi('text-generator', { text: name })
-            .then(resp => {
-                console.log(resp, '!!')
-                setRandomtext(resp.output.split('.')[0])
-            })
-    }
+    // let makeRequest = () => {
+    //     let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
+    //     deepai.setApiKey(apik)
+    //     deepai.callStandardApi('text-generator', { text: name })
+    //         .then(resp => {
+    //             console.log(resp, '!!')
+    //             setRandomtext(resp.output.split('.')[0])
+    //         })
+    // }
 
-    useEffect(() => makeRequest(), [name])
+    useEffect(() => descriptionText && setRandomtext(descriptionText), [name])
+
+    // useEffect(() => makeRequest(name, setRandomtext), [name])
 
     return (
         <div id='descriptive-infos-wrapper'>
@@ -110,6 +112,49 @@ let PersonMoodalTopSection = ({ name, handle, profilePicUrl, handleFollowSuggest
         </div>
     )
 }
+
+// export let makeRequest = (name, listUpdater, uuid, fetchStatus, updateCount ) => {
+//     let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
+//     deepai.setApiKey(apik)
+//     deepai.callStandardApi('text-generator', { text: name })
+//         .then(resp => {
+//             console.log(resp, '!!')
+//             // let textExtracted = (resp.output.split('.')[2])
+//             // listUpdater(uuid, resp.output)
+//             let textExtracted = (resp.output.split('.')[0])
+//             listUpdater(uuid, textExtracted)
+//             fetchStatus(true)
+//             updateCount(count => count + 1)
+//         })
+//     // console.log('chk02')
+// }
+
+export let makeRequest = (name, listUpdater, uuid, fetchStatus, updateCount, listUpdaterHook, listOfUsers) => {
+    let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
+    deepai.setApiKey(apik)
+    deepai.callStandardApi('text-generator', { text: name })
+        .then(resp => {
+            console.log(resp, '!!')
+            // let textExtracted = (resp.output.split('.')[2])
+            // listUpdater(uuid, resp.output)
+            let textExtracted = (resp.output.split('.')[0])
+            listUpdater(uuid, textExtracted, listUpdaterHook, listOfUsers)
+            fetchStatus(true)
+            updateCount(count => count + 1)
+        })
+    // console.log('chk02')
+}
+
+
+// export let makeRequest = (name, textUpdater) => {
+//     let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
+//     deepai.setApiKey(apik)
+//     deepai.callStandardApi('text-generator', { text: name })
+//         .then(resp => {
+//             // console.log(resp, '!!')
+//             textUpdater(resp.output.split('.')[0])
+//         })
+// }
 
 export default ShowSuggestedPersonModal
 

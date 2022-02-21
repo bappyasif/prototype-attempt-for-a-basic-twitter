@@ -1,27 +1,94 @@
 let deepai = require('deepai');
 import React, { useEffect, useState } from 'react';
 import { RenderUnfollowModal } from '../show-lengthy-follow-list';
-import ShowSuggestedPersonModal from './show-suggested-person-modal';
+import useReuseableDataExtraction from '../useReuseableDataExtraction';
+import ShowSuggestedPersonModal, { makeRequest } from './show-suggested-person-modal';
 
-function RenderSuggestedPeopleList({ contentCreators }) {
-    let [uniqueContents, setUniqueContents] = useState([])
+function RenderSuggestedPeopleList({ }) {
+    let [listOfUsers, setListOfUsers] = useState([])
+    let [fetchReady, setFetchReady] = useState(true)
+    let [counter, setCounter] = useState(0)
+    // let [dataset, setDataset] = useState(null)
 
-    useEffect(() => contentCreators && setUniqueContents(uniqueObjArray(contentCreators)), [contentCreators])
+    // let test = counter == 4 && useReuseableDataExtraction(4, listOfUsers)
 
-    // console.log(contentCreators, 'contentCreatrors!!', uniqueContents)
-    // let renderFollowThesePeople = () => contentCreators.map((item, idx) => idx < 4 && <RenderPeople key={idx} item={item} />)
+    // console.log(test, '?!?!')
 
-    let renderFollowThesePeople = () => uniqueContents && uniqueContents.map((item, idx) => idx < 4 && <RenderPeople key={idx} item={item} />)
+    // useEffect(() => {
+    //     counter == 4 && setDataset(listOfUsers)
+    //     counter >= 4 && setListOfUsers([])
+    // }, [counter])
+
+    useEffect(() => {
+        if (listOfUsers.length == 4 && counter < 5) {
+            // console.log('chk03')
+            listOfUsers.forEach((item, _, arr) => {
+                console.log(counter, 'counter!!')
+                if (fetchReady) {
+                    gettingDataFfromDeepai(item, setFetchReady, updateListOfUsers, setCounter, setListOfUsers, arr)
+                }
+            })
+        }
+    }, [listOfUsers])
+
+    useEffect(() => {
+        for (let i = 0; i < 5; i++) {
+            makeRequestToRandomDataAPI(setListOfUsers)
+        }
+    }, [])
+
+    console.log(listOfUsers, 'listOfUsers')
+
+    let renderFollowThesePeople = () => listOfUsers && listOfUsers.map((item, idx) => idx < 4 && <RenderPeople key={idx} item={item} />)
+
+    // let renderFollowThesePeople = () => (listOfUsers.length && listOfUsers || dataset && dataset).map((item, idx) => idx < 4 && <RenderPeople key={idx} item={item} />)
 
     return (
         <div id='follow-suggested-people-container'>
             {renderFollowThesePeople()}
+            {/* {dummyJsx} */}
         </div>
     )
 }
 
+export let updateListOfUsers = (uuid, descText, listUpdaterHook, listOfUsers) => {
+    let newList = listOfUsers && listOfUsers.map(item => {
+        if (item.uid == uuid) {
+            item.decsription = descText
+        }
+        return item
+    })
+    // setListOfUsers(newList)
+    listUpdaterHook(newList)
+}
+
+export let gettingDataFfromDeepai = (item, setFetchReady, updateListOfUsers, setCounter, listUpdaterHook, listOfUsers) => {
+    setFetchReady(false)
+    // console.log('chk04')
+    let handle = setTimeout(() => {
+        let userName = item.first_name + ' ' + item.last_name;
+        makeRequest(userName, updateListOfUsers, item.uid, setFetchReady, setCounter, listUpdaterHook, listOfUsers)
+        // console.log('chk05')
+    }, 1000)
+    // console.log('cchck01')
+    return () => clearTimeout(handle)
+}
+
+export let makeRequestToRandomDataAPI = (updateUsers) => {
+    let url = 'https://random-data-api.com/api/users/random_user'
+    fetch(url)
+        .then(resp => resp.json())
+        .then(data => {
+            // console.log(data)
+            updateUsers(prevData => prevData.concat(data))
+        })
+        .catch(err => console.log(err.code, err.message))
+}
+
 let RenderPeople = ({ item }) => {
-    let { name, imgUrl } = { ...item }
+    let { first_name, last_name, avatar, uid } = { ...item }
+
+    let name = first_name + ' ' + last_name
 
     let [nameAdjusted, setNameAdjusted] = useState(null)
 
@@ -34,24 +101,12 @@ let RenderPeople = ({ item }) => {
     let [showPersonCardModal, setShowPersonCardModal] = useState(false)
 
     let handleFollowSuggested = (evt) => {
-        // setFollowSuggested(!followSuggested)
         setActionName(evt.target.textContent)
-        // console.log(evt.target.textContent)
-        // setActionName(showPersonCardModal && actionName == 'Following' ? 'Unfollow' : evt.target.textContent )
     }
 
     let handleNameAdjust = () => {
-        if (name.includes(' And ')) {
-            let tokenizingNameIfThereIsAnd = name.split(' And ')
-            let joinedName = tokenizingNameIfThereIsAnd[0].split(' ')[0].concat(' ', tokenizingNameIfThereIsAnd[1].split(' ')[1])
-            setNameAdjusted(joinedName)
-            // console.log(joinedName, 'joined!!')
-        } else {
-            // console.log('not joined!!')
-        }
+        setNameAdjusted(name.split(' ').join('_'))
     }
-
-    // console.log(item, '!!')
 
     useEffect(() => {
         Math.random() > .51 && setFollows(true)
@@ -59,11 +114,9 @@ let RenderPeople = ({ item }) => {
     }, [])
 
     useEffect(() => {
-        // setFollowSuggested(actionName == 'Follow' ? true : actionName == 'Unfollow' ? false : actionName && true)
-        
         // when its coming from suggested peoople container
         !showPersonCardModal && setFollowSuggested(actionName == 'Follow' ? true : actionName == 'Unfollow' ? false : actionName && true)
-        
+
         // changing action strings appropriately when  its coming from showPersonCardModal
         showPersonCardModal && setFollowSuggested(actionName == 'Follow' ? true : actionName == 'Following' && false)
 
@@ -74,16 +127,16 @@ let RenderPeople = ({ item }) => {
     return (
         <div className='render-people-wrapper' onMouseLeave={() => setShowPersonCardModal(false)}>
             <div id='user-details' onMouseEnter={() => setShowPersonCardModal(true)}>
-                <img src={imgUrl} id='user-img' />
+                <img src={avatar} id='user-img' />
                 <div id='profile-info'>
-                    <div id='user-name'>{nameAdjusted || name}</div>
+                    <div id='user-name'>{name}</div>
                     <div id='user-handle'> @{(nameAdjusted || name).toLowerCase()} <span id='follow-status'>{follows ? ' Follows you' : ''}</span></div>
                 </div>
             </div>
             {/* <div id='follow-btn'>Follow</div> */}
             <div id='follow-btn' onClick={handleFollowSuggested}>{followSuggested ? 'Following' : 'Follow'}</div>
             {actionName == 'Following' && !showPersonCardModal && <RenderUnfollowModal suggestedName={nameAdjusted || name} handleFollow={handleFollowSuggested} />}
-            {showPersonCardModal && <ShowSuggestedPersonModal updatePersonModal={setShowPersonCardModal} name={nameAdjusted || name} handle={(nameAdjusted || name).toLowerCase()} profilePicUrl={imgUrl} handleFollowSuggested={handleFollowSuggested} followSuggested={followSuggested} />}
+            {showPersonCardModal && <ShowSuggestedPersonModal updatePersonModal={setShowPersonCardModal} name={name} handle={(nameAdjusted || name).toLowerCase()} profilePicUrl={avatar} handleFollowSuggested={handleFollowSuggested} followSuggested={followSuggested} descriptionText={item.decsription} />}
         </div>
     )
 }
@@ -91,15 +144,3 @@ let RenderPeople = ({ item }) => {
 export let uniqueObjArray = objArray => [...new Map(objArray.map((item) => [item["name"], item])).values()];
 
 export default RenderSuggestedPeopleList;
-
-/**
- * 
- * 
-     // let extractUniqueNamesOnly = (name) => {
-    //     let idx = uniqueNames.findIndex(n => n = name)
-    //     console.log('here!!', idx)
-    //     idx == -1 ? setUniqueNames(prev => prev.concat(name)) : null
-    // }
-
-    // useEffect(() => contentCreators && contentCreators.forEach(item => extractUniqueNamesOnly(item.name)), [contentCreators])
- */
