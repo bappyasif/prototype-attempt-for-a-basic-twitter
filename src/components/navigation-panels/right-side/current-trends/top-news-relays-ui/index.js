@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import { frownFaceSvgIcon, threeDotsSvgIcon } from '..';
 import { removeItemFromArrayByTitle, RenderSettingsOption, ShowSettingsModal } from '../../../reuseable-components';
 import useOnClickOutside from '../../click-outside-utility-hook/useOnClickOutside';
 
-function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
+function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators, handleExplicitTrendSearchText }) {
     let [newsData, setNewsData] = useState(null)
 
     let [removedNewsListTitles, setRemovedNewsListTitles] = useState([])
@@ -37,9 +38,9 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
         return (
             showDouble
                 ?
-                newsData && newsData.map((item, idx) => (idx == 1) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} />)
+                newsData && newsData.map((item, idx) => (idx == 1) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} handleExplicitTrendSearchText={handleExplicitTrendSearchText} />)
                 :
-                newsData && newsData.map((item, idx) => (idx < 2) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} />)
+                newsData && newsData.map((item, idx) => (idx < 2) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} handleExplicitTrendSearchText={handleExplicitTrendSearchText} />)
         )
     }
     // console.log(rndNum, 'rndNum!!')
@@ -52,10 +53,11 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators }) {
     )
 }
 
-let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNewsList }) => {
+let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNewsList, handleExplicitTrendSearchText }) => {
     let [hovered, setHovered] = useState(false)
     let [clicked, setClicked] = useState(false)
     let [showModal, setShowModal] = useState(false)
+    let history = useHistory(null)
 
     let { slug_name, subsection, section, byline, multimedia } = { ...newsItem };
     let tokenizing = slug_name.split(/[0-9]/);
@@ -73,7 +75,16 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNew
         setShowModal(true)
     }
 
+    let handleClick = () => {
+        console.log(adjustedSlug, 'adjustedSlug')
+
+        adjustedSlug && handleExplicitTrendSearchText(adjustedSlug)
+
+        adjustedSlug && history.push('/explicit_trends/')
+    }
+
     let adjustContentCreatorName = byline.split('BY')[1] && (byline.split('BY')[1]).split(' ').filter(name => name).map(name => name.toLowerCase())
+    
     adjustContentCreatorName = adjustContentCreatorName && adjustContentCreatorName.map(name => name[0].toUpperCase() + name.slice(1)).join(' ')
 
     useEffect(() => multimedia && byline && handleContentCreators({ name: adjustContentCreatorName, imgUrl: newsItem.multimedia[0].url }), [byline])
@@ -84,7 +95,7 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNew
         adjustedSlug
         &&
         <div className='news-item-wrapper' style={{ marginBottom: '4px' }} onMouseEnter={handleHover} onMouseLeave={handleHover}>
-            <div id='left-side'>
+            <div id='left-side' onClick={handleClick}>
                 <div id='news-category' style={{ color: hovered && 'black' }}>
                     <div id='category-name'>{section} </div>
                     <div id='news-type'> - {subsection || section}</div>

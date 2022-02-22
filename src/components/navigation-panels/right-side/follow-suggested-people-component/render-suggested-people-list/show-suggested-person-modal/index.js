@@ -1,12 +1,12 @@
-import { connectStorageEmulator } from 'firebase/storage'
 let deepai = require('deepai')
 import React, { useEffect, useRef, useState } from 'react'
 import useOnHoverOutside from '../../../../../user-profile/all-tweets/tweet-top/add-members-into-lists/useOnHoverOutside'
 
 let ShowSuggestedPersonModal = ({ updatePersonModal, name, handle, profilePicUrl, handleFollowSuggested, followSuggested, descriptionText }) => {
     let ref = useRef(null)
+    
     useOnHoverOutside(ref, () => updatePersonModal(false))
-    // onMouseLeave={() => updatePersonModal(false)}
+
     return (
         <div id='suggested-person-modal-container' ref={ref} >
             <PersonMoodalTopSection name={name} handle={handle} profilePicUrl={profilePicUrl} handleFollowSuggested={handleFollowSuggested} followSuggested={followSuggested} />
@@ -18,19 +18,7 @@ let ShowSuggestedPersonModal = ({ updatePersonModal, name, handle, profilePicUrl
 let PersonModalDescriptiveInfos = ({ name, descriptionText }) => {
     let [randomText, setRandomtext] = useState(null)
 
-    // let makeRequest = () => {
-    //     let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
-    //     deepai.setApiKey(apik)
-    //     deepai.callStandardApi('text-generator', { text: name })
-    //         .then(resp => {
-    //             console.log(resp, '!!')
-    //             setRandomtext(resp.output.split('.')[0])
-    //         })
-    // }
-
     useEffect(() => descriptionText && setRandomtext(descriptionText), [name])
-
-    // useEffect(() => makeRequest(name, setRandomtext), [name])
 
     return (
         <div id='descriptive-infos-wrapper'>
@@ -85,8 +73,6 @@ let FollowOrFollowerCard = ({ name }) => {
         let rDen = randNum > .5 && rNum.length <= 2 ? arr01[1] : randNum > .5 && rNum.length <= 3 ? arr01[0] : ''
 
         setDenomination(rNum + rDen)
-
-        // console.log(rIdx, rNum, rDen)
     }
 
     useEffect(() => makeRandomNumber(), [name])
@@ -105,13 +91,16 @@ let PersonMoodalTopSection = ({ name, handle, profilePicUrl, handleFollowSuggest
             <div id='left-side'>
                 {/* <img src='https://picsum.photos/200/200' /> */}
                 <img src={profilePicUrl} />
-                <div>{name}</div>
-                <div>@{handle}</div>
+                <div id='user-name'>{name}</div>
+                <div id='user-handle'>@{handle}</div>
             </div>
             <div id='follow-btn' onClick={handleFollowSuggested}>{followSuggested ? 'Following' : 'Follow'}</div>
         </div>
     )
 }
+
+export default ShowSuggestedPersonModal
+
 
 // export let makeRequest = (name, listUpdater, uuid, fetchStatus, updateCount ) => {
 //     let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
@@ -129,21 +118,21 @@ let PersonMoodalTopSection = ({ name, handle, profilePicUrl, handleFollowSuggest
 //     // console.log('chk02')
 // }
 
-export let makeRequest = (name, listUpdater, uuid, fetchStatus, updateCount, listUpdaterHook, listOfUsers) => {
-    let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
-    deepai.setApiKey(apik)
-    deepai.callStandardApi('text-generator', { text: name })
-        .then(resp => {
-            console.log(resp, '!!')
-            // let textExtracted = (resp.output.split('.')[2])
-            // listUpdater(uuid, resp.output)
-            let textExtracted = (resp.output.split('.')[0])
-            listUpdater(uuid, textExtracted, listUpdaterHook, listOfUsers)
-            fetchStatus(true)
-            updateCount(count => count + 1)
-        })
-    // console.log('chk02')
-}
+// export let makeRequest = (name, listUpdater, uuid, fetchStatus, updateCount, listUpdaterHook, listOfUsers) => {
+//     let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
+//     deepai.setApiKey(apik)
+//     deepai.callStandardApi('text-generator', { text: name })
+//         .then(resp => {
+//             // console.log(resp, '!!')
+//             // let textExtracted = (resp.output.split('.')[2])
+//             // listUpdater(uuid, resp.output)
+//             let textExtracted = (resp.output.split('.')[0])
+//             listUpdater(uuid, textExtracted, listUpdaterHook, listOfUsers)
+//             fetchStatus(true)
+//             updateCount(count => count + 1)
+//         })
+//     // console.log('chk02')
+// }
 
 
 // export let makeRequest = (name, textUpdater) => {
@@ -156,7 +145,6 @@ export let makeRequest = (name, listUpdater, uuid, fetchStatus, updateCount, lis
 //         })
 // }
 
-export default ShowSuggestedPersonModal
 
 // let makeRequest = () => {
 //     let url = `https://contentai-net-text-generation.p.rapidapi.com/text-generation/api/?category=${name}`;

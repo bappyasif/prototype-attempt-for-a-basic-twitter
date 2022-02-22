@@ -33,8 +33,9 @@ import TrendsModal from '../navigation-panels/right-side/current-trends/trends-m
 import RenderLengthyFollowList from '../navigation-panels/right-side/follow-suggested-people-component/show-lengthy-follow-list';
 import RenderHomePageView from '../navigation-panels/left-side/home-page';
 import RenderExplorePage from '../navigation-panels/left-side/explore-page';
+import ExplicitTrendsOnClick from '../navigation-panels/right-side/explicit-trends-on-click';
 
-function AllRoutes({ listName, handleListName, updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({ handleExplicitTrendSearchText, explicitTrendSearchText, listOfRandomUsers, listName, handleListName, updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -155,6 +156,8 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
         // console.log('its here')
     }
 
+    // console.log(explicitTrendSearchText, 'explicitTrendSearchText?!')
+
     return (
         <Router>
             <Switch>
@@ -164,6 +167,14 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                         currentUser={currentUser}
                         handleCurrentUser={handleCurrentUser}
                     />
+                </Route>
+
+                <Route exact path={'/explicit_trends/'}>
+                    <div className='constant-view-of-backdrop'>
+                        <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
+                        <ExplicitTrendsOnClick explicitTrendSearchText={explicitTrendSearchText} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
+                    </div>
                 </Route>
 
                 <Route exact path={'/home'}>
@@ -182,7 +193,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                             firstTweetHasMedia={firstTweetHasMedia} setFirstTweetHasMedia={setFirstTweetHasMedia} secondTweetHasMedia={secondTweetHasMedia} setSecondTweetHasMedia={setSecondTweetHasMedia}
                             firstTweetHasPoll={firstTweetHasPoll} setFirstTweetHasPoll={setFirstTweetHasPoll} secondTweetHasPoll={secondTweetHasPoll} setSecondTweetHasPoll={setSecondTweetHasPoll}
                         />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -190,7 +201,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <RenderExplorePage />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -198,7 +209,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={true} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <AnalyticsUI analysingTweetID={analysingTweetID} analysingTweetData={analysingTweetData} currentUser={currentUser} handlePollVotesCount={handlePollVotesCount} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -206,7 +217,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={true} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <AddMemebersIntoLists handleListName={handleListName} currentList={currentList} currentUser={currentUser} updateExistingListData={updateExistingListData} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -214,7 +225,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={true} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <CreateLists handleCurrentList={handleCurrentList} handleMembersList={handleMembersList} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -222,7 +233,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={true} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <ShowListExistingMembers updateExistingListData={updateExistingListData} listName={listName} currentList={currentList} handleMembersList={handleMembersRemoval} currentMembers={membersList} checkMemberExists={checkMemberExists} currentList={currentList} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -230,7 +241,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={true} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <ListOfAddedMembers listName={listName} currentList={currentList} currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} currentMembers={membersList} checkMemberExists={checkMemberExists} handleMembersRemoval={handleMembersRemoval} currentList={currentList} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} listOfRandomUsersv={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -238,15 +249,15 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <SuggestedMembersForList listName={listName} currentUser={currentUser} handleCurrentList={handleCurrentList} listMembersCount={listMembersCount} handleMembersCount={handleMembersCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} currentMembers={membersList} currentList={currentList} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
                 <Route exact path={'/i/connect_people'}>
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
-                        <RenderLengthyFollowList />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RenderLengthyFollowList listOfRandomUsers={listOfRandomUsers} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -254,7 +265,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <ShowTweetThread threadedTweetData={threadedTweetData} currentUser={currentUser} uniqueID={uniqueID} updateData={updateData} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={gifFile} setSelectedGif={setGifFile} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} removeSpeceficArrayItem={removeSpeceficArrayItem} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -262,7 +273,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <RetweetsWithCommentsThread currentUser={currentUser} quotedTweetID={quoteTweetID} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} handleThreadedTweetData={handleThreadedTweetData} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -270,15 +281,15 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <TagLocation currentUser={currentUser} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
                 <Route exact path={'/settings/trends'}>
-                <div className='constant-view-of-backdrop'>
+                    <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={true} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <TrendsModal />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={true} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -332,7 +343,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                         <TopicsPicker handleData={handleUserInterestsData} sanitizedData={sanitizedInterestsData} currentUser={currentUser} />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -356,7 +367,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
 
                             pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} selectedTaggedPlace={selectedTaggedPlace} quotedFromRetweetModal={quotedFromRetweetModal}
                         />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -369,7 +380,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                             setScheduleStamp={setScheduleStamp}
                         // handleTweetModalityToggle={handleTweetModalityToggle}
                         />
-                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                        <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -383,7 +394,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                             mediaDescriptionText={mediaFileDescriptionText}
                             setMediaDescriptionText={setMediaFileDescriptionText}
                         />
-                        <RightSideNavigationPanel tweetData={tweetData} />
+                        <RightSideNavigationPanel tweetData={tweetData} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
 
@@ -395,7 +406,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                             <div className='constant-view-of-backdrop'>
                                 <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                                 <ProfilePageUpperView currentUser={currentUser} />
-                                <RightSideNavigationPanel tweetData={tweetData} />
+                                <RightSideNavigationPanel tweetData={tweetData} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
                             <UserProfile
                                 selectedFile={selectedFile} extraSelectedFile={selectedPictureFileForExtraTweet} setSelectedFile={setSelectedFile} setExtraSelectedFile={setSelectedPictureFileForExtraTweet}
@@ -442,7 +453,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                                 {/* <EditProfile currentUser={currentUser} setOpacity={setOpacity} /> */}
                                 {/* { currentUserID && <EditProfile currentUser={currentUserID} setOpacity={setOpacity} />} */}
                                 {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
-                                <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                                <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
                             {currentUser && <EditProfile currentUser={currentUser} setOpacity={setOpacity} />}
                         </Route>
@@ -458,7 +469,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                             <div className='constant-view-of-backdrop'>
                                 <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                                 {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
-                                <RightSideNavigationPanel tweetData={tweetData} />
+                                <RightSideNavigationPanel tweetData={tweetData} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
                             <TweetsAndRepliesPage currentUser={currentUser} tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} handleThreadedTweetData={handleThreadedTweetData} />
                         </Route>
@@ -474,7 +485,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                             <div className='constant-view-of-backdrop'>
                                 <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                                 {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
-                                <RightSideNavigationPanel tweetData={tweetData} />
+                                <RightSideNavigationPanel tweetData={tweetData} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
                             <AllMedias tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
                         </Route>
@@ -489,7 +500,7 @@ function AllRoutes({ listName, handleListName, updateExistingListData, updateSom
                             <div className='constant-view-of-backdrop'>
                                 <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                                 <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />
-                                <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} />
+                                <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
                         </Route>
                         :

@@ -3,7 +3,7 @@ import { convertingTime12Hours } from "../../user-profile/all-tweets/show-tweet-
 import useOnClickOutside from "../right-side/click-outside-utility-hook/useOnClickOutside"
 import './styles.css'
 
-export let RenderArticle = ({ item, fromExplore }) => {
+export let RenderArticle = ({ item, fromExplore, fromExplicitTrend }) => {
     let [timeStamp, setTimeStamp] = useState(null)
     let [showTimeToolTip, setShowTimeToolTip] = useState(false)
     let [publishedDate, setPublishedDate] = useState(null)
@@ -11,13 +11,13 @@ export let RenderArticle = ({ item, fromExplore }) => {
     let [beginCountdown, setBeginCountdown] = useState(false)
 
     // useEffect(() => item && !fromExplore && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate), [item])
-    useEffect(() => item && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate, fromExplore), [item])
+    useEffect(() => item && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate, (fromExplore || fromExplicitTrend)), [item])
 
     // console.log(item, 'articleItem')
 
     let beginCountdownToZero = () => {
         let handle = setTimeout(() => {
-            if(countdown) {
+            if (countdown) {
                 setCountdown(countdown - 1)
             } else {
                 clearTimeout(handle)
@@ -44,8 +44,10 @@ export let RenderArticle = ({ item, fromExplore }) => {
             <div id='article-info'>
                 <div id='top-section' onMouseLeave={() => setShowTimeToolTip(false)}>
                     <div id='authors-info'>
-                        <div id='authors-name'>{item.byline.split('By ')[1] || 'Inhouse Newsdesk'}</div>
-                        <div id='authors-handle'>@{adjustingAuthorsNames(item) || 'Inhouse Newsdesk'}</div>
+                        <div id='authors-name'>{(!fromExplicitTrend ? item.byline.split('By ')[1] : item.author) || 'Inhouse Newsdesk'}</div>
+                        {/* <div id='authors-name'>{item.byline.split('By ')[1] || 'Inhouse Newsdesk'}</div> */}
+                        <div id='authors-handle'>@{(!fromExplicitTrend ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends(item.author)) || 'Inhouse Newsdesk'}</div>
+                        {/* <div id='authors-handle'>@{adjustingAuthorsNames(item) || 'Inhouse Newsdesk'}</div> */}
                     </div>
                     <div id='article-timestamp' onMouseEnter={handleHover} onBlur={handleHover}>
                         <div id='published-time'>{publishedDate || '4h'}</div>
@@ -53,17 +55,60 @@ export let RenderArticle = ({ item, fromExplore }) => {
                     </div>
                 </div>
                 <div id='snippet-text'>{item.abstract || item.title}</div>
+                {fromExplicitTrend && <div id="article-description">{removeHtmlTagsFromArticleString(item.description)}</div>}
             </div>
-            <img id='article-img' style={{opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none'}} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia[1].url)} />
+            <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} />
             {beginCountdown && <div className='countdown'>{countdown}</div>}
         </div>
     )
+}
+
+export let removeHtmlTagsFromArticleString = (text) => {
+    if(text) {
+        text = text.toString()
+    }
+    let stripOutHtmlTags = text.replace(/(<([^>]+)>)/ig, '')
+    return stripOutHtmlTags;
+}
+
+let adjustingAuthorsNamesForTrends = (authorNames) => {
+    let handleName = '';
+
+    let tokens;
+    if(authorNames.includes(', ')) {
+        tokens = authorNames.split(', ')[0]
+    }
+
+    let nextSplit;
+    if(tokens && tokens.includes(' and ')) {
+        nextSplit = tokens.split(' and ')
+    }
+
+    console.log(tokens, nextSplit, authorNames)
+
+    if(nextSplit) {
+        nextSplit.forEach((name, idx, arr) => {
+            handleName += name[0].toUpperCase();
+
+            if(idx == arr.length -1) {
+                handleName += name.slice(1)
+            } else {
+                handleName += '.'
+            }
+        })
+    } else {
+        // handleName = tokens && tokens.split(' ').join('_')
+        handleName = authorNames.split(' ').join('_')
+    }
+
+    return handleName;
 }
 
 export let adjustingAuthorsNames = (item) => {
     let readyAdjusts = ''
 
     let firstInduction = (item.byline || item.kicker).split('By ')[1]
+    // let firstInduction = ( !forTrends ? item.byline || item.kicker : item.author).split('By ')[1]
     // console.log(firstInduction, 'firstInduction')
     let secondInduction = firstInduction && firstInduction.split(' and ')
 
@@ -93,10 +138,10 @@ export let GmtBasedDateAndTimeTokens = (dtString) => {
 
 export let getHowLongSinceThisArticleWasPosted = (item, timeStampUpdater, poublishedDateUpdater, dateStringInGMT) => {
     let months = ['Jan', 'Feb', 'Mar', 'Apr', "Mei", "Jun", "Jul", 'Aug', 'Sep', "Okt", 'Nov', 'Dec']
-    let timeTokens = () => (item.updated || item.published_date).split(' ')
-    let [dateString, timeString] = dateStringInGMT ? [...GmtBasedDateAndTimeTokens(item.updated_date || item.published_date)] : [...timeTokens()]
+    let timeTokens = () => (item.updated || item.published_date || item.publishedAt).split(' ')
+    let [dateString, timeString] = dateStringInGMT ? [...GmtBasedDateAndTimeTokens(item.updated_date || item.published_date || item.publishedAt)] : [...timeTokens()]
 
-    // console.log(dateString, timeString, '<!<!')
+    console.log(dateString, timeString, '<!<!') 
     // 2022-02-07T21:42:08-05:00"
 
     let [yy, mm, dd] = dateString.split('-')
@@ -141,7 +186,7 @@ export let makeGetFetchRequest = (url, dataUpdater) => {
         .catch(err => console.log(err.code, err.message))
 }
 
-export let ShowSettingsModal = ({handleCloseModal, removedNewsFromList, options, announcementText, fromExplore }) => {
+export let ShowSettingsModal = ({ handleCloseModal, removedNewsFromList, options, announcementText, fromExplore }) => {
     let [announcement, setAnnouncement] = useState(null)
 
     let [timerHandle, setTimerHandle] = useState(null)
@@ -151,7 +196,7 @@ export let ShowSettingsModal = ({handleCloseModal, removedNewsFromList, options,
 
         let handle = setTimeout(() => {
             setAnnouncement('')
-           removedNewsFromList()
+            removedNewsFromList()
         }, 4000)
 
         setTimerHandle(handle)
@@ -166,16 +211,16 @@ export let ShowSettingsModal = ({handleCloseModal, removedNewsFromList, options,
 
     return (
         announcement
-        ?
-        <SettingsModal announcement={announcement} timerHandle={timerHandle} fromExplore={fromExplore} handleCloseModal={handleCloseModal} />
-        :
-        <div id='show-suggested-settings-wrapper' ref={ref}>
-            {renderOptions()}
-        </div>
+            ?
+            <SettingsModal announcement={announcement} timerHandle={timerHandle} fromExplore={fromExplore} handleCloseModal={handleCloseModal} />
+            :
+            <div id='show-suggested-settings-wrapper' ref={ref}>
+                {renderOptions()}
+            </div>
     )
 }
 
-let SettingsModal = ({announcement, timerHandle , fromExplore, handleCloseModal}) => {
+let SettingsModal = ({ announcement, timerHandle, fromExplore, handleCloseModal }) => {
     let [undoSuccessful, setUndoSuccessful] = useState(false)
 
     let handleUndo = () => {
@@ -204,7 +249,7 @@ let SettingsModal = ({announcement, timerHandle , fromExplore, handleCloseModal}
     )
 }
 
-export let RenderSettingsOption = ({item, removedNewsFromList}) => {
+export let RenderSettingsOption = ({ item, removedNewsFromList }) => {
     return (
         <div className='settings-option-wrapper' onClick={removedNewsFromList}>
             <div id='svg-icon'>{item.icon}</div>
@@ -219,10 +264,10 @@ export let removeItemFromArrayByTitle = (dataset, removalList, datasetUpdater, f
 
         // when its from fromExplore  dataset is list of category names, otherwise news items list
         let check = removalList.findIndex(comparable => fromExplore ? item == comparable : item.title == comparable)
-        
+
         return check == -1 && item
     }).filter(item => item)
-    
+
     datasetUpdater(newList)
 }
 

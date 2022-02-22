@@ -1992,11 +1992,21 @@
   font-size: smaller;
 }
 
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #left-side #user-infos #user-name:hover {
+  text-decoration: underline;
+}
+
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #book-review,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #description-text {
   margin-left: 72px;
   width: 450px;
   text-align: left;
+  line-height: 1.3em;
+}
+
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #description-text .more-text {
+  font-size: x-large;
+  color: aqua;
 }
 
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper,
