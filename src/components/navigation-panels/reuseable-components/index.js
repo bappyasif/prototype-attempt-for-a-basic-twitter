@@ -57,7 +57,8 @@ export let RenderArticle = ({ item, fromExplore, fromExplicitTrend }) => {
                 <div id='snippet-text'>{item.abstract || item.title}</div>
                 {fromExplicitTrend && <div id="article-description">{removeHtmlTagsFromArticleString(item.description)}</div>}
             </div>
-            <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} />
+            {/* <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} /> */}
+            <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none', display: fromExplicitTrend && Math.random() > .5 ? 'block' : 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} />
             {beginCountdown && <div className='countdown'>{countdown}</div>}
         </div>
     )
@@ -84,7 +85,7 @@ let adjustingAuthorsNamesForTrends = (authorNames) => {
         nextSplit = tokens.split(' and ')
     }
 
-    console.log(tokens, nextSplit, authorNames)
+    // console.log(tokens, nextSplit, authorNames)
 
     if(nextSplit) {
         nextSplit.forEach((name, idx, arr) => {
@@ -141,7 +142,7 @@ export let getHowLongSinceThisArticleWasPosted = (item, timeStampUpdater, poubli
     let timeTokens = () => (item.updated || item.published_date || item.publishedAt).split(' ')
     let [dateString, timeString] = dateStringInGMT ? [...GmtBasedDateAndTimeTokens(item.updated_date || item.published_date || item.publishedAt)] : [...timeTokens()]
 
-    console.log(dateString, timeString, '<!<!') 
+    // console.log(dateString, timeString, '<!<!') 
     // 2022-02-07T21:42:08-05:00"
 
     let [yy, mm, dd] = dateString.split('-')

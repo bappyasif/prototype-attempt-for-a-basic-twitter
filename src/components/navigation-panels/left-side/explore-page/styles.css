@@ -107,7 +107,8 @@
     background-color: lightslategray;
 }
 
-#render-explore-page-container #search-wrapper {
+#render-explore-page-container #search-wrapper,
+#explicit-trend-tweets-container #search-wrapper {
     display: flex;
     align-items: center;
     position: relative;
@@ -116,12 +117,14 @@
     border-radius: 20px;
 }
 
+#explicit-trend-tweets-container #search-wrapper #svg-icon,
 #render-explore-page-container #search-wrapper #svg-icon {
     transform: scale(1.3);
     position: absolute;
     left: 24px;
 }
 
+#explicit-trend-tweets-container #search-wrapper
 #render-explore-page-container #search-wrapper #search-suggested-list {
     width: -webkit-fill-available;
     line-height: 3.1em;

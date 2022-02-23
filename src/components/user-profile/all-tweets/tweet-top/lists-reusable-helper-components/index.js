@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { removeIconSvg } from "../../show-tweet-thread/tag-location"
 
 export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction, modalActionFlag }) => {
 
@@ -18,14 +19,14 @@ export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction, 
     )
 }
 
-export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore, handleSearchText, setSearchResultsModalHook, savingPrevSearchText}) => {
+export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore, handleSearchText, setSearchResultsModalHook, savingPrevSearchText, fromTrends, initialTrendSearchedText }) => {
     let [inputText, setInputText] = useState(null)
 
     let [focused, setFocused] = useState(false)
     
     // let handleFocused = () => setFocused(!focused)
     let handleFocused = () => {
-        fromExplore && setSearchResultsModalHook(true)
+        (fromExplore || fromTrends) && setSearchResultsModalHook(true)
         // fromExplore && savingPrevSearchText && handleSearchText(savingPrevSearchText)
         setFocused(!focused)
     }
@@ -37,18 +38,27 @@ export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore,
     //     fromExplore && handleSearchText(evt.target.value)
     // }
 
+    // useEffect(() => {
+    //     fromTrends && setInputFocused(focused)
+    // }, [focused])
+
+    // console.log(initialTrendSearchedText, 'initialTrendSearchedTexts')
+
+    useEffect(() => fromTrends && initialTrendSearchedText && setInputText(initialTrendSearchedText), [initialTrendSearchedText])
+
     useEffect(() => {
-        !fromExplore && handleMemberName(inputText)
-        inputText && fromExplore && handleSearchText(inputText)
+        !(fromExplore || fromTrends) && handleMemberName(inputText)
+        inputText && (fromExplore || fromTrends) && handleSearchText(inputText)
     }, [inputText])
 
     // console.log(searchableMembers, 'searchableMembers!!');
     
     return (
-        <div id='search-wrapper' style={{ borderColor: focused && 'rgb(29, 155, 240)' }}>
-            <div id='svg-icon'>{searchIconSvg()}</div>
+        <div id='search-wrapper' style={{ borderColor: focused && 'rgb(29, 155, 240)', position: "relative" }}>
+            <div id='svg-icon' style={{fill: fromTrends && focused && 'rgb(29, 155, 240)'}}>{searchIconSvg()}</div>
             <label htmlFor='search-suggested-list' />
-            <input id='search-suggested-list' placeholder='Search people' onFocus={handleFocused} onBlur={handleFocused} onChange={handleInputText} autoComplete='off' />
+            <input id='search-suggested-list' placeholder={fromTrends ? 'Search Twitter' : 'Search people'} onFocus={handleFocused} onBlur={handleFocused} onChange={handleInputText} autoComplete='off' value={inputText || ''} />
+            {fromTrends && inputText && <div id='remove-search-text' onClick={() => setInputText('')}>{removeIconSvg()}</div>}
         </div>
     )
 }

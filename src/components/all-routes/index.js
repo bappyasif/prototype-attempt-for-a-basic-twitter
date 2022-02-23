@@ -172,7 +172,7 @@ function AllRoutes({ handleExplicitTrendSearchText, explicitTrendSearchText, lis
                 <Route exact path={'/explicit_trends/'}>
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
-                        <ExplicitTrendsOnClick explicitTrendSearchText={explicitTrendSearchText} />
+                        <ExplicitTrendsOnClick explicitTrendSearchText={explicitTrendSearchText} handleExplicitTrendSearchText={handleExplicitTrendSearchText} />
                         <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>

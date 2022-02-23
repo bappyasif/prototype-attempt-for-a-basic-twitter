@@ -390,7 +390,6 @@
 
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #left-side img,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper #left-side img {
-  width: 42px;
   height: 38px;
   border-radius: 50%;
 }
@@ -480,4 +479,85 @@
   text-align: center;
   font-size: larger;
   border-radius: 20px;
+}
+
+#explicit-trend-tweets-container {
+  width: 696px;
+}
+
+#explicit-trend-tweets-container #trends-header-component {
+  /* width: 650px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+#explicit-trend-tweets-container #trends-header-component .svg-element {
+  width: 17%;
+  line-height: 2em;
+  position: relative;
+}
+
+#explicit-trend-tweets-container #trends-header-component .svg-element .tooltips {
+  position: absolute;
+  left: 40px;
+  top: 15px;
+}
+
+#explicit-trend-tweets-container #trends-header-component #back-svg-icon {
+  text-align: left;
+  padding-left: 15px;
+}
+
+#explicit-trend-tweets-container #trends-header-component #remove-search-text {
+  position: absolute;
+  right: 20px;
+  background-color: rgb(29, 155, 240);
+  border-radius: 50%;
+  display: flex;
+  padding-left: 2px;
+}
+
+#explicit-trend-tweets-container #trends-header-component #search-settings-icon {
+  text-align: right;
+  padding-right: 18px;
+}
+
+#explicit-trend-tweets-container #trends-header-component #search-wrapper {
+  line-height: 2em;
+  margin-bottom: 1.3px;
+  flex-grow: 2;
+}
+
+#explicit-trend-tweets-container #trends-header-component #search-wrapper #svg-icon {
+  display: flex;
+}
+
+#explicit-trend-tweets-container #trends-header-component #search-wrapper #search-suggested-list {
+  padding-left: 60px;
+  font-size: larger;
+  line-height: 2em;
+}
+
+#explicit-trend-tweets-container #top-navigation-panel-container {
+  display: flex;
+  justify-content: space-between;
+  font-size: larger;
+  font-weight: bolder;
+  padding: 0px 6px 0px 4px;
+  width: 97.1%;
+  margin: auto;
+}
+
+#explicit-trend-tweets-container #top-navigation-panel-container .navigation-name {
+  /* border: solid silver 1.1px; */
+  width: 20%;
+  line-height: 1.7em;
+  background-color: lightgray;
+  margin: 0.8px 1.1px 0px 1.1px;
+}
+
+#explicit-trend-tweets-container #reuseable-articles-renderer-wrapper .render-article-wrapper {
+  width: 674px;
 }
