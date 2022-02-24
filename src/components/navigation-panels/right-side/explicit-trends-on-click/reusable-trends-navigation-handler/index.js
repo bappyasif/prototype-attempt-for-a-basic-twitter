@@ -8,102 +8,76 @@ function ReuseableTrendsNavigationHandler({
 }) {
     let [dataset, setDataset] = useState(null);
     let [fetchUrl, setFetchUrl] = useState(null);
-    let [refetchWhenNoDataIsFound, setRefetchWhenNoDataIsFound] = useState(false);
     let [videoFeeds, setVideoFeeds] = useState(null);
 
-    let handleDataset = (items) => {
-        let newList = items
-            .filter((item) => item.author)
-            .filter((item) => !item.author.includes("("));
-        setDataset(newList);
-    };
+    // let handleDataset = (items) => {
+    //     let newList = items
+    //         .filter((item) => item.author)
+    //         .filter((item) => !item.author.includes("("));
+    //     console.log(newList, items, 'data!!')
+    //     setDataset(newList);
+    // };
 
     console.log(
         fetchUrl,
         "fetchUrl",
         explicitTrendSearchText,
         whichNav,
-        videoFeeds
+        videoFeeds,
+        dataset
     );
 
-    let fetchDataFromGoogleNewsAPI = () => {
-        // console.log(fetchUrl, 'fetchUrl', explicitTrendSearchText, whichNav)
-        fetch(fetchUrl)
-            .then((resp) => resp.json())
-            .then((data) => {
-                console.log(data, "data!!");
-                let results = data.articles;
-                if (results.length) {
-                    handleDataset(results);
-                } else {
-                    console.log("no data found, try again later!!");
-                }
-            })
-            .catch((err) => console.log(err.code, err.message));
-    };
-
-    useEffect(() => {
-        let apik = "16d8576b44404e2cacdb7c57761d4f34";
-        refetchWhenNoDataIsFound &&
-            explicitTrendSearchText &&
-            setFetchUrl(
-                `https://newsapi.org/v2/everything?q=${explicitTrendSearchText}&apiKey=${apik}`
-            );
-        refetchWhenNoDataIsFound && setRefetchWhenNoDataIsFound(false);
-    }, [refetchWhenNoDataIsFound]);
-
-    useEffect(() => {
-        let apik = "16d8576b44404e2cacdb7c57761d4f34";
-
-        // let apikForPexel = '563492ad6f91700001000001ff1b2b316cff458fa9f5199597d08cf7'
-
-        let url = explicitTrendSearchText
-            ? whichNav == "Top"
-                ? `https://newsapi.org/v2/everything?q=${encodeURI(explicitTrendSearchText)}&apiKey=${apik}`
-                : whichNav == "Latest"
-                    ? `https://newsapi.org/v2/top-headlines?sources=bbc-news?q=${encodeURI(explicitTrendSearchText)}&apiKey=${apik}?lang=en`
-                    : whichNav == "People"
-                        ? `https://newsapi.org/v2/everything?q=${explicitTrendSearchText}&apiKey=${apik}?lang=en`
-                        : whichNav == "Photos"
-                            ? `https://newsapi.org/v2/everything?q=${explicitTrendSearchText}&apiKey=${apik}?lang=en`
-                            : whichNav == "Videos" &&
-                            `https://newsapi.org/v2/everything?q=${explicitTrendSearchText}&apiKey=${apik}?lang=en`
-            : `https://newsapi.org/v2/everything?q=${explicitTrendSearchText}&apiKey=${apik}?lang=en`;
-
-        setFetchUrl(url);
-    }, [whichNav, explicitTrendSearchText]);
-
-    useEffect(() => {
-        whichNav && explicitTrendSearchText && fetchDataFromGoogleNewsAPI();
-    }, []);
-
-    // useEffect(() => whichNav && explicitTrendSearchText && fetchDataFromGoogleNewsAPI(), [explicitTrendSearchText, whichNav])
-    useEffect(() => {
-        if (whichNav != "Videos") {
-            whichNav && explicitTrendSearchText && fetchDataFromGoogleNewsAPI();
+    let decideWhichFetchRequest = (searchString, whichNav) => {
+        let url = 'https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/';
+        if(searchString) {
+            if(whichNav == 'Top') {
+                url += `search/NewsSearchAPI?q=${searchString}`
+            } else if(whichNav == 'Latest') {
+                url += `search/TrendingNewsAPI?q=${searchString}`
+            } else if(whichNav == 'Photos') {
+                url += `Search/ImageSearchAPI?q=${searchString}`
+            }
         } else {
-            searchForVideosOnly(setVideoFeeds);
+            console.log('no search string found!!')
         }
-    }, [explicitTrendSearchText, whichNav]);
+        console.log(url, 'url!!')
+        fetchDataWebSearch(url, setDataset);
+    }
+
+    useEffect(() => explicitTrendSearchText && whichNav && decideWhichFetchRequest(explicitTrendSearchText, whichNav), [explicitTrendSearchText, whichNav])
 
     let renderArticles = () =>
         dataset &&
         dataset.map((item) => (
-            <RenderArticle key={item.title} item={item} fromExplicitTrend={true} />
+            <RenderArticle key={item.title} item={item} fromExplicitTrend={true} whichNav={whichNav} />
         ));
 
     return <div id="reuseable-articles-renderer-wrapper">{renderArticles()}</div>;
 }
 
-// let searchForVideosOnly = (updateDataset) => {
-
-//     let apikForPexel = '563492ad6f91700001000001ff1b2b316cff458fa9f5199597d08cf7'
-
-//     const client = createClient(apikForPexel);
-//     const query = 'Nature';
-
-//     client.videos.search({ query, per_page: 1 }).then(videos => updateDataset(videos));
-
-// }
+let fetchDataWebSearch = (firstHalfOfUrl, dataUpdater) => {
+    fetch(`${firstHalfOfUrl}?pageNumber=1&pageSize=10`, {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "contextualwebsearch-websearch-v1.p.rapidapi.com",
+            "x-rapidapi-key": "16ecb1e169msh1f719a2c940b075p117e09jsn47e729518524"
+        }
+    })
+        .then(response => {
+            return response.json()
+        })
+        .then(data => {
+            console.log(data, 'data!!')
+            let results = data.value
+            if(results) {
+                dataUpdater(results)
+            } else {
+                console.log('no data is found!!')
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
 
 export default ReuseableTrendsNavigationHandler;

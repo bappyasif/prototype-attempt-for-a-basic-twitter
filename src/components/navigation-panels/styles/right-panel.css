@@ -501,11 +501,23 @@
 
 #explicit-trend-tweets-container #trends-header-component .svg-element .tooltips {
   position: absolute;
-  left: 40px;
-  top: 15px;
+  left: 13px;
+  top: 22px;
+  background-color: silver;
+  border-radius: 51%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 4px 0px 4px;
+  font-size: small;
 }
 
-#explicit-trend-tweets-container #trends-header-component #back-svg-icon {
+#explicit-trend-tweets-container #trends-header-component #More .tooltips {
+  left: 87px;
+}
+
+#explicit-trend-tweets-container #trends-header-component #back-svg-icon,
+#explicit-trend-tweets-container #trends-header-component #Back {
   text-align: left;
   padding-left: 15px;
 }
@@ -519,7 +531,8 @@
   padding-left: 2px;
 }
 
-#explicit-trend-tweets-container #trends-header-component #search-settings-icon {
+#explicit-trend-tweets-container #trends-header-component #search-settings-icon,
+#explicit-trend-tweets-container #trends-header-component #More {
   text-align: right;
   padding-right: 18px;
 }
@@ -559,5 +572,7 @@
 }
 
 #explicit-trend-tweets-container #reuseable-articles-renderer-wrapper .render-article-wrapper {
-  width: 674px;
+  /* width: 674px; */
+  width: 661px;
+  padding: 4px;
 }

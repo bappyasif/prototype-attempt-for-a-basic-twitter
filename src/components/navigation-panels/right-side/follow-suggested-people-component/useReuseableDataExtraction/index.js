@@ -68,7 +68,7 @@ export let gettingDataFfromDeepai = (item, setFetchReady, updateListOfUsers, set
         let userName = item.first_name + ' ' + item.last_name;
         makeRequest(userName, updateListOfUsers, item.uid, setFetchReady, setCounter)
         // console.log('chk05')
-    }, 1000)
+    }, 110)
     // console.log('cchck01')
     return () => clearTimeout(handle)
 }

@@ -3,15 +3,18 @@ import { convertingTime12Hours } from "../../user-profile/all-tweets/show-tweet-
 import useOnClickOutside from "../right-side/click-outside-utility-hook/useOnClickOutside"
 import './styles.css'
 
-export let RenderArticle = ({ item, fromExplore, fromExplicitTrend }) => {
+export let RenderArticle = ({ item, fromExplore, fromExplicitTrend, whichNav }) => {
     let [timeStamp, setTimeStamp] = useState(null)
     let [showTimeToolTip, setShowTimeToolTip] = useState(false)
     let [publishedDate, setPublishedDate] = useState(null)
     let [countdown, setCountdown] = useState(4)
     let [beginCountdown, setBeginCountdown] = useState(false)
+    let [showPicture, setShowPicture] = useState(false)
 
     // useEffect(() => item && !fromExplore && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate), [item])
     useEffect(() => item && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate, (fromExplore || fromExplicitTrend)), [item])
+
+    useEffect(() => whichNav != 'Picture' && fromExplicitTrend && setShowPicture(Math.random() > .51), [item])
 
     // console.log(item, 'articleItem')
 
@@ -44,28 +47,34 @@ export let RenderArticle = ({ item, fromExplore, fromExplicitTrend }) => {
             <div id='article-info'>
                 <div id='top-section' onMouseLeave={() => setShowTimeToolTip(false)}>
                     <div id='authors-info'>
-                        <div id='authors-name'>{(!fromExplicitTrend ? item.byline.split('By ')[1] : item.author) || 'Inhouse Newsdesk'}</div>
+                        <div id='authors-name'>{(!fromExplicitTrend ? item.byline.split('By ')[1] : (item.author || item.provider.name)) || 'Inhouse Newsdesk'}</div>
                         {/* <div id='authors-name'>{item.byline.split('By ')[1] || 'Inhouse Newsdesk'}</div> */}
-                        <div id='authors-handle'>@{(!fromExplicitTrend ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends(item.author)) || 'Inhouse Newsdesk'}</div>
+                        <div id='authors-handle'>@{(!fromExplicitTrend ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends((item.author || item.provider.name))) || 'Inhouse Newsdesk'}</div>
                         {/* <div id='authors-handle'>@{adjustingAuthorsNames(item) || 'Inhouse Newsdesk'}</div> */}
                     </div>
-                    <div id='article-timestamp' onMouseEnter={handleHover} onBlur={handleHover}>
-                        <div id='published-time'>{publishedDate || '4h'}</div>
-                        <div id='time-tooltip' style={{ display: showTimeToolTip && 'block' }}>{timeStamp || '00-00-00 99:99:99'}</div>
-                    </div>
+                    {
+                        whichNav != 'Photos'
+                        &&
+                        <div id='article-timestamp' onMouseEnter={handleHover} onBlur={handleHover}>
+                            <div id='published-time'>{publishedDate || '4h'}</div>
+                            <div id='time-tooltip' style={{ display: showTimeToolTip && 'block' }}>{timeStamp || '00-00-00 99:99:99'}</div>
+                        </div>
+                    }
                 </div>
                 <div id='snippet-text'>{item.abstract || item.title}</div>
-                {fromExplicitTrend && <div id="article-description">{removeHtmlTagsFromArticleString(item.description)}</div>}
+                {fromExplicitTrend && (whichNav != 'Photos') && <div id="article-description">{removeHtmlTagsFromArticleString(item.description)}</div>}
             </div>
             {/* <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} /> */}
-            <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none', display: fromExplicitTrend && Math.random() > .5 ? 'block' : 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} />
+            {/* <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none', display: whichNav != 'Picture' && showPicture ? 'block' : whichNav == 'Picture' ? 'block' : 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} /> */}
+            {/* <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none', display: whichNav != 'Picture' && !showPicture ? 'none' : 'block' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} /> */}
+            <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none', display: !fromExplicitTrend ? 'block' : whichNav == 'Photos' ? 'block' : showPicture ? 'block' : 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage || item.image.url || item.url)} />
             {beginCountdown && <div className='countdown'>{countdown}</div>}
         </div>
     )
 }
 
 export let removeHtmlTagsFromArticleString = (text) => {
-    if(text) {
+    if (text) {
         text = text.toString()
     }
     let stripOutHtmlTags = text.replace(/(<([^>]+)>)/ig, '')
@@ -76,22 +85,22 @@ let adjustingAuthorsNamesForTrends = (authorNames) => {
     let handleName = '';
 
     let tokens;
-    if(authorNames.includes(', ')) {
+    if (authorNames.includes(', ')) {
         tokens = authorNames.split(', ')[0]
     }
 
     let nextSplit;
-    if(tokens && tokens.includes(' and ')) {
+    if (tokens && tokens.includes(' and ')) {
         nextSplit = tokens.split(' and ')
     }
 
     // console.log(tokens, nextSplit, authorNames)
 
-    if(nextSplit) {
+    if (nextSplit) {
         nextSplit.forEach((name, idx, arr) => {
             handleName += name[0].toUpperCase();
 
-            if(idx == arr.length -1) {
+            if (idx == arr.length - 1) {
                 handleName += name.slice(1)
             } else {
                 handleName += '.'
@@ -140,7 +149,7 @@ export let GmtBasedDateAndTimeTokens = (dtString) => {
 export let getHowLongSinceThisArticleWasPosted = (item, timeStampUpdater, poublishedDateUpdater, dateStringInGMT) => {
     let months = ['Jan', 'Feb', 'Mar', 'Apr', "Mei", "Jun", "Jul", 'Aug', 'Sep', "Okt", 'Nov', 'Dec']
     let timeTokens = () => (item.updated || item.published_date || item.publishedAt).split(' ')
-    let [dateString, timeString] = dateStringInGMT ? [...GmtBasedDateAndTimeTokens(item.updated_date || item.published_date || item.publishedAt)] : [...timeTokens()]
+    let [dateString, timeString] = dateStringInGMT ? [...GmtBasedDateAndTimeTokens(item.updated_date || item.published_date || item.publishedAt || item.datePublished)] : [...timeTokens()]
 
     // console.log(dateString, timeString, '<!<!') 
     // 2022-02-07T21:42:08-05:00"

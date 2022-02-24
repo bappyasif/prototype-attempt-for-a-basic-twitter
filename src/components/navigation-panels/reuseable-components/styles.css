@@ -5,6 +5,8 @@
   margin: auto;
   margin-bottom: 11px;
   position: relative;
+  border: solid silver 1.1px;
+  border-radius: 4px;
 }
 
 #components-container #home-page-view-container .render-shared-article-wrapper #article-info,
@@ -64,6 +66,10 @@
   width: 681px;
   height: 400px;
   /* position: relative; */
+}
+
+#reuseable-articles-renderer-wrapper .render-article-wrapper #article-img {
+  width: -webkit-fill-available;
 }
 
 #components-container #home-page-view-container .render-article-wrapper .countdown,
