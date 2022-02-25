@@ -1961,6 +1961,8 @@
   background-color: whitesmoke;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #top-portion,
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #top-portion #left-side,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion,
@@ -1969,11 +1971,13 @@
   align-items: center;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #top-portion,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion {
   justify-content: space-between;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #top-portion #left-side #user-img,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-img,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #left-side #user-img {
   width: 51px;
@@ -1981,21 +1985,25 @@
   border-radius: 20px;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #top-portion #left-side #user-infos,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-infos,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #left-side #user-infos {
   margin-left: 20px;
   text-align: left;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #top-portion #left-side #user-infos #user-name,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #left-side #book-infos #author-name,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #left-side #user-infos #user-name {
   font-size: smaller;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #top-portion #left-side #user-infos #user-name:hover,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #left-side #user-infos #user-name:hover {
   text-decoration: underline;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #description-text,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #book-review,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #description-text {
   margin-left: 72px;
@@ -2004,17 +2012,21 @@
   line-height: 1.3em;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #description-text .more-text,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #description-text .more-text {
   font-size: x-large;
   color: aqua;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper {
   margin-bottom: 8px;
   position: relative;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #top-portion #follow-btn,
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #top-portion #follow-btn,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #top-portion #follow-btn,
@@ -2047,6 +2059,7 @@
   margin-bottom: 13px;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #unfollow-modal-wrapper,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper,
 #components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper {
@@ -2060,12 +2073,14 @@
   border-radius: 11px;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section,
 #components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section {
   text-align: left;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section #modal-action-description,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header,
@@ -2075,12 +2090,14 @@
   margin-bottom: 6px;
 }
 
-#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name,
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name,
 #components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #modal-top-section #modal-header #suggested-name {
   font-size: larger;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
 #components-container #lengthy-follow-list-container #suggested-first-half-wrapper #book-related-infos-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
 #components-container #suggested-people-list-container #follow-suggested-people-container .render-people-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
@@ -2090,10 +2107,12 @@
   margin-bottom: 6px;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns {
   background-color: gray;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns:hover,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #unfollow-modal-wrapper #action-btns-wrapper .action-btns:hover {
   background-color: darkslategray;
 }

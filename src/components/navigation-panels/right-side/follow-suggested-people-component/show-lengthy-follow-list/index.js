@@ -19,7 +19,7 @@ function RenderLengthyFollowList({listOfRandomUsers}) {
     )
 }
 
-let RenderUserInModal = ({ item }) => {
+export let RenderUserInModal = ({ item }) => {
     let [moreDescriptionText, setMoreDescriptionText] = useState(false)
 
     let [follow, setFollow] = useState(false)
@@ -34,7 +34,7 @@ let RenderUserInModal = ({ item }) => {
     let handleFollow = evt => {
         setActionName(evt.target.textContent)
 
-        setSuggestedName(item.title)
+        setSuggestedName && setSuggestedName(item.title)
     }
 
     let handleHover = () => {
@@ -42,8 +42,8 @@ let RenderUserInModal = ({ item }) => {
     }
 
     useEffect(() => {
-        item.decsription && item.decsription.length > 200 && setMoreDescriptionText(true)
-    }, [item.decsription])
+        (item.decsription || item.description) && (item.decsription || item.description).length > 200 && setMoreDescriptionText(true)
+    }, [item.decsription, item.description])
 
     // console.log(moreDescriptionText, 'moreDescriptionText')
 
@@ -62,18 +62,18 @@ let RenderUserInModal = ({ item }) => {
         <div id='lengthy-people-list-wrapper' onMouseLeave={() => setShowUserCardModal(false)}>
             <div id='top-portion'>
                 <div id='left-side' onMouseEnter={handleHover}>
-                    <img id='user-img' src={item.avatar} />
+                    <img id='user-img' src={item.avatar || item.profile_image_url} />
                     <div id='user-infos'>
-                        <div id='user-name'>{item.first_name + ' ' + item.last_name}</div>
-                        <div id='user-handle'>{(item.first_name + '_' + item.last_name).toLowerCase()}</div>
+                        <div id='user-name'>{ !item.name ? (item.first_name + ' ' + item.last_name) : item.name }</div>
+                        <div id='user-handle'>{ item.screen_name ? item.screen_name : (item.first_name + '_' + item.last_name).toLowerCase()}</div>
                     </div>
                 </div>
                 <div id='follow-btn' onClick={handleFollow} style={{ backgroundColor: follow && 'rgba(29, 155, 240, 1)' }}>{follow ? 'Following' : 'Follow'}</div>
             </div>
             {/* <div id='description-text'>{item.decsription && item.decsription.substring(0,62) || 'user description awaits or was not found at this moment....'}</div> */}
-            <div id='description-text'>{(moreDescriptionText ? item.decsription.slice(0, 200) : item.decsription) || 'user description awaits or was not found at this moment....'}<span className='more-text'>{moreDescriptionText && '...'}</span></div>
-            { !showUserCardModal && actionName == 'Following' && <RenderUnfollowModal handleFollow={handleFollow} suggestedName={item.first_name + ' ' + item.last_name} />}
-            {showUserCardModal && <ShowSuggestedPersonModal handleFollowSuggested={handleFollow} updatePersonModal={setShowUserCardModal} name={item.first_name + ' ' + item.last_name} handle={(item.first_name + '_' + item.last_name).toLowerCase()} profilePicUrl={item.avatar} followSuggested={follow} descriptionText={item.decsription} />}
+            <div id='description-text'>{(moreDescriptionText ? (item.decsription || item.description).slice(0, 200) : (item.decsription || item.description)) || 'user description awaits or was not found at this moment....'}<span className='more-text'>{moreDescriptionText && '...'}</span></div>
+            { !showUserCardModal && actionName == 'Following' && <RenderUnfollowModal handleFollow={handleFollow} suggestedName={!item.name ? (item.first_name + ' ' + item.last_name) : item.name} />}
+            {showUserCardModal && <ShowSuggestedPersonModal handleFollowSuggested={handleFollow} updatePersonModal={setShowUserCardModal} name={!item.name ? (item.first_name + ' ' + item.last_name) : item.name} handle={item.screen_name ? item.screen_name : (item.first_name + '_' + item.last_name).toLowerCase()} profilePicUrl={item.avatar || item.profile_image_url} followSuggested={follow} descriptionText={item.decsription || item.description} friendsAndFollowersCount={ (item.friends_count || item.followers_count) && [item.friends_count, item.followers_count]} />}
         </div>
     )
 }

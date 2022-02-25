@@ -332,7 +332,8 @@
 
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #follow-btn,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper #follow-btn,
-#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #follow-btn {
+#components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #follow-btn,
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #follow-btn {
   line-height: 2em;
   background-color: rgba(29, 155, 240, 1);
   padding: 0px 11px 0px 11px;
@@ -352,6 +353,7 @@
   border-radius: 4px;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container {
   position: absolute;
   top: 36px;
@@ -363,6 +365,7 @@
   padding: 10px 11px 4px 20px;
 } 
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper {
   display: flex;
@@ -371,40 +374,48 @@
   margin-bottom: 11px;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #user-name,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #user-details #profile-info #user-name,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper #user-name,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #user-name {
   font-size: smaller;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #user-name:hover,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #user-details #profile-info #user-name:hover,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper #user-name:hover,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #user-name:hover {
   text-decoration: underline;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #left-side,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper #left-side,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #left-side {
   text-align: left;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #left-side img,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #top-section-wrapper #left-side img,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper #left-side img {
   height: 38px;
   border-radius: 50%;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper {
   margin-bottom: 11px;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #description-text,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #description-text {
   margin-left: 0px;
   text-align: justify;
   width: -webkit-fill-available;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers,
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers,
@@ -413,6 +424,7 @@
   align-items: center;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers {
   margin-top: 11px;
@@ -420,11 +432,13 @@
   justify-content: space-between;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper {
   justify-content: space-between;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper #numbers-denominations,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper #numbers-denominations,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper #numbers-denominations {
   font-size: x-large;
@@ -432,24 +446,28 @@
   margin-right: 4px;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper #card-name,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper #card-name,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #follow-and-follower-numbers #card-wrapper #card-name {
   color: silver;
   /* font-size: larger; */
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper {
   color: darkslategray;
   font-size: smaller;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper #followed-by-people-wrapper,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper #followed-by-people-wrapper,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper #followed-by-people-wrapper {
   display: flex;
   align-items: center;
 }
 
+#components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper #followed-by-people-wrapper img,
 #components-container #lengthy-follow-list-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper #followed-by-people-wrapper img,
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #descriptive-infos-wrapper #statement-wrapper #followed-by-people-wrapper img {
   width: 11px;

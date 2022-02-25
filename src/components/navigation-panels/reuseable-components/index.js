@@ -12,9 +12,9 @@ export let RenderArticle = ({ item, fromExplore, fromExplicitTrend, whichNav }) 
     let [showPicture, setShowPicture] = useState(false)
 
     // useEffect(() => item && !fromExplore && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate), [item])
-    useEffect(() => item && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate, (fromExplore || fromExplicitTrend)), [item])
+    useEffect(() => whichNav != 'Videos' && item && getHowLongSinceThisArticleWasPosted(item, setTimeStamp, setPublishedDate, (fromExplore || fromExplicitTrend)), [item])
 
-    useEffect(() => whichNav != 'Picture' && fromExplicitTrend && setShowPicture(Math.random() > .51), [item])
+    useEffect(() => (whichNav != 'Picture' && whichNav != 'Videos') && fromExplicitTrend && setShowPicture(Math.random() > .51), [item])
 
     // console.log(item, 'articleItem')
 
@@ -47,13 +47,16 @@ export let RenderArticle = ({ item, fromExplore, fromExplicitTrend, whichNav }) 
             <div id='article-info'>
                 <div id='top-section' onMouseLeave={() => setShowTimeToolTip(false)}>
                     <div id='authors-info'>
-                        <div id='authors-name'>{(!fromExplicitTrend ? item.byline.split('By ')[1] : (item.author || item.provider.name)) || 'Inhouse Newsdesk'}</div>
+                        {(whichNav != 'Videos') && <div id='authors-name'>{(!fromExplicitTrend ? item.byline.split('By ')[1] : (item.author || item.provider.name)) || 'Inhouse Newsdesk'}</div>}
+                        {/* { (whichNav == 'Videos') && <div id="author-name">{item.name.split(':')[0]}</div>} */}
+                        {(whichNav == 'Videos') && <div id="author-name">{item.user && item.user.name || 'In-house'}</div>}
                         {/* <div id='authors-name'>{item.byline.split('By ')[1] || 'Inhouse Newsdesk'}</div> */}
-                        <div id='authors-handle'>@{(!fromExplicitTrend ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends((item.author || item.provider.name))) || 'Inhouse Newsdesk'}</div>
+                        <div id='authors-handle'>@{(!fromExplicitTrend ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends((item.author || item.provider && item.provider.name || item.user && item.user.name))) || 'Inhouse Newsdesk'}</div>
+                        {/* { (whichNav != 'Videos') && <div id='authors-handle'>@{(!fromExplicitTrend ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends((item.author || item.provider.name))) || 'Inhouse Newsdesk'}</div>} */}
                         {/* <div id='authors-handle'>@{adjustingAuthorsNames(item) || 'Inhouse Newsdesk'}</div> */}
                     </div>
                     {
-                        whichNav != 'Photos'
+                        (whichNav != 'Photos' && whichNav != 'Videos')
                         &&
                         <div id='article-timestamp' onMouseEnter={handleHover} onBlur={handleHover}>
                             <div id='published-time'>{publishedDate || '4h'}</div>
@@ -62,12 +65,20 @@ export let RenderArticle = ({ item, fromExplore, fromExplicitTrend, whichNav }) 
                     }
                 </div>
                 <div id='snippet-text'>{item.abstract || item.title}</div>
-                {fromExplicitTrend && (whichNav != 'Photos') && <div id="article-description">{removeHtmlTagsFromArticleString(item.description)}</div>}
+                {fromExplicitTrend && (whichNav != 'Photos' && whichNav != 'Videos') && <div id="article-description">{removeHtmlTagsFromArticleString(item.description)}</div>}
+                {/* {whichNav == 'Videos' && <div id="article-description">{item.snippet}</div> } */}
             </div>
             {/* <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} /> */}
             {/* <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none', display: whichNav != 'Picture' && showPicture ? 'block' : whichNav == 'Picture' ? 'block' : 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} /> */}
             {/* <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none', display: whichNav != 'Picture' && !showPicture ? 'none' : 'block' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage)} /> */}
-            <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none', display: !fromExplicitTrend ? 'block' : whichNav == 'Photos' ? 'block' : showPicture ? 'block' : 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage || item.image.url || item.url)} />
+            {whichNav != 'Videos' && <img id='article-img' style={{ opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none', display: !fromExplicitTrend ? 'block' : whichNav == 'Photos' ? 'block' : showPicture ? 'block' : 'none' }} src={(item.media && item.media[0]['media-metadata'][1].url || item.multimedia && item.multimedia[1].url || item.urlToImage || item.image.url || item.url)} />}
+            {/* {whichNav == 'Videos' && <iframe id="article-img"  src={item.url} style={{opacity: beginCountdown && '20%', pointerEvents: beginCountdown && 'none'}} />} */}
+            {whichNav == 'Videos'
+                &&
+                <video id="article-img" controls={true}>
+                    <source src={item.video_files[0]?.link} type={"video/mp4"} />
+                </video>
+            }
             {beginCountdown && <div className='countdown'>{countdown}</div>}
         </div>
     )
@@ -149,7 +160,7 @@ export let GmtBasedDateAndTimeTokens = (dtString) => {
 export let getHowLongSinceThisArticleWasPosted = (item, timeStampUpdater, poublishedDateUpdater, dateStringInGMT) => {
     let months = ['Jan', 'Feb', 'Mar', 'Apr', "Mei", "Jun", "Jul", 'Aug', 'Sep', "Okt", 'Nov', 'Dec']
     let timeTokens = () => (item.updated || item.published_date || item.publishedAt).split(' ')
-    let [dateString, timeString] = dateStringInGMT ? [...GmtBasedDateAndTimeTokens(item.updated_date || item.published_date || item.publishedAt || item.datePublished)] : [...timeTokens()]
+    let [dateString, timeString] = dateStringInGMT ? [...GmtBasedDateAndTimeTokens(item.updated_date || item.published_date || item.publishedAt || item.datePublished || item.dateLastCrawled)] : [...timeTokens()]
 
     // console.log(dateString, timeString, '<!<!') 
     // 2022-02-07T21:42:08-05:00"

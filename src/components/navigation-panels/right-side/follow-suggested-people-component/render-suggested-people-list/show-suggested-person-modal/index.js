@@ -2,7 +2,7 @@ let deepai = require('deepai')
 import React, { useEffect, useRef, useState } from 'react'
 import useOnHoverOutside from '../../../../../user-profile/all-tweets/tweet-top/add-members-into-lists/useOnHoverOutside'
 
-let ShowSuggestedPersonModal = ({ updatePersonModal, name, handle, profilePicUrl, handleFollowSuggested, followSuggested, descriptionText }) => {
+let ShowSuggestedPersonModal = ({ updatePersonModal, name, handle, profilePicUrl, handleFollowSuggested, followSuggested, descriptionText, friendsAndFollowersCount }) => {
     let ref = useRef(null)
     
     useOnHoverOutside(ref, () => updatePersonModal(false))
@@ -10,13 +10,15 @@ let ShowSuggestedPersonModal = ({ updatePersonModal, name, handle, profilePicUrl
     return (
         <div id='suggested-person-modal-container' ref={ref} >
             <PersonMoodalTopSection name={name} handle={handle} profilePicUrl={profilePicUrl} handleFollowSuggested={handleFollowSuggested} followSuggested={followSuggested} />
-            <PersonModalDescriptiveInfos name={name} descriptionText={descriptionText} />
+            <PersonModalDescriptiveInfos name={name} descriptionText={descriptionText} friendsAndFollowersCount={friendsAndFollowersCount} />
         </div>
     )
 }
 
-let PersonModalDescriptiveInfos = ({ name, descriptionText }) => {
+let PersonModalDescriptiveInfos = ({ name, descriptionText, friendsAndFollowersCount }) => {
     let [randomText, setRandomtext] = useState(null)
+
+    let [friendsCount, followersCount] = friendsAndFollowersCount && [...friendsAndFollowersCount]
 
     useEffect(() => descriptionText && setRandomtext(descriptionText), [name])
 
@@ -24,8 +26,8 @@ let PersonModalDescriptiveInfos = ({ name, descriptionText }) => {
         <div id='descriptive-infos-wrapper'>
             <div id='description-text'>{randomText || 'some description about this account, yada yada yada yada'}</div>
             <div id='follow-and-follower-numbers'>
-                <FollowOrFollowerCard name={'Following'} />
-                <FollowOrFollowerCard name={'Followers'} />
+                <FollowOrFollowerCard name={'Following'} fofCount={friendsCount} />
+                <FollowOrFollowerCard name={'Followers'} fofCount={followersCount} />
             </div>
             <MakeStatementAboutAccount />
         </div>
@@ -52,12 +54,12 @@ let FollowedByPeople = () => {
     return (
         <div id='followed-by-people-wrapper'>
             <img src='https://picsum.photos/40/40' />
-            <div id='name'>Followed by this somebody</div>
+            <div id='name'>Followed by this somebody from your friends list</div>
         </div>
     )
 }
 
-let FollowOrFollowerCard = ({ name }) => {
+let FollowOrFollowerCard = ({ name, fofCount }) => {
     let [denomination, setDenomination] = useState(null)
 
     let arr01 = ['K', "M"]
@@ -72,7 +74,9 @@ let FollowOrFollowerCard = ({ name }) => {
 
         let rDen = randNum > .5 && rNum.length <= 2 ? arr01[1] : randNum > .5 && rNum.length <= 3 ? arr01[0] : ''
 
-        setDenomination(rNum + rDen)
+        // setDenomination(rNum + rDen)
+
+        setDenomination(fofCount ? fofCount : rNum + rDen)
     }
 
     useEffect(() => makeRandomNumber(), [name])
