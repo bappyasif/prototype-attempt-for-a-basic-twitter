@@ -124,7 +124,7 @@
     left: 24px;
 }
 
-#explicit-trend-tweets-container #search-wrapper
+#explicit-trend-tweets-container #search-wrapper,
 #render-explore-page-container #search-wrapper #search-suggested-list {
     width: -webkit-fill-available;
     line-height: 3.1em;
@@ -136,6 +136,7 @@
 #render-explore-page-container #search-semantics-container {
     border: solid 1px silver;
     position: absolute;
+    width: -webkit-fill-available;
     /* color: aqua; */
     top: 62px;
     z-index: 99;

@@ -3,17 +3,34 @@ import { removeIconSvg } from '../../../../user-profile/all-tweets/show-tweet-th
 import useOnHoverOutside from '../../../../user-profile/all-tweets/tweet-top/add-members-into-lists/useOnHoverOutside'
 import { SearchComponent } from '../../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components'
 import { threeDotsSvgIcon } from '../../current-trends'
+import useOnClickOutside  from '../../click-outside-utility-hook/useOnClickOutside.js'
 
 function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }) {
   let [searchText, setSearchText] = useState(null)
   let [showSearchResults, setShowSearchResults] = useState(false)
   let [inputFocused, setInputFocused] = useState(false)
 
+  let [dataset, setDataset] = useState(null)
+
   let handleSearchText = value => setSearchText(value)
 
-  useEffect(() => searchText && handleExplicitTrendSearchText(searchText), [searchText])
+  useEffect(() => {
+    if(searchText) {
+      let handle = setTimeout(() => {
+        fetchResultsFromTwitter(setDataset, searchText)
+      }, 2000)
+
+      return () => clearTimeout(handle)
+    }
+  }, [searchText])
+
+  // useEffect(() => searchText && fetchResultsFromTwitter(setDataset, searchText), [searchText])
+
+  // useEffect(() => searchText && handleExplicitTrendSearchText(searchText), [searchText])
 
   // console.log(inputFocused, 'inputFocused')
+
+  useEffect(() => explicitTrendSearchText && setSearchText(explicitTrendSearchText), [explicitTrendSearchText])
 
   return (
     <div id='trends-header-component'>
@@ -29,8 +46,73 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
         {showTooltips && <div className='tooltips'>tooltip</div>}
       </div> */}
       {/* <div id='remove-search-text'>{removeIconSvg()}</div> */}
+      {showSearchResults && dataset && <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} />}
+      {/* {showSearchResults && searchText && <ShowSearchResultsModal searchText={searchText} updateModalVisibility={setShowSearchResults} />} */}
     </div>
   )
+}
+
+let ShowSearchResultsModal = ({searchText, updateModalVisibility, dataset}) => {
+  // let [dataset, setDataset] = useState(null)
+
+  // useEffect(() => searchText && fetchResultsFromTwitter(setDataset, searchText), [searchText])
+  
+  let ref = useRef(null)
+  useOnClickOutside(ref, ()=>updateModalVisibility(false))
+
+  console.log(dataset, 'dataset!!')
+
+  let renderResults = () => dataset && dataset.map(item => <SearchResultsWrapperUi key={item.id} item={item} />)
+
+  return (
+    <div id='show-search-results-container' ref={ref}>
+      {renderResults()}
+    </div>
+  )
+}
+
+let SearchResultsWrapperUi = ({item}) => {
+  let {name, screen_name, profile_image_url, description } = {...item}
+  return (
+    <div className='results-wrapper-ui'>
+      <img id='profile-picture' src={profile_image_url} />
+      <div id='profile-infos'>
+        <div id='name'>{name}</div>
+        <div id='handle'>@{screen_name}</div>
+        <div id='description'>{description || item.result_context.display_string}</div>
+      </div>
+    </div>
+  )
+}
+
+let fetchResultsFromTwitter = (updateDataset, searchText) => {
+  let url = `https://twitter135.p.rapidapi.com/AutoComplete/?q=${searchText}`
+    fetch(url, {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "twitter135.p.rapidapi.com",
+            "x-rapidapi-key": "16ecb1e169msh1f719a2c940b075p117e09jsn47e729518524"
+        }
+    }).then(response => {
+        console.log(response, 'chk02')
+        return response.json()
+    })
+        .then(data => {
+            console.log(data, 'data!!')
+            let results = data.users
+            if (results) {
+                let allkeys = Object.keys(results)
+                let arrOfObj = allkeys.map(key => results[key])
+                updateDataset(arrOfObj)
+                // console.log('arrOfObj', arrOfObj)
+                // datasetUpdater([...results])
+            } else {
+                console.log('no data is found!!')
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        });
 }
 
 let ShowSvgHoverableElement = ({setShowToolTips, svgIcon, tooltipsText, showTooltips}) => {

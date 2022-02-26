@@ -3,79 +3,26 @@ import { makeGetFetchRequest, verifiedSvgIcon } from '../../../reuseable-compone
 import { SearchComponent } from '../../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components'
 import useOnClickOutside from '../../../right-side/click-outside-utility-hook/useOnClickOutside'
 
-function SearchSemantics({ searchText, searchResultsModalHook, setSearchResultsModalHook, showSearchResultsModal }) {
-    // let [searchText, setSearchText] = useState(null)
-
-    let [dataset, setDataset] = useState(null)
-
+function SearchSemantics({ dataset, searchText, searchResultsModalHook, setSearchResultsModalHook, showSearchResultsModal }) {
+   
     let [firstHalf, setFirstHalf] = useState(null)
-
-    let [secondHalf, setSecondHalf] = useState(null)
-
-    let [fetchInProgress, setFetchInProgress] = useState(false)
-
-    let [currentlyFetching, setCurrentlyFetching] = useState(null)
-
-    // let [searchResultsModalHook, setSearchResultsModalHook] = useState(false)
-    
-    // let ref = useRef(null)
-
-    // useOnClickOutside(ref, () => setSearchResultsModalHook(false))
-
-    // let handleSearchText = value => setSearchText(value)
-
-    let handleDataset = items => {
-        // let newList = items.filter(item => item.concept_name.toLowerCase().includes(searchText))
-        let newList = items.filter(item => !item.concept_name.includes(';')).filter(item => !item.concept_name.includes(',')).filter(item => item.concept_name.split(' ').length <= 5).filter(item => !item.concept_name.includes('('))
-        setDataset(newList)
-        console.log(searchText, newList)
-    }
-
-    let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
-
-    let url = `http://api.nytimes.com/svc/semantic/v2/concept/search.json?query=${searchText}&concept_type=nytd_org&api-key=${apik}`
-
-    useEffect(() => {
-        // searchText && console.log(url)
-        currentlyFetching != searchText && searchText && !fetchInProgress && makeGetFetchRequestUpdated(url, handleDataset, setFetchInProgress, setCurrentlyFetching, searchText)
-    }, [searchText, fetchInProgress])
-
-    // useEffect(() => searchText && makeGetFetchRequest(url, handleDataset), [])
 
     useEffect(() => {
         if (dataset) {
             let slicedArray = dataset.filter((_, i) => i <= 9)
             setFirstHalf(slicedArray)
-            // setDataset(null)
-            // setSearchResultsModalHook(true)
         }
     }, [dataset])
 
-    // useEffect(() => setSearchResultsModalHook(true), [])
-
     // console.log(dataset, 'dataset', firstHalf, fetchInProgress)
 
-    let renderFirstHalfDataset = () => firstHalf.map(item => <RenderIndividualCompanyInformation key={item.concept_id} companyName={item.concept_name} item={item} />)
+    let renderFirstHalfDataset = () => firstHalf && firstHalf.map(item => <RenderIndividualCompanyInformation key={item.concept_id} companyName={item.concept_name} item={item} />)
 
     return (
         <div id='search-semantics-container'>
-            {/* <SearchComponent fromExplore={true} handleSearchText={handleSearchText} /> */}
-            {/* {searchText} */}
-
-            {/* {firstHalf && renderFirstHalfDataset()} */}
             { searchResultsModalHook && firstHalf && renderFirstHalfDataset()}
         </div>
     )
-}
-
-let makeGetFetchRequestUpdated = (url, updater, callInProgress, currentlyFetching, searchText) => {
-    currentlyFetching(searchText)
-    callInProgress(true)
-    fetch(url)
-        .then(resp => resp.json())
-        .then(data => updater(data.results))
-        .catch(err => console.log(err.code, err.message))
-        .finally(() => callInProgress(false))
 }
 
 // As company companyData itself is producing enough data (at least 10 records for each company name), lets render just top 5 or less from intial organization semantics search
@@ -92,8 +39,6 @@ let RenderIndividualCompanyInformation = ({ companyName, item, idx, unpause }) =
         // chooseRandomIdx(items, setRandomIdx)
     }
 
-    // let handleData = items => setCompanyData(items)
-
     let handleData = items => {
         let newList = items.filter(item => companyName.split(' ').some(word => item.identifier.value.includes(word)))
         // setCompanyData(items)
@@ -101,37 +46,22 @@ let RenderIndividualCompanyInformation = ({ companyName, item, idx, unpause }) =
     }
 
     let rapidApiCrunchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?query=${companyName.split(' ').join('%20')}`
-    // let rapidApiCrunchbaseUrl = `https://crunchbase-crunchbase-v1.p.rapidapi.com/autocompletes?query='${companyName}'`
 
     let akey = 'Y523ekZfcrFFNQKeXpbsPlQhe1zW4vGPwrASfRsfJmo'
 
-    // let unsplashUrl = `https://api.unsplash.com/search/photos?client_id=${akey}&query=${companyName}`
-    // let unsplashUrl = `https://api.unsplash.com/search/photos?client_id=${akey}&query=${companyName.split(' ').join('%20')}`
     let unsplashUrl = `https://api.unsplash.com/search/photos?client_id=${akey}&query=${encodeURIComponent(companyName)}`
 
     useEffect(() => idx == 7 && unpause(false))
 
     useEffect(() => companyData && chooseRandomIdx(companyData, setRandomIdx), [companyData, companyName])
 
-    // useEffect(() => companyData && makeGetFetchRequest(unsplashUrl, handleUnsplashData), [companyData])
     useEffect(() => {
         companyData && makeGetFetchRequest(unsplashUrl, handleUnsplashData)
-        // companyData && chooseRandomIdx(companyData, setRandomIdx)
     }, [companyData])
-
-    // useEffect(() => companyName && makeRequest(rapidApiCrunchbaseUrl, handleData), [companyName])
 
     useEffect(() => item && companyName && makeRequest(rapidApiCrunchbaseUrl, handleData), [item])
 
-    // useEffect(() => {
-    //     if(idx >=8) {
-    //         setAwaitTime(true)
-    //     }
-    // }, [idx])
-
-    console.log(unsplashData, unsplashUrl, 'unsplash')
-
-    // console.log(companyData, 'companyData', unsplashData, randomIdx, companyName, item)
+    // console.log(unsplashData, unsplashUrl, 'unsplash')
 
     return (
         item

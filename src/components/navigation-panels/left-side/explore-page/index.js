@@ -12,14 +12,31 @@ import './styles.css';
 function RenderExplorePage() {
     let [searchText, setSearchText] = useState(null)
     let [savingPrevSearchText, setSavingPrevSearchText] = useState(null)
-    // let [semanticsData, setSemanticsData] = useState(null)
     let [contentCreators, setContentCreators] = useState([])
-
+    let [searchedDataset, setSearchedDataset] = useState(null)
     let [searchResultsModalHook, setSearchResultsModalHook] = useState(false)
 
-    let [showSearchResultsModal, setShowSearchResultsModal] = useState(false)
+    let handleSearchedDataset = items => {
+        // let newList = items.filter(item => item.concept_name.toLowerCase().includes(searchText))
+        let newList = items.filter(item => !item.concept_name.includes(';')).filter(item => !item.concept_name.includes(',')).filter(item => item.concept_name.split(' ').length <= 5).filter(item => !item.concept_name.includes('('))
+        setSearchedDataset(newList)
+        console.log(searchText, newList)
+    }
 
-    let handleSearchResultsModal = () => setShowSearchResultsModal(!showSearchResultsModal)
+    let makeFetchRequestToNytimes = () => {
+        let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
+
+        let url = `http://api.nytimes.com/svc/semantic/v2/concept/search.json?query=${searchText}&concept_type=nytd_org&api-key=${apik}`
+
+        makeGetFetchRequestUpdated(url, handleSearchedDataset)
+    }
+
+    useEffect(() => {
+        if(searchText) {
+            let handle = setTimeout(makeFetchRequestToNytimes, 1100)
+            return () => clearTimeout(handle)
+        }
+    }, [searchText])
 
     let ref = useRef(null)
 
@@ -28,64 +45,31 @@ function RenderExplorePage() {
         setSavingPrevSearchText(searchText)
         setSearchText(null)
     })
-    
-    // let handleSemanticsData = items => {
-    //     let newList = items.filter(item => item.concept_name.toLowerCase().includes(searchText))
-    //     console.log(newList, 'newList', searchText)
-    //     setSemanticsData(newList)
-    // }
+   
     let handleSearchText = value => setSearchText(value)
     let handleContentCreators = name => setContentCreators(prevData => prevData.concat(name))
-
-    // let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
-
-    // let url = `http://api.nytimes.com/svc/semantic/v2/concept/search.json?query=${searchText}&concept_type=nytd_org&api-key=${apik}`
-
-    // useEffect(() => searchText && makeGetFetchRequest(url, handleSemanticsData), [searchText])
-
-    // console.log(searchText, 'searchText!!', semanticsData)
-
-    // useEffect(() => !searchResultsModalHook && searchText && setSearchResultsModalHook(true), [searchText])
-
-    // useEffect(() => !searchResultsModalHook && setSearchResultsModalHook(true), [searchResultsModalHook])
-
-    // useEffect(() => !searchResultsModalHook && setSearchResultsModalHook(true), [])
-
-    console.log(searchText, searchResultsModalHook, 'hook!!', savingPrevSearchText)
 
     return (
         <div id='render-explore-page-container' ref={ref}>
             <SearchComponent fromExplore={true} handleSearchText={handleSearchText} setSearchResultsModalHook={setSearchResultsModalHook} savingPrevSearchText={savingPrevSearchText} />
-            {searchText && searchText.length >= 2 && searchResultsModalHook && <SearchSemantics searchText={searchText} searchResultsModalHook={searchResultsModalHook} setSearchResultsModalHook={setSearchResultsModalHook} />}
-            {/* {searchResultsModalHook && <SearchSemantics searchText={searchText} searchResultsModalHook={searchResultsModalHook} setSearchResultsModalHook={setSearchResultsModalHook} />} */}
-            {/* <SearchSemantics /> */}
+            
+            { searchedDataset && searchResultsModalHook && <SearchSemantics dataset={searchedDataset} searchResultsModalHook={searchResultsModalHook} setSearchResultsModalHook={setSearchResultsModalHook} />}
+            
             <MostTrendingNewsDisplay searchText={searchText} />
+            
             <CurrentTrends handleContentCreators={handleContentCreators} />
+            
             <RenderNewsFromSections />
         </div>
     )
 }
 
-// let SearchComponent = ({handleSearchText}) => {
-//     let [inputText, setInputText] = useState(null)
-
-//     let [focused, setFocused] = useState(false)
-    
-//     let handleFocused = () => setFocused(!focused)
-    
-//     let handleInputText = evt => {
-//         setInputText(evt.target.value)
-//         handleSearchText(evt.target.value)
-//     }
-
-//     return (
-//         <div id='search-wrapper' style={{ borderColor: focused && 'rgb(29, 155, 240)' }}>
-//             <div id='svg-icon'>{searchIconSvg()}</div>
-//             <label htmlFor='search-suggested-list' />
-//             <input id='search-suggested-list' placeholder='Search people' onFocus={handleFocused} onBlur={handleFocused} onChange={handleInputText} />
-//         </div>
-//     )
-// }
+let makeGetFetchRequestUpdated = (url, updater) => {
+    fetch(url)
+        .then(resp => resp.json())
+        .then(data => updater(data.results))
+        .catch(err => console.log(err.code, err.message))
+}
 
 let RenderNewsFromSections = () => {
     let [data, setData] = useState(null)
@@ -94,38 +78,24 @@ let RenderNewsFromSections = () => {
     let [randomIndexes, setRandomIndexes] = useState([])
     let [renderingCategories, setRenderingCategories] = useState([])
     let [removeCategoryList, setRemoveCategoryList] = useState([])
-    // let [keepingCopyOfInitialRenderingCategories, setKeepingCopyOfInitialRenderingCategories] = useState(null)
-    // let [undoRemovedCategory, setUndoRemovedCategory] = useState(false)
-
-    // let handleUndoRemovedCategory = () => setUndoRemovedCategory(!undoRemovedCategory)
-
-    // useEffect(() => undoRemovedCategory && setRenderingCategories(renderingCategories), [undoRemovedCategory])
-
-    // let updateRemoveCategoryList = categoryName => setRemoveCategoryList(prevList => prevList.concat(categoryName))
+    
     let updateRemoveCategoryList = categoryName => {
         setRemoveCategoryList(prevList => prevList.concat(categoryName))
-        // let idx = keepingCopyOfInitialRenderingCategories.findIndex(item => item == categoryName)
+
         let idx = renderingCategories.findIndex(item => item == categoryName)
-        // let newIndexs = randomIndexes.filter((v,i) => i != idx)
-        let newIndexs = randomIndexes.filter((v,_,arr) => v != arr[idx])
+
+        let newIndexs = randomIndexes.filter((v, _, arr) => v != arr[idx])
 
         setRandomIndexes(newIndexs);
-        // console.log(newIndexs, 'is it ?!?!', idx, randomIndexes)
-        // console.log(idx, newIndexes, 'is it?!?!', keepingCopyOfInitialRenderingCategories, renderingCategories)
     }
 
     useEffect(() => {
         removeCategoryList.length && removeItemFromArrayByTitle(renderingCategories, removeCategoryList, setRenderingCategories, 'fromExplore');
         if (removeCategoryList.length && renderingCategories.length <= 4) {
-            // randomIndexes.forEach(idx => handleRenderingCategories(idx))
-            // handleRenderingCategories(randomIndexes[3])
-
             // clearing previously held data in renderingCategories, so that newly generated index to replace it can be re render on DOM
             setRenderingCategories([])
         }
     }, [removeCategoryList])
-
-    // useEffect(() => renderingCategories.length == 4 && setKeepingCopyOfInitialRenderingCategories(renderingCategories), [renderingCategories])
 
     let handleData = items => setData(items)
 
@@ -150,9 +120,7 @@ let RenderNewsFromSections = () => {
 
     let randomlySelectedIndexes = () => {
         let [idx, isDuplicate] = generateRenderingReadyIndex()
-
         // console.log(idx, isDuplicate, '[][]', randomIndexes)
-        // setRandomIndexes(prevIdxs => prevIdxs.concat(checkDouble == -1 ? rndIdx : null))
         isDuplicate != -1 ? randomlySelectedIndexes() : setRandomIndexes(prevIndexes => prevIndexes.concat(idx))
     }
 
@@ -161,7 +129,6 @@ let RenderNewsFromSections = () => {
     useEffect(() => {
         if (randomIndexes.length == 4) {
             randomIndexes.forEach(idx => handleRenderingCategories(idx))
-            // console.log('checkbox 01')
         }
     }, [randomIndexes])
 
@@ -178,7 +145,6 @@ let RenderNewsFromSections = () => {
                 let idx = temp.findIndex(n => name == n);
                 idx == -1 ? temp.push(name) : null
             })
-            // console.log(temp, 'temp!!')
             temp && setUniqueNewsSectionNames(temp)
         }
     }, [sectionNames])
@@ -191,14 +157,9 @@ let RenderNewsFromSections = () => {
         makeGetFetchRequest(url, handleData)
     }, [])
     // console.log(data, 'data!!', sectionNames, uniqueNewsSectionNames)
-    // console.log('data!!', randomIndexes, renderingCategories, removeCategoryList)
 
-    // let renderingNewsFromCategories = () => renderingCategories.map((category, idx) => idx == 0 && <RenderNewsFromThisNewsCategory key={category} categoryName={category} />)
-    
     // without timeout, but it requires timeout otherwise too many bad requests error
     let renderingNewsFromCategories = () => renderingCategories.map((category, idx) => <RenderNewsFromThisNewsCategory key={category} categoryName={category} updateRemoveCategoryList={updateRemoveCategoryList} />)
-
-    // let renderingCategoricalNews = () => 
 
     return (
         <div id='rendering-news-from-categories'>
@@ -207,7 +168,7 @@ let RenderNewsFromSections = () => {
     )
 }
 
-let MostTrendingNewsDisplay = ({searchText}) => {
+let MostTrendingNewsDisplay = ({ searchText }) => {
     let [rawDataset, setRawDataset] = useState(null)
 
     let [dataset, setDataset] = useState(null)
@@ -233,39 +194,33 @@ let MostTrendingNewsDisplay = ({searchText}) => {
         }
     }, [rawDataset])
 
-    // let randomizeIdx = dataset && Math.floor((Math.random() * dataset.length))
-    // console.log(randomizeIdx, '??')
-
     useEffect(() => {
-        if(dataset) {
+        if (dataset) {
             let randomizeIdx = dataset && Math.floor((Math.random() * dataset.length))
             setRndIdx(randomizeIdx)
         }
     }, [dataset])
 
     // console.log(rawDataset, 'top news!!', dataset)
-    // console.log(rndIdx, dataset[rndIdx])
 
     return rndIdx != -1 && dataset && dataset.length && <RenderThisRandomlySelectedNewsItem item={dataset[rndIdx]} searchText={searchText} />
-    // return randomizeIdx != -1 && dataset && dataset.length && <RenderThisRandomlySelectedNewsItem item={randomizeIdx && dataset[randomizeIdx]} />
 }
 
 let RenderThisRandomlySelectedNewsItem = ({ item, searchText }) => {
-    let adjustedSection = makeStringWordCased( item && (item.subsection || item.section))
-    // console.log(item, 'render!!', adjustedSection)
-    console.log(searchText, 'searchText')
-    // style={{width: searchText && searchText.length > 1 ? '98%' : '100%'}}
+    let adjustedSection = makeStringWordCased(item && (item.subsection || item.section))
+    // console.log(searchText, 'searchText')
+
     return (
         item ?
-        <div id='most-trending-news-wrapper'>
-            <img id='trending-news-img' src={item.multimedia && item.multimedia[1].url} />
-            <div id='news-info'>
-                <div id='news-section'>{adjustedSection}</div>
-                <div id='news-headline'>{adjustedSection} : {item.title}</div>
+            <div id='most-trending-news-wrapper'>
+                <img id='trending-news-img' src={item.multimedia && item.multimedia[1].url} />
+                <div id='news-info'>
+                    <div id='news-section'>{adjustedSection}</div>
+                    <div id='news-headline'>{adjustedSection} : {item.title}</div>
+                </div>
             </div>
-        </div>
-        :
-        null
+            :
+            null
     )
 }
 
@@ -273,6 +228,109 @@ export default RenderExplorePage;
 
 
 /**
+ * 
+ * 
+ // function RenderExplorePage() {
+//     let [searchText, setSearchText] = useState(null)
+//     let [savingPrevSearchText, setSavingPrevSearchText] = useState(null)
+//     // let [semanticsData, setSemanticsData] = useState(null)
+//     let [contentCreators, setContentCreators] = useState([])
+//     let [searchedDataset, setSearchedDataset] = useState(null)
+
+//     let [searchResultsModalHook, setSearchResultsModalHook] = useState(false)
+
+//     let [showSearchResultsModal, setShowSearchResultsModal] = useState(false)
+
+//     let handleSearchedDataset = items => {
+//         // let newList = items.filter(item => item.concept_name.toLowerCase().includes(searchText))
+//         let newList = items.filter(item => !item.concept_name.includes(';')).filter(item => !item.concept_name.includes(',')).filter(item => item.concept_name.split(' ').length <= 5).filter(item => !item.concept_name.includes('('))
+//         setSearchedDataset(newList)
+//         console.log(searchText, newList)
+//     }
+
+//     let makeFetchRequestToNytimes = () => {
+//         let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
+
+//         let url = `http://api.nytimes.com/svc/semantic/v2/concept/search.json?query=${searchText}&concept_type=nytd_org&api-key=${apik}`
+
+//         makeGetFetchRequestUpdated(url, handleSearchedDataset)
+//     }
+
+//     useEffect(() => {
+//         if(searchText) {
+//             let handle = setTimeout(makeFetchRequestToNytimes, 1100)
+//             return () => clearTimeout(handle)
+//         }
+//     }, [searchText])
+
+//     // let handleSearchResultsModal = () => setShowSearchResultsModal(!showSearchResultsModal)
+
+//     let ref = useRef(null)
+
+//     useOnClickOutside(ref, () => {
+//         setSearchResultsModalHook(false)
+//         setSavingPrevSearchText(searchText)
+//         setSearchText(null)
+//     })
+
+//     // let handleSemanticsData = items => {
+//     //     let newList = items.filter(item => item.concept_name.toLowerCase().includes(searchText))
+//     //     console.log(newList, 'newList', searchText)
+//     //     setSemanticsData(newList)
+//     // }
+//     let handleSearchText = value => setSearchText(value)
+//     let handleContentCreators = name => setContentCreators(prevData => prevData.concat(name))
+
+//     // let apik = '8RizJqR4D0CrmKRxfGDmszpKT8VUHAlT'
+
+//     // let url = `http://api.nytimes.com/svc/semantic/v2/concept/search.json?query=${searchText}&concept_type=nytd_org&api-key=${apik}`
+
+//     // useEffect(() => searchText && makeGetFetchRequest(url, handleSemanticsData), [searchText])
+
+//     // console.log(searchText, 'searchText!!', semanticsData)
+
+//     // useEffect(() => !searchResultsModalHook && searchText && setSearchResultsModalHook(true), [searchText])
+
+//     // useEffect(() => !searchResultsModalHook && setSearchResultsModalHook(true), [searchResultsModalHook])
+
+//     // useEffect(() => !searchResultsModalHook && setSearchResultsModalHook(true), [])
+
+//     // console.log(searchText, searchResultsModalHook, 'hook!!', savingPrevSearchText)
+
+//     return (
+//         <div id='render-explore-page-container' ref={ref}>
+//             <SearchComponent fromExplore={true} handleSearchText={handleSearchText} setSearchResultsModalHook={setSearchResultsModalHook} savingPrevSearchText={savingPrevSearchText} />
+//             {/* {searchText && searchText.length >= 2 && searchResultsModalHook && <SearchSemantics searchText={searchText} searchResultsModalHook={searchResultsModalHook} setSearchResultsModalHook={setSearchResultsModalHook} />} /}
+//             { searchedDataset && searchResultsModalHook && <SearchSemantics dataset={searchedDataset} searchResultsModalHook={searchResultsModalHook} setSearchResultsModalHook={setSearchResultsModalHook} />}
+//             {/* {searchResultsModalHook && <SearchSemantics searchText={searchText} searchResultsModalHook={searchResultsModalHook} setSearchResultsModalHook={setSearchResultsModalHook} />} /}
+//             {/* <SearchSemantics /> /}
+//             <MostTrendingNewsDisplay searchText={searchText} />
+//             <CurrentTrends handleContentCreators={handleContentCreators} />
+//             <RenderNewsFromSections />
+//         </div>
+//     )
+// }
+
+// let SearchComponent = ({handleSearchText}) => {
+//     let [inputText, setInputText] = useState(null)
+
+//     let [focused, setFocused] = useState(false)
+
+//     let handleFocused = () => setFocused(!focused)
+
+//     let handleInputText = evt => {
+//         setInputText(evt.target.value)
+//         handleSearchText(evt.target.value)
+//     }
+
+//     return (
+//         <div id='search-wrapper' style={{ borderColor: focused && 'rgb(29, 155, 240)' }}>
+//             <div id='svg-icon'>{searchIconSvg()}</div>
+//             <label htmlFor='search-suggested-list' />
+//             <input id='search-suggested-list' placeholder='Search people' onFocus={handleFocused} onBlur={handleFocused} onChange={handleInputText} />
+//         </div>
+//     )
+// }
  * 
  * 
  // export let makeStringWordCased = (string) => {

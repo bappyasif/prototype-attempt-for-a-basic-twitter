@@ -16,9 +16,11 @@ function RenderSuggestedPeopleList({ listOfRandomUsers }) {
 }
 
 let RenderPeople = ({ item }) => {
-    let { first_name, last_name, avatar, uid } = { ...item }
+    // let { first_name, last_name, avatar, uid } = { ...item }
 
-    let name = first_name + ' ' + last_name
+    // let name = first_name + ' ' + last_name
+
+    let {name, screen_name, profile_image_url} = {...item}
 
     let [nameAdjusted, setNameAdjusted] = useState(null)
 
@@ -34,13 +36,13 @@ let RenderPeople = ({ item }) => {
         setActionName(evt.target.textContent)
     }
 
-    let handleNameAdjust = () => {
-        setNameAdjusted(name.split(' ').join('_'))
-    }
+    // let handleNameAdjust = () => {
+    //     setNameAdjusted(name.split(' ').join('_'))
+    // }
 
     useEffect(() => {
         Math.random() > .51 && setFollows(true)
-        handleNameAdjust()
+        // handleNameAdjust()
     }, [])
 
     useEffect(() => {
@@ -57,16 +59,21 @@ let RenderPeople = ({ item }) => {
     return (
         <div className='render-people-wrapper' onMouseLeave={() => setShowPersonCardModal(false)}>
             <div id='user-details' onMouseEnter={() => setShowPersonCardModal(true)}>
-                <img src={avatar} id='user-img' />
+                {/* <img src={avatar || profile_image_url} id='user-img' /> */}
+                <img src={profile_image_url} id='user-img' />
                 <div id='profile-info'>
                     <div id='user-name'>{name}</div>
-                    <div id='user-handle'> @{(nameAdjusted || name).toLowerCase()} <span id='follow-status'>{follows ? ' Follows you' : ''}</span></div>
+                    <div id='user-handle'> @{screen_name} <span id='follow-status'>{follows ? ' Follows you' : ''}</span></div>
+                    {/* <div id='user-handle'> @{ screen_name || (nameAdjusted || name).toLowerCase()} <span id='follow-status'>{follows ? ' Follows you' : ''}</span></div> */}
                 </div>
             </div>
             {/* <div id='follow-btn'>Follow</div> */}
             <div id='follow-btn' onClick={handleFollowSuggested}>{followSuggested ? 'Following' : 'Follow'}</div>
-            {actionName == 'Following' && !showPersonCardModal && <RenderUnfollowModal suggestedName={nameAdjusted || name} handleFollow={handleFollowSuggested} />}
-            {showPersonCardModal && <ShowSuggestedPersonModal updatePersonModal={setShowPersonCardModal} name={name} handle={(nameAdjusted || name).toLowerCase()} profilePicUrl={avatar} handleFollowSuggested={handleFollowSuggested} followSuggested={followSuggested} descriptionText={item.decsription} />}
+            {actionName == 'Following' && !showPersonCardModal && <RenderUnfollowModal suggestedName={name} handleFollow={handleFollowSuggested} />}
+            {showPersonCardModal && <ShowSuggestedPersonModal updatePersonModal={setShowPersonCardModal} name={name} handle={ screen_name } profilePicUrl={profile_image_url} handleFollowSuggested={handleFollowSuggested} followSuggested={followSuggested} descriptionText={item.description} friendsAndFollowersCount={ (item.friends_count || item.followers_count) && [item.friends_count, item.followers_count]} />}
+
+            {/* {actionName == 'Following' && !showPersonCardModal && <RenderUnfollowModal suggestedName={name || nameAdjusted} handleFollow={handleFollowSuggested} />}
+            {showPersonCardModal && <ShowSuggestedPersonModal updatePersonModal={setShowPersonCardModal} name={name} handle={ screen_name || (nameAdjusted || name).toLowerCase()} profilePicUrl={avatar} handleFollowSuggested={handleFollowSuggested} followSuggested={followSuggested} descriptionText={item.decsription || item.description} />} */}
         </div>
     )
 }

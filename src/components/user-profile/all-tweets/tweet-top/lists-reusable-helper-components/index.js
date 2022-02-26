@@ -26,7 +26,8 @@ export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore,
     
     // let handleFocused = () => setFocused(!focused)
     let handleFocused = () => {
-        (fromExplore || fromTrends) && setSearchResultsModalHook(true)
+        (fromExplore || fromTrends) && setSearchResultsModalHook(!focused)
+        // (fromExplore || fromTrends) && setSearchResultsModalHook(true)
         // fromExplore && savingPrevSearchText && handleSearchText(savingPrevSearchText)
         setFocused(!focused)
     }
@@ -67,7 +68,7 @@ export let handleSearchMemberName = (searchingName, existingMembers, showFoundMa
     let testMatches = existingMembers.map(name => name.includes(searchingName) && name)
     // showFoundMatchedMembers(testMatches.map(name => name && name))
     showFoundMatchedMembers(testMatches.filter(name => name && name))
-    console.log(testMatches, 'ready!!', existingMembers)
+    // console.log(testMatches, 'ready!!', existingMembers)
 }
 
 export let ModalOptions = ({ membersCount, underlined, history, routeUrl }) => {

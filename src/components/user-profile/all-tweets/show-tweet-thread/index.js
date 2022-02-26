@@ -30,7 +30,7 @@ function ShowTweetThread({ quotesListFromRetweet, handleQuotedFromRetweetModal, 
         <div id='show-tweet-thread-container'>
             <HeaderComponent headerText={'Thread'} />
             {hasRetweetedThread && <RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet quotedTweetID={quotedTweetID} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} isQuotedFromRetweeted={true} />}
-            {tweetText && <TweetComponent tweetText={tweetText} createdDate={created} handleQuoteTweetID={handleQuoteTweetID} threadedTweetData={threadedTweetData} currentUser={currentUser} currentUserProfileInfo={currentUserProfileInfo} repliedTweetsIDs={repliedTweetsIDs} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} hasRetweetedThread={hasRetweetedThread} quotesListFromRetweet={quotesListFromRetweet} />}
+            {tweetText && <TweetComponent tweetText={tweetText} createdDate={created} handleQuoteTweetID={handleQuoteTweetID} threadedTweetData={threadedTweetData} currentUser={currentUser} currentUserProfileInfo={currentUserProfileInfo} repliedTweetsIDs={repliedTweetsIDs} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} hasRetweetedThread={hasRetweetedThread} quotesListFromRetweet={quotesListFromRetweet} handleAnalysingTweetID={handleAnalysingTweetID} tweetThreadID={ID} />}
             <ReplyThreadComponent currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} handleLoadingTweetsIDs={handleLoadingTweetsIDs} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
             {<RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />}
         </div>
@@ -453,13 +453,14 @@ export let convertTimestampIntoTokens = createdTime => {
     return timestampTokens;
 }
 
-let TweetComponent = ({ tweetText, createdDate, handleQuoteTweetID, threadedTweetData, currentUser, handleReplyCount, currentUserProfileInfo, repliedTweetsIDs, handleQuotedFromRetweetModal, hasRetweetedThread, quotesListFromRetweet }) => {
+let TweetComponent = ({ tweetText, createdDate, handleQuoteTweetID, threadedTweetData, currentUser, handleReplyCount, currentUserProfileInfo, repliedTweetsIDs, handleQuotedFromRetweetModal, hasRetweetedThread, quotesListFromRetweet, handleAnalysingTweetID, tweetThreadID }) => {
     // console.log(new Date(createdDate.seconds))
     // converting epoch timestamp from seconds to gmt time
     // let timestamp = new Date(createdDate.seconds * 1000)
     // let timestampTokens = String(timestamp).split(' ').slice(1, 5)
     // console.log(timestampTokens, '?!', timestamp)
     // currentUserProfileInfo && console.log(currentUserProfileInfo, 'currentUserProfileInfo')
+    
     return (
         <div id='tweet-component-wrapper'>
             <UserInfo currentUserProfileInfo={currentUserProfileInfo} />
@@ -467,7 +468,7 @@ let TweetComponent = ({ tweetText, createdDate, handleQuoteTweetID, threadedTwee
             <RenderTweetMediaFiles tweetData={threadedTweetData} />
             {/* <RenderTweetPostedTimestamp timestampTokens={timestampTokens} /> */}
             <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(createdDate.seconds)} fromTweetThread={true} />
-            <RenderTweetAnalyticsActivity />
+            <RenderTweetAnalyticsActivity handleAnalysingTweetID={handleAnalysingTweetID} tweetThreadID={tweetThreadID} />
             {hasRetweetedThread && <RenderThreadQuoteCount handleQuoteTweetID={handleQuoteTweetID} threadedTweetData={threadedTweetData} />}
             <RenderMoreOptions handleQuoteTweetID={handleQuoteTweetID} threadedTweetData={threadedTweetData} currentUser={currentUser} handleReplyCount={handleReplyCount} repliedTweetsIDs={repliedTweetsIDs} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} />
             <RenderTweetPrivacyAnouncement tweetPrivacy={threadedTweetData.tweetPrivacy} profileName={currentUserProfileInfo[0].content} />
@@ -519,9 +520,14 @@ let RenderTweetPrivacyAnouncement = ({ tweetPrivacy, profileName }) => {
     )
 }
 
-let RenderTweetAnalyticsActivity = () => {
+let RenderTweetAnalyticsActivity = ({handleAnalysingTweetID, tweetThreadID}) => {
+    let history = useHistory(null)
+    let handleClick = () => {
+        handleAnalysingTweetID(tweetThreadID)
+        history.push(history.push('/analytics'))
+    }
     return (
-        <div id='analytics-activity-wrapper'>
+        <div id='analytics-activity-wrapper' onClick={handleClick}>
             <div id='svg-icon'>{analyticsIcon()}</div>
             <div id='actitvity-text'>View Tweet activity</div>
         </div>

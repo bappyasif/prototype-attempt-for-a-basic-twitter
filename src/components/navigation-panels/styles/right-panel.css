@@ -20,6 +20,46 @@
   width: 299px;
 }
 
+#right-navigation-panel-container #programmable-panels #relevant-people-view-container {
+  text-align: left;
+  margin-bottom: 11px;
+  /* line-height: 1.5em; */
+  border: solid silver 1.1px;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+#right-navigation-panel-container #programmable-panels #relevant-people-view-container #heading-text {
+  font-size: x-large;
+  margin-bottom: 11px;
+}
+
+#right-navigation-panel-container #programmable-panels #relevant-people-view-container #person-details {
+  display: flex;
+  /* text-align: left; */
+}
+
+#right-navigation-panel-container #programmable-panels #relevant-people-view-container #person-details #profile-picture {
+  width: 62px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 22px;
+}
+
+#right-navigation-panel-container #programmable-panels #relevant-people-view-container #person-details #name {
+  font-size: larger;
+}
+
+#right-navigation-panel-container #programmable-panels #relevant-people-view-container #person-details #handle {
+  font-size: small;
+  color: silver;
+}
+
+#right-navigation-panel-container #programmable-panels #relevant-people-view-container #person-details #description {
+  margin-top: 6px;
+  text-align: justify;
+}
+
 #search-twitter-container {
   display: flex;
   /* justify-content: space-between; */
@@ -28,6 +68,7 @@
   border: 0.11em solid lightgray;
   border-radius: 20px;
   position: relative;
+  width: 299px;
 }
 
 #search-twitter-container label {
@@ -399,6 +440,7 @@
 #right-navigation-panel-container #follow-suggested-people-container .render-people-wrapper #suggested-person-modal-container #top-section-wrapper #left-side img {
   height: 38px;
   border-radius: 50%;
+  width: 42px;
 }
 
 #components-container #explicit-trend-tweets-container #lengthy-people-list-wrapper #suggested-person-modal-container #descriptive-infos-wrapper,
@@ -569,6 +611,44 @@
   padding-left: 60px;
   font-size: larger;
   line-height: 2em;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container {
+  position: absolute;
+  top: 42px;
+  background-color: whitesmoke;
+  z-index: 99;
+  padding: 11px;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui {
+  display: flex;
+  margin-bottom: 11px;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-picture {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-infos {
+  text-align: left;
+  margin-left: 20px;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-infos #name {
+  font-size: x-large;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-infos #handle {
+  color: silver;
+  font-size: smaller;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-infos #description {
+  text-align: justify;
+  font-size: larger;
 }
 
 #explicit-trend-tweets-container #top-navigation-panel-container {

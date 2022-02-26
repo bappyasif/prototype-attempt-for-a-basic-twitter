@@ -361,7 +361,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
                     {/* <TweetPrivacySelected setTweetOptions={setTweetOptions} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy} /> */}
                     <PrivacyAndTaggedLocation setTweetOptions={setTweetOptions} tweetPrivacy={tweetPrivacy} setTweetPrivacy={setTweetPrivacy} selectedTaggedPlace={selectedTaggedPlace} />
 
-                    <div id='tweet-additionals' style={{ marginTop: selectedTaggedPlace && '-11px' }}>
+                    <div id='tweet-additionals' style={{ marginTop: selectedTaggedPlace && '-6px' }}>
                         {/* <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} scheduleToggler={handleScheduleIconClicked} /> */}
                         <TweetMediaOptions gifFile={gifFile} selectedFile={selectedFile} inputRef={inputRef} setIsGifIconClicked={setIsGifIconClicked} isGifIconClicked={isGifIconClicked} handleToggle={handlePollIconClicked} isPollIconClicked={isPollIconClicked} isEmojiIconClicked={isEmojiIconClicked} showPicker={setIsEmojiIconClicked} />
 
