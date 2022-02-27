@@ -17,7 +17,7 @@ function ExplicitTrendsOnClick({explicitTrendSearchText, handleExplicitTrendSear
       <TrendsHeader explicitTrendSearchText={explicitTrendSearchText} handleExplicitTrendSearchText={handleExplicitTrendSearchText} />
       <TrendsTopNavigationPanel explicitTrendSearchText={explicitTrendSearchText} updateCurrentNav={setCurrentNav} />
       {/* {renderArticles()} */}
-      <ReuseableTrendsNavigationHandler explicitTrendSearchText={explicitTrendSearchText} whichNav={currentNav} />
+      { explicitTrendSearchText && <ReuseableTrendsNavigationHandler explicitTrendSearchText={explicitTrendSearchText} whichNav={currentNav} />}
     </div>
   )
 }

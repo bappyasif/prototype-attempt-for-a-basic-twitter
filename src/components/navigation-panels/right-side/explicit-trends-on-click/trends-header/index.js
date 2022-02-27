@@ -21,7 +21,10 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
       }, 2000)
 
       return () => clearTimeout(handle)
-    }
+    } 
+    // else if (dataset && !searchText) {
+    //   setDataset(null)
+    // }
   }, [searchText])
 
   // useEffect(() => searchText && fetchResultsFromTwitter(setDataset, searchText), [searchText])
@@ -57,16 +60,17 @@ let ShowSearchResultsModal = ({searchText, updateModalVisibility, dataset}) => {
 
   // useEffect(() => searchText && fetchResultsFromTwitter(setDataset, searchText), [searchText])
   
-  let ref = useRef(null)
-  useOnClickOutside(ref, ()=>updateModalVisibility(false))
+  // let ref = useRef(null)
+  // useOnClickOutside(ref, ()=>updateModalVisibility(false))
 
-  console.log(dataset, 'dataset!!')
+  // console.log(dataset, 'dataset!!')
 
   let renderResults = () => dataset && dataset.map(item => <SearchResultsWrapperUi key={item.id} item={item} />)
 
+  // ref={ref}
   return (
-    <div id='show-search-results-container' ref={ref}>
-      {renderResults()}
+    <div id='show-search-results-container' style={{overflowY: dataset && dataset.length >= 5 && 'scroll', maxHeight: '380px'}}>
+      { dataset && renderResults()}
     </div>
   )
 }

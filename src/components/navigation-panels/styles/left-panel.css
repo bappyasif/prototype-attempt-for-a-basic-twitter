@@ -59,3 +59,27 @@
 #Tweet span {
     margin-left: 36%;
 }
+
+#left-panel-container #More {
+    position: relative;
+}
+
+#left-panel-container #More #more-options-wrpper {
+    position: absolute;
+    right: -26px;
+    background-color: whitesmoke;
+    padding: 11px;
+    border-radius: 20px;
+}
+
+#left-panel-container #More #more-options-wrpper .option-wrapper {
+    /* line-height: 2em; */
+    background-color: lightgray;
+    border-radius: 11px;
+    margin: 4px;
+    padding: 11px;
+}
+
+#left-panel-container #More #more-options-wrpper .option-wrapper .option-name {
+    font-size: larger;
+}

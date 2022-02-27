@@ -10,6 +10,7 @@ function ReuseableTrendsNavigationHandler({
     let [dataset, setDataset] = useState(null);
     let [fetchUrl, setFetchUrl] = useState(null);
     let [videoFeeds, setVideoFeeds] = useState(null);
+    let [peopleDataset, setPeopleDataset]  = useState(null)
 
     // let handleDataset = (items) => {
     //     let newList = items
@@ -54,25 +55,37 @@ function ReuseableTrendsNavigationHandler({
         // whichNav == 'Videos' && fetchBingWebSearch(url, setDataset)
 
         whichNav == 'Videos' && fetchVideosPexelApi(url, setDataset)
+        // whichNav == 'Videos' && fetchVideosPexelApi(url, setVideoFeeds)
         // whichNav == 'Videos' && console.log('th02')
 
-        whichNav == 'People' && fetchUsersTwitterApi(url, setDataset)
+        // whichNav == 'People' && fetchUsersTwitterApi(url, setDataset)
+        whichNav == 'People' && fetchUsersTwitterApi(url, setPeopleDataset)
     }
 
     useEffect(() => explicitTrendSearchText && whichNav && decideWhichFetchRequest(explicitTrendSearchText, whichNav), [explicitTrendSearchText, whichNav])
 
+    useEffect(() => setDataset(null), [])
+    
     let renderArticles = () =>
         dataset &&
         dataset.map((item) => (
             <RenderArticle key={item.title} item={item} fromExplicitTrend={true} whichNav={whichNav} />
         ));
 
-    let renderUsers = () => dataset && dataset.map(item => <RenderUserInModal key={item.id} item={item} />)
+    let renderUsers = () => peopleDataset && peopleDataset.map(item => <RenderUserInModal key={item.id} item={item} />)
 
-    return <div id="reuseable-articles-renderer-wrapper">
-        {whichNav != 'People' && renderArticles()}
-        {whichNav == 'People' && renderUsers()}
-    </div>;
+    // let renderVideoFeeds = () => videoFeeds && videoFeeds.map(item => <RenderArticle key={item.id} item={item} />)
+
+    return (
+        (dataset || peopleDataset)
+        &&
+        <div id="reuseable-articles-renderer-wrapper">
+            {whichNav != 'People' && renderArticles()}
+            {/* {(whichNav != 'People' && whichNav != 'Videos') && renderArticles()} */}
+            {whichNav == 'People' && renderUsers()}
+            {/* {whichNav == 'Videos' && renderVideoFeeds()} */}
+        </div>
+    )
 }
 
 let fetchUsersTwitterApi = (url, datasetUpdater) => {
@@ -176,7 +189,10 @@ let fetchDataWebSearch = (firstHalfOfUrl, dataUpdater) => {
             console.log(data, 'data!!')
             let results = data.value
             if (results) {
-                dataUpdater(results)
+                let newList = results.filter(item => item.image.url)
+                // console.log(newList, 'newList!!')
+                // dataUpdater(results)
+                dataUpdater(newList)
             } else {
                 console.log('no data is found!!')
             }
