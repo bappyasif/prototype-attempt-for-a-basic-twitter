@@ -68,7 +68,7 @@ let RenderAnalyticsDataSection = ({ analysingTweetData, currentUser }) => {
 let RenderTweetAnalyticMetrics = ({ analysingTweetID, analysingTweetData }) => {
     // let [currentTooltip, setCurrentTooltip] = useState(null)
     let [randomNumberTotal, setRandomNumberTotal] = useState(0)
-    
+
     let handleRandomNumberTotal = (value) => {
         setRandomNumberTotal(prevNum => prevNum + value)
         // setRandomNumberTotal(randomNumberTotal + value)
@@ -78,13 +78,13 @@ let RenderTweetAnalyticMetrics = ({ analysingTweetID, analysingTweetData }) => {
     console.log('total', randomNumberTotal)
 
     let tooltipSvg = informationTooltipSvg()
-    
+
     let renderMetrics = analyticMetrics.map((item, idx) => idx ? <RenderTweetAnalyticMetric key={item.name} item={item} tooltipSvg={tooltipSvg} analysingTweetData={analysingTweetData} handleRandomNumberTotal={handleRandomNumberTotal} /> : null)
     // let renderMetrics = analyticMetrics.map(item => <RenderTweetAnalyticMetric key={item.name} item={item} tooltipSvg={tooltipSvg} currentTooltip={currentTooltip} setCurrentTooltip={setCurrentTooltip} />)
-    
+
     // analysingTweetID && console.log(analysingTweetID, analysingTweetData)
     let leftItem = { name: 'Impressions', number: '00' }
-    
+
     return (
         <div id='analytic-metrics-ui-wrapper'>
             <RenderTweetAnalyticMetric item={leftItem} tooltipSvg={tooltipSvg} analysingTweetData={analysingTweetData} randomNumberTotal={randomNumberTotal} handleRandomNumberTotal={handleRandomNumberTotal} />
@@ -130,7 +130,7 @@ let RenderTweetAnalyticMetric = ({ item, tooltipSvg, handleRandomNumberTotal, ra
                 <div className='tooltip-svg' onClick={handleTooltips}>{tooltipSvg}</div>
             </div>
 
-            <div className='meteric-number'>{ randomNumberTotal || randomNumber || item.number}</div>
+            <div className='meteric-number'>{randomNumberTotal || randomNumber || item.number}</div>
         </div>
     )
 }
@@ -151,7 +151,7 @@ let RenderMetricTooltipModal = ({ tooltip, closeTooltip, randomNumber, randomNum
     return (
         <div className='tooltip-ui-wrapper' ref={ref}>
             <div className='tooltip-name'>{tooltip}</div>
-            <div className='tooltip-subtext'><span style={{fontSize: 'larger', fontWeight: 'bolder'}}>{randomNumberTotal || randomNumber}</span> {subText}</div>
+            <div className='tooltip-subtext'><span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>{randomNumberTotal || randomNumber}</span> {subText}</div>
             <div className='tooltip-modal-btn' onClick={() => closeTooltip()}>OK</div>
         </div>
     )
@@ -185,7 +185,20 @@ export let RenderUserTweet = ({ speceficTweetData, currentUser, pollVotesCount, 
 
     let [neededInfo, setNeededInfo] = useState([])
 
+    // let [connectingLineHeight, setConnectingLineHeight] = useState(null);
+
     let history = useHistory(null)
+
+    // let getConnectingLineHeight = () => {
+    //     let ref01 = document.querySelector('.quoted-picture');
+    //     let ref02 = document.querySelector('.style-gif-border-radius');
+    //     if(ref01 || ref02) {
+    //         // console.log(ref01, ref02, ref01.clientHeight)
+    //         setConnectingLineHeight('279')
+    //     } else {
+    //         setConnectingLineHeight('38')
+    //     }
+    // }
 
     let handleShowThisThread = () => {
         console.log(speceficTweetData, 'from showthisthread')
@@ -197,9 +210,16 @@ export let RenderUserTweet = ({ speceficTweetData, currentUser, pollVotesCount, 
     let handleDataLoading = (dataset) => setUserProfileData(dataset)
 
     // let {created, extraPoll, extraTweet, medias, tweetPoll, tweetText, id} = speceficTweetData && {...speceficTweetData[0]}
-    let { created, extraPoll, extraTweet, medias, tweetPoll, tweetText, id } = Object.keys(speceficTweetData) && { ...speceficTweetData[0] }
+    let { created, extraPoll, extraTweet, extraPicture, extraGif, medias, tweetPoll, tweetText, id, gif, picture } = Object.keys(speceficTweetData) && { ...speceficTweetData[0] }
 
     useEffect(() => currentUser && getUserProfileData(currentUser, handleDataLoading), [])
+
+    // useEffect(() => medias && ( medias.picture || medias.extraPicture) && getConnectingLineHeight(), [ medias && medias.picture, medias && medias.extraPicture])
+
+    // useEffect(() => {
+    //     currentUser && getUserProfileData(currentUser, handleDataLoading);
+    //     getConnectingLineHeight();
+    // }, [])
 
     let filterProfileData = () => {
         let itemFiltered = userProfileData.filter((item, idx) => (idx == 0 || idx == 6) && item.content)
@@ -214,6 +234,8 @@ export let RenderUserTweet = ({ speceficTweetData, currentUser, pollVotesCount, 
 
     // console.log(speceficTweetData, 'speceficTweetData!!', created, tweetText, speceficTweetData.created, speceficTweetData.tweetText)
 
+    // console.log(medias, 'medias!!!!')
+
     let retweetModalQuoteStyles = {
         border: 'solid 1px silver',
         marginLeft: '80px',
@@ -227,27 +249,39 @@ export let RenderUserTweet = ({ speceficTweetData, currentUser, pollVotesCount, 
         <div id='analysing-user-tweet-wrapper' style={quotedFromRetweetModal && retweetModalQuoteStyles}>
             <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={(created && created.seconds) || (speceficTweetData.created.seconds)} quotedFromRetweetModal={quotedFromRetweetModal} />
             {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
-            <RenderUserTweetText tweetText={tweetText || speceficTweetData.tweetText} quotedFromRetweetModal={quotedFromRetweetModal} />
-            {!quotedFromRetweetModal && <div id='addtional-tweet-line' style={{ display: 'none', height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px' }} ></div>}
-            {!quotedFromRetweetModal && <div id='poll-tweet-line-extension' style={{ height: numberOfPollOptions == 3 ? '153px' : numberOfPollOptions == 4 && '194px' }}></div>}
-            {((medias && medias.gif && medias.gif) || (medias && medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />}
+            {/* <RenderUserTweetText tweetText={tweetText|| speceficTweetData.tweetText} quotedFromRetweetModal={quotedFromRetweetModal} /> */}
+            <RenderUserTweetText tweetText={quotedFromRetweetModal && extraTweet ? extraTweet : extraTweet ? extraTweet : tweetText} quotedFromRetweetModal={quotedFromRetweetModal} />
+
+            {/* trying to adjust this from tweet modal instead */}
+            {/* {!quotedFromRetweetModal && <div id='addtional-tweet-line' style={{ display: 'none', height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px' }} ></div>} */}
+            {/* {!quotedFromRetweetModal && <div id='poll-tweet-line-extension' style={{ height: numberOfPollOptions == 3 ? '153px' : numberOfPollOptions == 4 && '194px' }}></div>} */}
+            
+            {/* {((medias && medias.gif && medias.gif) || (medias && medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />} */}
+            {medias && (medias.extraGif || medias.extraPicture || medias.gif || medias.picture) && <RenderUserTweetMedias medias={medias} quotedFromRetweetModal={quotedFromRetweetModal} />}
+
             {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} forModal={forModal} />}
             {quotedFromRetweetModal && <div id='show-this-thread-text' onClick={handleShowThisThread}>Show this thread</div>}
         </div>
     )
 }
 
-let RenderUserTweetMedias = ({ medias }) => {
+let RenderUserTweetMedias = ({ medias, quotedFromRetweetModal }) => {
     // let [gifObj, setGifObj] = useState(null)
-    let { gif, picture } = { ...medias }
+    let { gif, picture, extraGif, extraPicture } = { ...medias }
     // console.log(gif, picture, 'media found!!')
     // let getGifFromID = () => {
     //     // getGiphyGifObject(gif)
 
     // }
+    // console.log(extraPicture, extraGif, '?!?!')
     return (
         // picture ? <img width={'461px'} src={picture} /> : getGifFromID()
-        picture ? <img className='quoted-picture' src={handleMediaFileChecks(picture)} /> : <MakeGifObjectAvailable gifId={gif} />
+        // picture ? <img className='quoted-picture' src={handleMediaFileChecks(picture)} /> : <MakeGifObjectAvailable gifId={gif} />
+
+        (extraPicture || picture) ? <img className='quoted-picture' src={handleMediaFileChecks(quotedFromRetweetModal && extraPicture ? extraPicture : extraPicture ? extraPicture : picture)} style={{width: quotedFromRetweetModal && '540px', marginLeft: quotedFromRetweetModal && '26px'}} /> : <MakeGifObjectAvailable gifId={quotedFromRetweetModal && extraGif ? extraGif : extraGif ? extraGif : gif} quotedFromRetweetModal={quotedFromRetweetModal} />
+
+        // quotedFromRetweetModal && extraPicture ? <img className='quoted-picture' src={handleMediaFileChecks(extraPicture)} /> : extraPicture ? <img className='quoted-picture' src={handleMediaFileChecks(extraPicture)} /> : <img className='quoted-picture' src={handleMediaFileChecks(picture)} />
+
         // <div id='medias-wrapper'></div>
     )
 }

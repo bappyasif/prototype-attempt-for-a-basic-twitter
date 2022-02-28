@@ -47,11 +47,12 @@ export let RenderArticle = ({ item, fromExplore, fromExplicitTrend, whichNav }) 
             <div id='article-info'>
                 <div id='top-section' onMouseLeave={() => setShowTimeToolTip(false)}>
                     <div id='authors-info'>
-                        {(whichNav != 'Videos') && <div id='authors-name'>{(!fromExplicitTrend ? item.byline.split('By ')[1] : (item.author || item.provider.name)) || 'Inhouse Newsdesk'}</div>}
+                        {(whichNav != 'Videos') && <div id='authors-name'>{(!fromExplicitTrend ? item.byline && item.byline.split('By ')[1] : (item.author || item.provider.name)) || 'Inhouse Newsdesk'}</div>}
                         {/* { (whichNav == 'Videos') && <div id="author-name">{item.name.split(':')[0]}</div>} */}
                         {(whichNav == 'Videos') && <div id="author-name">{item.user && item.user.name || 'In-house'}</div>}
                         {/* <div id='authors-name'>{item.byline.split('By ')[1] || 'Inhouse Newsdesk'}</div> */}
-                        <div id='authors-handle'>@{(!fromExplicitTrend ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends((item.author || item.provider && item.provider.name || item.user && item.user.name))) || 'Inhouse Newsdesk'}</div>
+                        <div id='authors-handle'>@{((!fromExplicitTrend && whichNav != 'Videos') ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends((item.author || item.provider && item.provider.name || item.user && item.user.name))) || 'Inhouse Newsdesk'}</div>
+                        {/* <div id='authors-handle'>@{(!fromExplicitTrend ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends((item.author || item.provider && item.provider.name || item.user && item.user.name))) || 'Inhouse Newsdesk'}</div> */}
                         {/* { (whichNav != 'Videos') && <div id='authors-handle'>@{(!fromExplicitTrend ? adjustingAuthorsNames(item) : adjustingAuthorsNamesForTrends((item.author || item.provider.name))) || 'Inhouse Newsdesk'}</div>} */}
                         {/* <div id='authors-handle'>@{adjustingAuthorsNames(item) || 'Inhouse Newsdesk'}</div> */}
                     </div>

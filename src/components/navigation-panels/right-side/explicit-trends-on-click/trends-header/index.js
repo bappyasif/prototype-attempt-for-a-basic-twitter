@@ -4,19 +4,34 @@ import useOnHoverOutside from '../../../../user-profile/all-tweets/tweet-top/add
 import { SearchComponent } from '../../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components'
 import { threeDotsSvgIcon } from '../../current-trends'
 import useOnClickOutside  from '../../click-outside-utility-hook/useOnClickOutside.js'
+import { AlreadySearchedKeywordsWrapper, getOnlyUniqueSearchedTerms } from '../../search-twitter'
 
 function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }) {
   let [searchText, setSearchText] = useState(null)
   let [showSearchResults, setShowSearchResults] = useState(false)
   let [inputFocused, setInputFocused] = useState(false)
+  let [alreadySearchedTermsList, setAlreadySearchedTermsList] = useState([])
 
   let [dataset, setDataset] = useState(null)
 
   let handleSearchText = value => setSearchText(value)
 
+  let updateAlreadySearchedTerms = (searchText) => {
+    setAlreadySearchedTermsList(prevList =>  {
+      let newList = prevList.filter(searchTerm => searchTerm != searchText)
+      // return prevList.length ? newList : prevList.concat(searchText)
+      return prevList.concat(searchText)
+    })
+    console.log('chkj01', searchText, alreadySearchedTermsList)
+  }
+
   useEffect(() => {
     if(searchText) {
       let handle = setTimeout(() => {
+        
+        // recording recently searched term into list
+        updateAlreadySearchedTerms(searchText)
+
         fetchResultsFromTwitter(setDataset, searchText)
       }, 2000)
 
@@ -32,6 +47,8 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
   // useEffect(() => searchText && handleExplicitTrendSearchText(searchText), [searchText])
 
   // console.log(inputFocused, 'inputFocused')
+
+  // useEffect(() => searchText && updateAlreadySearchedTerms(searchText), [searchText])
 
   useEffect(() => explicitTrendSearchText && setSearchText(explicitTrendSearchText), [explicitTrendSearchText])
 
@@ -49,13 +66,15 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
         {showTooltips && <div className='tooltips'>tooltip</div>}
       </div> */}
       {/* <div id='remove-search-text'>{removeIconSvg()}</div> */}
-      {showSearchResults && dataset && <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} />}
+      {showSearchResults && dataset && <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} />}
       {/* {showSearchResults && searchText && <ShowSearchResultsModal searchText={searchText} updateModalVisibility={setShowSearchResults} />} */}
+
+      {/* <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} updateSearchedTerms={setAlreadySearchedTermsList} /> */}
     </div>
   )
 }
 
-let ShowSearchResultsModal = ({searchText, updateModalVisibility, dataset}) => {
+let ShowSearchResultsModal = ({searchText, updateModalVisibility, dataset, searchedTerms, updateSearchedTerms}) => {
   // let [dataset, setDataset] = useState(null)
 
   // useEffect(() => searchText && fetchResultsFromTwitter(setDataset, searchText), [searchText])
@@ -63,19 +82,32 @@ let ShowSearchResultsModal = ({searchText, updateModalVisibility, dataset}) => {
   // let ref = useRef(null)
   // useOnClickOutside(ref, ()=>updateModalVisibility(false))
 
+  let handleSearchKeywordRemoval = (evt) => {
+    let findID = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id
+    let newList = findID && getOnlyUniqueSearchedTerms(searchedTerms, findID)
+    // console.log(evt.target, findID, newList)
+    newList && updateSearchedTerms(newList)
+  }
+
   // console.log(dataset, 'dataset!!')
 
   let renderResults = () => dataset && dataset.map(item => <SearchResultsWrapperUi key={item.id} item={item} />)
 
+  // console.log(searchedTerms, 'searchedTerms');
+
+  let alreadySearchedTermsList = () => searchedTerms && searchedTerms.map(item => <AlreadySearchedKeywordsWrapper key={item} item={item} handleSearchKeywordRemoval={handleSearchKeywordRemoval} /> )
+
   // ref={ref}
   return (
     <div id='show-search-results-container' style={{overflowY: dataset && dataset.length >= 5 && 'scroll', maxHeight: '380px'}}>
+      {/* rendering already searched keywords */}
+      {alreadySearchedTermsList()}
       { dataset && renderResults()}
     </div>
   )
 }
 
-let SearchResultsWrapperUi = ({item}) => {
+export let SearchResultsWrapperUi = ({item}) => {
   let {name, screen_name, profile_image_url, description } = {...item}
   return (
     <div className='results-wrapper-ui'>
@@ -89,8 +121,9 @@ let SearchResultsWrapperUi = ({item}) => {
   )
 }
 
-let fetchResultsFromTwitter = (updateDataset, searchText) => {
+export let fetchResultsFromTwitter = (updateDataset, searchText) => {
   let url = `https://twitter135.p.rapidapi.com/AutoComplete/?q=${searchText}`
+  // console.log(searchText, 'searchText')
     fetch(url, {
         "method": "GET",
         "headers": {

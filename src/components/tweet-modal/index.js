@@ -196,6 +196,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
 
     useEffect(() => {
         let referencePoint01 = document.querySelector('#header-section')
+        let analysingTweetRef = document.querySelector('#analysing-user-tweet-wrapper')
         let calc;
         if (isExtraTweetClicked && !(selectedFile || gifFile)) {
             // let referencePoint01 = document.querySelector('#header-section')
@@ -210,18 +211,18 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
             calc = mediaDiv.clientHeight + referencePoint01.clientHeight - 53
             calc && setLineHeight(calc)
             console.log('2nd')
-        } else if((selectedFile || gifFile) && isPrimaryTweetClicked && isBothTextareaExist) {
+        } else if ((selectedFile || gifFile) && isPrimaryTweetClicked && isBothTextareaExist) {
             let mediaDiv = document.querySelector('#tweet-compose-container')
             let footerDiv = document.querySelector('#footer-section')
             calc = mediaDiv.clientHeight + (referencePoint01.clientHeight - 53) + footerDiv.clientHeight
             calc && setLineHeight(calc)
             console.log('3nd')
-        } else if(isBothTextareaExist && isPrimaryTweetClicked) {
+        } else if (isBothTextareaExist && isPrimaryTweetClicked) {
             // let referencePoint01 = document.querySelector('#header-section')
             let referencePoint02 = document.querySelector('#extra-tweet-view')
 
             let footerDiv = document.querySelector('#footer-section')
-            
+
             calc = footerDiv.clientHeight + referencePoint01.clientHeight - 53
             calc && setLineHeight(calc)
             console.log('4th')
@@ -229,12 +230,22 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
         let tweetModal = document.querySelector('#tweet-modal');
         setModalHeight(tweetModal);
 
+        // analysingTweetRef && setLineHeight(279)
+        // if (analysingTweetRef) {
+        //     let chkIfPictureExist = analysingTweetRef.querySelector('.quoted-picture');
+        //     let chkIfGifExist = analysingTweetRef.querySelector('.style-gif-border-radius');
+
+        //     if (chkIfPictureExist || chkIfGifExist) setLineHeight(prevHeight => prevHeight + 299)
+        // }
+
+        // analysingTweetRef && console.log(analysingTweetRef, analysingTweetRef.clientHeight, tweetModal.clientHeight)
+
     }, [extraTweetText, isExtraTweetClicked])
 
     return (
-        <div id='tweet-modal' 
-        // style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((extraGifFile && gifFile) || (selectedFile && extraSelectedFile)) && isPrimaryTweetClicked) ? '1104px' : ((extraGifFile || extraSelectedFile) && isPrimaryTweetClicked) ? '731px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} 
-        style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: modalHeight && modalHeight}}
+        <div id='tweet-modal'
+            // style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: ((isBothTextareaExist && isPrimaryTweetClicked && (selectedFile || gifFile))) ? '731px' : (isBothTextareaExist && isPrimaryTweetClicked && (firstTweetHasPoll) && !isPollIconClickedForExtraTweet) ? '643px' : '', minHeight: (firstTweetHasMedia && secondTweetHasMedia && isPrimaryTweetClicked) ? '1089px' : (firstTweetHasPoll && secondTweetHasPoll && isPollIconClickedForExtraTweet && isPrimaryTweetClicked) ? '936px' : (((extraGifFile && gifFile) || (selectedFile && extraSelectedFile)) && isPrimaryTweetClicked) ? '1104px' : ((extraGifFile || extraSelectedFile) && isPrimaryTweetClicked) ? '731px' : '' }} className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extended-modal-view' : ''} 
+            style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: modalHeight && modalHeight }}
         >
             <div className='upper-content'>
                 {/* <span id='delete-icon' onClick={closeTweetModalHandler}>{deleteIcon()}</span> */}
@@ -246,7 +257,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
             <div id='middle-content'>
                 {scheduleStamp && scheduleStamp}
                 {quoteTweetData && !quotedFromRetweetModal && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} forModal={true} />}
-                {quoteTweetData && !quotedFromRetweetModal && <div id='addtional-tweet-line'></div>}
+                {/* {quoteTweetData && !quotedFromRetweetModal && <div id='addtional-tweet-line'></div>} */}
                 {/* {quoteTweetData && <div id='addtional-tweet-line' style={{height: ((quoteTweetData.medias.gif && quoteTweetData.medias.gif) || (quoteTweetData.medias.picture && quoteTweetData.medias.picture)) && '324px'}} ></div>} */}
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />

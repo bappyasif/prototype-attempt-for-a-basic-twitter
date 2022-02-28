@@ -14,7 +14,9 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
     // let [replyCountFlag, setCountReplyFlag] = useState(false)
     let history = useHistory(null)
 
-    // changedCount && console.log(changedCount, 'changedCount!!', repliedTweetsIDs)
+    // extraTwee && console.log(elem, extraTwee, extraEen, tweetData)
+
+    // changedCount && console.log(changedCount, 'changedCount!!', repliedTweetsIDs)l
 
     // let handleReplyCount = (val) => {
     //     // setReplyCount(val ? val : 1)
@@ -47,9 +49,9 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
     useEffect(() => quotesListFromRetweet && elem.id == 'retweet' && setCounter(quotesListFromRetweet.length), [quotesListFromRetweet])
 
     useEffect(() => {
-        if(iconClicked == "like") {
+        if(iconClicked == "like" || iconClicked == "like-twee") {
             handleIncreaseCount()
-        } else if(iconClicked == 'reply') {
+        } else if(iconClicked == 'reply' || iconClicked == 'reply-twee') {
             // replyCount && history.push('/tweet/compose')
         } else if(iconClicked.includes('analytics')) {
             // alert('here!!')
@@ -110,12 +112,13 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
         // console.log(evt.target.parentNode.parentNode.parentNode)
         let iconElement = evt.target.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.id
         setIconClicked(iconElement)
-        if(iconElement == 'retweet') {
+        // iconElement.includes('retweet')
+        if(iconElement == 'retweet' || iconElement == 'retweet-twee') {
             handleShowModal()
             // !undoRetweet && handleCount()
-        } else if(iconElement == 'like') {
+        } else if(iconElement == 'like' || iconElement == 'like-twee') {
             handleDecreaseCount()
-        } else if(iconElement == 'reply') {
+        } else if(iconElement == 'reply' || iconElement == 'reply-twee') {
             handleQuoteTweetID(tweetData.ID)
             handleQuoteTweetCount()
             setReplyRouteReady(true)
@@ -200,7 +203,7 @@ let RenderRetweetModalItem = ({ item, handleShowModal, handleUndoTweet, undoRetw
     let history = useHistory(null);
 
     let handleClick = (evt) => {
-        // console.log(evt.target.parentNode.id)
+        // console.log(evt.target.parentNode.id, '?!?!')
         let nodeID = evt.target.parentNode.id
         if(nodeID == 'Quote') {
             handleQuoteTweetID(tweetData.ID)
@@ -229,6 +232,27 @@ let retweetIcon = () => <svg width={'24px'} height={'24px'}><g><path d="M23.77 1
 let retweetModalItems = [{ name: 'Retweet', icon: retweetIcon() }, { name: 'Quote', icon: quoteIcon() }]
 
 /**
+ * 
+ * 
+ let handleClicked = (evt) => {
+        // console.log(evt.target.parentNode.parentNode.parentNode)
+        let iconElement = evt.target.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.id
+        setIconClicked(iconElement)
+        if(iconElement == 'retweet') {
+            handleShowModal()
+            // !undoRetweet && handleCount()
+        } else if(iconElement == 'like') {
+            handleDecreaseCount()
+        } else if(iconElement == 'reply') {
+            handleQuoteTweetID(tweetData.ID)
+            handleQuoteTweetCount()
+            setReplyRouteReady(true)
+            // HandleQuoteTweetProcess({userID: currentUser, docID: tweetData.ID, whichData: 'replyCount'})
+            // updateDataInFirestore(currentUser, tweetData.ID, {replyCount: })
+            // history.push('/tweet/compose')
+        }
+        // console.log(iconElement, 'iconElement')
+    }
  * 
  * 
  let ShowRetweetModalUI = ({handleShow}) => {

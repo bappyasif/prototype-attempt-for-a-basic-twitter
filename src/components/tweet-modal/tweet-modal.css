@@ -116,11 +116,11 @@
 
 #middle-content #analysing-user-tweet-wrapper .quoted-picture {
   height: 279px;
-  width: 533px;
+  width: 593px;
   display: flex;
   border-radius: 20px;
   justify-content: center;
-  margin-left: 24px;
+  margin-left: 44px;
   /* margin: auto; */
 }
 
@@ -141,7 +141,7 @@
 #middle-content #analysing-user-tweet-wrapper a div picture img {
   border-radius: 20px;
   width: -webkit-fill-available;
-  margin-left: -31px;
+  margin-left: -157px;
 }
 
 #middle-content #analysing-user-tweet-wrapper #user-info-wrapper {
@@ -177,6 +177,10 @@
 #middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper-from-retweet {
   margin-left: 29px !important;
   margin-bottom: 0px !important;
+}
+
+#middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper-from-retweet .style-gif-border-radius {
+  margin-left: -103px;
 }
 
 #middle-content #analysing-user-tweet-wrapper #show-this-thread-text {

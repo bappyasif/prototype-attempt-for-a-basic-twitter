@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import '../../styles/right-panel.css'
 import useOnClickOutside from '../click-outside-utility-hook/useOnClickOutside';
+import { fetchResultsFromTwitter, SearchResultsWrapperUi } from '../explicit-trends-on-click/trends-header'
+
 
 function SearchTwitter() {
     let [searchText, setSearchText] = useState('')
     let [searchedKeywords, setSearchedKeywords] = useState([])
     let [focused, setFocused] = useState(false);
+    let [dataset, setDataset] = useState(null)
     let ref = useRef();
 
     let handleUserInput = (evt) => setSearchText(evt.target.value)
@@ -17,6 +20,8 @@ function SearchTwitter() {
                 let sanitizeData = curateData.filter((item, idx, self) => idx == self.findIndex(elem => elem.keyword == item.keyword))
 
                 setSearchedKeywords(sanitizeData);
+
+                fetchResultsFromTwitter(setDataset, searchText)
             }
             setSearchText('');
         }
@@ -31,6 +36,8 @@ function SearchTwitter() {
 
     let handleFocused = () => setFocused(true)
 
+    // console.log(searchedKeywords, 'searchedKeywords!!')
+
     return (
         <div id='search-twitter-container' ref={ref}>
             <span id='svg-icon'>{searchIcon()}</span>
@@ -41,48 +48,98 @@ function SearchTwitter() {
                 <SearchDropdown
                     searchedKeywords={searchedKeywords}
                     setSearchedKeywords={setSearchedKeywords}
+                    dataset={dataset}
                 />
             }
         </div>
     )
 }
 
-let SearchDropdown = ({ searchedKeywords, setSearchedKeywords }) => {
+let SearchDropdown = ({ searchedKeywords, setSearchedKeywords, dataset }) => {
 
     let handleSearchKeywordRemoval = evt => {
         let findId = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.id;
 
-        let findIndex = searchedKeywords.findIndex(item => item.keyword == findId)
+        // let findIndex = searchedKeywords.findIndex(item => item.keyword == findId)
 
-        let newSearchedKeywordList = searchedKeywords.slice(0, findIndex).concat(searchedKeywords.slice(findIndex + 1))
+        // let newSearchedKeywordList = searchedKeywords.slice(0, findIndex).concat(searchedKeywords.slice(findIndex + 1))
+
+        let newSearchedKeywordList = getOnlyUniqueSearchedTerms(searchedKeywords, findId) 
 
         setSearchedKeywords(newSearchedKeywordList);
 
         // console.log(findId, findIndex, newSearchedKeywordList)
     }
 
-    let renderAlreadySearchedKeywords = searchedKeywords.map((item, idx) => <div key={item.keyword} className='keywords-section'><span className='search-icon'>{searchIcon(null, 'scale(1.3)')}</span><span className='searched-keywords'>{item.keyword}</span><span className='remove-icon' id={item.keyword} onClick={handleSearchKeywordRemoval}>{removeIcon()}</span></div>)
+    // let renderAlreadySearchedKeywords = () => searchedKeywords.map((item, idx) => <div key={item.keyword} className='keywords-section'><span className='search-icon'>{searchIcon(null, 'scale(1.3)')}</span><span className='searched-keywords'>{item.keyword}</span><span className='remove-icon' id={item.keyword} onClick={handleSearchKeywordRemoval}>{removeIcon()}</span></div>)
+
+    let renderAlreadySearchedKeywords = () => searchedKeywords.map((item, idx) => <AlreadySearchedKeywordsWrapper key={item.keyword} item={item} handleSearchKeywordRemoval={handleSearchKeywordRemoval} />)
 
     let handleClearAllAlreadySearchedKeywords = () => {
         searchedKeywords = [];
         setSearchedKeywords(searchedKeywords);
     }
 
-    return <div id='search-dropdown-container'>
-        {
-            renderAlreadySearchedKeywords.length == 0
-                ?
-                <div id='show-to-search-announcement'>Try searching for people, topics or keywords</div>
-                :
-                <div id='headings-section'>
-                    <div id='recent-text'>Recent</div>
-                    <div id='clear-all-searched-keywords' onClick={handleClearAllAlreadySearchedKeywords}>Clear all</div>
-                </div>
-        }
+    // let searchResultsPretextPlaceholder = () => {
+    //     return (
+    //         renderAlreadySearchedKeywords().length == 0
+    //             ?
+    //             <div id='show-to-search-announcement'>Try searching for people, topics or keywords</div>
+    //             :
+    //             <div id='headings-section'>
+    //                 <div id='recent-text'>Recent</div>
+    //                 <div id='clear-all-searched-keywords' onClick={handleClearAllAlreadySearchedKeywords}>Clear all</div>
+    //             </div>
+    //     )
+    // }
 
-        {renderAlreadySearchedKeywords}
+    let renderTwitterSearchResults = () => dataset && dataset.map(item => <SearchResultsWrapperUi key={item.uid} item={item} />)
 
-    </div>
+    return (
+        <div id='search-dropdown-container' style={{maxHeight: dataset && '420px', overflowY: dataset && 'scroll'}}>
+            {/* {searchResultsPretextPlaceholder(renderAlreadySearchedKeywords(), handleClearAllAlreadySearchedKeywords)} */}
+            {/* {searchResultsPretextPlaceholder()} */}
+            {searchResultsPretextPlaceholder(searchedKeywords, handleClearAllAlreadySearchedKeywords)}
+            {renderAlreadySearchedKeywords()}
+            {renderTwitterSearchResults()}
+        </div>
+    )
+}
+
+
+export let getOnlyUniqueSearchedTerms = (searchedKeywords, findId) => {
+    // console.log('iiiim here!!', searchedKeywords, findId)
+
+    let findIndex = searchedKeywords.findIndex(item => item.keyword == findId)
+
+    let newSearchedKeywordList = searchedKeywords.slice(0, findIndex).concat(searchedKeywords.slice(findIndex + 1))
+
+    let correctedList = searchedKeywords.length == 1 ? [] : newSearchedKeywordList
+
+    return correctedList;
+
+    // return newSearchedKeywordList;
+}
+
+export let AlreadySearchedKeywordsWrapper = ({ item, handleSearchKeywordRemoval }) => {
+    return (
+        <div className='keywords-section'>
+            <span className='search-icon'>{searchIcon(null, 'scale(1.3)')}</span><span className='searched-keywords'>{item.keyword || item}</span><span className='remove-icon' id={item.keyword || item} onClick={handleSearchKeywordRemoval}>{removeIcon()}</span>
+        </div>
+    )
+}
+
+export let searchResultsPretextPlaceholder = (list, handleClearAllAlreadySearchedKeywords) => {
+    return (
+        list.length == 0
+            ?
+            <div id='show-to-search-announcement'>Try searching for people, topics or keywords</div>
+            :
+            <div id='headings-section'>
+                <div id='recent-text'>Recent</div>
+                <div id='clear-all-searched-keywords' onClick={handleClearAllAlreadySearchedKeywords}>Clear all</div>
+            </div>
+    )
 }
 
 let searchIcon = (color, scaled) => <svg width='24px' height='24px' transform={scaled ? scaled : 'scale(.8)'} style={{ paddingTop: '4px', paddingLeft: scaled ? '2px' : null }}><g><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path></g></svg>

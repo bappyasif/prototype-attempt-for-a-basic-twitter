@@ -8,7 +8,7 @@ function ReuseableTrendsNavigationHandler({
     whichNav,
 }) {
     let [dataset, setDataset] = useState(null);
-    let [fetchUrl, setFetchUrl] = useState(null);
+    // let [fetchUrl, setFetchUrl] = useState(null);
     let [videoFeeds, setVideoFeeds] = useState(null);
     let [peopleDataset, setPeopleDataset]  = useState(null)
 
@@ -21,12 +21,12 @@ function ReuseableTrendsNavigationHandler({
     // };
 
     console.log(
-        fetchUrl,
         "fetchUrl",
         explicitTrendSearchText,
         whichNav,
         videoFeeds,
-        dataset
+        dataset,
+        peopleDataset
     );
 
     let decideWhichFetchRequest = (searchString, whichNav) => {
@@ -54,8 +54,8 @@ function ReuseableTrendsNavigationHandler({
 
         // whichNav == 'Videos' && fetchBingWebSearch(url, setDataset)
 
-        whichNav == 'Videos' && fetchVideosPexelApi(url, setDataset)
-        // whichNav == 'Videos' && fetchVideosPexelApi(url, setVideoFeeds)
+        // whichNav == 'Videos' && fetchVideosPexelApi(url, setDataset)
+        whichNav == 'Videos' && fetchVideosPexelApi(url, setVideoFeeds)
         // whichNav == 'Videos' && console.log('th02')
 
         // whichNav == 'People' && fetchUsersTwitterApi(url, setDataset)
@@ -64,7 +64,7 @@ function ReuseableTrendsNavigationHandler({
 
     useEffect(() => explicitTrendSearchText && whichNav && decideWhichFetchRequest(explicitTrendSearchText, whichNav), [explicitTrendSearchText, whichNav])
 
-    useEffect(() => setDataset(null), [])
+    // useEffect(() => dataset && setDataset(null), [whichNav])
     
     let renderArticles = () =>
         dataset &&
@@ -74,16 +74,14 @@ function ReuseableTrendsNavigationHandler({
 
     let renderUsers = () => peopleDataset && peopleDataset.map(item => <RenderUserInModal key={item.id} item={item} />)
 
-    // let renderVideoFeeds = () => videoFeeds && videoFeeds.map(item => <RenderArticle key={item.id} item={item} />)
+    let renderVideoFeeds = () => videoFeeds && videoFeeds.map(item => <RenderArticle key={item.id} item={item} fromExplicitTrend={true} whichNav={whichNav} />)
 
     return (
-        (dataset || peopleDataset)
-        &&
         <div id="reuseable-articles-renderer-wrapper">
-            {whichNav != 'People' && renderArticles()}
-            {/* {(whichNav != 'People' && whichNav != 'Videos') && renderArticles()} */}
+            {/* {whichNav != 'People' && renderArticles()} */}
+            {(whichNav != 'People' && whichNav != 'Videos') && renderArticles()}
             {whichNav == 'People' && renderUsers()}
-            {/* {whichNav == 'Videos' && renderVideoFeeds()} */}
+            {whichNav == 'Videos' && renderVideoFeeds()}
         </div>
     )
 }

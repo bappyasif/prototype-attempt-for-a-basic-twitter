@@ -62,11 +62,13 @@ function ComponentsContainer() {
     // vnxOMhbaq8ObeFIE56GNPDQanig1
     let handleExplicitTrendSearchText = (value) => setExplicitTrendSearchText(value)
 
-    let data = useReuseableDataExtraction()
+    // uncomment this to extract data again
+    // let data = useReuseableDataExtraction()
+    let data;
 
     // console.log(data, 'data fc!!', listOfRandomUsers)
 
-    useEffect(() => setListOfRandomUsers(data), [data])
+    useEffect(() => data && setListOfRandomUsers(data), [data])
 
     // console.log(repliedTweets, '<<<<repliedTweets list from Container>>>>')
 

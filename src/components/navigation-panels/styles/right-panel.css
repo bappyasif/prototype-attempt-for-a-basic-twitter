@@ -114,6 +114,7 @@
   top: 34.5px;
   width: -webkit-fill-available;
   background-color: white;
+  z-index: 99;
 }
 
 #search-dropdown-container #headings-section {
@@ -123,14 +124,16 @@
   margin: 6px 2px 2px 2px;
 }
 
-#search-dropdown-container .keywords-section {
+#search-dropdown-container .keywords-section,
+#show-search-results-container .keywords-section {
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 3.3em;
 }
 
-#search-dropdown-container .keywords-section:hover {
+#search-dropdown-container .keywords-section:hover,
+#show-search-results-container .keywords-section:hover {
   /* border: .11em solid lightgray; */
   background-color: rgba(245, 245, 245, 0.4);
   cursor: pointer;
@@ -621,38 +624,61 @@
   padding: 11px;
   border-top-left-radius: 11px;
   border-bottom-left-radius: 11px;
+  width: -webkit-fill-available;
 }
 
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .keywords-section .remove-icon {
+  display: flex;
+  height: 42px;
+  align-items: center;
+  transform: scale(1.5);
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .keywords-section svg {
+  fill: silver;
+}
+
+#search-twitter-container #search-dropdown-container .results-wrapper-ui,
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui {
   display: flex;
   margin-bottom: 11px;
   border-radius: 8px;
 }
 
+#search-twitter-container #search-dropdown-container .results-wrapper-ui {
+  font-size: smaller;
+}
+
+#search-twitter-container #search-dropdown-container .results-wrapper-ui:hover,
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui:hover {
   background-color: lightgray;
 }
 
+#search-twitter-container #search-dropdown-container .results-wrapper-ui #profile-picture,
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-picture {
   width: 60px;
   height: 60px;
   border-radius: 50%;
 }
 
+#search-twitter-container #search-dropdown-container .results-wrapper-ui #profile-infos,
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-infos {
   text-align: left;
   margin-left: 20px;
 }
 
+#search-twitter-container #search-dropdown-container .results-wrapper-ui #profile-infos #name,
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-infos #name {
   font-size: x-large;
 }
 
+#search-twitter-container #search-dropdown-container .results-wrapper-ui #profile-infos #handle,
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-infos #handle {
   color: silver;
   font-size: smaller;
 }
 
+#search-twitter-container #search-dropdown-container .results-wrapper-ui #profile-infos #description,
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-infos #description {
   text-align: justify;
   font-size: larger;
