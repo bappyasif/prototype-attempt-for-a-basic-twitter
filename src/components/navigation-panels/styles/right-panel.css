@@ -127,9 +127,10 @@
 #search-dropdown-container .keywords-section,
 #show-search-results-container .keywords-section {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   height: 3.3em;
+  color: silver;
 }
 
 #search-dropdown-container .keywords-section:hover,
@@ -636,7 +637,7 @@
 
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .keywords-section svg {
   fill: silver;
-}
+} 
 
 #search-twitter-container #search-dropdown-container .results-wrapper-ui,
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui {
@@ -682,6 +683,41 @@
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container .results-wrapper-ui #profile-infos #description {
   text-align: justify;
   font-size: larger;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .searched-related-topic-wrapper,
+#search-twitter-container #search-dropdown-container .searched-related-topic-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .searched-related-topic-wrapper:hover,
+#search-twitter-container #search-dropdown-container .searched-related-topic-wrapper:hover {
+  background-color: lightgray;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .searched-related-topic-wrapper .search-icon,
+#search-twitter-container #search-dropdown-container .searched-related-topic-wrapper .search-icon {
+  transform: scale(.6);
+  display: flex;
+  align-items: center;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .searched-related-topic-wrapper .topic-name,
+#search-twitter-container #search-dropdown-container .searched-related-topic-wrapper .topic-name {
+  font-size: smaller;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .searched-related-topic-wrapper .topic-tweets,
+#search-twitter-container #search-dropdown-container .searched-related-topic-wrapper .topic-tweets {
+  margin-left: 11px;
+  color: silver;
+  font-size: small;
+}
+
+#explicit-trend-tweets-container #trends-header-component #show-search-results-container .searched-related-topic-wrapper {
+  font-size: x-large;
+  line-height: 2em;
 }
 
 #explicit-trend-tweets-container #top-navigation-panel-container {

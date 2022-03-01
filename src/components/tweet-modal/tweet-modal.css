@@ -116,11 +116,11 @@
 
 #middle-content #analysing-user-tweet-wrapper .quoted-picture {
   height: 279px;
-  width: 593px;
+  /* width: 522px !important; */
   display: flex;
   border-radius: 20px;
   justify-content: center;
-  margin-left: 44px;
+  margin-left: 42px;
   /* margin: auto; */
 }
 
@@ -134,14 +134,35 @@
   width: auto;
 }
 
-#middle-content #analysing-user-tweet-wrapper a div {
-  width: 434px;
+#middle-content #analysing-user-tweet-wrapper #gif-wrapper a div {
+  /* width: 537px; */
 }
 
-#middle-content #analysing-user-tweet-wrapper a div picture img {
+#middle-content #analysing-user-tweet-wrapper a div {
+  /* width: 586px; */
+  width: -webkit-fill-available;
+  padding-left: 8%;
+}
+
+#right-side #analysing-user-tweet-wrapper:nth-child(2),
+#right-side #analysing-user-tweet-wrapper .css-16k37tz,
+#right-side #analysing-user-tweet-wrapper .style-gif-border-radius,
+#right-side #analysing-user-tweet-wrapper .giphy-gif {
+  margin-left: 29px !important;
+  border-radius: 20px !important;
+}
+
+#middle-content #analysing-user-tweet-wrapper a div picture img,
+#right-side #analysing-user-tweet-wrapper a div picture img {
   border-radius: 20px;
   width: -webkit-fill-available;
-  margin-left: -157px;
+  /* margin-left: -157px; */
+}
+
+#right-side #analysing-user-tweet-wrapper a div picture img,
+#right-side #analysing-user-tweet-wrapper .giphy-gif-img {
+  margin-left: 29px !important;
+  border-radius: 20px !important;
 }
 
 #middle-content #analysing-user-tweet-wrapper #user-info-wrapper {
@@ -149,6 +170,7 @@
   justify-content: space-between;
   width: fit-content;
   align-items: center;
+  line-height: 2em;
 }
 
 #middle-content #analysing-user-tweet-wrapper #user-info-wrapper img {
@@ -166,6 +188,7 @@
   width: 20px !important;
   height: 20px !important;
   border-radius: 50%;
+  margin-right: 24px !important;
 }
 
 #middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper,
@@ -175,8 +198,9 @@
 }
 
 #middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper-from-retweet {
-  margin-left: 29px !important;
+  margin-left: 44px !important;
   margin-bottom: 0px !important;
+  line-height: 2em;
 }
 
 #middle-content #analysing-user-tweet-wrapper #analysing-tweet-text-wrapper-from-retweet .style-gif-border-radius {
@@ -184,9 +208,10 @@
 }
 
 #middle-content #analysing-user-tweet-wrapper #show-this-thread-text {
-    margin-left: 29px;
+    margin-left: 44px;
     color: rgba(29, 155, 240, .6);
     pointer-events: none;
+    line-height: 2em;
 }
 
 #middle-content #annnounce-schedule {
@@ -609,27 +634,33 @@
 
 #gif-container {
   padding-left: 20px;
+  width: 560px;
 }
 
 .grid-component {
-  padding-left: 33.9px;
+  padding-left: 71.9px;
 }
 
 #gif-top {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  border: solid silver 1.1px;
+  border-radius: 20px;
+  margin-left: 63px;
 }
 
 #gif-search {
-  width: 74%;
-  border-radius: 99px;
+  width: -webkit-fill-available;
+  border-radius: 20px;
 }
 
 #remove-icon {
   margin-right: 15px;
-  padding: 2px 5px 0px 2px;
+  padding: 2px 2px 2px 2px;
   background: silver;
   border-radius: 50%;
+  margin-left: 20px;
+  display: flex;
 }
 
 #gif-view {

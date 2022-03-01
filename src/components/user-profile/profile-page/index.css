@@ -953,10 +953,17 @@
   font-size: smaller;
 }
 
+.rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper .quoted-picture {
+  margin-left: 0px !important;
+  border-radius: 20px;
+  height: 290px !important;
+  width: -webkit-fill-available !important;
+}
+
 .rendering-tweet-data-container .right-side #analysing-user-tweet-wrapper #show-this-thread-text {
   color: rgb(29, 155, 240);
   /* pointer-events: none; */
-  margin-left: 29px;
+  /* margin-left: 29px; */
   cursor: pointer;
 }
 

@@ -234,7 +234,7 @@ export let RenderUserTweet = ({ speceficTweetData, currentUser, pollVotesCount, 
 
     // console.log(speceficTweetData, 'speceficTweetData!!', created, tweetText, speceficTweetData.created, speceficTweetData.tweetText)
 
-    // console.log(medias, 'medias!!!!')
+    // console.log(medias, 'medias!!!!', extraTweet, speceficTweetData.extraTweet)
 
     let retweetModalQuoteStyles = {
         border: 'solid 1px silver',
@@ -250,14 +250,19 @@ export let RenderUserTweet = ({ speceficTweetData, currentUser, pollVotesCount, 
             <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={(created && created.seconds) || (speceficTweetData.created.seconds)} quotedFromRetweetModal={quotedFromRetweetModal} />
             {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
             {/* <RenderUserTweetText tweetText={tweetText|| speceficTweetData.tweetText} quotedFromRetweetModal={quotedFromRetweetModal} /> */}
-            <RenderUserTweetText tweetText={quotedFromRetweetModal && extraTweet ? extraTweet : extraTweet ? extraTweet : tweetText} quotedFromRetweetModal={quotedFromRetweetModal} />
+            {/* <RenderUserTweetText tweetText={quotedFromRetweetModal && extraTweet ? extraTweet : extraTweet ? extraTweet : tweetText} quotedFromRetweetModal={quotedFromRetweetModal} /> */}
+
+            <RenderUserTweetText tweetText={quotedFromRetweetModal && speceficTweetData.extraTweet ? speceficTweetData.extraTweet : speceficTweetData.extraTweet ? speceficTweetData.extraTweet : tweetText} quotedFromRetweetModal={quotedFromRetweetModal} />
 
             {/* trying to adjust this from tweet modal instead */}
             {/* {!quotedFromRetweetModal && <div id='addtional-tweet-line' style={{ display: 'none', height: ((medias.gif && medias.gif) || (medias.picture && medias.picture)) && '324px' }} ></div>} */}
             {/* {!quotedFromRetweetModal && <div id='poll-tweet-line-extension' style={{ height: numberOfPollOptions == 3 ? '153px' : numberOfPollOptions == 4 && '194px' }}></div>} */}
             
             {/* {((medias && medias.gif && medias.gif) || (medias && medias.picture && medias.picture)) && <RenderUserTweetMedias medias={medias} />} */}
-            {medias && (medias.extraGif || medias.extraPicture || medias.gif || medias.picture) && <RenderUserTweetMedias medias={medias} quotedFromRetweetModal={quotedFromRetweetModal} />}
+            {/* {medias && (medias.extraGif || medias.extraPicture || medias.gif || medias.picture) && <RenderUserTweetMedias medias={medias} quotedFromRetweetModal={quotedFromRetweetModal} />} */}
+        
+            <RenderUserTweetMedias medias={medias ? medias : speceficTweetData.medias} quotedFromRetweetModal={quotedFromRetweetModal} />
+            {/* {(speceficTweetData.extraGif || speceficTweetData.extraPicture || speceficTweetData.gif || speceficTweetData.picture) && <RenderUserTweetMedias medias={speceficTweetData.medias} quotedFromRetweetModal={quotedFromRetweetModal} />} */}
 
             {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} forModal={forModal} />}
             {quotedFromRetweetModal && <div id='show-this-thread-text' onClick={handleShowThisThread}>Show this thread</div>}
@@ -268,7 +273,7 @@ export let RenderUserTweet = ({ speceficTweetData, currentUser, pollVotesCount, 
 let RenderUserTweetMedias = ({ medias, quotedFromRetweetModal }) => {
     // let [gifObj, setGifObj] = useState(null)
     let { gif, picture, extraGif, extraPicture } = { ...medias }
-    // console.log(gif, picture, 'media found!!')
+    // console.log(gif, picture, extraGif, extraPicture, 'media found!!')
     // let getGifFromID = () => {
     //     // getGiphyGifObject(gif)
 
@@ -278,7 +283,7 @@ let RenderUserTweetMedias = ({ medias, quotedFromRetweetModal }) => {
         // picture ? <img width={'461px'} src={picture} /> : getGifFromID()
         // picture ? <img className='quoted-picture' src={handleMediaFileChecks(picture)} /> : <MakeGifObjectAvailable gifId={gif} />
 
-        (extraPicture || picture) ? <img className='quoted-picture' src={handleMediaFileChecks(quotedFromRetweetModal && extraPicture ? extraPicture : extraPicture ? extraPicture : picture)} style={{width: quotedFromRetweetModal && '540px', marginLeft: quotedFromRetweetModal && '26px'}} /> : <MakeGifObjectAvailable gifId={quotedFromRetweetModal && extraGif ? extraGif : extraGif ? extraGif : gif} quotedFromRetweetModal={quotedFromRetweetModal} />
+        (extraPicture || picture) ? <img className='quoted-picture' src={handleMediaFileChecks(quotedFromRetweetModal && extraPicture ? extraPicture : extraPicture ? extraPicture : picture)} style={{width: quotedFromRetweetModal ? '522px' : '594px', marginLeft: quotedFromRetweetModal ? '40px' : ' 42px'}} /> : <MakeGifObjectAvailable gifId={quotedFromRetweetModal && extraGif ? extraGif : extraGif ? extraGif : gif} quotedFromRetweetModal={quotedFromRetweetModal} />
 
         // quotedFromRetweetModal && extraPicture ? <img className='quoted-picture' src={handleMediaFileChecks(extraPicture)} /> : extraPicture ? <img className='quoted-picture' src={handleMediaFileChecks(extraPicture)} /> : <img className='quoted-picture' src={handleMediaFileChecks(picture)} />
 

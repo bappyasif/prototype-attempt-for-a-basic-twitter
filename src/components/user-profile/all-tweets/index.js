@@ -232,13 +232,15 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
             
             if (picture || extraPictureFile) {
                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 20;
+            } else if (!gifFile && extraGifFile) {
+                calc = reference01 && reference03 && reference01.clientHeight - reference03.clientHeight  - reference02.clientHeight - 20;
             } else if (gifFile || extraGifFile) {
                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 281;
             } else {
                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 6;
             }
             
-            // console.log(calc, 'calc', ID)
+            // console.log(calc, 'calc', ID, reference01.clientHeight)
             calc && setLineHeight(calc)
         }
     }

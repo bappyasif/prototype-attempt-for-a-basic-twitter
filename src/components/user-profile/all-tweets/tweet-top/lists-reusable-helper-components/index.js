@@ -26,7 +26,9 @@ export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore,
     
     // let handleFocused = () => setFocused(!focused)
     let handleFocused = () => {
-        (fromExplore || fromTrends) && setSearchResultsModalHook(!focused)
+        (fromExplore) && setSearchResultsModalHook(!focused)
+        // (fromTrends) && setSearchResultsModalHook(true)
+        // (fromExplore || fromTrends) && setSearchResultsModalHook(!focused)
         // (fromExplore || fromTrends) && setSearchResultsModalHook(true)
         // fromExplore && savingPrevSearchText && handleSearchText(savingPrevSearchText)
         setFocused(!focused)

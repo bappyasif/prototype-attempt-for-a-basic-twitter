@@ -4,15 +4,20 @@ import useOnHoverOutside from '../../../../user-profile/all-tweets/tweet-top/add
 import { SearchComponent } from '../../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components'
 import { threeDotsSvgIcon } from '../../current-trends'
 import useOnClickOutside  from '../../click-outside-utility-hook/useOnClickOutside.js'
-import { AlreadySearchedKeywordsWrapper, getOnlyUniqueSearchedTerms } from '../../search-twitter'
+import { AlreadySearchedKeywordsWrapper, getOnlyUniqueSearchedTerms, handleSearchKeywordRemoval, RenderSearchedRelatedTopic, selectTopicsRandomlyFromExistingTopics } from '../../search-twitter'
+import { search } from 'emoji-mart/dist/svgs'
 
 function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }) {
   let [searchText, setSearchText] = useState(null)
   let [showSearchResults, setShowSearchResults] = useState(false)
   let [inputFocused, setInputFocused] = useState(false)
   let [alreadySearchedTermsList, setAlreadySearchedTermsList] = useState([])
+  let [searchedRelatedTopics, setSearchedRelatedTopics] = useState(null)
+  let [randomlySelectedTopics, setRandomlySelectedTopics] = useState([])
 
   let [dataset, setDataset] = useState(null)
+
+  let handleUpdateTopics = items => setSearchedRelatedTopics(items)
 
   let handleSearchText = value => setSearchText(value)
 
@@ -22,7 +27,7 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
       // return prevList.length ? newList : prevList.concat(searchText)
       return prevList.concat(searchText)
     })
-    console.log('chkj01', searchText, alreadySearchedTermsList)
+    // console.log('chkj01', searchText, alreadySearchedTermsList)
   }
 
   useEffect(() => {
@@ -32,8 +37,14 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
         // recording recently searched term into list
         updateAlreadySearchedTerms(searchText)
 
-        fetchResultsFromTwitter(setDataset, searchText)
-      }, 2000)
+        setSearchedRelatedTopics(null)
+        
+        setRandomlySelectedTopics([])
+
+        fetchResultsFromTwitter(setDataset, searchText, handleUpdateTopics)
+      }, 1100)
+
+      setShowSearchResults(true)
 
       return () => clearTimeout(handle)
     } 
@@ -42,11 +53,17 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
     // }
   }, [searchText])
 
+  useEffect(() => searchedRelatedTopics && selectTopicsRandomlyFromExistingTopics(searchedRelatedTopics, setRandomlySelectedTopics), [searchedRelatedTopics])
+
   // useEffect(() => searchText && fetchResultsFromTwitter(setDataset, searchText), [searchText])
 
   // useEffect(() => searchText && handleExplicitTrendSearchText(searchText), [searchText])
 
   // console.log(inputFocused, 'inputFocused')
+
+  useEffect(() => dataset && searchText && setShowSearchResults(true), [dataset, searchText] )
+
+  console.log(searchedRelatedTopics, 'searchedRelatedTopics!!')
 
   // useEffect(() => searchText && updateAlreadySearchedTerms(searchText), [searchText])
 
@@ -59,35 +76,36 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
         {showTooltips && <div className='tooltips'>tooltip</div>}
       </div> */}
       <ShowSvgHoverableElement svgIcon={backIcon()} tooltipsText={'Back'} />
-      <SearchComponent handleSearchText={handleSearchText} fromTrends={true} setSearchResultsModalHook={setShowSearchResults} initialTrendSearchedText={explicitTrendSearchText} />
+      <SearchComponent handleSearchText={handleSearchText} fromTrends={true} initialTrendSearchedText={explicitTrendSearchText} />
       <ShowSvgHoverableElement svgIcon={threeDotsSvgIcon()} tooltipsText={'More'} />
       {/* <div className='svg-element' id='search-settings-icon' onMouseEnter={() => setShowToolTips(true)} ref={ref}>
         {threeDotsSvgIcon()}
         {showTooltips && <div className='tooltips'>tooltip</div>}
       </div> */}
       {/* <div id='remove-search-text'>{removeIconSvg()}</div> */}
-      {showSearchResults && dataset && <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} />}
+      {/* {showSearchResults && dataset && <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} randomlySelectedTopics={randomlySelectedTopics} setSearchText={setSearchText} />} */}
       {/* {showSearchResults && searchText && <ShowSearchResultsModal searchText={searchText} updateModalVisibility={setShowSearchResults} />} */}
 
       {/* <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} updateSearchedTerms={setAlreadySearchedTermsList} /> */}
+      {showSearchResults && <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} updateSearchedTerms={setAlreadySearchedTermsList} randomlySelectedTopics={randomlySelectedTopics} setSearchText={setSearchText} />}
     </div>
   )
 }
 
-let ShowSearchResultsModal = ({searchText, updateModalVisibility, dataset, searchedTerms, updateSearchedTerms}) => {
+let ShowSearchResultsModal = ({searchText, updateModalVisibility, dataset, searchedTerms, updateSearchedTerms, randomlySelectedTopics, setSearchText}) => {
   // let [dataset, setDataset] = useState(null)
 
   // useEffect(() => searchText && fetchResultsFromTwitter(setDataset, searchText), [searchText])
   
-  // let ref = useRef(null)
-  // useOnClickOutside(ref, ()=>updateModalVisibility(false))
+  let ref = useRef(null)
+  useOnClickOutside(ref, ()=>updateModalVisibility(false))
 
-  let handleSearchKeywordRemoval = (evt) => {
-    let findID = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id
-    let newList = findID && getOnlyUniqueSearchedTerms(searchedTerms, findID)
-    // console.log(evt.target, findID, newList)
-    newList && updateSearchedTerms(newList)
-  }
+  // let handleSearchKeywordRemoval = (evt) => {
+  //   let findID = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id
+  //   let newList = findID && getOnlyUniqueSearchedTerms(searchedTerms, findID)
+  //   console.log(evt.target, findID, newList)
+  //   newList && updateSearchedTerms(newList)
+  // }
 
   // console.log(dataset, 'dataset!!')
 
@@ -95,13 +113,21 @@ let ShowSearchResultsModal = ({searchText, updateModalVisibility, dataset, searc
 
   // console.log(searchedTerms, 'searchedTerms');
 
-  let alreadySearchedTermsList = () => searchedTerms && searchedTerms.map(item => <AlreadySearchedKeywordsWrapper key={item} item={item} handleSearchKeywordRemoval={handleSearchKeywordRemoval} /> )
+  let handleFetchAgain = (value) => {
+    // console.log(value, 'value!!')
+    setSearchText(value)
+  }
+
+  let alreadySearchedTermsList = () => searchedTerms && searchedTerms.map(item => <AlreadySearchedKeywordsWrapper key={item} item={item} handleSearchKeywordRemoval={(evt) => handleSearchKeywordRemoval(evt, searchedTerms, updateSearchedTerms)} /> )
+
+  let renderSearchedRelatedTopics = () => randomlySelectedTopics && randomlySelectedTopics.map(item => <RenderSearchedRelatedTopic key={item.topic} item={item} fetcAgainhWithUserSelectedTopic={handleFetchAgain} />)
 
   // ref={ref}
   return (
-    <div id='show-search-results-container' style={{overflowY: dataset && dataset.length >= 5 && 'scroll', maxHeight: '380px'}}>
+    <div id='show-search-results-container' style={{overflowY: (dataset && dataset.length >= 5 || randomlySelectedTopics.length >= 5) && 'scroll', maxHeight: '380px'}} ref={ref}>
       {/* rendering already searched keywords */}
       {alreadySearchedTermsList()}
+      {renderSearchedRelatedTopics()}
       { dataset && renderResults()}
     </div>
   )
@@ -121,7 +147,7 @@ export let SearchResultsWrapperUi = ({item}) => {
   )
 }
 
-export let fetchResultsFromTwitter = (updateDataset, searchText) => {
+export let fetchResultsFromTwitter = (updateDataset, searchText, updateTopics) => {
   let url = `https://twitter135.p.rapidapi.com/AutoComplete/?q=${searchText}`
   // console.log(searchText, 'searchText')
     fetch(url, {
@@ -135,12 +161,23 @@ export let fetchResultsFromTwitter = (updateDataset, searchText) => {
         return response.json()
     })
         .then(data => {
-            console.log(data, 'data!!')
-            let results = data.users
+
+            let results = data.users;
+            let topics = data.topics
+
+            console.log(data, 'data!!', topics)
+
             if (results) {
-                let allkeys = Object.keys(results)
-                let arrOfObj = allkeys.map(key => results[key])
-                updateDataset(arrOfObj)
+                // let allkeys = Object.keys(results)
+                // let arrOfObj = allkeys.map(key => results[key])
+                // updateDataset(arrOfObj)
+
+                updateDataset(convertsObjectOfObjectsIntoArrayOfObjects(results))
+                // updateTopics(convertsObjectOfObjectsIntoArrayOfObjects(topics))
+
+                let filterTopics = topics.filter(item => item.result_context)
+                updateTopics(filterTopics)
+                // updateTopics(topics)
                 // console.log('arrOfObj', arrOfObj)
                 // datasetUpdater([...results])
             } else {
@@ -150,6 +187,12 @@ export let fetchResultsFromTwitter = (updateDataset, searchText) => {
         .catch(err => {
             console.error(err);
         });
+}
+
+let convertsObjectOfObjectsIntoArrayOfObjects = objects => {
+  let allkeys = Object.keys(objects)
+  let arrOfObj = allkeys.map(key => objects[key])
+  return arrOfObj
 }
 
 let ShowSvgHoverableElement = ({setShowToolTips, svgIcon, tooltipsText, showTooltips}) => {

@@ -62,12 +62,22 @@ let HandlePollOptionProgress = ({ value, handleChange, highestValue, handlePollV
     )
 }
 
-export let MakeGifObjectAvailable = ({ gifId }) => {
+export let MakeGifObjectAvailable = ({ gifId, quotedFromRetweetModal }) => {
     let [gif, setGif] = useState(null)
 
     gifId && getGiphyGifObject(gifId).then(res => {
         setGif(res)
     }).catch(err => console.log(err.message))
+
+    // return (
+    //     gif
+    //     ?
+    //     squotedFromRetweetModal && <div id='gif-wrapper'><Gif gif={gif} height='290px' className='style-gif-border-radius' /></div>
+    //     :
+    //     <Gif gif={gif} height='290px' className='style-gif-border-radius' />
+    // )
+
+    // return gif && <div id='gif-wrapper'><Gif gif={gif} height='290px' className='style-gif-border-radius' /></div>
 
     return gif && <Gif gif={gif} height='290px' className='style-gif-border-radius' />
 }
