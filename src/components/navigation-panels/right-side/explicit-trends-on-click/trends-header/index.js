@@ -44,7 +44,7 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
         fetchResultsFromTwitter(setDataset, searchText, handleUpdateTopics)
       }, 1100)
 
-      setShowSearchResults(true)
+      // setShowSearchResults(true)
 
       return () => clearTimeout(handle)
     } 
@@ -76,7 +76,7 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
         {showTooltips && <div className='tooltips'>tooltip</div>}
       </div> */}
       <ShowSvgHoverableElement svgIcon={backIcon()} tooltipsText={'Back'} />
-      <SearchComponent handleSearchText={handleSearchText} fromTrends={true} initialTrendSearchedText={explicitTrendSearchText} />
+      <SearchComponent handleSearchText={handleSearchText} fromTrends={true} initialTrendSearchedText={explicitTrendSearchText} setSearchResultsModalHook={setShowSearchResults} />
       <ShowSvgHoverableElement svgIcon={threeDotsSvgIcon()} tooltipsText={'More'} />
       {/* <div className='svg-element' id='search-settings-icon' onMouseEnter={() => setShowToolTips(true)} ref={ref}>
         {threeDotsSvgIcon()}
@@ -87,7 +87,7 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
       {/* {showSearchResults && searchText && <ShowSearchResultsModal searchText={searchText} updateModalVisibility={setShowSearchResults} />} */}
 
       {/* <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} updateSearchedTerms={setAlreadySearchedTermsList} /> */}
-      {showSearchResults && <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} updateSearchedTerms={setAlreadySearchedTermsList} randomlySelectedTopics={randomlySelectedTopics} setSearchText={setSearchText} />}
+      {showSearchResults && dataset &&  <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} updateSearchedTerms={setAlreadySearchedTermsList} randomlySelectedTopics={randomlySelectedTopics} setSearchText={setSearchText} />}
     </div>
   )
 }

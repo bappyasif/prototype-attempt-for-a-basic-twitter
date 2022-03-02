@@ -572,12 +572,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0px 4px 0px 4px;
+  padding: 0px 0px 0px 0px;
   font-size: small;
 }
 
 #explicit-trend-tweets-container #trends-header-component #More .tooltips {
-  left: 53px;
+  left: 56px;
 }
 
 #explicit-trend-tweets-container #trends-header-component #back-svg-icon,

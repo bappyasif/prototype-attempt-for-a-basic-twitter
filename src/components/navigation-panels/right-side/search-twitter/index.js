@@ -81,7 +81,7 @@ function SearchTwitter() {
 
     let handleFocused = () => setFocused(true)
 
-    console.log(searchedKeywords, 'searchedKeywords!!', searchedRelatedTopics, randomlySelectedTopics)
+    // console.log(searchedKeywords, 'searchedKeywords!!', searchedRelatedTopics, randomlySelectedTopics)
 
     return (
         <div id='search-twitter-container' ref={ref}>

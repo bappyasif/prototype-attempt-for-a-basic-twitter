@@ -205,66 +205,27 @@ let ShowRetweetedQuote = ({ quoteTweetID, currentUser, handleThreadedTweetData }
     )
 }
 
-export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount, handleThreadedTweetData, fromTweetThread, currentUserProfileInfo, handleQuotedFromRetweetModal, isQuotedFromRetweeted }) => {
-    let { repliedTweets, listOfRetweetedQuotes, retweetedQuote, quotedTweetID, ID, scheduledTime, created, tweetText, extraTweet, gifFile, extraGifFile, picture, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
+let RenderPollFirstReply = ({currentUser, docID}) => {
+    let [documentDataset, setDocumentDataset] = useState(null)
+    useEffect(() => readDocumentFromFirestoreSubCollection(currentUser, docID, setDocumentDataset), [])
+    console.log(documentDataset, 'documentDataset!!')
+    return (
+        <div id='poll-first-reply-wrapper'>
+
+        </div>
+    )
+}
+
+let TweetContentsMarkUp = ({tweetType, extra, ID, currentUser, tweetText, tweetPoll, gifFile, extraGifFile, picture, extraPictureFile, handlePollVotesCount, content, handleQuoteTweetID, handleReplyCount, quotedTweetID, handleThreadedTweetData, fromTweetThread, isQuotedFromRetweeted, retweetedQuote, removeSpeceficArrayItem, handleInitialReplyCount, tweetPrivacy, updateTweetPrivacy, handleAnalysingTweetID, handlePinnedTweetID, currentUserProfileInfo, created, handleQuotedFromRetweetModal, listOfRetweetedQuotes}) => {
+    let decideMarkupClassName = tweetType == 'een' ? 'tweet-extra-info-een' : tweetType == 'twee' && 'tweet-extra-info-twee'
+    let forClickableTweets = tweetType == 'een' ? '-een' : tweetType == 'twee' && '-twee'
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (picture || extraPictureFile) ? showImg(extra != 'extra' ? picture : extraPictureFile) : ''
 
-    let [initialReplyCount, setInitialReplyCount] = useState(null)
-
-    let [lineHeight, setLineHeight] = useState(null)
-
-    let calculateLineHeight = () => {
-        // let reference01 = document.querySelector('.rendering-tweet-data-container')
-        let referencePoints = document.querySelectorAll('.rendering-tweet-data-container')
-        let reference01;
-        
-        referencePoints && referencePoints.forEach(node => {
-            if (node.id == ID) reference01 = node
-        })
-        
-        let checkRef = reference01 && reference01.id == ID
-
-        if (checkRef) {
-            let reference02 = reference01.querySelector('.in-tweet-profile-pic')
-            let reference03 = reference01.querySelector('.tweet-extra-info-twee')
-            let calc;
-            
-            if (picture || extraPictureFile) {
-                calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 20;
-            } else if (!gifFile && extraGifFile) {
-                calc = reference01 && reference03 && reference01.clientHeight - reference03.clientHeight  - reference02.clientHeight - 20;
-            } else if (gifFile || extraGifFile) {
-                calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 281;
-            } else {
-                calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 6;
-            }
-            
-            // console.log(calc, 'calc', ID, reference01.clientHeight)
-            calc && setLineHeight(calc)
-        }
-    }
-
-    useEffect(() => (extraTweet || extraGifFile || extraPictureFile || extraPoll) && calculateLineHeight(), [extraTweet, extraGifFile, extraPictureFile, extraPoll, ID])
-
-    // useEffect(() => fromTweetThread && setInitialReplyCount(replyCount || null), [fromTweetThread])
-
-    let handleInitialReplyCount = (val) => setInitialReplyCount(val)
-
     let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} changedCount={content.replyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} currentCountInFirestore={content.repliedTweets && content.repliedTweets.length} />)
 
-    // repliedTweets && console.log(repliedTweets, replyCount, content.replyCount, 'some checks', ID, created)
-    // console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture, replyCount, retweetedQuote, content, fromTweetThread)
-
-    let history = useHistory()
-
-    let handleShowThread = () => {
-        handleThreadedTweetData(content)
-        history.push('/status/tweetID')
-    }
-
-    let whenWithoutExtraTweet = () => <div className='rendering-tweet-data-container' style={{ marginLeft: isQuotedFromRetweeted && '11px' }}>
-        <div id='tweet-part'>
+    return (
+        <div id={!tweetType ? 'tweet-part' : null} className={tweetType ? decideMarkupClassName : null}>
             <div className='left-side'>
                 <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' />
             </div>
@@ -273,12 +234,11 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
                     {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} createdDate={created} />}
 
-                    {/* {quotedTweetID && <GetReplyToInformation currentUser={currentUser} />} */}
                     {(quotedTweetID || fromTweetThread) && !isQuotedFromRetweeted && !retweetedQuote && <GetReplyToInformation currentUser={currentUser} />}
 
                     <div className='tweet-text'>{tweetText}</div>
 
-                    {<div className='tweet-media-file-content'>{readyMedia()}</div>}
+                    {<div className='tweet-media-file-content'>{readyMedia( extra ? extra : null)}</div>}
 
                     {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} />}
 
@@ -286,90 +246,107 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
                     {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
 
-                    <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons()}</div>
-
-                    {/* {(((content.repliedTweets && content.repliedTweets.length) || content.replyCount) && !isQuotedFromRetweeted) > 0 && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>} */}
+                    <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons(tweetType ? forClickableTweets : null)}</div>
                 </div>
             </div>
         </div>
-        {/* {(initialReplyCount) > 0 && <div id='show-tweet-thread'>Show this thread</div>} */}
-        {(((content.repliedTweets && content.repliedTweets.length) || content.replyCount) && !isQuotedFromRetweeted) > 0 && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>}
-    </div>
+    )
+}
+
+export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount, handleThreadedTweetData, fromTweetThread, currentUserProfileInfo, handleQuotedFromRetweetModal, isQuotedFromRetweeted }) => {
+    let { repliedTweets, listOfRetweetedQuotes, retweetedQuote, quotedTweetID, ID, scheduledTime, created, tweetText, extraTweet, gifFile, extraGifFile, picture, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
+
+    // let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (picture || extraPictureFile) ? showImg(extra != 'extra' ? picture : extraPictureFile) : ''
+
+    let [initialReplyCount, setInitialReplyCount] = useState(null)
+
+    let [lineHeight, setLineHeight] = useState(null)
+
+    let calculateLineHeight = () => {
+        let referencePoints = document.querySelectorAll('.rendering-tweet-data-container')
+        let reference01;
+
+        referencePoints && referencePoints.forEach(node => {
+            if (node.id == ID) reference01 = node
+        })
+
+        let checkRef = reference01 && reference01.id == ID
+
+        if (checkRef) {
+            let reference02 = reference01.querySelector('.in-tweet-profile-pic')
+            let reference03 = reference01.querySelector('.tweet-extra-info-twee')
+            let calc;
+
+            if (picture || extraPictureFile) {
+                calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 20;
+            } else if (!gifFile && extraGifFile) {
+                calc = reference01 && reference03 && reference01.clientHeight - reference03.clientHeight - reference02.clientHeight - 20;
+            } else if (gifFile || extraGifFile) {
+                calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 281;
+            } else if (tweetPoll || extraPoll) {
+                calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 20;
+            } else {
+                calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 6;
+            }
+
+            // console.log(calc, 'calc', ID, reference01.clientHeight)
+            calc && setLineHeight(calc)
+        }
+    }
+
+    useEffect(() => (extraTweet || extraGifFile || extraPictureFile || extraPoll) && calculateLineHeight(), [extraTweet, extraGifFile, extraPictureFile, extraPoll, ID])
+
+    let handleInitialReplyCount = (val) => setInitialReplyCount(val)
+
+    // let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} changedCount={content.replyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} currentCountInFirestore={content.repliedTweets && content.repliedTweets.length} />)
+
+    // repliedTweets && console.log(repliedTweets, replyCount, content.replyCount, 'some checks', ID, created)
+    // console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture, replyCount, retweetedQuote, content, fromTweetThread)
+    // console.log(tweetPoll, '!!', tweetPoll.choice01)
+
+    let history = useHistory()
+
+    let handleShowThread = () => {
+        handleThreadedTweetData(content)
+        history.push('/status/tweetID')
+    }
+
+    let whenWithoutExtraTweet = () => {
+        return (
+            <div className='rendering-tweet-data-container' style={{ marginLeft: isQuotedFromRetweeted && '11px' }}>
+
+                <TweetContentsMarkUp ID={ID} handleReplyCount={handleReplyCount} handleInitialReplyCount={handleInitialReplyCount} content={content} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} gifFile={gifFile} picture={picture} retweetedQuote={retweetedQuote} fromTweetThread={fromTweetThread} tweetPoll={tweetPoll} isQuotedFromRetweeted={isQuotedFromRetweeted} tweetPrivacy={tweetPrivacy} handleThreadedTweetData={handleThreadedTweetData} quotedTweetID={quotedTweetID} handlePollVotesCount={handlePollVotesCount} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} created={created} tweetText={tweetText} />
+                
+                {/* {(((content.repliedTweets && content.repliedTweets.length) || content.replyCount) > 0 && !isQuotedFromRetweeted && !(tweetPoll || extraPoll)) && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>} */}
+                
+                { ((content.repliedTweets && content.repliedTweets.length)  && !(tweetPoll[0].choice01)) ? <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div> : null}
+
+                {/* { (content.repliedTweets && content.repliedTweets.length) ? <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div> : null} */}
+                
+                {/* { content.repliedTweets && content.repliedTweets.length == 1 && (tweetPoll || extraPoll) && content.repliedTweets.length == 1 && <RenderPollFirstReply currentUser={currentUser} docID={repliedTweets[0]} /> } */}
+            </div>
+        )
+    }
 
     let whenWithExtraTweet = () => {
-        return <div className='rendering-tweet-data-container' id={ID}>
+        return (
+            <div className='rendering-tweet-data-container' id={ID}>
 
-            <div className='when-has-extra-tweet'>
+                <div className='when-has-extra-tweet'>
+                    
+                    <TweetContentsMarkUp tweetType={'een'} ID={ID} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} feedParentInitialReplyCount={handleInitialReplyCount} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} content={content} handleQuoteTweetID={handleQuoteTweetID} gifFile={gifFile} picture={picture} tweetPoll={tweetPoll} tweetText={tweetText} fromTweetThread={fromTweetThread} tweetPrivacy={tweetPrivacy} handleThreadedTweetData={handleThreadedTweetData} quotedTweetID={quotedTweetID} handlePollVotesCount={handlePollVotesCount} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} created={created} />
 
-                <div className='tweet-extra-info-een'>
-                    <div className='left-side'>
-                        <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' />
-                    </div>
+                    <div id='show-connecting-line' style={{ height: lineHeight && lineHeight }}></div>
 
-                    <div className='right-side'>
-
-                        {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} currentUserProfileInfo={currentUserProfileInfo} createdDate={created} />}
-
-                        {/* {quotedTweetID && <GetReplyToInformation currentUser={currentUser} />} */}
-                        {(quotedTweetID || fromTweetThread) && <GetReplyToInformation currentUser={currentUser} />}
-
-                        <div className='tweet-text'>{tweetText}</div>
-
-                        {<div className='tweet-media-file-content'>{readyMedia()}</div>}
-                        {/* {<RenderPolls poll={tweetPoll} />} */}
-                        {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} />}
-
-                        {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
-
-                        <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons('-een')}</div>
-                    </div>
-                </div>
-
-                {/* {((picture && extraPictureFile) || (gifFile && extraGifFile) || (((picture || gifFile) && extraTweet))) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '407.9px', transform: 'translate(24.5px, -406.5px)' }}></div>}
-
-                {((picture || extraPictureFile) || (gifFile || extraGifFile) || (!picture && !extraPictureFile) || (!gifFile && !extraGifFile)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '106.9px', transform: 'translate(24.5px, -104.5px)' }}></div>}
-
-                {(!firstTweetHasMedia && !secondTweetHasMedia) && ((extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px', transform: 'translate(25px, -184.5px)' }}></div>}
-                {(!firstTweetHasMedia && !secondTweetHasMedia) && (!(extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px', transform: 'translate(25px, -184.5px)' }}></div>}
-                {(extraPoll && extraPoll[0].choice01 || tweetPoll.choice01) && console.log(extraPoll, '??', tweetPoll, tweetPoll[0].choice01)} */}
-
-                <div id='show-connecting-line' style={{ height: lineHeight && lineHeight }}></div>
-
-                <div className='tweet-extra-info-twee'>
-
-                    <div className='left-side'>
-                        <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' />
-                    </div>
-
-                    <div className='right-side'>
-
-                        {/* <div className='tweet-top'>
-                            <div className='user-info'>User Name<span>@profile handle</span> <span>-</span> <span>time here</span></div><div className='icon-svg'>{moreIcon()}</div>
-                        </div> */}
-
-                        <TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} currentUserProfileInfo={currentUserProfileInfo} createdDate={created} />
-
-                        <div className='extra-tweet-text'>{extraTweet}</div>
-
-                        {<div className='tweet-media-file-content'>{readyMedia('extra')}</div>}
-                        {/* {<div className='tweet-media-file-content'>{readyMedia()}</div>} */}
-
-                        {/* {extraPoll && <RenderPolls poll={extraPoll && extraPoll} />} */}
-                        {extraPoll && <RenderPolls poll={extraPoll && extraPoll} handlePollVotesCount={handlePollVotesCount} />}
-
-                        {/* {getPrivacySelectedElement(tweetPrivacy, 'white')} */}
-                        {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
-
-                        <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons(null, '-twee')}</div>
-
-                    </div>
+                    <TweetContentsMarkUp tweetType={'twee'} extra={'extra'} ID={ID} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} feedParentInitialReplyCount={handleInitialReplyCount} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} content={content} handleQuoteTweetID={handleQuoteTweetID} extraGifFile={extraGifFile} extraPictureFile={extraPictureFile} tweetText={extraTweet} tweetPoll={extraPoll} tweetPrivacy={tweetPrivacy} handleThreadedTweetData={handleThreadedTweetData} quotedTweetID={quotedTweetID} handlePollVotesCount={handlePollVotesCount} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} created={created} />
                 </div>
             </div>
-        </div>
+        )
     }
 
     return (
-        extraTweet
+        // (extraTweet || extraGifFile || extraPictureFile || extraPoll)
+        (extraTweet)
             ?
             whenWithExtraTweet()
             :
@@ -380,6 +357,220 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 let pinnedTweetIcon = () => <svg width={'24px'} height={'24px'} ><g><path d="M20.235 14.61c-.375-1.745-2.342-3.506-4.01-4.125l-.544-4.948 1.495-2.242c.157-.236.172-.538.037-.787-.134-.25-.392-.403-.675-.403h-9.14c-.284 0-.542.154-.676.403-.134.25-.12.553.038.788l1.498 2.247-.484 4.943c-1.668.62-3.633 2.38-4.004 4.116-.04.16-.016.404.132.594.103.132.304.29.68.29H8.64l2.904 6.712c.078.184.26.302.458.302s.38-.118.46-.302l2.903-6.713h4.057c.376 0 .576-.156.68-.286.146-.188.172-.434.135-.59z"></path></g></svg>
 
 export default AllTweetsPage
+
+
+
+
+// export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount, handleThreadedTweetData, fromTweetThread, currentUserProfileInfo, handleQuotedFromRetweetModal, isQuotedFromRetweeted }) => {
+//     let { repliedTweets, listOfRetweetedQuotes, retweetedQuote, quotedTweetID, ID, scheduledTime, created, tweetText, extraTweet, gifFile, extraGifFile, picture, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
+
+//     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (picture || extraPictureFile) ? showImg(extra != 'extra' ? picture : extraPictureFile) : ''
+
+//     let [initialReplyCount, setInitialReplyCount] = useState(null)
+
+//     let [lineHeight, setLineHeight] = useState(null)
+
+//     let calculateLineHeight = () => {
+//         // let reference01 = document.querySelector('.rendering-tweet-data-container')
+//         let referencePoints = document.querySelectorAll('.rendering-tweet-data-container')
+//         let reference01;
+
+//         referencePoints && referencePoints.forEach(node => {
+//             if (node.id == ID) reference01 = node
+//         })
+
+//         let checkRef = reference01 && reference01.id == ID
+
+//         if (checkRef) {
+//             let reference02 = reference01.querySelector('.in-tweet-profile-pic')
+//             let reference03 = reference01.querySelector('.tweet-extra-info-twee')
+//             let calc;
+
+//             if (picture || extraPictureFile) {
+//                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 20;
+//             } else if (!gifFile && extraGifFile) {
+//                 calc = reference01 && reference03 && reference01.clientHeight - reference03.clientHeight - reference02.clientHeight - 20;
+//             } else if (gifFile || extraGifFile) {
+//                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 281;
+//             } else if (tweetPoll || extraPoll) {
+//                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 20;
+//             } else {
+//                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 6;
+//             }
+
+//             // console.log(calc, 'calc', ID, reference01.clientHeight)
+//             calc && setLineHeight(calc)
+//         }
+//     }
+
+//     useEffect(() => (extraTweet || extraGifFile || extraPictureFile || extraPoll) && calculateLineHeight(), [extraTweet, extraGifFile, extraPictureFile, extraPoll, ID])
+
+//     // useEffect(() => fromTweetThread && setInitialReplyCount(replyCount || null), [fromTweetThread])
+
+//     let handleInitialReplyCount = (val) => setInitialReplyCount(val)
+
+//     let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} changedCount={content.replyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} currentCountInFirestore={content.repliedTweets && content.repliedTweets.length} />)
+
+//     // repliedTweets && console.log(repliedTweets, replyCount, content.replyCount, 'some checks', ID, created)
+//     // console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture, replyCount, retweetedQuote, content, fromTweetThread)
+
+//     let history = useHistory()
+
+//     let handleShowThread = () => {
+//         handleThreadedTweetData(content)
+//         history.push('/status/tweetID')
+//     }
+
+//     let tweetContentsMarkUp = (tweetType) => {
+//         let decideMarkupClassName = tweetType == 'een' ? 'tweet-extra-info-een' : tweetType == 'twee' && 'tweet-extra-info-twee'
+//         let forClickableTweets = tweetType == 'een' ? '-een' : tweetType == 'twee' && '-twee'
+
+//         return (
+//             <div id={!tweetType ? 'tweet-part' : null} className={tweetType ? decideMarkupClassName : null}>
+//                 <div className='left-side'>
+//                     <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' />
+//                 </div>
+//                 <div className='right-side'>
+//                     <div className='tweet-info'>
+
+//                         {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} createdDate={created} />}
+
+//                         {(quotedTweetID || fromTweetThread) && !isQuotedFromRetweeted && !retweetedQuote && <GetReplyToInformation currentUser={currentUser} />}
+
+//                         <div className='tweet-text'>{tweetText}</div>
+
+//                         {<div className='tweet-media-file-content'>{readyMedia()}</div>}
+
+//                         {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} />}
+
+//                         {quotedTweetID && retweetedQuote && <ShowRetweetedQuote quoteTweetID={quotedTweetID} currentUser={currentUser} handleThreadedTweetData={handleThreadedTweetData} />}
+
+//                         {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
+
+//                         <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons(tweetType ? forClickableTweets : null)}</div>
+//                     </div>
+//                 </div>
+//             </div>
+//         )
+//     }
+
+//     let whenWithoutExtraTweet = () => (<div className='rendering-tweet-data-container' style={{ marginLeft: isQuotedFromRetweeted && '11px' }}>
+//         {tweetContentsMarkUp()}
+//         {/* {(initialReplyCount) > 0 && <div id='show-tweet-thread'>Show this thread</div>} */}
+//         {(((content.repliedTweets && content.repliedTweets.length) || content.replyCount) && !isQuotedFromRetweeted && !(tweetPoll || extraPoll)) > 0 && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>}
+//         {(tweetPoll || extraPoll) && content.repliedTweets.length == 1 && tweetContentsMarkUp()}
+//     </div>)
+
+//     // let whenWithoutExtraTweet = () => <div className='rendering-tweet-data-container' style={{ marginLeft: isQuotedFromRetweeted && '11px' }}>
+//     //     <div id='tweet-part'>
+//     //         <div className='left-side'>
+//     //             <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' />
+//     //         </div>
+//     //         <div className='right-side'>
+//     //             <div className='tweet-info'>
+
+//     //                 {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} createdDate={created} />}
+
+//     //                 {/* {quotedTweetID && <GetReplyToInformation currentUser={currentUser} />} */}
+//     //                 {(quotedTweetID || fromTweetThread) && !isQuotedFromRetweeted && !retweetedQuote && <GetReplyToInformation currentUser={currentUser} />}
+
+//     //                 <div className='tweet-text'>{tweetText}</div>
+
+//     //                 {<div className='tweet-media-file-content'>{readyMedia()}</div>}
+
+//     //                 {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} />}
+
+//     //                 {quotedTweetID && retweetedQuote && <ShowRetweetedQuote quoteTweetID={quotedTweetID} currentUser={currentUser} handleThreadedTweetData={handleThreadedTweetData} />}
+
+//     //                 {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
+
+//     //                 <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons()}</div>
+
+//     //                 {/* {(((content.repliedTweets && content.repliedTweets.length) || content.replyCount) && !isQuotedFromRetweeted) > 0 && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>} */}
+//     //             </div>
+//     //         </div>
+//     //     </div>
+//     //     {/* {(initialReplyCount) > 0 && <div id='show-tweet-thread'>Show this thread</div>} */}
+//     //     {(((content.repliedTweets && content.repliedTweets.length) || content.replyCount) && !isQuotedFromRetweeted && !(tweetPoll || extraPoll)) > 0 && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>}
+//     //     {/* {!(tweetPoll || extraPoll) && content.repliedTweets.length == 1 && } */}
+//     // </div>
+
+//     let whenWithExtraTweet = () => {
+//         return <div className='rendering-tweet-data-container' id={ID}>
+
+//             <div className='when-has-extra-tweet'>
+                
+//             {tweetContentsMarkUp('een')}
+
+//                 {/* <div className='tweet-extra-info-een'>
+//                     <div className='left-side'>
+//                         <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' />
+//                     </div>
+
+//                     <div className='right-side'>
+
+//                         {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} currentUserProfileInfo={currentUserProfileInfo} createdDate={created} />}
+
+//                         {(quotedTweetID || fromTweetThread) && <GetReplyToInformation currentUser={currentUser} />}
+
+//                         <div className='tweet-text'>{tweetText}</div>
+
+//                         {<div className='tweet-media-file-content'>{readyMedia()}</div>}
+
+//                         {tweetPoll && <RenderPolls poll={tweetPoll} handlePollVotesCount={handlePollVotesCount} />}
+
+//                         {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
+
+//                         <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons('-een')}</div>
+//                     </div>
+//                 </div> */}
+
+//                 {/* {((picture && extraPictureFile) || (gifFile && extraGifFile) || (((picture || gifFile) && extraTweet))) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '407.9px', transform: 'translate(24.5px, -406.5px)' }}></div>}
+
+//                 {((picture || extraPictureFile) || (gifFile || extraGifFile) || (!picture && !extraPictureFile) || (!gifFile && !extraGifFile)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '106.9px', transform: 'translate(24.5px, -104.5px)' }}></div>}
+
+//                 {(!firstTweetHasMedia && !secondTweetHasMedia) && ((extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px', transform: 'translate(25px, -184.5px)' }}></div>}
+//                 {(!firstTweetHasMedia && !secondTweetHasMedia) && (!(extraPoll && extraPoll[0].choice01) && (tweetPoll && tweetPoll[0].choice01)) && <div id='show-connecting-line' className='extended-line-in-tweet' style={{ height: '184.9px', transform: 'translate(25px, -184.5px)' }}></div>}
+//                 {(extraPoll && extraPoll[0].choice01 || tweetPoll.choice01) && console.log(extraPoll, '??', tweetPoll, tweetPoll[0].choice01)} */}
+
+//                 <div id='show-connecting-line' style={{ height: lineHeight && lineHeight }}></div>
+
+//                 {tweetContentsMarkUp('twee')}
+
+//                 {/* <div className='tweet-extra-info-twee'>
+
+//                     <div className='left-side'>
+//                         <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' />
+//                     </div>
+
+//                     <div className='right-side'>
+
+//                         <TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} currentUserProfileInfo={currentUserProfileInfo} createdDate={created} />
+
+//                         <div className='extra-tweet-text'>{extraTweet}</div>
+
+//                         {<div className='tweet-media-file-content'>{readyMedia('extra')}</div>}
+
+//                         {extraPoll && <RenderPolls poll={extraPoll && extraPoll} handlePollVotesCount={handlePollVotesCount} />}
+
+//                         {getPrivacySelectedElement(tweetPrivacy, 'white', tweetPrivacy == '01' ? ' ' : 'You can reply to this conversation')}
+
+//                         <div className='tweet-bottom-clickable-icons'>{tweetBottomClickableIcons(null, '-twee')}</div>
+
+//                     </div>
+//                 </div> */}
+//             </div>
+//         </div>
+//     }
+
+//     return (
+//         extraTweet
+//             ?
+//             whenWithExtraTweet()
+//             :
+//             whenWithoutExtraTweet()
+//     )
+// }
 
 
 

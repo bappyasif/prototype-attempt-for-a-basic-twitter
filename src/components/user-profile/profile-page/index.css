@@ -302,6 +302,8 @@
   width: 100%;
 }
 
+#show-tweet-thread-container #tweet-component-wrapper .poll-info,
+#show-tweet-thread-container #tweet-component-wrapper .poll-info .left-view,
 #tweet-container .tweet-poll-on-profile .poll-info,
 #tweet-container .tweet-poll-on-profile .poll-info .left-view,
 .rendering-tweet-data-container .right-side .tweet-info .poll-info,
@@ -316,6 +318,7 @@
   justify-content: space-between;
 }
 
+#show-tweet-thread-container #tweet-component-wrapper .poll-info,
 #tweet-container .tweet-poll-on-profile .poll-info,
 .rendering-tweet-data-container .right-side .tweet-info .poll-info,
 .rendering-tweet-data-container .when-has-extra-tweet .right-side .poll-info

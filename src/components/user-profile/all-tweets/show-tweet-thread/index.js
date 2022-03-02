@@ -12,7 +12,7 @@ import GifModal from '../../../tweet-modal/gif-modal'
 import { everybodyIcon, locationTagIcon, peopleIcon, replyTweetModalIcons } from '../../../tweet-modal/svg-resources'
 import TweetWordCount from '../../../tweet-modal/tweet-word-count'
 import { analyticsIcon, backIcon, tweetAdditionalIconsArray } from '../../profile-page/svg-resources'
-import { MakeGifObjectAvailable, RenderUserTweetText } from '../reuseable-helper-functions'
+import { MakeGifObjectAvailable, RenderPolls, RenderUserTweetText } from '../reuseable-helper-functions'
 import { RenderTweetBottomIcons } from '../tweet-bottom'
 import TagLocation from './tag-location'
 
@@ -466,6 +466,8 @@ let TweetComponent = ({ tweetText, createdDate, handleQuoteTweetID, threadedTwee
             <UserInfo currentUserProfileInfo={currentUserProfileInfo} />
             <RenderUserTweetText tweetText={tweetText || 'dummy text'} />
             <RenderTweetMediaFiles tweetData={threadedTweetData} />
+            {/* no thread is visible on tweet but on all tweets */}
+            {/* { threadedTweetData.tweetPoll && <RenderPolls poll={threadedTweetData.tweetPoll} /> } */}
             {/* <RenderTweetPostedTimestamp timestampTokens={timestampTokens} /> */}
             <RenderTweetPostedTimestamp timestampTokens={convertTimestampIntoTokens(createdDate.seconds)} fromTweetThread={true} />
             <RenderTweetAnalyticsActivity handleAnalysingTweetID={handleAnalysingTweetID} tweetThreadID={tweetThreadID} />

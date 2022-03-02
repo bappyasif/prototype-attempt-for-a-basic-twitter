@@ -9,6 +9,8 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators, hand
 
     let [removedNewsListTitles, setRemovedNewsListTitles] = useState([])
 
+    let [radnomIdx, setRandomIdx] = useState(null)
+
     let handleRemovedNewsList = title => setRemovedNewsListTitles(prevList => prevList.concat(title))
 
     useEffect(() => removedNewsListTitles.length && removeItemFromArrayByTitle(newsData, removedNewsListTitles, setNewsData), [removedNewsListTitles])
@@ -20,17 +22,36 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators, hand
     let url = `https://api.nytimes.com/svc/news/v3/content/nyt/${newsCategory}.json?api-key=${apik}`
 
     useEffect(() => {
-        fetch(url)
+        let handle = setTimeout(() => {
+            fetch(url)
             .then(response => response.json())
             .then(data => {
                 // console.log(data, 'response!!')
                 setNewsData(data.results)
             })
             .catch(err => console.log('call failed', err.code, err.message))
+        }, 1001)
+
+        return () => clearTimeout(handle)
+
     }, [newsCategory])
 
+    useEffect(() => newsData && setRandomIdx(Math.floor(Math.random() * newsData.length)), [newsData])
+    
+    
+    // this works, trying out async with setTimeout for avoiding too many request error
+    // useEffect(() => {
+    //     fetch(url)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // console.log(data, 'response!!')
+    //             setNewsData(data.results)
+    //         })
+    //         .catch(err => console.log('call failed', err.code, err.message))
+    // }, [newsCategory])
+
     // let renderNews = () => newsData && newsData.map((item, idx) => (idx < 5) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} />)
-    let rndNum = Math.floor(Math.random() * 20)
+    // let rndNum = Math.floor(Math.random() * 20)
     // let renderNews = () => newsData && newsData.map((item, idx) => (idx == rndNum) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} />)
     // let renderNews = () => newsData && newsData.map((item, idx) => (idx == 0) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} />)
 
@@ -38,7 +59,7 @@ function TopNewsRelaysUI({ newsCategory, showDouble, handleContentCreators, hand
         return (
             showDouble
                 ?
-                newsData && newsData.map((item, idx) => (idx == 1) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} handleExplicitTrendSearchText={handleExplicitTrendSearchText} />)
+                newsData && newsData.map((item, idx) => (idx == radnomIdx) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} handleExplicitTrendSearchText={handleExplicitTrendSearchText} />)
                 :
                 newsData && newsData.map((item, idx) => (idx < 2) && <ShowNewsReelHeadlines key={item.slug_name} newsItem={item} handleContentCreators={handleContentCreators} handleRemovedNewsList={handleRemovedNewsList} handleExplicitTrendSearchText={handleExplicitTrendSearchText} />)
         )
@@ -76,7 +97,7 @@ let ShowNewsReelHeadlines = ({ newsItem, handleContentCreators, handleRemovedNew
     }
 
     let handleClick = () => {
-        console.log(adjustedSlug, 'adjustedSlug')
+        // console.log(adjustedSlug, 'adjustedSlug')
 
         adjustedSlug && handleExplicitTrendSearchText(adjustedSlug)
 
