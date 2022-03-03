@@ -76,7 +76,10 @@ function ComponentsContainer() {
 
     let handleExistingRetweetedQuotesList = dataset => setExistingRetweetedQuotesList(dataset)
 
-    let handleExistingRepliedTweetIDs = (foundIDs) => setExistingRepliedTweetIDs(foundIDs)
+    let handleExistingRepliedTweetIDs = (foundIDs) => {
+        // console.log(foundIDs, '?!?!')
+        setExistingRepliedTweetIDs(foundIDs)
+    }
 
     let handleQuotesListFromRetweet = dataset => dataset && setQuotesListFromRetweet([].concat(...dataset))
 
@@ -284,11 +287,16 @@ function ComponentsContainer() {
 
     // quotedFromRetweetModal && quoteTweetData && console.log(quoteTweetID, quoteTweetData, 'quotedFromRetweetModal!!', quotesListFromRetweet)
 
+    // deleting nowDeletingTweetID from DOM nodes and also from firetore within deletingTweetQuotedID
     useEffect(() => {
         if(existingRepliedTweetIDs && nowDeletingTweetID && deletingTweetQuotedID) {
-            let newList = existingRepliedTweetIDs.filter(id=> id != nowDeletingTweetID)
+            let newList = existingRepliedTweetIDs.filter(id => id != nowDeletingTweetID)
+            
             // console.log(newList, 'newList!!')
+            
             updateDataInFirestore(currentUser, deletingTweetQuotedID, {repliedTweets: newList})
+            
+            updateSomeDataInUserDocs(deletingTweetQuotedID, 'repliedTweets', newList)
         }
     }, [existingRepliedTweetIDs])
 
@@ -448,24 +456,20 @@ function ComponentsContainer() {
 
     let generateOneNewID = () => setUniqueID(uuid())
 
-    // let removeFromListOfRetweetedQuotesForQuotedTweetDocument = speceficData => {
-    //     let newList
-    // }
-
     let removeFromRepliedListInFirestoreFromQuotedTweetDocument = (idx) => {
         let specificData = userDocs.filter(item => item.id == idx)
-        // console.log(specificData, specificData[0].replyCount, 'found!!', quoteTweetID)
+
         let speceficValue = userDocs.filter(item => item.id == specificData[0].quoteTweetID)
-        // updateSomeDataInUserDocs(idx, 'replyCount', (specificData[0].replyCount - 1))
-        // console.log(speceficValue, speceficValue[0].replyCount, 'found!!', quoteTweetID)
+       
         let decideNewValue = (speceficValue[0] && speceficValue[0].replyCount > 0) ? (speceficValue[0].replyCount - 1) : 0
+
         // console.log(speceficValue, 'speceficValue!!', specificData)
-        // if(speceficValue[0] && !speceficValue[0].retweetedQuote)
+
         if(speceficValue[0]) {
             // console.log(speceficValue, speceficValue[0].replyCount, 'found!!', quoteTweetID)
-            // updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
-            // updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
-            // getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+            updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+            updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+            getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
             
             speceficValue[0].retweetedQuote && updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
             speceficValue[0].retweetedQuote && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
@@ -474,33 +478,13 @@ function ComponentsContainer() {
             !speceficValue[0].retweetedQuote && getDataFromFirestoreSubCollection(currentUser, speceficValue[0].id, 'listOfRetweetedQuotes', handleExistingRetweetedQuotesList)
             // !speceficValue[0].retweetedQuote && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'listOfRetweetedQuotes', decideNewValue, 'from delete')
             
-            // !speceficValue[0].retweetedQuote && updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
-            // !speceficValue[0].retweetedQuote && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
-            // !speceficValue[0].retweetedQuote && getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
             setNowDeletingTweetID(idx)
             setDeletingTweetQuotedID(speceficValue[0].id)
         } 
-        // else {
-        //     removeFromListOfRetweetedQuotesForQuotedTweetDocument(speceficValue[0])
-        // }
     }
 
     let removeSpeceficArrayItem = idx => {
-        // idx = 'fb34e41b-60ab-4541-a99e-65d2d6181102'
-        // console.log(threadedTweetData, idx, '<<<<from remove!!>>>>', repliedTweetsIDs)
         idx && setRemoveFromTweetThread(idx)
-
-        // let specificData = userDocs.filter(item => item.id == idx)
-        // let speceficValue = userDocs.filter(item => item.id == specificData[0].quoteTweetID)
-        // // updateSomeDataInUserDocs(idx, 'replyCount', (specificData[0].replyCount - 1))
-        // let decideNewValue = (speceficValue[0] && speceficValue[0].replyCount > 0) ? (speceficValue[0].replyCount - 1) : 0
-        // if(speceficValue[0]) {
-        //     updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
-        //     updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
-        //     getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
-        //     setNowDeletingTweetID(idx)
-        //     setDeletingTweetQuotedID(speceficValue[0].id)
-        // }
 
         // removing this intended tweet to be removed from quoted tweet repliedTweets list so that it gets flushed out and not causing in adjusting correct reply count for next add or remove process
         removeFromRepliedListInFirestoreFromQuotedTweetDocument(idx);
@@ -512,14 +496,20 @@ function ComponentsContainer() {
             deleteDocFromFirestore(currentUser, idx)
 
             let updatedDataset = prevData.slice(0, foundIndex).concat(prevData.slice(foundIndex+1))
+            // let updatedDataset = prevData.filter(item => item.id != idx)
 
             // updateSomeDataInUserDocs(idx, 'replyCount', updatedDataset.length)
+
+            // console.log(foundIndex, updatedDataset, prevData, idx)
 
             // updating userdocs for DOM node rendering
             return updatedDataset
         })
-        // let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
-        //     console.log(foundIndex, 'found!!')
+    }
+
+    let hideFirstPollReplyFromDomAsAnIndividualTweet = (idx) => {
+        let newList = userDocs.filter(item => item.id != idx)
+        setUserDocs(newList)
     }
 
     let updateTweetPrivacy = (idx, privacyOption) => {
@@ -596,14 +586,14 @@ function ComponentsContainer() {
     //     pinnedTweetFlag && pinnedTweetData && setPinnedTweetData(null)
     // }, [pinnedTweetFlag])
 
-    let updateUserDocsItems = idx => {
-        setUserDocs(prevData => {
-            let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
+    // let updateUserDocsItems = idx => {
+    //     setUserDocs(prevData => {
+    //         let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
 
-            // updating userdocs for DOM node rendering
-            return prevData.slice(0, foundIndex).concat(prevData.slice(foundIndex+1))
-        })
-    }
+    //         // updating userdocs for DOM node rendering
+    //         return prevData.slice(0, foundIndex).concat(prevData.slice(foundIndex+1))
+    //     })
+    // }
 
     let adjustUserDocsDataset = (pinnedID, pinnedData) => {
         // console.log('dataset updating....', pinnedData)
@@ -615,6 +605,8 @@ function ComponentsContainer() {
             return [].concat(pinnedData, temp)
         })
     }
+
+    // console.log(userDocs, 'userDocs!!')
 
     useEffect(() => {
         initialPinnedTweetData && adjustUserDocsDataset(initialPinnedTweetData.id, initialPinnedTweetData)
@@ -658,7 +650,7 @@ function ComponentsContainer() {
     return (
         <div id='components-container' style={{position: 'relative'}}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={(selectedTaggedPlace) || taggedPlaceInfoInUserProfile} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotedFromRetweetModal={quotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} handleQuotesListFromRetweet={handleQuotesListFromRetweet} handleRepliedTweets={handleRepliedTweets} updateSomeDataInUserDocs={updateSomeDataInUserDocs} updateExistingListData={updateExistingListData} listName={listName} handleListName={handleListName} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={(selectedTaggedPlace) || taggedPlaceInfoInUserProfile} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotedFromRetweetModal={quotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} handleQuotesListFromRetweet={handleQuotesListFromRetweet} handleRepliedTweets={handleRepliedTweets} updateSomeDataInUserDocs={updateSomeDataInUserDocs} updateExistingListData={updateExistingListData} listName={listName} handleListName={handleListName} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} hideFirstPollReply={hideFirstPollReplyFromDomAsAnIndividualTweet} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )
@@ -671,6 +663,101 @@ export default ComponentsContainer
 
 
 /**
+ * 
+ * 
+ let removeFromRepliedListInFirestoreFromQuotedTweetDocument = (idx) => {
+        let specificData = userDocs.filter(item => item.id == idx)
+        // console.log(specificData, specificData[0].replyCount, 'found!!', quoteTweetID)
+        let speceficValue = userDocs.filter(item => item.id == specificData[0].quoteTweetID)
+        // updateSomeDataInUserDocs(idx, 'replyCount', (specificData[0].replyCount - 1))
+        // console.log(speceficValue, speceficValue[0].replyCount, 'found!!', quoteTweetID)
+        let decideNewValue = (speceficValue[0] && speceficValue[0].replyCount > 0) ? (speceficValue[0].replyCount - 1) : 0
+        console.log(speceficValue, 'speceficValue!!', specificData)
+        // if(speceficValue[0] && !speceficValue[0].retweetedQuote)
+        if(speceficValue[0]) {
+            // console.log(speceficValue, speceficValue[0].replyCount, 'found!!', quoteTweetID)
+            // updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+            // updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+            // getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+            
+            speceficValue[0].retweetedQuote && updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+            speceficValue[0].retweetedQuote && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+            speceficValue[0].retweetedQuote && getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+
+            // (speceficValue[0].retweetedQuote) && updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+            // (speceficValue[0].retweetedQuote.length || speceficValue[0].repliedTweets) && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+            // (speceficValue[0].retweetedQuote.length || speceficValue[0].repliedTweets) && getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+
+            // speceficValue[0].repliedTweets && getDataFromFirestoreSubCollection(currentUser, speceficValue[0].id, 'repliedTweets', handleExistingRepliedTweetIDs)
+            !speceficValue[0].retweetedQuote && getDataFromFirestoreSubCollection(currentUser, speceficValue[0].id, 'listOfRetweetedQuotes', handleExistingRetweetedQuotesList)
+            // !speceficValue[0].retweetedQuote && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'listOfRetweetedQuotes', decideNewValue, 'from delete')
+            
+            // !speceficValue[0].retweetedQuote && updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+            // !speceficValue[0].retweetedQuote && updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+            // !speceficValue[0].retweetedQuote && getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+            setNowDeletingTweetID(idx)
+            setDeletingTweetQuotedID(speceficValue[0].id)
+            // setExisting
+            // console.log(speceficValue[0].repliedTweets, 'deleted!!', idx, speceficValue[0].retweetedQuote && speceficValue[0].retweetedQuote.length || speceficValue[0].repliedTweets, speceficValue[0].retweetedQuote && speceficValue[0].retweetedQuote.length, speceficValue[0].repliedTweets)
+        } 
+        // else {
+        //     removeFromListOfRetweetedQuotesForQuotedTweetDocument(speceficValue[0])
+        // }
+    }
+
+    let removeSpeceficArrayItem = idx => {
+        // idx = 'fb34e41b-60ab-4541-a99e-65d2d6181102'
+        // console.log(threadedTweetData, idx, '<<<<from remove!!>>>>', repliedTweetsIDs)
+        idx && setRemoveFromTweetThread(idx)
+
+        // let specificData = userDocs.filter(item => item.id == idx)
+        // let speceficValue = userDocs.filter(item => item.id == specificData[0].quoteTweetID)
+        // // updateSomeDataInUserDocs(idx, 'replyCount', (specificData[0].replyCount - 1))
+        // let decideNewValue = (speceficValue[0] && speceficValue[0].replyCount > 0) ? (speceficValue[0].replyCount - 1) : 0
+        // if(speceficValue[0]) {
+        //     updateDataInFirestore(currentUser, speceficValue[0].id, {replyCount: (speceficValue[0].replyCount - 1)})
+        //     updateSomeDataInUserDocs((speceficValue[0] && speceficValue[0].id), 'replyCount', decideNewValue, 'from delete')
+        //     getDataFromFirestoreSubCollection(currentUser, (speceficValue[0] && speceficValue[0].id), 'repliedTweets', handleExistingRepliedTweetIDs)
+        //     setNowDeletingTweetID(idx)
+        //     setDeletingTweetQuotedID(speceficValue[0].id)
+        // }
+
+        // removing this intended tweet to be removed from quoted tweet repliedTweets list so that it gets flushed out and not causing in adjusting correct reply count for next add or remove process
+        removeFromRepliedListInFirestoreFromQuotedTweetDocument(idx);
+
+        setUserDocs(prevData => {
+            let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
+            
+            // updating records in firestore as well
+            deleteDocFromFirestore(currentUser, idx)
+
+            let extractQuotedIDFromRemovingTweet = prevData.filter(item => item.id == idx).map(item => item.quoteTweetID)[0]
+            let extractAlreadyExistingRepliedTweetIDs = prevData.filter(item =>  item.id == idx).map(item => item.repliedTweets)
+            
+            
+            prevData = prevData.map(item => {
+                if(item.id == extractQuotedIDFromRemovingTweet) {
+                    let repliedTweets = item.repliedTweets
+                    let newList = repliedTweets.filter(item => item != idx)
+                    console.log(repliedTweets, newList, '??', idx)
+                }
+                return item
+            })
+            // console.log(extractAlreadyExistingRepliedTweetIDs, extractQuotedIDFromRemovingTweet)
+
+            // let updatedDataset = prevData.slice(0, foundIndex).concat(prevData.slice(foundIndex+1))
+            let updatedDataset = prevData.filter(item => item.id != idx)
+
+            // updateSomeDataInUserDocs(idx, 'replyCount', updatedDataset.length)
+
+            // console.log(foundIndex, updatedDataset, prevData, idx)
+
+            // updating userdocs for DOM node rendering
+            return updatedDataset
+        })
+        // let foundIndex = userDocs && userDocs.findIndex(item => item.id == idx)
+        //     console.log(foundIndex, 'found!!')
+    }
  * 
  * 
      // let makingDataReadyInDescendingOrder = () => {

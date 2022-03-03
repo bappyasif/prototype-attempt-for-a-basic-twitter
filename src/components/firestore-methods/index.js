@@ -10,7 +10,7 @@ let db = getFirestore();
 
 // set data into firestore
 export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, userID) => {
-    let { listOfRetweetedQuotes, retweetedQuote, selectedTaggedPlace, quoteTweetID, scheduledTimeStamp, extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
+    let { hideTweet, listOfRetweetedQuotes, retweetedQuote, selectedTaggedPlace, quoteTweetID, scheduledTimeStamp, extraPoll, tweetPoll, tweetMedia, tweetText, extraTweet, tweetPrivacy, imgFile, extraImgFile, gifItem, extraGifItem, count, firstTweetHasMedia, secondTweetHasMedia } = { ...data }
 
     // trying out firestore timestamp as createdDate, this works just fine
     let dateCreated = Timestamp.now()
@@ -27,6 +27,8 @@ export let writeDataIntoCollection = (data, docID, newDataStatus, updateData, us
     }
 
     if(scheduledTimeStamp) refinedData.scheduledTimeStamp = scheduledTimeStamp
+
+    refinedData.hideTweet = hideTweet;
 
     refinedData.repliedTweets = []; // bringing in repliedTweets into firestore subcollection as well
 

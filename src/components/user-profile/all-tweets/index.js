@@ -13,7 +13,7 @@ import { MakeGifObjectAvailable, RenderPolls } from './reuseable-helper-function
 import { useHistory } from 'react-router-dom';
 import { RenderUserTweet } from './tweet-top/analytics-ui';
 
-function AllTweetsPage({ handleQuotedFromRetweetModal, currentUserProfileInfo, handleThreadedTweetData, handlePollVotesCount, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetData, handleQuoteTweetID, tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
+function AllTweetsPage({ hideFirstPollReply, handleQuotedFromRetweetModal, currentUserProfileInfo, handleThreadedTweetData, handlePollVotesCount, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetData, handleQuoteTweetID, tweetData, onlyMedias, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID }) {
     let [show, setShow] = useState(false)
     let [showNoMoreTweets, setShowNoMoreTweets] = useState(false)
     let [totalTweets, setTotalTweets] = useState()
@@ -80,7 +80,7 @@ function AllTweetsPage({ handleQuotedFromRetweetModal, currentUserProfileInfo, h
             content = { tweetText: item.tweetText, extraTweet: item.extraTweet, tweetPrivacy: item.privacy, tweetPoll: item.tweetPoll, extraPoll: item.extraPoll, scheduledTime: item.scheduledTimeStamp, ID: ID, quotedTweetID: item.quoteTweetID, created: item.created, retweetedQuote: item.retweetedQuote, hasRetweetedThread: item.hasRetweetedThread, replyCount: item.replyCount, listOfRetweetedQuotes: item.listOfRetweetedQuotes, repliedTweets: item.repliedTweets }
         }
 
-        return <RenderTweetDataComponent content={content} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} handlePollVotesCount={handlePollVotesCount} handleThreadedTweetData={handleThreadedTweetData} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />
+        return <RenderTweetDataComponent content={content} hideFirstPollReply={hideFirstPollReply} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} handlePollVotesCount={handlePollVotesCount} handleThreadedTweetData={handleThreadedTweetData} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />
     }
 
     let runThis = time => {
@@ -159,6 +159,7 @@ export let sanitizeDatasetForRendering = item => {
         replyCount: item.replyCount,
         listOfRetweetedQuotes: item.listOfRetweetedQuotes,
         repliedTweets: item.repliedTweets,
+        hideTweet: item.hideTweet ? item.hideTweet : null
     }
 }
 
@@ -205,18 +206,27 @@ let ShowRetweetedQuote = ({ quoteTweetID, currentUser, handleThreadedTweetData }
     )
 }
 
-let RenderPollFirstReply = ({currentUser, docID}) => {
+let RenderPollFirstReply = ({currentUser, docID, hideFirstPollReply}) => {
     let [documentDataset, setDocumentDataset] = useState(null)
+    let [repliedtweetData, setRepliedTweetData] = useState(null)
+
     useEffect(() => readDocumentFromFirestoreSubCollection(currentUser, docID, setDocumentDataset), [])
-    console.log(documentDataset, 'documentDataset!!')
+
+    useEffect(() => documentDataset && readDocumentFromFirestoreSubCollection(currentUser, documentDataset.repliedTweets[0], setRepliedTweetData), [documentDataset])
+
+    useEffect(() => repliedtweetData && hideFirstPollReply(repliedtweetData.id), [repliedtweetData])
+
+    // documentDataset && console.log(documentDataset, 'documentDataset!!', currentUser, docID, repliedtweetData, documentDataset.repliedTweets, documentDataset.repliedTweets[0])
+    
     return (
         <div id='poll-first-reply-wrapper'>
-
+            {repliedtweetData && <RenderTweetDataComponent content={sanitizeDatasetForRendering(repliedtweetData)} currentUser={currentUser} pollFirstReply={true} />}
+            {/* {repliedtweetData && <TweetContentsMarkUp content={sanitizeDatasetForRendering(repliedtweetData)} currentUser={currentUser} pollFirstReply={true} />} */}
         </div>
     )
 }
 
-let TweetContentsMarkUp = ({tweetType, extra, ID, currentUser, tweetText, tweetPoll, gifFile, extraGifFile, picture, extraPictureFile, handlePollVotesCount, content, handleQuoteTweetID, handleReplyCount, quotedTweetID, handleThreadedTweetData, fromTweetThread, isQuotedFromRetweeted, retweetedQuote, removeSpeceficArrayItem, handleInitialReplyCount, tweetPrivacy, updateTweetPrivacy, handleAnalysingTweetID, handlePinnedTweetID, currentUserProfileInfo, created, handleQuotedFromRetweetModal, listOfRetweetedQuotes}) => {
+let TweetContentsMarkUp = ({ pollFirstReply, tweetType, extra, ID, currentUser, tweetText, tweetPoll, gifFile, extraGifFile, picture, extraPictureFile, handlePollVotesCount, content, handleQuoteTweetID, handleReplyCount, quotedTweetID, handleThreadedTweetData, fromTweetThread, isQuotedFromRetweeted, retweetedQuote, removeSpeceficArrayItem, handleInitialReplyCount, tweetPrivacy, updateTweetPrivacy, handleAnalysingTweetID, handlePinnedTweetID, currentUserProfileInfo, created, handleQuotedFromRetweetModal, listOfRetweetedQuotes}) => {
     let decideMarkupClassName = tweetType == 'een' ? 'tweet-extra-info-een' : tweetType == 'twee' && 'tweet-extra-info-twee'
     let forClickableTweets = tweetType == 'een' ? '-een' : tweetType == 'twee' && '-twee'
 
@@ -234,7 +244,7 @@ let TweetContentsMarkUp = ({tweetType, extra, ID, currentUser, tweetText, tweetP
 
                     {<TweeetTop ID={ID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} createdDate={created} />}
 
-                    {(quotedTweetID || fromTweetThread) && !isQuotedFromRetweeted && !retweetedQuote && <GetReplyToInformation currentUser={currentUser} />}
+                    {(quotedTweetID || fromTweetThread) && !isQuotedFromRetweeted && !retweetedQuote && !pollFirstReply && <GetReplyToInformation currentUser={currentUser} />}
 
                     <div className='tweet-text'>{tweetText}</div>
 
@@ -253,7 +263,7 @@ let TweetContentsMarkUp = ({tweetType, extra, ID, currentUser, tweetText, tweetP
     )
 }
 
-export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount, handleThreadedTweetData, fromTweetThread, currentUserProfileInfo, handleQuotedFromRetweetModal, isQuotedFromRetweeted }) => {
+export let RenderTweetDataComponent = ({ content, hideFirstPollReply, pollFirstReply, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount, handleThreadedTweetData, fromTweetThread, currentUserProfileInfo, handleQuotedFromRetweetModal, isQuotedFromRetweeted }) => {
     let { repliedTweets, listOfRetweetedQuotes, retweetedQuote, quotedTweetID, ID, scheduledTime, created, tweetText, extraTweet, gifFile, extraGifFile, picture, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
     // let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (picture || extraPictureFile) ? showImg(extra != 'extra' ? picture : extraPictureFile) : ''
@@ -294,6 +304,15 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
         }
     }
 
+    let calculateLineHeightForFirstPollReply = () => {
+        let p_o_f_01 = document.querySelector('#poll-first-reply-wrapper');
+        let parentOfPof01 = p_o_f_01.parentNode;
+        let calc = parentOfPof01.clientHeight - p_o_f_01.clientHeight - 53
+        setLineHeight(calc)
+    }
+
+    useEffect(() => content.replyCount >= 1 && tweetPoll[0] && calculateLineHeightForFirstPollReply(), [tweetPoll])
+
     useEffect(() => (extraTweet || extraGifFile || extraPictureFile || extraPoll) && calculateLineHeight(), [extraTweet, extraGifFile, extraPictureFile, extraPoll, ID])
 
     let handleInitialReplyCount = (val) => setInitialReplyCount(val)
@@ -313,17 +332,24 @@ export let RenderTweetDataComponent = ({ content, removeSpeceficArrayItem, updat
 
     let whenWithoutExtraTweet = () => {
         return (
+            !content.hideTweet
+            &&
             <div className='rendering-tweet-data-container' style={{ marginLeft: isQuotedFromRetweeted && '11px' }}>
 
-                <TweetContentsMarkUp ID={ID} handleReplyCount={handleReplyCount} handleInitialReplyCount={handleInitialReplyCount} content={content} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} gifFile={gifFile} picture={picture} retweetedQuote={retweetedQuote} fromTweetThread={fromTweetThread} tweetPoll={tweetPoll} isQuotedFromRetweeted={isQuotedFromRetweeted} tweetPrivacy={tweetPrivacy} handleThreadedTweetData={handleThreadedTweetData} quotedTweetID={quotedTweetID} handlePollVotesCount={handlePollVotesCount} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} created={created} tweetText={tweetText} />
+                <TweetContentsMarkUp ID={ID} pollFirstReply={pollFirstReply} handleReplyCount={handleReplyCount} handleInitialReplyCount={handleInitialReplyCount} content={content} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} gifFile={gifFile} picture={picture} retweetedQuote={retweetedQuote} fromTweetThread={fromTweetThread} tweetPoll={tweetPoll} isQuotedFromRetweeted={isQuotedFromRetweeted} tweetPrivacy={tweetPrivacy} handleThreadedTweetData={handleThreadedTweetData} quotedTweetID={quotedTweetID} handlePollVotesCount={handlePollVotesCount} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} created={created} tweetText={tweetText} />
                 
                 {/* {(((content.repliedTweets && content.repliedTweets.length) || content.replyCount) > 0 && !isQuotedFromRetweeted && !(tweetPoll || extraPoll)) && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>} */}
                 
-                { ((content.repliedTweets && content.repliedTweets.length)  && !(tweetPoll[0].choice01)) ? <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div> : null}
+                { (((content.repliedTweets && content.repliedTweets.length) || content.replyCount )  && !(tweetPoll[0].choice01)) ? <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div> : null}
 
                 {/* { (content.repliedTweets && content.repliedTweets.length) ? <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div> : null} */}
                 
                 {/* { content.repliedTweets && content.repliedTweets.length == 1 && (tweetPoll || extraPoll) && content.repliedTweets.length == 1 && <RenderPollFirstReply currentUser={currentUser} docID={repliedTweets[0]} /> } */}
+                
+                {content.replyCount >= 1 && (tweetPoll[0].choice01) && <div id='show-connecting-line' style={{ height: lineHeight && lineHeight }}></div>}
+
+                {/* { content.replyCount == 1 && (tweetPoll[0].choice01) && <RenderPollFirstReply currentUser={currentUser} docID={ID} hideFirstPollReply={hideFirstPollReply} /> } */}
+                { content.replyCount >= 1 && (tweetPoll[0].choice01) && <RenderPollFirstReply currentUser={currentUser} docID={ID} hideFirstPollReply={hideFirstPollReply} replyCount={content.replyCount} /> }
             </div>
         )
     }
