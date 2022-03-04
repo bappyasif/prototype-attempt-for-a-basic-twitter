@@ -1040,6 +1040,14 @@
   justify-content: space-between;
 }
 
+.rendering-tweet-data-container .right-side .tweet-bottom-clickable-icons .item-icon {
+  width: 31px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* #all-tweets-container #tweet-container .rendering-tweet-data-container .tweet-info .right-side .tweet-bottom-clickable-icons {
   display: flex;
   justify-content: space-between;

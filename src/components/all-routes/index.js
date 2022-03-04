@@ -34,8 +34,9 @@ import RenderLengthyFollowList from '../navigation-panels/right-side/follow-sugg
 import RenderHomePageView from '../navigation-panels/left-side/home-page';
 import RenderExplorePage from '../navigation-panels/left-side/explore-page';
 import ExplicitTrendsOnClick from '../navigation-panels/right-side/explicit-trends-on-click';
+import LikedTweets from '../user-profile/liked-tweets';
 
-function AllRoutes({ hideFirstPollReply, handleExplicitTrendSearchText, explicitTrendSearchText, listOfRandomUsers, listName, handleListName, updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
+function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hideFirstPollReply, handleExplicitTrendSearchText, explicitTrendSearchText, listOfRandomUsers, listName, handleListName, updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
     // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
@@ -413,7 +414,7 @@ function AllRoutes({ hideFirstPollReply, handleExplicitTrendSearchText, explicit
 
                                 gifFile={gifFile} extraGifFile={gifFileSelectedForExtraTweet} setGifFile={setGifFile} setExtraGifFile={setGifFileSelectedForExtraTweet} hideFirstPollReply={hideFirstPollReply}
 
-                                tweetData={tweetData} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} extraTweetText={extraTweetText}
+                                tweetData={tweetData} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} extraTweetText={extraTweetText} handleLikedTweets={handleLikedTweets} removeFromLikedTweets={removeFromLikedTweets}
 
                                 setExtraTweetText={setExtraTweetText} tweetPrivacy={tweetPrivacy} tweetPublishReady={tweetPublishReady} setTweetPublishReady={setTweetPublishReady}
 
@@ -471,7 +472,7 @@ function AllRoutes({ hideFirstPollReply, handleExplicitTrendSearchText, explicit
                                 {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
                                 <RightSideNavigationPanel tweetData={tweetData} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
-                            <TweetsAndRepliesPage currentUser={currentUser} tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} handleThreadedTweetData={handleThreadedTweetData} />
+                            <TweetsAndRepliesPage currentUser={currentUser} hideFirstPollReply={hideFirstPollReply} tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} handleThreadedTweetData={handleThreadedTweetData} />
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)
@@ -487,7 +488,7 @@ function AllRoutes({ hideFirstPollReply, handleExplicitTrendSearchText, explicit
                                 {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
                                 <RightSideNavigationPanel tweetData={tweetData} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
-                            <AllMedias tweetData={tweetData} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
+                            <AllMedias tweetData={tweetData} hideFirstPollReply={hideFirstPollReply} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)
@@ -500,8 +501,9 @@ function AllRoutes({ hideFirstPollReply, handleExplicitTrendSearchText, explicit
                             <div className='constant-view-of-backdrop'>
                                 <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                                 <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />
-                                <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
+                                <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} hideFirstPollReply={hideFirstPollReply} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
+                            <LikedTweets likedTweets={likedTweets} currentUser={currentUser} handleLikedTweets={handleLikedTweets} removeFromLikedTweets={removeFromLikedTweets} />
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)

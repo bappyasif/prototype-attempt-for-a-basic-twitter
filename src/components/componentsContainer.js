@@ -58,6 +58,35 @@ function ComponentsContainer() {
     let [adjustListData, setAdjustListData] = useState(false)
     let [listOfRandomUsers, setListOfRandomUsers] = useState([])
     let [explicitTrendSearchText, setExplicitTrendSearchText] = useState(null)
+    let [likedTweets, setLikedTweets] = useState([])
+
+    let addToLikedTweets = (newTweet) => setLikedTweets(prevTweets => prevTweets.concat(newTweet))
+    
+    let handleLikedTweets = (id) => {
+        let newList = userDocs.map(item => {
+            if(item.id == id) {
+                item.liked = true
+                let findIdx = likedTweets.findIndex(item => item.id == id)
+                findIdx == -1 && addToLikedTweets(item)
+            }
+            return item
+        })
+        setUserDocs(newList)
+        console.log('aadd')
+    }
+
+    let removeFromLikedTweets = (tweetID) => {
+        let newFilteredList = likedTweets.filter(item => item.id != tweetID)
+        setLikedTweets(newFilteredList)
+        console.log('delete')
+        let newList = userDocs.map(item => {
+            if(item.id == tweetID) {
+                item.liked = false
+            }
+            return item
+        })
+        setUserDocs(newList)
+    }
 
     // vnxOMhbaq8ObeFIE56GNPDQanig1
     let handleExplicitTrendSearchText = (value) => setExplicitTrendSearchText(value)
@@ -650,7 +679,7 @@ function ComponentsContainer() {
     return (
         <div id='components-container' style={{position: 'relative'}}>
             {/* {<AllRoutes updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} />} */}
-            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={(selectedTaggedPlace) || taggedPlaceInfoInUserProfile} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotedFromRetweetModal={quotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} handleQuotesListFromRetweet={handleQuotesListFromRetweet} handleRepliedTweets={handleRepliedTweets} updateSomeDataInUserDocs={updateSomeDataInUserDocs} updateExistingListData={updateExistingListData} listName={listName} handleListName={handleListName} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} hideFirstPollReply={hideFirstPollReplyFromDomAsAnIndividualTweet} />}
+            {<AllRoutes currentUser={currentUser} handleCurrentUser={handleCurrentUser} updateData={updateData} newID={generateOneNewID} uniqueID={uniqueID} tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} setChangeLayout={setChangeLayout} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} analysingTweetID={analysingTweetID} handleAnalysingTweetID={handleAnalysingTweetID} analysingTweetData={analysingTweetData} handleQuoteTweetID={handleQuoteTweetID} quoteTweetData={quoteTweetData} quoteTweetID={quoteTweetID} handleReplyCount={handleReplyCount} replyCount={replyCount} handlePinnedTweetID={handlePinnedTweetID} showPinnedTweetTag={showPinnedTweetTag} currentlyPinnedTweetID={currentlyPinnedTweetID} currentList={currentList} handleCurrentList={handleCurrentList} listMembersCount={countAddedMembers} handleMembersCount={handleMembersAddedCount} membersList={membersList} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} handleQuoteTweetData={handleQuoteTweetData} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} handleThreadedTweetData={handleThreadedTweetData} threadedTweetData={threadedTweetData} repliedTweets={repliedTweets} selectedTaggedPlace={(selectedTaggedPlace) || taggedPlaceInfoInUserProfile} handleSelectedTaggedPlace={handleSelectedTaggedPlace} taggedPlaceInfoInUserProfile={taggedPlaceInfoInUserProfile} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} quotedFromRetweetModal={quotedFromRetweetModal} quotesListFromRetweet={quotesListFromRetweet} handleQuotesListFromRetweet={handleQuotesListFromRetweet} handleRepliedTweets={handleRepliedTweets} updateSomeDataInUserDocs={updateSomeDataInUserDocs} updateExistingListData={updateExistingListData} listName={listName} handleListName={handleListName} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} hideFirstPollReply={hideFirstPollReplyFromDomAsAnIndividualTweet} likedTweets={likedTweets} handleLikedTweets={handleLikedTweets} removeFromLikedTweets={removeFromLikedTweets} />}
             {/* { dataLoading && <AllRoutes tweetData={userDocs && userDocs} newDataStatus={newDataStatus} setNewDataStatus={setNewDataStatus} count={countForTweetContainer} handleCount={handleCount} setChangeLayout={setChangeLayout} />} */}
         </div>
     )

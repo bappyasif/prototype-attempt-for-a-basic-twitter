@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 import { getDataFromFirestoreSubCollection, updateDataInFirestore } from '../../../firestore-methods'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 
-export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, listOfRetweetedQuotes, quotesListFromRetweet, handleQuotedFromRetweetModal, fromTweetThread, elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount, repliedTweetsIDs }) => {
+export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFromLikedTweets, currentCountInFirestore, listOfRetweetedQuotes, quotesListFromRetweet, handleQuotedFromRetweetModal, fromTweetThread, elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount, repliedTweetsIDs }) => {
     let [hoveredID, setHoveredID] = useState('')
     let [iconClicked, setIconClicked] = useState('')
     let [showModal, setShowModal] = useState(false)
@@ -51,6 +51,8 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
     useEffect(() => {
         if(iconClicked == "like" || iconClicked == "like-twee") {
             handleIncreaseCount()
+            // handleLikedTweets(tweetData)
+            // tweetData.liked ? removeFromLikedTweets(tweetData.ID) : handleLikedTweets(tweetData.ID)
         } else if(iconClicked == 'reply' || iconClicked == 'reply-twee') {
             // replyCount && history.push('/tweet/compose')
         } else if(iconClicked.includes('analytics')) {
@@ -110,7 +112,7 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
 
     let handleClicked = (evt) => {
         // console.log(evt.target.parentNode.parentNode.parentNode)
-        let iconElement = evt.target.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.id
+        let iconElement = evt.target.parentNode.id || evt.target.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.parentNode.id
         setIconClicked(iconElement)
         // iconElement.includes('retweet')
         if(iconElement == 'retweet' || iconElement == 'retweet-twee') {
@@ -118,6 +120,9 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
             // !undoRetweet && handleCount()
         } else if(iconElement == 'like' || iconElement == 'like-twee') {
             handleDecreaseCount()
+            // removeFromLikedTweets(tweetData.ID)
+            tweetData.liked ? removeFromLikedTweets(tweetData.ID) : handleLikedTweets(tweetData.ID)
+            console.log(tweetData, '?!?!')
         } else if(iconElement == 'reply' || iconElement == 'reply-twee') {
             handleQuoteTweetID(tweetData.ID)
             handleQuoteTweetCount()
@@ -126,7 +131,7 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
             // updateDataInFirestore(currentUser, tweetData.ID, {replyCount: })
             // history.push('/tweet/compose')
         }
-        console.log(iconElement, 'iconElement')
+        console.log(iconElement, 'iconElement', evt.target)
     }
 
     let loadInitialReplyCount = () => {
@@ -157,7 +162,7 @@ export let RenderTweetBottomIcons = ({ changedCount, currentCountInFirestore, li
             {/* <span onClick={handleClicked} style={{fill: undoRetweet && 'greenyellow'}} >{iconClicked == 'like' ? loveIcon() : elem.icon}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span> */}
 
             <div className='item-wrapper' onClick={handleClicked} style={{display: 'flex', alignItems: 'center'}}>
-                <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{iconClicked == 'like' ? loveIcon() : elem.icon}</div>
+                <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{((iconClicked == 'like' && tweetData.liked) || (elem.id == 'like' && tweetData.liked)) ? loveIcon() : elem.icon}</div>
                 {(counter > 0) && <div className='item-counter' style={{color: 'silver', fontSize: 'large', marginLeft: '4px', position: 'absolute', 'right': '-15px'}}>{counter}</div>}
                 {/* {(counter > 0 || replyCount > 0) && <div className='item-counter' style={{color: 'silver', fontSize: 'large', marginLeft: '4px', position: 'absolute', 'right': '-15px'}}>{counter || (elem.ID && replyCount)}</div>} */}
             </div>
