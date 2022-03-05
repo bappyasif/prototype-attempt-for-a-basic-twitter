@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 import { getDataFromFirestoreSubCollection, updateDataInFirestore } from '../../../firestore-methods'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 
-export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFromLikedTweets, currentCountInFirestore, listOfRetweetedQuotes, quotesListFromRetweet, handleQuotedFromRetweetModal, fromTweetThread, elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount, repliedTweetsIDs }) => {
+export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFromLikedTweets, tweetType, currentCountInFirestore, listOfRetweetedQuotes, quotesListFromRetweet, handleQuotedFromRetweetModal, fromTweetThread, elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount, repliedTweetsIDs }) => {
     let [hoveredID, setHoveredID] = useState('')
     let [iconClicked, setIconClicked] = useState('')
     let [showModal, setShowModal] = useState(false)
@@ -112,7 +112,7 @@ export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFr
 
     let handleClicked = (evt) => {
         // console.log(evt.target.parentNode.parentNode.parentNode)
-        let iconElement = evt.target.parentNode.id || evt.target.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.parentNode.id
+        let iconElement = evt.target.parentNode.id || evt.target.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.parentNode.id|| evt.target.parentNode.parentNode.parentNode.parentNode.parentNode.id
         setIconClicked(iconElement)
         // iconElement.includes('retweet')
         if(iconElement == 'retweet' || iconElement == 'retweet-twee') {
@@ -146,11 +146,14 @@ export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFr
 
     // replyCount && console.log(replyCount, 'replyCount!!', counter)
 
+    // console.log((elem.id == 'like' && tweetType != 'een' && tweetData.liked || elem.id == 'like' && tweetType == 'twee'  && tweetData.liked), elem.id == 'like'  && tweetData.liked , elem.id == 'like-twee'  && tweetData.liked, elem.id)
+
     return (
         <div
             key={elem.id}
 
-            id={extraTwee ? elem.id + '-twee' : extraEen ? elem.id + '-een' : elem.id}
+            // id={extraTwee ? elem.id + '-twee' : extraEen ? elem.id + '-een' : elem.id}
+            id={tweetType == 'twee' ? elem.id + '-twee' : tweetType == 'een' ? elem.id + '-een' : elem.id}
 
             className='hoverable-div'
 
@@ -162,11 +165,14 @@ export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFr
             {/* <span onClick={handleClicked} style={{fill: undoRetweet && 'greenyellow'}} >{iconClicked == 'like' ? loveIcon() : elem.icon}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span> */}
 
             <div className='item-wrapper' onClick={handleClicked} style={{display: 'flex', alignItems: 'center'}}>
-                <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{((iconClicked == 'like' && tweetData.liked) || (elem.id == 'like' && tweetData.liked)) ? loveIcon() : elem.icon}</div>
+                {/* <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{((iconClicked == 'like' && !(elem.id == 'like-een' || elem.id == 'like-twee') && tweetData.liked) || ((elem.id == 'like' || elem.id == 'like-twee') && tweetData.liked)) ? loveIcon() : elem.icon}</div> */}
+                {/* <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{((iconClicked == 'like' || iconClicked == 'like-twee') && tweetData.liked) ? loveIcon() : elem.icon}</div> */}
+                <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{((iconClicked == 'like' || iconClicked == 'like-twee') && tweetData.liked || (elem.id == 'like' && tweetType != 'een' && tweetData.liked || elem.id == 'like' && tweetType == 'twee'  && tweetData.liked)) ? loveIcon() : elem.icon}</div>
                 {(counter > 0) && <div className='item-counter' style={{color: 'silver', fontSize: 'large', marginLeft: '4px', position: 'absolute', 'right': '-15px'}}>{counter}</div>}
                 {/* {(counter > 0 || replyCount > 0) && <div className='item-counter' style={{color: 'silver', fontSize: 'large', marginLeft: '4px', position: 'absolute', 'right': '-15px'}}>{counter || (elem.ID && replyCount)}</div>} */}
             </div>
-            <span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
+            {/* <span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span> */}
+            <span style={{ display: hoveredID == elem.id + (tweetType == 'twee' ? '-twee' : tweetType == 'een' ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
 
             {
                 showModal

@@ -14,17 +14,21 @@ function RightSideNavigationPanel({ tweetData, opacity, listOfRandomUsers, handl
     let handleContentCreators = name => setContentCreators(prevData => prevData.concat(name))
 
     // console.log(contentCreators, '<><>', listOfRandomUsers)
+    let urlTokens = window.location.href.split('/')
+    let getRouteUrl = urlTokens[urlTokens.length - 1]
 
     return (
         <div id='right-navigation-panel-container' style={{ opacity: opacity ? '.2' : 1 }}>
             <div id='native-panels'>
                 <SearchTwitter />
-                {!threadedTweetData && <MediaGallery tweetData={tweetData} />}
+                {!(getRouteUrl == 'with_comments' || getRouteUrl == 'tweetID') && <MediaGallery tweetData={tweetData} />}
+                {/* {!threadedTweetData && <MediaGallery tweetData={tweetData} />} */}
                 {/* <MediaGallery tweetData={tweetData} /> */}
             </div>
             <div id='programmable-panels' style={{top: threadedTweetData && '44px'}}>
                 {/* <TopNewsRelaysUI /> */}
-                {threadedTweetData && <RelevantPeopleViewForTweetThread currentUserProfileInfo={currentUserProfileInfo} />}
+                {(getRouteUrl == 'with_comments' || getRouteUrl == 'tweetID') && <RelevantPeopleViewForTweetThread currentUserProfileInfo={currentUserProfileInfo} />}
+                {/* {threadedTweetData && <RelevantPeopleViewForTweetThread currentUserProfileInfo={currentUserProfileInfo} />} */}
                 <CurrentTrends handleContentCreators={handleContentCreators} handleExplicitTrendSearchText={handleExplicitTrendSearchText} />
                 {/* <FollowSuggestedPeopleList contentCreators={contentCreators} /> */}
                 {/* <FollowSuggestedPeopleComponent listOfRandomUsers={listOfRandomUsers} /> */}

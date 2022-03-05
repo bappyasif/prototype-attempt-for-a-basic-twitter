@@ -120,6 +120,7 @@
   transform: translate(-4px, 27px);
 }
 
+#quotes-with-comments-wrapper #show-connecting-line,
 #tweet-container #show-connecting-line {
   border-left: .2px solid silver;
   position: absolute;
@@ -127,6 +128,10 @@
   left: 24.2px;
   /* height: 61px; */
   /* transform: translate(26px, -59.5px); */
+}
+
+#quotes-with-comments-wrapper #show-connecting-line {
+  top: 57.1px;
 }
 
 #extra-tweet-portion-container,

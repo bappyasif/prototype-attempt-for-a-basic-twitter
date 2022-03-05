@@ -47,6 +47,8 @@ export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore,
 
     // console.log(initialTrendSearchedText, 'initialTrendSearchedTexts')
 
+    useEffect(() => focused && fromTrends && setSearchResultsModalHook(true), [focused])
+
     useEffect(() => fromTrends && initialTrendSearchedText && setInputText(initialTrendSearchedText), [initialTrendSearchedText])
 
     useEffect(() => {

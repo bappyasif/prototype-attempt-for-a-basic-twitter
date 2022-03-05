@@ -29,21 +29,21 @@ function ShowTweetThread({ quotesListFromRetweet, handleQuotedFromRetweetModal, 
     return (
         <div id='show-tweet-thread-container'>
             <HeaderComponent headerText={'Thread'} />
-            {hasRetweetedThread && <RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet quotedTweetID={quotedTweetID} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} isQuotedFromRetweeted={true} />}
+            {hasRetweetedThread && <RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet quotedTweetID={quotedTweetID} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} isQuotedFromRetweeted={true} currentUserProfileInfo={currentUserProfileInfo} updateTweetPrivacy={updateTweetPrivacy} handlePinnedTweetID={{handlePinnedTweetID}} removeSpeceficArrayItem={removeSpeceficArrayItem} />}
             {tweetText && <TweetComponent tweetText={tweetText} createdDate={created} handleQuoteTweetID={handleQuoteTweetID} threadedTweetData={threadedTweetData} currentUser={currentUser} currentUserProfileInfo={currentUserProfileInfo} repliedTweetsIDs={repliedTweetsIDs} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} hasRetweetedThread={hasRetweetedThread} quotesListFromRetweet={quotesListFromRetweet} handleAnalysingTweetID={handleAnalysingTweetID} tweetThreadID={ID} />}
-            <ReplyThreadComponent currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} handleLoadingTweetsIDs={handleLoadingTweetsIDs} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
-            {<RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />}
+            <ReplyThreadComponent currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} handleLoadingTweetsIDs={handleLoadingTweetsIDs} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} currentUserProfileInfo={currentUserProfileInfo} />
+            <RenderAlreadyRepliedTweets currentUser={currentUser} tweetThreadID={ID} repliedTweetsIDs={repliedTweetsIDs} handleLoadingTweetsIDs={handleLoadingTweetsIDs} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} updateRepliedTweetsOnThread={updateRepliedTweetsOnThread} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />
         </div>
     )
 }
 
-export let RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet = ({ quotedTweetID, currentUser, handleAnalysingTweetID, handleQuoteTweetID, handleQuotedFromRetweetModal, isQuotedFromRetweeted, handleThreadedTweetData }) => {
+export let RenderThreadWithExistingQuotedTweetWhenQuotedFromRetweet = ({ quotedTweetID, currentUser, handleAnalysingTweetID, handleQuoteTweetID, handleQuotedFromRetweetModal, isQuotedFromRetweeted, handleThreadedTweetData, currentUserProfileInfo, updateTweetPrivacy, handlePinnedTweetID, removeSpeceficArrayItem }) => {
     let [dataset, setDataset] = useState(null);
     let handleLoadingDataset = items => setDataset(items)
     useEffect(() => quotedTweetID && readDocumentFromFirestoreSubCollection(currentUser, quotedTweetID, handleLoadingDataset), [quotedTweetID])
     // console.log(dataset, 'fromThreadExistingQuote')
     return (
-        dataset ? <RenderTweetDataComponent content={sanitizeDatasetForRendering(dataset)} currentUser={currentUser} isQuotedFromRetweeted={isQuotedFromRetweeted} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} handleThreadedTweetData={handleThreadedTweetData} /> : null
+        dataset ? <RenderTweetDataComponent content={sanitizeDatasetForRendering(dataset)} currentUser={currentUser} isQuotedFromRetweeted={isQuotedFromRetweeted} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} handleThreadedTweetData={handleThreadedTweetData} currentUserProfileInfo={currentUserProfileInfo} updateTweetPrivacy={updateTweetPrivacy} handlePinnedTweetID={handlePinnedTweetID} removeSpeceficArrayItem={removeSpeceficArrayItem} /> : null
     )
 }
 
@@ -80,15 +80,19 @@ let RenderAlreadyRepliedTweets = ({ currentUser, tweetThreadID, repliedTweetsIDs
     // }, [])
 
     return (
+        repliedTweetsIDs?.length
+        ?
         <div id='already-replied-tweets-wrapper'>
             {/* <RenderTweetDataComponent content={content} /> */}
             {/* {updateRepliedTweetsOnThread && alreadyRepliedTweetsListReRendered()} */}
-            {updateRepliedTweetsOnThread ? repliedTweetsIDs.map((item, idx) => <RenderRepliedTweet key={item} docID={item} currentUser={currentUser} idx={idx} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} setLineHeight={setLineHeight} />) : null}
+            {updateRepliedTweetsOnThread?.length ? repliedTweetsIDs.map((item, idx) => <RenderRepliedTweet key={item} docID={item} currentUser={currentUser} idx={idx} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} setLineHeight={setLineHeight} />) : null}
             {!updateRepliedTweetsOnThread ? alreadyRepliedTweetsList() : null}
             {/* {alreadyRepliedTweetsList()} */}
             {repliedTweetsIDs && repliedTweetsIDs.length && <div id='extra-tweet-extension-line' style={{height: lineHeight && lineHeight}}></div>}
             {/* <RenderAddAnotherTweet /> */}
         </div>
+        :
+        null
     )
 }
 
@@ -137,7 +141,7 @@ let RenderRepliedTweet = ({ docID, currentUser, idx, removeSpeceficArrayItem, ha
 
         markup = <div className='tweet-ui-wrapper'>
             <RenderTweetDataComponent content={sanitizeDatasetForRendering(dataset)} currentUser={currentUser} fromTweetThread={true} removeSpeceficArrayItem={removeSpeceficArrayItem} handlePinnedTweetID={handlePinnedTweetID} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} replyCount={dataset.replyCount} currentUserProfileInfo={currentUserProfileInfo} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} />
-            {idx == 0 && <RenderAddAnotherTweet docID={docID} currentUser={currentUser} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} count={dataset.replyCount} setLineHeight={setLineHeight} />}
+            {idx == 0 && <RenderAddAnotherTweet docID={docID} currentUser={currentUser} handleQuoteTweetID={handleQuoteTweetID} handleReplyCount={handleReplyCount} count={dataset.replyCount} setLineHeight={setLineHeight} currentUserProfileInfo={currentUserProfileInfo} />}
         </div>
         return (markup)
     }
@@ -146,7 +150,7 @@ let RenderRepliedTweet = ({ docID, currentUser, idx, removeSpeceficArrayItem, ha
     return (markup)
 }
 
-let RenderAddAnotherTweet = ({ docID, currentUser, handleQuoteTweetID, handleReplyCount, count, setLineHeight }) => {
+let RenderAddAnotherTweet = ({ docID, currentUser, handleQuoteTweetID, handleReplyCount, count, setLineHeight, currentUserProfileInfo }) => {
     let [clicked, setClicked] = useState(false)
 
     let [readyForReRoute, setReadyForReRoute] = useState(false)
@@ -193,13 +197,13 @@ let RenderAddAnotherTweet = ({ docID, currentUser, handleQuoteTweetID, handleRep
 
     return (
         <div id='add-another-tweet-wrapper'>
-            <img className='profile-pic' src='https://picsum.photos/200/300' />
+            <img className='profile-pic' src={currentUserProfileInfo?.[6]?.content || 'https://picsum.photos/200/300'} />
             <div id='add-another-tweet' onClick={handleAddAnotherTweet}>Add another Tweet</div>
         </div>
     )
 }
 
-let ReplyThreadComponent = ({ currentUser, threadedTweetData, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs, primaryTweetText, setPrimaryTweetText, selectedFile, setSelectedFile, selectedGif, setSelectedGif, selectedTaggedPlace, handleSelectedTaggedPlace }) => {
+let ReplyThreadComponent = ({ currentUser, threadedTweetData, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs, primaryTweetText, setPrimaryTweetText, selectedFile, setSelectedFile, selectedGif, setSelectedGif, selectedTaggedPlace, handleSelectedTaggedPlace, currentUserProfileInfo }) => {
     let [clicked, setClicked] = useState(false)
 
     let handleClicked = () => setClicked(!clicked)
@@ -208,14 +212,14 @@ let ReplyThreadComponent = ({ currentUser, threadedTweetData, uniqueID, repliedT
         <div id='reply-tweet-thread-wrapper' style={{ marginBottom: '20px' }}>
             {(clicked || primaryTweetText)
                 ?
-                <AfterClickedMarkup handleClicked={handleClicked} handleLoadingTweetsIDs={handleLoadingTweetsIDs} currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />
+                <AfterClickedMarkup handleClicked={handleClicked} handleLoadingTweetsIDs={handleLoadingTweetsIDs} currentUser={currentUser} threadedTweetData={threadedTweetData} uniqueID={uniqueID} repliedTweetsIDs={repliedTweetsIDs} updateData={updateData} primaryTweetText={primaryTweetText} setPrimaryTweetText={setPrimaryTweetText} selectedFile={selectedFile} setSelectedFile={setSelectedFile} selectedGif={selectedGif} setSelectedGif={setSelectedGif} selectedTaggedPlace={selectedTaggedPlace} handleSelectedTaggedPlace={handleSelectedTaggedPlace} currentUserProfileInfo={currentUserProfileInfo} />
                 :
-                <BeforeClickedMarkup handleClicked={handleClicked} setSelectedFile={setSelectedFile} setSelectedGif={setSelectedGif} handleSelectedTaggedPlace={handleSelectedTaggedPlace} />}
+                <BeforeClickedMarkup handleClicked={handleClicked} setSelectedFile={setSelectedFile} setSelectedGif={setSelectedGif} handleSelectedTaggedPlace={handleSelectedTaggedPlace} currentUserProfileInfo={currentUserProfileInfo} />}
         </div>
     )
 }
 
-let AfterClickedMarkup = ({ handleClicked, currentUser, threadedTweetData, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs, primaryTweetText, setPrimaryTweetText, selectedFile, setSelectedFile, selectedGif, setSelectedGif, selectedTaggedPlace, handleSelectedTaggedPlace }) => {
+let AfterClickedMarkup = ({ handleClicked, currentUser, threadedTweetData, uniqueID, repliedTweetsIDs, updateData, handleLoadingTweetsIDs, primaryTweetText, setPrimaryTweetText, selectedFile, setSelectedFile, selectedGif, setSelectedGif, selectedTaggedPlace, handleSelectedTaggedPlace, currentUserProfileInfo }) => {
     let [tweetText, setTweetText] = useState('')
 
     let [imgFile, setImgFile] = useState(null);
@@ -283,7 +287,7 @@ let AfterClickedMarkup = ({ handleClicked, currentUser, threadedTweetData, uniqu
         <div id='after-clicked-markup-wrapper'>
             <div id='replying-to'>Replying to @profile_handle</div>
             <div id='user-tweet'>
-                <img className='profile-pic' src='https://picsum.photos/200/300' />
+                <img className='profile-pic' src={currentUserProfileInfo?.[6]?.content || 'https://picsum.photos/200/300'} />
                 <label htmlFor='tweet-reply' />
                 <input ref={tweetTextRef} id='tweet-reply' placeholder='Tweet your reply' onChange={handleTweetText} maxLength={100} value={tweetText} />
             </div>
@@ -435,10 +439,10 @@ let RenderIcon = ({ item, handleTagLocationModal, handleShowEmojiPicker, imgRef,
     )
 }
 
-let BeforeClickedMarkup = ({ handleClicked }) => {
+let BeforeClickedMarkup = ({ handleClicked, currentUserProfileInfo }) => {
     return (
         <div id='before-clicked-markup-wrapper'>
-            <img className='profile-pic' src='https://picsum.photos/200/300' />
+            <img className='profile-pic' src={currentUserProfileInfo?.[6]?.content || 'https://picsum.photos/200/300'} />
             <label htmlFor='reply-tweet' />
             <input type={'text'} id='reply-tweet' placeholder='Tweet your reply' onClick={handleClicked} />
             <div id='reply-btn'>Reply</div>
@@ -581,7 +585,7 @@ let RenderMoreOptions = ({ handleQuoteTweetID, threadedTweetData, currentUser, h
 let UserInfo = ({ currentUserProfileInfo }) => {
     return (
         <div id='user-info-wrapper'>
-            <img className='profile-pic' src='https://picsum.photos/200/300' />
+            <img className='profile-pic' src={currentUserProfileInfo?.[6].content || 'https://picsum.photos/200/300'} />
             <div id='profile-info'>
                 {/* <div id='profile-name'>Profile Name</div> */}
                 <div id='profile-name'>{currentUserProfileInfo[0].content}</div>

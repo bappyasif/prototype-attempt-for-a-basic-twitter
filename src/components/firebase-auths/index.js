@@ -167,11 +167,12 @@ export let userLoginWithPhone = (phoneNumber, otpCode, handleSigninStatus, handl
             // confirmationalResult.confirm(code)
 
             // will be using rather direct user provided otp code instead
-            confirmationalResult.confirm(otpCode)
+            // confirmationalResult.confirm(otpCode)
+            window.confirmationalResult.confirm(otpCode)
                 .then(result => {
                     // user = result.user
                     let user = result.user.uid
-                    console.log('is it here!!!! chk01')
+                    // console.log('is it here!!!! chk01')
                     if (user) {
                         findUserDocumentFromFirestore(user, handleCurrentUser, handleProfileCompletion)
                         console.log('valid user!!')
@@ -194,6 +195,7 @@ export let userLoginWithPhone = (phoneNumber, otpCode, handleSigninStatus, handl
             //   })
         })
     // .finally(()=>signInThroughOTP())
+    // console.log('done!!!!')
 }
 
 // user login with OTP, tryouts!!

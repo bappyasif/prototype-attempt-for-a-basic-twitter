@@ -173,7 +173,7 @@ let GetOtpFromUser = ({userID, handleSigninStatus, handleProfileCompletion, hand
   let [code, setCode] = useState(null)
   let handleCodeInput = evt => setCode(evt.target.value)
   let handleClick = evt => {
-    // console.log('go gogogo', code, userID)
+    console.log('go gogogo', code, userID)
     userLoginWithPhone(userID, code, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
   }
   return (

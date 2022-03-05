@@ -273,7 +273,7 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                 <Route exact path={'/retweets/with_comments'}>
                     <div className='constant-view-of-backdrop'>
                         <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
-                        <RetweetsWithCommentsThread currentUser={currentUser} quotedTweetID={quoteTweetID} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} handleThreadedTweetData={handleThreadedTweetData} />
+                        <RetweetsWithCommentsThread currentUser={currentUser} quotedTweetID={quoteTweetID} handleAnalysingTweetID={handleAnalysingTweetID} handleQuoteTweetID={handleQuoteTweetID} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} handleThreadedTweetData={handleThreadedTweetData} currentUserProfileInfo={currentUserProfileInfo} updateTweetPrivacy={updateTweetPrivacy} handlePinnedTweetID={handlePinnedTweetID} />
                         <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
                 </Route>
@@ -503,7 +503,7 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                                 <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />
                                 <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} hideFirstPollReply={hideFirstPollReply} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
-                            <LikedTweets likedTweets={likedTweets} currentUser={currentUser} handleLikedTweets={handleLikedTweets} removeFromLikedTweets={removeFromLikedTweets} />
+                            <LikedTweets likedTweets={likedTweets} currentUser={currentUser} handleLikedTweets={handleLikedTweets} removeFromLikedTweets={removeFromLikedTweets} handleThreadedTweetData={handleThreadedTweetData} />
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)

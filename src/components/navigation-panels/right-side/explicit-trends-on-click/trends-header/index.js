@@ -61,9 +61,9 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
 
   // console.log(inputFocused, 'inputFocused')
 
-  useEffect(() => dataset && searchText && setShowSearchResults(true), [dataset, searchText] )
+  // useEffect(() => dataset && searchText && setShowSearchResults(true), [dataset, searchText] )
 
-  console.log(searchedRelatedTopics, 'searchedRelatedTopics!!')
+  console.log(searchedRelatedTopics, 'searchedRelatedTopics!!', dataset)
 
   // useEffect(() => searchText && updateAlreadySearchedTerms(searchText), [searchText])
 
@@ -87,7 +87,7 @@ function TrendsHeader({ explicitTrendSearchText, handleExplicitTrendSearchText }
       {/* {showSearchResults && searchText && <ShowSearchResultsModal searchText={searchText} updateModalVisibility={setShowSearchResults} />} */}
 
       {/* <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} updateSearchedTerms={setAlreadySearchedTermsList} /> */}
-      {showSearchResults && dataset &&  <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} updateSearchedTerms={setAlreadySearchedTermsList} randomlySelectedTopics={randomlySelectedTopics} setSearchText={setSearchText} />}
+      {showSearchResults && <ShowSearchResultsModal dataset={dataset} updateModalVisibility={setShowSearchResults} searchedTerms={alreadySearchedTermsList} updateSearchedTerms={setAlreadySearchedTermsList} randomlySelectedTopics={randomlySelectedTopics} setSearchText={setSearchText} />}
     </div>
   )
 }

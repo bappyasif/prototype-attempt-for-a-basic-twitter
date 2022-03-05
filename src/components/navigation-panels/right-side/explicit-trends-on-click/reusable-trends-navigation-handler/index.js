@@ -33,17 +33,19 @@ function ReuseableTrendsNavigationHandler({
         let url = 'https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/';
         if (searchString) {
             if (whichNav == 'Top') {
-                url += `search/NewsSearchAPI?q=${searchString}`
+                url += `search/NewsSearchAPI?q=${encodeURI(searchString)}`
             } else if (whichNav == 'Latest') {
-                url += `search/TrendingNewsAPI?q=${searchString}`
+                url += `search/TrendingNewsAPI?q=${encodeURI(searchString)}`
             } else if (whichNav == 'Photos') {
-                url += `Search/ImageSearchAPI?q=${searchString}`
+                url += `Search/ImageSearchAPI?q=${encodeURI(searchString)}`
             } else if (whichNav == 'Videos') {
                 // url = `https://bing-web-search1.p.rapidapi.com/search?q=${explicitTrendSearchText}&mkt=en-us&safeSearch=Off&textFormat=Raw&freshness=Day`;
-                url = `https://pexelsdimasv1.p.rapidapi.com/videos/search?query=${explicitTrendSearchText}&per_page=15&page=1`
+                // url = `https://pexelsdimasv1.p.rapidapi.com/videos/search?query=${encodeURI(explicitTrendSearchText)}&per_page=15&page=1`
+                url = `https://pexelsdimasv1.p.rapidapi.com/videos/search?query=${encodeURI(searchString)}&per_page=15&page=1`
                 // console.log('th01')
             } else if (whichNav == 'People') {
-                url = `https://twitter135.p.rapidapi.com/Search/?q=${explicitTrendSearchText}&count=20`
+                // url = `https://twitter135.p.rapidapi.com/Search/?q=${encodeURI(explicitTrendSearchText)}&count=20`
+                url = `https://twitter135.p.rapidapi.com/Search/?q=${encodeURI(searchString)}&count=20`
             }
         } else {
             console.log('no search string found!!')
@@ -186,7 +188,7 @@ let fetchDataWebSearch = (firstHalfOfUrl, dataUpdater) => {
         .then(data => {
             console.log(data, 'data!!')
             let results = data.value
-            if (results) {
+            if (results.length) {
                 let newList = results.filter(item => item.image.url)
                 // console.log(newList, 'newList!!')
                 // dataUpdater(results)

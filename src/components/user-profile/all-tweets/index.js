@@ -230,15 +230,21 @@ let RenderPollFirstReply = ({currentUser, docID, hideFirstPollReply, handleLiked
 let TweetContentsMarkUp = ({ removeFromLikedTweets, handleLikedTweets, pollFirstReply, tweetType, extra, ID, currentUser, tweetText, tweetPoll, gifFile, extraGifFile, picture, extraPictureFile, handlePollVotesCount, content, handleQuoteTweetID, handleReplyCount, quotedTweetID, handleThreadedTweetData, fromTweetThread, isQuotedFromRetweeted, retweetedQuote, removeSpeceficArrayItem, handleInitialReplyCount, tweetPrivacy, updateTweetPrivacy, handleAnalysingTweetID, handlePinnedTweetID, currentUserProfileInfo, created, handleQuotedFromRetweetModal, listOfRetweetedQuotes}) => {
     let decideMarkupClassName = tweetType == 'een' ? 'tweet-extra-info-een' : tweetType == 'twee' && 'tweet-extra-info-twee'
     let forClickableTweets = tweetType == 'een' ? '-een' : tweetType == 'twee' && '-twee'
+    // console.log(forClickableTweets, decideMarkupClassName);
 
     let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (picture || extraPictureFile) ? showImg(extra != 'extra' ? picture : extraPictureFile) : ''
 
-    let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} removeFromLikedTweets={removeFromLikedTweets} handleLikedTweets={handleLikedTweets} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} changedCount={content.replyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} currentCountInFirestore={content.repliedTweets && content.repliedTweets.length} />)
+    // let tweetBottomClickableIcons = (extraEen, extraTwee) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} removeFromLikedTweets={removeFromLikedTweets} handleLikedTweets={handleLikedTweets} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} changedCount={content.replyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} currentCountInFirestore={content.repliedTweets && content.repliedTweets.length} />)
+    let tweetBottomClickableIcons = () => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} removeFromLikedTweets={removeFromLikedTweets} handleLikedTweets={handleLikedTweets} tweetType={tweetType} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} changedCount={content.replyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} currentCountInFirestore={content.repliedTweets && content.repliedTweets.length} />)
+    // let tweetBottomClickableIcons = (extraEen=forClickableTweets, extraTwee=forClickableTweets) => tweetAdditionalIconsArray.map((elem) => <RenderTweetBottomIcons key={elem.id} elem={elem} removeFromLikedTweets={removeFromLikedTweets} handleLikedTweets={handleLikedTweets} extraEen={extraEen} extraTwee={extraTwee} tweetData={content} handleQuoteTweetID={handleQuoteTweetID} currentUser={currentUser} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} ID={ID} feedParentInitialReplyCount={handleInitialReplyCount} changedCount={content.replyCount} fromTweetThread={fromTweetThread} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} currentCountInFirestore={content.repliedTweets && content.repliedTweets.length} />)
+
+    // console.log(currentUserProfileInfo, 'currentUserProfileInfo!!', currentUserProfileInfo?.[6]?.content)
 
     return (
         <div id={!tweetType ? 'tweet-part' : null} className={tweetType ? decideMarkupClassName : null}>
             <div className='left-side'>
-                <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' />
+                {/* <img className='in-tweet-profile-pic' src='https://picsum.photos/200/300' /> */}
+                <img className='in-tweet-profile-pic' src={currentUserProfileInfo?.[6]?.content || 'https://picsum.photos/200/300'} />
             </div>
             <div className='right-side'>
                 <div className='tweet-info'>
@@ -265,7 +271,7 @@ let TweetContentsMarkUp = ({ removeFromLikedTweets, handleLikedTweets, pollFirst
 }
 
 export let RenderTweetDataComponent = ({ content, removeFromLikedTweets, handleLikedTweets, hideFirstPollReply, pollFirstReply, removeSpeceficArrayItem, updateTweetPrivacy, currentUser, handleAnalysingTweetID, handleQuoteTweetID, quoteTweetData, handleReplyCount, replyCount, handlePinnedTweetID, showPinnedTweetTag, handlePollVotesCount, handleThreadedTweetData, fromTweetThread, currentUserProfileInfo, handleQuotedFromRetweetModal, isQuotedFromRetweeted }) => {
-    let { repliedTweets, listOfRetweetedQuotes, retweetedQuote, quotedTweetID, ID, scheduledTime, created, tweetText, extraTweet, gifFile, extraGifFile, picture, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
+    let { hasRetweetedThread, repliedTweets, listOfRetweetedQuotes, retweetedQuote, quotedTweetID, ID, scheduledTime, created, tweetText, extraTweet, gifFile, extraGifFile, picture, extraPictureFile, tweetPrivacy, firstTweetHasMedia, secondTweetHasMedia, tweetPoll, extraPoll } = { ...content }
 
     // let readyMedia = (extra) => (gifFile || extraGifFile) ? <MakeGifObjectAvailable gifId={extra != 'extra' ? gifFile : extraGifFile} /> : (picture || extraPictureFile) ? showImg(extra != 'extra' ? picture : extraPictureFile) : ''
 
@@ -307,9 +313,9 @@ export let RenderTweetDataComponent = ({ content, removeFromLikedTweets, handleL
 
     let calculateLineHeightForFirstPollReply = () => {
         let p_o_f_01 = document.querySelector('#poll-first-reply-wrapper');
-        let parentOfPof01 = p_o_f_01.parentNode;
-        let calc = parentOfPof01.clientHeight - p_o_f_01.clientHeight - 53
-        setLineHeight(calc)
+        let parentOfPof01 = p_o_f_01?.parentNode;
+        let calc = parentOfPof01?.clientHeight - p_o_f_01?.clientHeight - 53
+        !calc < 0 && setLineHeight(calc)
     }
 
     useEffect(() => content.replyCount >= 1 && tweetPoll[0] && calculateLineHeightForFirstPollReply(), [tweetPoll])
@@ -341,7 +347,7 @@ export let RenderTweetDataComponent = ({ content, removeFromLikedTweets, handleL
                 
                 {/* {(((content.repliedTweets && content.repliedTweets.length) || content.replyCount) > 0 && !isQuotedFromRetweeted && !(tweetPoll || extraPoll)) && <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div>} */}
                 
-                { (((content.repliedTweets && content.repliedTweets.length) || content.replyCount )  && !(tweetPoll[0].choice01)) ? <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div> : null}
+                { (((content.repliedTweets && content.repliedTweets.length) || content.replyCount )  && !(tweetPoll[0].choice01) && !isQuotedFromRetweeted  && !(fromTweetThread && replyCount)) ? <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div> : null}
 
                 {/* { (content.repliedTweets && content.repliedTweets.length) ? <div id='show-tweet-thread' onClick={handleShowThread}>Show this thread</div> : null} */}
                 
@@ -356,14 +362,17 @@ export let RenderTweetDataComponent = ({ content, removeFromLikedTweets, handleL
     }
 
     let whenWithExtraTweet = () => {
+        let urlTokens = window.location.href.split('/')
+        let getRouteUrl = urlTokens[urlTokens.length - 1]
+        // console.log(getRouteUrl, 'getRouteUrl!!')
         return (
             <div className='rendering-tweet-data-container' id={ID}>
 
                 <div className='when-has-extra-tweet'>
                     
-                    <TweetContentsMarkUp tweetType={'een'} ID={ID} removeFromLikedTweets={removeFromLikedTweets} handleLikedTweets={handleLikedTweets} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} feedParentInitialReplyCount={handleInitialReplyCount} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} content={content} handleQuoteTweetID={handleQuoteTweetID} gifFile={gifFile} picture={picture} tweetPoll={tweetPoll} tweetText={tweetText} fromTweetThread={fromTweetThread} tweetPrivacy={tweetPrivacy} handleThreadedTweetData={handleThreadedTweetData} quotedTweetID={quotedTweetID} handlePollVotesCount={handlePollVotesCount} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} created={created} />
+                    { getRouteUrl != 'likes' && <TweetContentsMarkUp tweetType={'een'} ID={ID} removeFromLikedTweets={removeFromLikedTweets} handleLikedTweets={handleLikedTweets} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} feedParentInitialReplyCount={handleInitialReplyCount} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} content={content} handleQuoteTweetID={handleQuoteTweetID} gifFile={gifFile} picture={picture} tweetPoll={tweetPoll} tweetText={tweetText} fromTweetThread={fromTweetThread} tweetPrivacy={tweetPrivacy} handleThreadedTweetData={handleThreadedTweetData} quotedTweetID={quotedTweetID} handlePollVotesCount={handlePollVotesCount} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} created={created} />}
 
-                    <div id='show-connecting-line' style={{ height: lineHeight && lineHeight }}></div>
+                    { getRouteUrl != 'likes' && <div id='show-connecting-line' style={{ height: lineHeight && lineHeight }}></div>}
 
                     <TweetContentsMarkUp tweetType={'twee'} extra={'extra'} ID={ID} removeFromLikedTweets={removeFromLikedTweets} handleLikedTweets={handleLikedTweets} handleReplyCount={handleReplyCount} handleAnalysingTweetID={handleAnalysingTweetID} feedParentInitialReplyCount={handleInitialReplyCount} handleQuotedFromRetweetModal={handleQuotedFromRetweetModal} listOfRetweetedQuotes={listOfRetweetedQuotes} content={content} handleQuoteTweetID={handleQuoteTweetID} extraGifFile={extraGifFile} extraPictureFile={extraPictureFile} tweetText={extraTweet} tweetPoll={extraPoll} tweetPrivacy={tweetPrivacy} handleThreadedTweetData={handleThreadedTweetData} quotedTweetID={quotedTweetID} handlePollVotesCount={handlePollVotesCount} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} currentUser={currentUser} handleAnalysingTweetID={handleAnalysingTweetID} handlePinnedTweetID={handlePinnedTweetID} currentUserProfileInfo={currentUserProfileInfo} created={created} />
                 </div>

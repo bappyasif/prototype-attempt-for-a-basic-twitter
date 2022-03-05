@@ -615,6 +615,7 @@
   /* padding-left: 60px; */
   font-size: larger;
   line-height: 2em;
+  width: 87%;
 }
 
 #explicit-trend-tweets-container #trends-header-component #show-search-results-container {
