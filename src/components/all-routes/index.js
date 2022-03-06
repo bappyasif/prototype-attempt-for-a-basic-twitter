@@ -488,7 +488,7 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                                 {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
                                 <RightSideNavigationPanel tweetData={tweetData} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
-                            <AllMedias tweetData={tweetData} hideFirstPollReply={hideFirstPollReply} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
+                            <AllMedias tweetData={tweetData} handlePinnedTweetID={handlePinnedTweetID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)
@@ -503,7 +503,7 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                                 <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />
                                 <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} hideFirstPollReply={hideFirstPollReply} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
-                            <LikedTweets likedTweets={likedTweets} currentUser={currentUser} handleLikedTweets={handleLikedTweets} removeFromLikedTweets={removeFromLikedTweets} handleThreadedTweetData={handleThreadedTweetData} />
+                            <LikedTweets likedTweets={likedTweets} currentUser={currentUser} handleLikedTweets={handleLikedTweets} removeFromLikedTweets={removeFromLikedTweets} handleThreadedTweetData={handleThreadedTweetData} handlePinnedTweetID={handlePinnedTweetID} removeSpeceficArrayItem={removeSpeceficArrayItem} updateTweetPrivacy={updateTweetPrivacy} handleAnalysingTweetID={handleAnalysingTweetID} />
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)

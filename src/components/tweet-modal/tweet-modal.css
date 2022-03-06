@@ -46,6 +46,15 @@
   position: relative;
 }
 
+#middle-content #addtional-tweet-extension-line {
+  width: 2px;
+  background-color: silver;
+  position: absolute;
+  height: 36px;
+  top: 40px;
+  left: 42.2px;
+}
+
 #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info,
 #tweet-modal #middle-content #analysing-user-tweet-wrapper .poll-info .left-view  {
   display: flex;
@@ -177,6 +186,11 @@
   width: 33px !important;
   height: 33px !important;
   border-radius: 50%;
+  margin-left: -4px;
+}
+
+#middle-content #analysing-user-tweet-wrapper #user-info-wrapper #profile-name {
+  margin-left: 11px;
 }
 
 #middle-content #analysing-user-tweet-wrapper #user-info-wrapper #published-date {

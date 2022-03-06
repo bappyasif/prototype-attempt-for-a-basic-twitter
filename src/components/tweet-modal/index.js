@@ -21,6 +21,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
     let [isBothTextareaExist, setIsBothTextareaExist] = useState(false);
+    let [extraPaddingTop, setExtraPaddingTop] = useState(null)
 
     // let [toggleModality, setToggleModality] = useState(false);
     let [tweetOptions, setTweetOptions] = useState(false);
@@ -226,9 +227,16 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
             calc = footerDiv.clientHeight + referencePoint01.clientHeight - 53
             calc && setLineHeight(calc)
             console.log('4th')
-        }
-        let tweetModal = document.querySelector('#tweet-modal');
-        setModalHeight(tweetModal);
+        } 
+        // else if(analysingTweetRef) {
+        //     // setLineHeight(prevHeight => prevHeight+analysingTweetRef .clientHeight)
+        //     setExtraPaddingTop(analysingTweetRef.clientHeight)
+        //     console.log(analysingTweetRef.clientHeight, 'analysingTweetRef .clientHeight')
+        // }
+        // let tweetModal = document.querySelector('#tweet-modal');
+        // setModalHeight(tweetModal.clientHeight);
+
+        // console.log(analysingTweetRef, analysingTweetRef.clientHeight)
 
         // analysingTweetRef && setLineHeight(279)
         // if (analysingTweetRef) {
@@ -241,6 +249,14 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
         // analysingTweetRef && console.log(analysingTweetRef, analysingTweetRef.clientHeight, tweetModal.clientHeight)
 
     }, [extraTweetText, isExtraTweetClicked])
+
+    useEffect(() => {
+        quoteTweetData && !quotedFromRetweetModal && setExtraPaddingTop(140.1)
+        quoteTweetData && quotedFromRetweetModal && setLineHeight(prevHeight => prevHeight+141)
+        quoteTweetData && quotedFromRetweetModal && console.log('quoteTweetData && quotedFromRetweetModal && s', lineHeight)
+        // quoteTweetData && quotedFromRetweetModal && setExtraPaddingTop(141)
+        // quoteTweetData && !quotedFromRetweetModal && console.log(quoteTweetData, 'quoteTweetData && !quotedFromRetweetModal!!')
+    }, [quoteTweetData, quotedFromRetweetModal, isPrimaryTweetClicked, isExtraTweetClicked, tweetText, extraTweetText])
 
     return (
         <div id='tweet-modal'
@@ -257,7 +273,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
             <div id='middle-content'>
                 {scheduleStamp && scheduleStamp}
                 {quoteTweetData && !quotedFromRetweetModal && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} forModal={true} />}
-                {/* {quoteTweetData && !quotedFromRetweetModal && <div id='addtional-tweet-line'></div>} */}
+                {quoteTweetData && !quotedFromRetweetModal && <div id='addtional-tweet-extension-line' style={{width: '2px', backgroundColor: 'silver'}}></div>}
                 {/* {quoteTweetData && <div id='addtional-tweet-line' style={{height: ((quoteTweetData.medias.gif && quoteTweetData.medias.gif) || (quoteTweetData.medias.picture && quoteTweetData.medias.picture)) && '324px'}} ></div>} */}
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />
@@ -268,7 +284,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
 
                 {quoteTweetData && quotedFromRetweetModal && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} forModal={true} quotedFromRetweetModal={quotedFromRetweetModal} />}
 
-                <div id='extension-line' style={{ height: lineHeight && lineHeight, width: '2px', backgroundColor: 'silver', position: 'absolute', top: '69px', left: '42px' }}></div>
+                { isBothTextareaExist && <div id='extension-line' style={{ height: lineHeight && lineHeight, width: '2px', backgroundColor: 'silver', position: 'absolute', top: extraPaddingTop ? `${extraPaddingTop}px` : '69px', left: '42px' }}></div>}
 
                 {
 

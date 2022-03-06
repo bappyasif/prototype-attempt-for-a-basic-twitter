@@ -24,6 +24,7 @@ function ComponentsContainer() {
     let [quoteTweetID, setQuoteTweetID] = useState(false)
     let [quoteTweetData, setQuoteTweetData] = useState(null)
     let [replyCount, setReplyCount] = useState(0)
+    // let [tweetPrivacy, setTweetPrivacy] = useState('01');
     let [pinnedTweetID, setPinnedTweetID] = useState(null)
     let [pinnedTweetData, setPinnedTweetData] = useState(null)
     let [initialPinnedTweetData, setInitialPinnedTweetData] = useState(null)
@@ -61,6 +62,8 @@ function ComponentsContainer() {
     let [likedTweets, setLikedTweets] = useState([])
 
     let addToLikedTweets = (newTweet) => setLikedTweets(prevTweets => prevTweets.concat(newTweet))
+
+    useEffect(() => userDocs && likedTweets.length && console.log(likedTweets, userDocs), [userDocs, likedTweets])
     
     let handleLikedTweets = (id) => {
         let newList = userDocs.map(item => {
@@ -300,6 +303,16 @@ function ComponentsContainer() {
         setUserDocs(newlyMappedUserDocs);
         // console.log(newlyMappedUserDocs, 'newlyMappedUserDocs', whichData, idx, newValue, checkStr)
     }
+
+    // when tweets are deleted from likes routes, they also jneeds to be flushed from likedTweets list
+    useEffect(() => {
+        // nowDeletingTweetID && likedTweets.length && removeFromLikedTweets(nowDeletingTweetID)
+        if(nowDeletingTweetID && likedTweets.length) {
+            let newList = likedTweets.filter(item => item.id != nowDeletingTweetID)
+            setLikedTweets(newList)
+            // console.log(newList, 'newList!!!!')
+        }
+    }, [nowDeletingTweetID, likedTweets])
 
     useEffect(() => {
         adjustListData && membersList && listName && updateExistingListData(listName)
@@ -548,6 +561,9 @@ function ComponentsContainer() {
         // updating this in existing tweets currently on DOM
         setUserDocs(prevData => prevData.map(item => item.id == idx ? {...item, privacy: privacyOption} : {...item}))
         updateDataInFirestore(currentUser, idx, {privacy: privacyOption})
+        if (likedTweets.length) {
+            setLikedTweets(prevData => prevData.map(item => item.id == idx ? {...item, privacy: privacyOption} : {...item}))
+        }
     }
 
     let getSpeceficItemFromUserDocs = (idx, dataLoader) => {
