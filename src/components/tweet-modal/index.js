@@ -251,9 +251,12 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
     }, [extraTweetText, isExtraTweetClicked])
 
     useEffect(() => {
-        quoteTweetData && !quotedFromRetweetModal && setExtraPaddingTop(140.1)
-        quoteTweetData && quotedFromRetweetModal && setLineHeight(prevHeight => prevHeight+141)
-        quoteTweetData && quotedFromRetweetModal && console.log('quoteTweetData && quotedFromRetweetModal && s', lineHeight)
+        // quoteTweetData && !quotedFromRetweetModal && setExtraPaddingTop(140.1)
+        quoteTweetData && !quotedFromRetweetModal && setExtraPaddingTop((quoteTweetData[0].medias.gif || quoteTweetData[0].medias.picture) ? 442.1 : 140.1)
+        // (quoteTweetData[0].medias.gif || quoteTweetData[0].medias.picture) && !quotedFromRetweetModal && setExtraPaddingTop(442.1)
+        // quoteTweetData && quotedFromRetweetModal && setLineHeight(prevHeight => prevHeight+141)
+        quoteTweetData && quotedFromRetweetModal && setLineHeight(prevHeight => (quoteTweetData[0].medias.gif || quoteTweetData[0].medias.picture) ? prevHeight+420 : prevHeight+141)
+        // quoteTweetData && quotedFromRetweetModal && console.log('quoteTweetData && quotedFromRetweetModal && s', lineHeight)
         // quoteTweetData && quotedFromRetweetModal && setExtraPaddingTop(141)
         // quoteTweetData && !quotedFromRetweetModal && console.log(quoteTweetData, 'quoteTweetData && !quotedFromRetweetModal!!')
     }, [quoteTweetData, quotedFromRetweetModal, isPrimaryTweetClicked, isExtraTweetClicked, tweetText, extraTweetText])
@@ -273,7 +276,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
             <div id='middle-content'>
                 {scheduleStamp && scheduleStamp}
                 {quoteTweetData && !quotedFromRetweetModal && <RenderUserTweet speceficTweetData={quoteTweetData} currentUser={currentUser} pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} forModal={true} />}
-                {quoteTweetData && !quotedFromRetweetModal && <div id='addtional-tweet-extension-line' style={{width: '2px', backgroundColor: 'silver'}}></div>}
+                {quoteTweetData && !quotedFromRetweetModal && <div id='addtional-tweet-extension-line' style={{width: '2px', backgroundColor: 'silver', height: (quoteTweetData[0].medias.gif || quoteTweetData[0].medias.picture) && '310px', top: (quoteTweetData[0].medias.gif || quoteTweetData[0].medias.picture) && '47px'}}></div>}
                 {/* {quoteTweetData && <div id='addtional-tweet-line' style={{height: ((quoteTweetData.medias.gif && quoteTweetData.medias.gif) || (quoteTweetData.medias.picture && quoteTweetData.medias.picture)) && '324px'}} ></div>} */}
                 <div id='header-section'>
                     <img id='profile-pic' src='https://picsum.photos/200/300' />

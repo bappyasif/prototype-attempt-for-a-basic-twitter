@@ -63,7 +63,7 @@ function ComponentsContainer() {
 
     let addToLikedTweets = (newTweet) => setLikedTweets(prevTweets => prevTweets.concat(newTweet))
 
-    useEffect(() => userDocs && likedTweets.length && console.log(likedTweets, userDocs), [userDocs, likedTweets])
+    // useEffect(() => userDocs && likedTweets.length && console.log(likedTweets, userDocs), [userDocs, likedTweets])
     
     let handleLikedTweets = (id) => {
         let newList = userDocs.map(item => {
@@ -75,13 +75,13 @@ function ComponentsContainer() {
             return item
         })
         setUserDocs(newList)
-        console.log('aadd')
+        // console.log('aadd')
     }
 
     let removeFromLikedTweets = (tweetID) => {
         let newFilteredList = likedTweets.filter(item => item.id != tweetID)
         setLikedTweets(newFilteredList)
-        console.log('delete')
+        // console.log('delete')
         let newList = userDocs.map(item => {
             if(item.id == tweetID) {
                 item.liked = false
@@ -95,8 +95,8 @@ function ComponentsContainer() {
     let handleExplicitTrendSearchText = (value) => setExplicitTrendSearchText(value)
 
     // uncomment this to extract data again
-    // let data = useReuseableDataExtraction()
-    let data;
+    let data = useReuseableDataExtraction()
+    // let data;
 
     // console.log(data, 'data fc!!', listOfRandomUsers)
 

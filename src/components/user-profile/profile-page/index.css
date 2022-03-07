@@ -1357,6 +1357,7 @@
 
 #components-container #retweeted-quote-thread-container #component-wrapper #svg-icon {
   margin-right: 40px;
+  transform: scale(1.5);
 }
 
 #components-container #retweeted-quote-thread-container #quotes-with-comments-wrapper .rendering-tweet-data-container {
@@ -1364,6 +1365,10 @@
   padding-bottom: 11px !important;
   border-bottom: 1px solid;
   margin-bottom: 4px;
+}
+
+#components-container #retweeted-quote-thread-container #quotes-with-comments-wrapper .rendering-tweet-data-container:hover {
+  background-color: whitesmoke;
 }
 
 /* tweet thread styles here */
@@ -1378,6 +1383,8 @@
 #components-container #retweeted-quote-thread-container #component-wrapper {
   display: flex;
   align-items: center;
+  font-size: xx-large;
+  padding-left: 11px;
 }
 
 #components-container #show-tweet-thread-container #component-wrapper #component-title {

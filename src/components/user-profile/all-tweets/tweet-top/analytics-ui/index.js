@@ -247,7 +247,7 @@ export let RenderUserTweet = ({ speceficTweetData, currentUser, pollVotesCount, 
 
     return (
         <div id='analysing-user-tweet-wrapper' style={quotedFromRetweetModal && retweetModalQuoteStyles}>
-            <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={(created && created.seconds) || (speceficTweetData.created.seconds)} quotedFromRetweetModal={quotedFromRetweetModal} />
+            <RenderTweetUserInfo name={neededInfo.length && neededInfo[0].content} tweetPostedDate={(created && created.seconds) || (speceficTweetData.created.seconds)} quotedFromRetweetModal={quotedFromRetweetModal} profilePicture={neededInfo[1]?.content} />
             {/* <RenderAnalysingTweetText tweetText={tweetText} /> */}
             {/* <RenderUserTweetText tweetText={tweetText|| speceficTweetData.tweetText} quotedFromRetweetModal={quotedFromRetweetModal} /> */}
             {/* <RenderUserTweetText tweetText={quotedFromRetweetModal && extraTweet ? extraTweet : extraTweet ? extraTweet : tweetText} quotedFromRetweetModal={quotedFromRetweetModal} /> */}
@@ -299,7 +299,7 @@ let RenderUserTweetMedias = ({ medias, quotedFromRetweetModal }) => {
 //     )
 // }
 
-let RenderTweetUserInfo = ({ name, profileHandle, tweetPostedDate, quotedFromRetweetModal }) => {
+let RenderTweetUserInfo = ({ name, profileHandle, tweetPostedDate, quotedFromRetweetModal, profilePicture }) => {
     // let dateFormatted = ''
 
     let processCreatedDateFormat = () => {
@@ -313,7 +313,7 @@ let RenderTweetUserInfo = ({ name, profileHandle, tweetPostedDate, quotedFromRet
     }
     return (
         <div id='user-info-wrapper'>
-            <img id={quotedFromRetweetModal && 'profile-pic-for-retweet-quote-tweet'} style={{ width: '20px', height: '20px', marginRight: '9px' }} src='https://picsum.photos/200/300' />
+            <img id={quotedFromRetweetModal && 'profile-pic-for-retweet-quote-tweet'} style={{ width: '20px', height: '20px', marginRight: '9px' }} src={profilePicture || 'https://picsum.photos/200/300'} />
             <div id='profile-name' style={{ marginRight: '8px' }}>{name || 'profile name'}</div>
             <div id='profile-handle' style={{ marginRight: '8px' }}>@{profileHandle || 'profile handle'}</div>
             <div id='text-separator' style={{ marginRight: '8px', fontSize: 'small', color: 'silver' }}> - </div>

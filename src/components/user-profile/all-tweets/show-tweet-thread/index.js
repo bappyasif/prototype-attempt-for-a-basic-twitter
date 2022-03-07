@@ -599,7 +599,7 @@ export let HeaderComponent = ({ headerText }) => {
     let history = useHistory()
     return (
         <div id='component-wrapper'>
-            <div id='svg-icon' onClick={() => history.goBack()}>{backIcon()}</div>
+            <div id='svg-icon' onClick={() => history.goBack()} style={{transform: 'scale(1.5)'}} >{backIcon()}</div>
             <div id='component-title'>{headerText}</div>
         </div>
     )

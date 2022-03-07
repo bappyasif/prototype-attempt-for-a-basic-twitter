@@ -207,7 +207,7 @@ let ShowRetweetedQuote = ({ quoteTweetID, currentUser, handleThreadedTweetData }
     )
 }
 
-let RenderPollFirstReply = ({currentUser, docID, hideFirstPollReply, handleLikedTweets}) => {
+let RenderPollFirstReply = ({currentUser, docID, hideFirstPollReply, handleLikedTweets, showExtensionLine, updateTweetPrivacy, currentUserProfileInfo}) => {
     let [documentDataset, setDocumentDataset] = useState(null)
     let [repliedtweetData, setRepliedTweetData] = useState(null)
 
@@ -215,13 +215,18 @@ let RenderPollFirstReply = ({currentUser, docID, hideFirstPollReply, handleLiked
 
     useEffect(() => documentDataset && readDocumentFromFirestoreSubCollection(currentUser, documentDataset.repliedTweets[0], setRepliedTweetData), [documentDataset])
 
-    useEffect(() => repliedtweetData && hideFirstPollReply(repliedtweetData.id), [repliedtweetData])
+    // useEffect(() => repliedtweetData && hideFirstPollReply(repliedtweetData.id), [repliedtweetData])
+
+    useEffect(() => {
+        repliedtweetData && hideFirstPollReply(repliedtweetData.id)
+        repliedtweetData && showExtensionLine(true)
+    }, [repliedtweetData])
 
     // documentDataset && console.log(documentDataset, 'documentDataset!!', currentUser, docID, repliedtweetData, documentDataset.repliedTweets, documentDataset.repliedTweets[0])
     
     return (
         <div id='poll-first-reply-wrapper'>
-            {repliedtweetData && <RenderTweetDataComponent content={sanitizeDatasetForRendering(repliedtweetData)} currentUser={currentUser} pollFirstReply={true} handleLikedTweets={handleLikedTweets} />}
+            {repliedtweetData && <RenderTweetDataComponent content={sanitizeDatasetForRendering(repliedtweetData)} currentUser={currentUser} pollFirstReply={true} handleLikedTweets={handleLikedTweets} updateTweetPrivacy={updateTweetPrivacy} currentUserProfileInfo={currentUserProfileInfo} />}
             {/* {repliedtweetData && <TweetContentsMarkUp content={sanitizeDatasetForRendering(repliedtweetData)} currentUser={currentUser} pollFirstReply={true} />} */}
         </div>
     )
@@ -279,6 +284,8 @@ export let RenderTweetDataComponent = ({ content, removeFromLikedTweets, handleL
 
     let [lineHeight, setLineHeight] = useState(null)
 
+    let [showExtensionForFirstPollReply, setShowExtensionForFirstPollReply] = useState(false)
+
     let calculateLineHeight = () => {
         let referencePoints = document.querySelectorAll('.rendering-tweet-data-container')
         let reference01;
@@ -298,12 +305,21 @@ export let RenderTweetDataComponent = ({ content, removeFromLikedTweets, handleL
                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 20;
             } else if (!gifFile && extraGifFile) {
                 calc = reference01 && reference03 && reference01.clientHeight - reference03.clientHeight - reference02.clientHeight - 20;
-            } else if (gifFile || extraGifFile) {
+            } else if (gifFile) {
                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 281;
-            } else if (tweetPoll || extraPoll) {
-                calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 20;
+            } 
+            // else if(showExtensionForFirstPollReply) {
+            //     calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 18.2;
+            //     // console.log('here!!')
+            // } 
+            else if (tweetPoll || extraPoll) {
+                // calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 20;
+                calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight - 18.2;
+                // calc += (tweetPrivacy == '02' || tweetPrivacy == '03') ? 18.2 : - 9.2;
+                // console.log('but,here!!')
             } else {
                 calc = reference01 && reference03 && reference01.clientHeight - reference02.clientHeight - reference03.clientHeight + 6;
+                // console.log('here!!')
             }
 
             // console.log(calc, 'calc', ID, reference01.clientHeight)
@@ -318,9 +334,13 @@ export let RenderTweetDataComponent = ({ content, removeFromLikedTweets, handleL
         !calc < 0 && setLineHeight(calc)
     }
 
+    // useEffect(() => tweetPrivacy && setLineHeight(prevHeight => (tweetPrivacy == '02' || tweetPrivacy == '03') ? prevHeight + 28.1 : prevHeight - 28.1), [tweetPrivacy])
+
+    useEffect(() => showExtensionForFirstPollReply && setLineHeight((tweetPrivacy == '02' || tweetPrivacy == '03') ? 216 : 178), [[showExtensionForFirstPollReply]])
+
     useEffect(() => content.replyCount >= 1 && tweetPoll[0] && calculateLineHeightForFirstPollReply(), [tweetPoll])
 
-    useEffect(() => (extraTweet || extraGifFile || extraPictureFile || extraPoll) && calculateLineHeight(), [extraTweet, extraGifFile, extraPictureFile, extraPoll, ID])
+    useEffect(() => (extraTweet || extraGifFile || extraPictureFile || extraPoll) && calculateLineHeight(), [extraTweet, extraGifFile, extraPictureFile, extraPoll, ID, tweetPrivacy, tweetPoll])
 
     let handleInitialReplyCount = (val) => setInitialReplyCount(val)
 
@@ -329,6 +349,8 @@ export let RenderTweetDataComponent = ({ content, removeFromLikedTweets, handleL
     // repliedTweets && console.log(repliedTweets, replyCount, content.replyCount, 'some checks', ID, created)
     // console.log(quotedTweetID, 'check!!', showPinnedTweetTag, initialReplyCount, picture, replyCount, retweetedQuote, content, fromTweetThread)
     // console.log(tweetPoll, '!!', tweetPoll.choice01)
+
+    // showExtensionForFirstPollReply && console.log(showExtensionForFirstPollReply, lineHeight, 'chk chk!!')
 
     let history = useHistory()
 
@@ -353,10 +375,11 @@ export let RenderTweetDataComponent = ({ content, removeFromLikedTweets, handleL
                 
                 {/* { content.repliedTweets && content.repliedTweets.length == 1 && (tweetPoll || extraPoll) && content.repliedTweets.length == 1 && <RenderPollFirstReply currentUser={currentUser} docID={repliedTweets[0]} /> } */}
                 
-                {content.replyCount >= 1 && (tweetPoll[0].choice01) && <div id='show-connecting-line' style={{ height: lineHeight && lineHeight }}></div>}
+                {/* {content.replyCount >= 1 && (tweetPoll[0].choice01) && <div id='show-connecting-line' style={{ height: lineHeight && lineHeight }}></div>} */}
+                {(content.replyCount >= 1 && (tweetPoll[0].choice01) || showExtensionForFirstPollReply) && <div id='show-connecting-line' style={{ height: lineHeight && lineHeight }}></div>}
 
                 {/* { content.replyCount == 1 && (tweetPoll[0].choice01) && <RenderPollFirstReply currentUser={currentUser} docID={ID} hideFirstPollReply={hideFirstPollReply} /> } */}
-                { content.replyCount >= 1 && (tweetPoll[0].choice01) && <RenderPollFirstReply currentUser={currentUser} docID={ID} removeFromLikedTweets={removeFromLikedTweets} handleLikedTweets={handleLikedTweets} hideFirstPollReply={hideFirstPollReply} replyCount={content.replyCount} /> }
+                { content.replyCount >= 1 && (tweetPoll[0].choice01) && <RenderPollFirstReply currentUser={currentUser} docID={ID} removeFromLikedTweets={removeFromLikedTweets} handleLikedTweets={handleLikedTweets} hideFirstPollReply={hideFirstPollReply} replyCount={content.replyCount} showExtensionLine={setShowExtensionForFirstPollReply} updateTweetPrivacy={updateTweetPrivacy} currentUserProfileInfo={currentUserProfileInfo} /> }
             </div>
         )
     }
