@@ -8,6 +8,10 @@
   margin-top: 4px;
 }
 
+#top-navigation-menu-container .menu-default-view{ 
+  width: -webkit-fill-available;
+}
+
 #top-navigation-menu-container .menu-default-view, #top-navigation-menu-container .menu-active {
   padding: 0.8em;
   min-width: 101px;

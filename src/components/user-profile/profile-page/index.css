@@ -476,6 +476,8 @@
 .rendering-tweet-data-container .left-side .in-tweet-profile-pic {
   border-radius: 56px;
   margin: 4px 0px 0px 6px;
+  /* border: solid 1.1px silver;
+  padding: 4px; */
 }
 
 .rendering-tweet-data-container .right-side {
