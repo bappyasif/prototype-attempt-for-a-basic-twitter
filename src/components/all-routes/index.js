@@ -282,7 +282,7 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
 
                             firstTweetHasMedia={firstTweetHasMedia} setFirstTweetHasMedia={setFirstTweetHasMedia} secondTweetHasMedia={secondTweetHasMedia} setSecondTweetHasMedia={setSecondTweetHasMedia} firstTweetHasPoll={firstTweetHasPoll} setFirstTweetHasPoll={setFirstTweetHasPoll} secondTweetHasPoll={secondTweetHasPoll} setSecondTweetHasPoll={setSecondTweetHasPoll}
 
-                            pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} selectedTaggedPlace={selectedTaggedPlace} quotedFromRetweetModal={quotedFromRetweetModal}
+                            pollVotesCount={pollVotesCount} handlePollVotesCount={handlePollVotesCount} selectedTaggedPlace={selectedTaggedPlace} quotedFromRetweetModal={quotedFromRetweetModal} currentUserProfileInfo={currentUserProfileInfo}
                         />
                         <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>

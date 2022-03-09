@@ -13,7 +13,7 @@ import { ShowCurrentlyTaggedPlace } from '../user-profile/all-tweets/show-tweet-
 
 const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
 
-function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace, handlePollVotesCount, pollVotesCount, handleQuoteTweetID, quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
+function TweetModal({ currentUserProfileInfo, fromHomePage, quotedFromRetweetModal, selectedTaggedPlace, handlePollVotesCount, pollVotesCount, handleQuoteTweetID, quoteTweetData, currentUser, firstTweetHasMedia, setFirstTweetHasMedia, secondTweetHasMedia, setSecondTweetHasMedia, firstTweetHasPoll, setFirstTweetHasPoll, secondTweetHasPoll, setSecondTweetHasPoll, opacity, setOpacity, setNewDataStatus, isScheduleIconClicked, selectedFile, extraSelectedFile, setSelectedFile, setExtraSelectedFile, gifFile, extraGifFile, setGifFile, setExtraGifFile, toggleModality, handleTweetModalToggle, tweetText, setTweetText, extraTweetText, setExtraTweetText, tweetPrivacy, setTweetPrivacy, readyTweetPublish, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, inputTextChoice05, setInputTextChoice05, inputTextChoice06, setInputTextChoice06, inputTextChoice07, setInputTextChoice07, inputTextChoice08, setInputTextChoice08, scheduleStamp, setScheduleStamp, mediaDescriptionText, setMediaDescriptionText }) {
     let [isPrimaryTweetClicked, setIsPrimaryTweetClicked] = useState(false);
     let [isExtraTweetClicked, setIsExtraTweetClicked] = useState(false);
     let [addExtraTweetClicked, setAddExtraTweetClicked] = useState(false);
@@ -176,6 +176,8 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
         quoteTweetData && quotedFromRetweetModal && setLineHeight(prevHeight => (quoteTweetData[0].medias.gif || quoteTweetData[0].medias.picture) ? prevHeight+420 : prevHeight+141)
     }, [quoteTweetData, quotedFromRetweetModal, isPrimaryTweetClicked, isExtraTweetClicked, tweetText, extraTweetText])
 
+    // console.log(currentUserProfileInfo, 'currentUserProfileInfo!!')
+
     return (
         <div id='tweet-modal'
             style={{ display: toggleModality ? 'block' : 'none', zIndex: '9999', height: modalHeight && modalHeight }}
@@ -191,7 +193,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
                 {quoteTweetData && !quotedFromRetweetModal && <div id='addtional-tweet-extension-line' style={{width: '2px', backgroundColor: 'silver', height: (quoteTweetData[0].medias.gif || quoteTweetData[0].medias.picture) && '310px', top: (quoteTweetData[0].medias.gif || quoteTweetData[0].medias.picture) && '47px'}}></div>}
                 
                 <div id='header-section'>
-                    <img id='profile-pic' src='https://picsum.photos/200/300' />
+                    <img id='profile-pic' src={currentUserProfileInfo?.[6].content || 'https://picsum.photos/200/300'} />
                     <div id='primary-tweet-view' style={{ opacity: isExtraTweetClicked ? '.6' : '1' }}>{<TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={quotedFromRetweetModal ? 'Add a comment' : isPollIconClicked ? "Ask a question" : (quoteTweetData && quoteTweetData.length) ? 'Add another Tweet' : "What's happening?"} tweetText={tweetText} setTweetText={setTweetText} setExtraTweetClicked={setIsExtraTweetClicked} setPrimaryTweetClicked={setIsPrimaryTweetClicked} quotedFromRetweetModal={quotedFromRetweetModal} />}</div>
                 </div>
 
@@ -203,7 +205,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
                     (!secondTweetHasMedia && !firstTweetHasMedia && !secondTweetHasGif && !firstTweetHasGif && addExtraTweetClicked && !isPrimaryTweetClicked && !firstTweetHasPoll && !secondTweetHasPoll)
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
-                        {(addExtraTweetClicked) && <img id='profile-pic' src='https://picsum.photos/200/300' />}
+                        {(addExtraTweetClicked) && <img id='profile-pic' src={currentUserProfileInfo?.[6].content || 'https://picsum.photos/200/300'} />}
                         {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : quoteTweetData ? 'Add another Tweet' : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
                     </div>
                 }
@@ -236,7 +238,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
                     ((firstTweetHasMedia || firstTweetHasPoll || firstTweetHasGif) && addExtraTweetClicked && !isPrimaryTweetClicked)
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
-                        {(addExtraTweetClicked) && <img id='profile-pic' src='https://picsum.photos/200/300' />}
+                        {(addExtraTweetClicked) && <img id='profile-pic' src={currentUserProfileInfo?.[6].content || 'https://picsum.photos/200/300'} />}
                         {(addExtraTweetClicked) && <TweetTextInput height={!firstTweetHasPoll && isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={((!firstTweetHasPoll && isPollIconClicked) || (firstTweetHasPoll && isPollIconClickedForExtraTweet)) ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
                     </div>
                 }
@@ -245,7 +247,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
                     (secondTweetHasMedia && !firstTweetHasMedia && !isPrimaryTweetClicked)
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
-                        {(addExtraTweetClicked) && <img id='profile-pic' src='https://picsum.photos/200/300' />}
+                        {(addExtraTweetClicked) && <img id='profile-pic' src={currentUserProfileInfo?.[6].content || 'https://picsum.photos/200/300'} />}
                         {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
                     </div>
                 }
@@ -294,7 +296,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
                     (firstTweetHasMedia && isPrimaryTweetClicked && !secondTweetHasMedia)
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
-                        {(addExtraTweetClicked) && <img id='profile-pic' src='https://picsum.photos/200/300' />}
+                        {(addExtraTweetClicked) && <img id='profile-pic' src={currentUserProfileInfo?.[6].content || 'https://picsum.photos/200/300'} />}
                         {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
                     </div>
                 }
@@ -303,7 +305,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
                     (secondTweetHasMedia && isPrimaryTweetClicked)
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
-                        {(addExtraTweetClicked) && <img id='profile-pic' src='https://picsum.photos/200/300' />}
+                        {(addExtraTweetClicked) && <img id='profile-pic' src={currentUserProfileInfo?.[6].content || 'https://picsum.photos/200/300'} />}
                         {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
                     </div>
                 }
@@ -312,7 +314,7 @@ function TweetModal({ fromHomePage, quotedFromRetweetModal, selectedTaggedPlace,
                     (!secondTweetHasMedia && !firstTweetHasMedia && isPrimaryTweetClicked && addExtraTweetClicked)
                     &&
                     <div id='extra-tweet-view' className={(isBothTextareaExist && isPrimaryTweetClicked) ? 'extra-tweet-bottom-view' : ''} style={{ opacity: isPrimaryTweetClicked ? '.6' : '1', position: 'initial' }}>
-                        {(addExtraTweetClicked) && <img id='profile-pic' src='https://picsum.photos/200/300' />}
+                        {(addExtraTweetClicked) && <img id='profile-pic' src={currentUserProfileInfo?.[6].content || 'https://picsum.photos/200/300'} />}
                         {(addExtraTweetClicked) && <TweetTextInput height={isPollIconClicked ? "41.6px" : "81.6px"} placeholderText={isPollIconClicked ? "Ask a question...." : "What's happening?"} tweetText={extraTweetText} setTweetText={setExtraTweetText} setPrimaryTweetClicked={setIsPrimaryTweetClicked} setExtraTweetClicked={setIsExtraTweetClicked} setBoth={setIsBothTextareaExist} />}
                     </div>
                 }
