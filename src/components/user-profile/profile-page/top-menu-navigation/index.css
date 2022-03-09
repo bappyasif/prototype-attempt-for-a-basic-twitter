@@ -17,6 +17,7 @@
   min-width: 101px;
   color: gray;
   text-decoration: none;
+  width: 25%;
 }
 
 #top-navigation-menu-container #tweets:hover,
