@@ -1,9 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
-import { beginRecaptchaForVerification, userLoginWithFirebase, userLoginWithPhone, userSignInWithSessionPersistence } from "../firebase-auths";
+import { beginRecaptchaForVerification, userLoginWithPhone, userSignInWithSessionPersistence } from "../firebase-auths";
 import "./styles/index.css";
-// import { userLoginWithFirebase } from "./user-login-with-firebase";
-// import { userLoginWithPhone } from "./user-login-with-phone";
 
 function LoginPage({ currentUser, handleCurrentUser }) {
   let announcementText =
@@ -18,7 +16,6 @@ function LoginPage({ currentUser, handleCurrentUser }) {
         document.querySelector("#announcement-div").textContent =
           announcementText;
       } else if (userId && userPassword) {
-        // window.open("/home", "_blank");
         window.open("/user-profile", "_blank");
       } else {
         document.querySelector("#announcement-div").textContent = "";
@@ -30,7 +27,7 @@ function LoginPage({ currentUser, handleCurrentUser }) {
   let [announcement, setAnnouncement] = useState('')
 
   let handleAnnouncement = message => {
-    console.log(message, '<here>', message.split(':')[1])
+    // console.log(message, '<here>', message.split(':')[1])
     setAnnouncement(message.split(':')[1])
   }
 
@@ -45,9 +42,6 @@ function LoginPage({ currentUser, handleCurrentUser }) {
       <UserLoginInfoComponent currentUser={currentUser} handleCurrentUser={handleCurrentUser} handleAnnouncement={handleAnnouncement} />
 
       <div id="additional-info">
-        {/* <a href="/begin-password-reset" target="_blank">
-          forgot password?
-        </a> */}
         <Link to='/begin-password-reset'>
           forgot password?
         </Link>
@@ -92,18 +86,11 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser, handleAnnounceme
     } else {
       setBothPresent(false)
     }
-    // showAnnouncement();
   }, [userID, userPassword]);
 
-  // let confirmLogin = () => userLoginWithFirebase(userID, userPassword)
-  // let confirmLogin = () => userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
   let confirmLogin = (evt) => {
-    // !loginWithPhoneNumber && userLoginWithFirebase(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser, handleAnnouncement)
     !loginWithPhoneNumber && userSignInWithSessionPersistence(userID, userPassword, handleSigninStatus, handleProfileCompletion, handleCurrentUser, handleAnnouncement)
-    // console.log(evt.target, '??')
-    // loginWithPhoneNumber && userLoginWithPhone(userID, evt.target)
     loginWithPhoneNumber && beginRecaptchaForVerification(evt.target, userID, handleShowOtpModal)
-    // loginWithPhoneNumber && handleShowOtpModal()
   }
   let renderMarkup = () => {
     return (
@@ -123,57 +110,24 @@ let UserLoginInfoComponent = ({ currentUser, handleCurrentUser, handleAnnounceme
 
   return (
     <div id="login-info">
-      {/* <ReturnAnInputElement name='Mobile, email or username' elemID='user-id' setID={setUserID} updateIfItsNumber={handleLoginWithPhone} /> */}
-      
-      {/* <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} /> */}
-      {/* {!loginWithPhoneNumber && <ReturnAnInputElement name='Password' elemID='user-password' setPassword={setUserPassword} updateIfItsNumber={handleLoginWithPhone}/>} */}
-      
-      {/* <button onClick={confirmLogin} style={{ opacity: (loginWithPhoneNumber || bothPresent) ? 1 : .5, cursor: (!loginWithPhoneNumber && !bothPresent) && 'pointer', pointerEvents: (!loginWithPhoneNumber && !bothPresent) && 'none' }} id='login-btn'>Login</button> */}
-      {/* <button onClick={confirmLogin} style={{ opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent  && 'none' }} id='login-btn'>Login</button> */}
-      {/* <Link onClick={confirmLogin} style={{opacity: bothPresent ? 1 : .5, cursor: bothPresent && 'pointer', pointerEvents: !bothPresent && 'none'}} id='login-btn'>Login</Link> */}
-
-      {/* when mobile number is used for login get a otp code before proceeding from user */}
-      {/* {
-        showOtpModal && <GetOtpFromUser userID={userID} handleSigninStatus={handleSigninStatus} handleProfileCompletion={handleProfileCompletion} handleCurrentUser={handleCurrentUser} />
-      } */}
-
-      {/* <GetOtpFromUser userID={userID} handleSigninStatus={handleSigninStatus} handleProfileCompletion={handleProfileCompletion} handleCurrentUser={handleCurrentUser} /> */}
-
       {renderMarkup()}
       
       {
-        // currentUser && signinDone && profileCompleted && <Redirect to='/username/' />
         currentUser && signinDone && profileCompleted && <Redirect to={`/${currentUser}`} />
       }
-
+      
       {
-        // currentUser && signinDone && !profileCompleted && <Redirect to='/username/profile/' />
         currentUser && signinDone && !profileCompleted && <Redirect to={`/${currentUser}/profile`} />
       }
-
-      {/* {
-        signinDone
-        ?
-        profileCompleted
-        ?
-        <Redirect to='/username' />
-        :
-        <Redirect to='/username/profile' />
-        : 
-        ''
-      } */}
     </div>
   )
-
-  // <input placeholder={name} value={value} onChange={handleChange} onFocus={handleFocus} />
-
 }
 
 let GetOtpFromUser = ({userID, handleSigninStatus, handleProfileCompletion, handleCurrentUser}) => {
   let [code, setCode] = useState(null)
   let handleCodeInput = evt => setCode(evt.target.value)
   let handleClick = evt => {
-    console.log('go gogogo', code, userID)
+    // console.log('go gogogo', code, userID)
     userLoginWithPhone(userID, code, handleSigninStatus, handleProfileCompletion, handleCurrentUser)
   }
   return (
@@ -200,9 +154,7 @@ let ReturnAnInputElement = ({ name, elemID, setID, setPassword, updateIfItsNumbe
       let regEx = /(\+)|([0-9]{3}(-){0,1}){2}[0-9]{4,}/
       let test = regEx.test(value)
       test && updateIfItsNumber(true)
-      // console.log('here!!')
     } else if (value.length == 10) {
-      // !value.includes('@') && updateIfItsNumber(false)
       updateIfItsNumber(false)
     }
   }

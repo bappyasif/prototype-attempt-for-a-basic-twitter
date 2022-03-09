@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { makeGetFetchRequest, verifiedSvgIcon } from '../../../reuseable-components'
-import { SearchComponent } from '../../../../user-profile/all-tweets/tweet-top/lists-reusable-helper-components'
-import useOnClickOutside from '../../../right-side/click-outside-utility-hook/useOnClickOutside'
 
 function SearchSemantics({ dataset, searchText, searchResultsModalHook, setSearchResultsModalHook, showSearchResultsModal }) {
    
@@ -32,16 +30,13 @@ let RenderIndividualCompanyInformation = ({ companyName, item, idx, unpause }) =
     let [companyData, setCompanyData] = useState(null)
     let [unsplashData, setUnsplashData] = useState(null)
     let [randomIdx, setRandomIdx] = useState(null)
-    // let [awaitTime, setAwaitTime] = useState(false)
 
     let handleUnsplashData = items => {
         setUnsplashData(items)
-        // chooseRandomIdx(items, setRandomIdx)
     }
 
     let handleData = items => {
         let newList = items.filter(item => companyName.split(' ').some(word => item.identifier.value.includes(word)))
-        // setCompanyData(items)
         setCompanyData(newList)
     }
 
@@ -115,16 +110,16 @@ let makeRequest = (url, updater) => {
         .then(async resp => {
             // console.log(resp)
             const data = await resp.json()
-            console.log(data, 'compData', url)
+            // console.log(data, 'compData', url)
             updater(data.entities)
         })
         .catch(err => console.log(err.code, err.message))
 }
 
 export let chooseRandomIdx = (dataset, updater) => {
-    console.log('chkbox 01')
+    // console.log('chkbox 01')
     let rndIdx = Math.floor((Math.random() * dataset.length))
-    console.log(rndIdx, 'index')
+    // console.log(rndIdx, 'index')
     updater(rndIdx)
 }
 

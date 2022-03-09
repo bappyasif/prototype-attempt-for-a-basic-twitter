@@ -5,20 +5,16 @@ function useOnHoverOutside(ref, handler) {
         let listener = event => {
             // do nothing if hover ref is elemnt or descendent elements
             if (!ref.current || ref.current.contains(event.target)) {
-                // console.log(ref, "01")
                 return
             }
 
             // otherwise pass it along, to close off that div reference
             handler(event)
-            // console.log(ref, "02")
         }
 
         document.addEventListener('mouseleave', listener)
-        // console.log(ref, "??")
 
         return () => {
-            // document.removeEventListener('mouseout', listener)
             document.removeEventListener('mouseleave', listener)
         }
 

@@ -18,37 +18,26 @@ function UserProfile({ updateSomeDataInUserDocs, removeFromLikedTweets, handleLi
     
     let updatePictureUploadingStatus = () => {
         setDoneUploading(true);
-        // selectedFile && setDoneUploading(true)
-        // extraSelectedFile && setDoneExtraUrlUploading(true)
     }
 
     let updateExtraPictureUploadingStatus = () => setDoneExtraUrlUploading(true);
-
-    // currentUser && console.log(currentUser, 'from userProfile', quotedFromRetweetModal, replyCount, repliedTweets, quotesListFromRetweet, quoteTweetID, quoteTweetData);
-    // currentUser && console.log(quotedFromRetweetModal, quotesListFromRetweet, quoteTweetID, quoteTweetData, 'from userProfile', inputTextChoice01)
     
     let setUrl = (url) => {
         setPictureUrl(url);
-        // selectedFile && setPictureUrl(url);
-        // extraSelectedFile && setExtraPictureUrl(url);
     }
 
     let setExtraUrl = url => setExtraPictureUrl(url);
 
     useEffect(() => {
         doneUploading && downloadTweetPictureUrlFromStorage(uniqueID, setUrl);
-        // pictureUrl && console.log('checkpoint!!', pictureUrl)
     }, [doneUploading])
 
     useEffect(() => {
-        // doneExtraUrlUploading && downloadTweetPictureUrlFromStorage(uniqueID+'extra', setExtraUrl)
         doneExtraUrlUploading && downloadTweetPictureUrlFromStorage(uniqueID, setExtraUrl, 'extra');
-        // pictureUrl && console.log('checkpoint!!', pictureUrl)
     }, [doneExtraUrlUploading])
 
     // using for image element
     useEffect(() => {
-        // pictureUrl && !extraSelectedFile && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile, scheduledTimeStamp: scheduledTimeStamp, quoteTweetID:  quoteTweetID, selectedTaggedPlace: selectedTaggedPlace, retweetedQuote: quotedFromRetweetModal, listOfRetweetedQuotes: [] }, uniqueID, newDataStatus, updateData, currentUser);
         pictureUrl && !extraSelectedFile && writeDataIntoCollection({firstTweetHasMedia: firstTweetHasMedia, secondTweetHasMedia: secondTweetHasMedia, extraPoll:[{choice01: inputTextChoice05, choice02: inputTextChoice06, choice03: inputTextChoice07, choice04: inputTextChoice08}], tweetPoll: [{choice01: inputTextChoice01, choice02: inputTextChoice02, choice03: inputTextChoice03, choice04: inputTextChoice04}], tweetText: primaryTweetText, extraTweet: extraTweetText, tweetPrivacy: tweetPrivacy, imgFile: pictureUrl, extraImgFile: extraPictureUrl, gifItem: gifFile, extraGifItem: extraGifFile, scheduledTimeStamp: scheduledTimeStamp, quoteTweetID:  quoteTweetID, selectedTaggedPlace: selectedTaggedPlace, retweetedQuote: quotedFromRetweetModal, listOfRetweetedQuotes: [] }, uniqueID, newDataStatus, updateData, currentUser);
         if(tweetPublishReady && pictureUrl && !extraSelectedFile ) {
             cleanupDetails()
@@ -64,12 +53,6 @@ function UserProfile({ updateSomeDataInUserDocs, removeFromLikedTweets, handleLi
         }
     }, [extraPictureUrl])
 
-    let resetUrlToNull = () => {
-        // pictureUrl && setPictureUrl('')
-        pictureUrl && setPictureUrl('');
-        extraPictureUrl && setExtraPictureUrl('');
-    }   
-
     // initlal calls
     useEffect(() => {
         setChangeLayout(false);
@@ -80,8 +63,6 @@ function UserProfile({ updateSomeDataInUserDocs, removeFromLikedTweets, handleLi
     useEffect(() => {
         tweetPublishReady && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: Number(replyCount + 1)});
     }, [tweetPublishReady])
-
-    // quoteTweetID && alert('here!!')
 
     let cleanupDetails = () => {
         setNewDataStatus(false);
@@ -116,15 +97,9 @@ function UserProfile({ updateSomeDataInUserDocs, removeFromLikedTweets, handleLi
 
         // when there is a tweet quoted by user, and posted it on profile, updating that count on Firestore
         repliedTweets && !quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: repliedTweets ? (repliedTweets.length + 1) : 0});
-        // !quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: replyCount ? Number(replyCount + 1) : replyCount});
-        // !quotedFromRetweetModal && newDataStatus && quoteTweetID && !quotesListFromRetweet && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: replyCount ? Number(replyCount + 1) : replyCount});
-        // newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: repliedTweets.length + 1})
-        // quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {replyCount: Number(replyCount + 1)})
-        !quotedFromRetweetModal && newDataStatus && quoteTweetID && repliedTweets && updateDataInFirestore(currentUser, quoteTweetID, {repliedTweets: repliedTweets.length ? [...repliedTweets, uniqueID] : [uniqueID]});
-        // newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {repliedTweets: [].concat(uniqueID)})
         
-        // updating list references in quoted tweet this about to be added (quoted from retweet modal), so that when required these references can be used for generating data
-        // quotesListFromRetweet && quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {listOfRetweetedQuotes: [...quotesListFromRetweet, uniqueID]});
+        !quotedFromRetweetModal && newDataStatus && quoteTweetID && repliedTweets && updateDataInFirestore(currentUser, quoteTweetID, {repliedTweets: repliedTweets.length ? [...repliedTweets, uniqueID] : [uniqueID]});
+        
         quotedFromRetweetModal && newDataStatus && quoteTweetID && updateDataInFirestore(currentUser, quoteTweetID, {listOfRetweetedQuotes: quotesListFromRetweet ? [...quotesListFromRetweet, uniqueID] : [uniqueID]});
 
         // updating listOfRetweetedCounts in userDocs for DOM
@@ -141,62 +116,18 @@ function UserProfile({ updateSomeDataInUserDocs, removeFromLikedTweets, handleLi
 
         // making previously held quoteTweetID reset to null
         newDataStatus && quoteTweetID && handleQuoteTweetID(false);
-        // newDataStatus && quoteTweetID && alert('here!!')
 
         // quotedFromRetweetModal && newDataStatus && quoteTweetID && console.log(repliedTweets,'repliedTweets!!??', quotesListFromRetweet)
         repliedTweets && !quotedFromRetweetModal && newDataStatus && quoteTweetID && updateSomeDataInUserDocs(quoteTweetID, 'replyCount', repliedTweets.length + 1)
-        
-
-        // setFirstTweetHasMedia(false)
-        // setSecondTweetHasMedia(false)
 
         // neutralize previous tweet state variables values
         quotedFromRetweetModal && handleQuotedFromRetweetModal();
-        // quotedFromRetweetModal && handleQuotesListFromRetweet([]);
-        // quotesListFromRetweet && handleQuotesListFromRetweet([]);
-        quotesListFromRetweet && handleQuotesListFromRetweet([]);
-        // repliedTweets && handleRepliedTweets([]);
-        
-        
-        // setSelectedFile('');
-        // setExtraSelectedFile('');
-        // setGifFile('');
-        // setExtraGifFile('');
-        
-        // setInputTextChoice01('');
-        // setInputTextChoice02('');
-        // setInputTextChoice03('');
-        // setInputTextChoice04('');
-
-        // setInputTextChoice05('');
-        // setInputTextChoice06('');
-        // setInputTextChoice07('');
-        // setInputTextChoice08('');
-
-        // setNewDataStatus(false);
-        // setScheduledTimeStamp('');
-        // setPrimaryTweetText('');
-        // setExtraTweetText('');
-        
+        quotesListFromRetweet && handleQuotesListFromRetweet([]);        
     }, [tweetPublishReady])
-
-    // let getPrivacySelectedElement = whichOption => {
-    //     switch (whichOption) {
-    //         case '01':
-    //             return tweetPrivacySelected01()
-    //         case '02':
-    //             return tweetPrivacySelected02()
-    //         case '03':
-    //             return tweetPrivacySelected03()
-    //         default: console.log('somethigs wrong!!')
-    //     }
-    // }
 
     return (
         <div id='user-profile-page-container'>
-            {/* {pictureUrl && <img src={pictureUrl} />} */}
             {tweetData && <AllTweetsPage
-                // tweetData={tweetData}
                 currentUser={currentUser}
                 removeSpeceficArrayItem={removeSpeceficArrayItem}
                 updateTweetPrivacy={updateTweetPrivacy}
@@ -216,10 +147,8 @@ function UserProfile({ updateSomeDataInUserDocs, removeFromLikedTweets, handleLi
                 handleLikedTweets={handleLikedTweets}
                 removeFromLikedTweets={removeFromLikedTweets}
                 tweetData={tweetData || []}
-                // handleCount={handleCount}
             />
             }
-            {/* { testGif && testUserDoc && <GifDemo testGif={testGif} />} */}
         </div>
     )
 }
@@ -227,14 +156,13 @@ function UserProfile({ updateSomeDataInUserDocs, removeFromLikedTweets, handleLi
 
 export let GifDemo = ({testGif}) => {
     let [giphyObject, setGiphyObject] = useState('');
-    // console.log(testGif, 'id found')
+
     let getGif = async () => {
         let {data} = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(testGif)
         setGiphyObject(data);
-        // console.log(testGif, '<id found>', data)
     }
     getGif();    
-    // console.log(testGif, 'id found', testUserDoc, data)
+
     return giphyObject && testGif && <Gif gif={giphyObject} height={200} width={209} />
 }
 
@@ -251,12 +179,10 @@ export let showGif = selectedGif => {
 }
 
 export let showImg = (imgRR) => {
-    // console.log('visting here')
     return imgRR && <img src={handleMediaFileChecks(imgRR)} />
 }
 
 export let getPrivacySelectedElement = (whichOption, color, text) => {
-    // console.log(whichOption, '<<which option>>', color, text)
     switch (whichOption) {
         case '01':
             return tweetPrivacySelected01(color, text)

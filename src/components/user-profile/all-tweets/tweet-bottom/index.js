@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import {useHistory} from 'react-router-dom'
-import { getDataFromFirestoreSubCollection, updateDataInFirestore } from '../../../firestore-methods'
+import { getDataFromFirestoreSubCollection } from '../../../firestore-methods'
 import useOnClickOutside from '../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 
 export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFromLikedTweets, tweetType, currentCountInFirestore, listOfRetweetedQuotes, quotesListFromRetweet, handleQuotedFromRetweetModal, fromTweetThread, elem, extraTwee, extraEen, tweetData, handleQuoteTweetID, currentUser, handleReplyCount, replyCount, handleAnalysingTweetID, ID, feedParentInitialReplyCount, repliedTweetsIDs }) => {
@@ -10,27 +10,7 @@ export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFr
     let [undoRetweet, setUndoRetweet] = useState(false)
     let [counter, setCounter] = useState(0);
     let [replyRouteReady, setReplyRouteReady] = useState(false)
-    // let [replyCount, setReplyCount] = useState(0)
-    // let [replyCountFlag, setCountReplyFlag] = useState(false)
     let history = useHistory(null)
-
-    // extraTwee && console.log(elem, extraTwee, extraEen, tweetData)
-
-    // changedCount && console.log(changedCount, 'changedCount!!', repliedTweetsIDs)l
-
-    // let handleReplyCount = (val) => {
-    //     // setReplyCount(val ? val : 1)
-    //     setReplyCount(Number(val + 1))
-    //     setCountReplyFlag(true)
-    //     setCounter(Number(val + 1))
-    //     console.log('checkpoint 2', val)
-    // }
-
-    let handleInitialReplyCount = val => {
-        // console.log(val, 'val!!!!')
-        // setCounter(val)
-        // feedParentInitialReplyCount(val)
-    }
 
     let handleIncreaseCount = () => setCounter(prevCount => prevCount+1)
 
@@ -42,8 +22,6 @@ export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFr
 
     useEffect(() => changedCount != -1  && elem.id == 'reply' && setCounter(changedCount), [changedCount])
 
-    // useEffect(() => currentCountInFirestore && elem.id == 'reply' && setCounter(currentCountInFirestore), [])
-
     useEffect(() => repliedTweetsIDs && elem.id == 'reply' && setCounter(repliedTweetsIDs.length), [repliedTweetsIDs])
 
     useEffect(() => quotesListFromRetweet && elem.id == 'retweet' && setCounter(quotesListFromRetweet.length), [quotesListFromRetweet])
@@ -51,25 +29,13 @@ export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFr
     useEffect(() => {
         if(iconClicked == "like" || iconClicked == "like-twee") {
             handleIncreaseCount()
-            // handleLikedTweets(tweetData)
-            // tweetData.liked ? removeFromLikedTweets(tweetData.ID) : handleLikedTweets(tweetData.ID)
         } else if(iconClicked == 'reply' || iconClicked == 'reply-twee') {
-            // replyCount && history.push('/tweet/compose')
+
         } else if(iconClicked.includes('analytics')) {
-            // alert('here!!')
             handleAnalysingTweetID(ID);
-            // console.log(ID, 'foundhere!!', tweetData)
             history.push('/analytics')
         }
-        // else if(iconClicked == 'analytics') {
-        //     // alert('here!!')
-        //     handleAnalysingTweetID(ID);
-        //     // console.log(ID, 'foundhere!!', tweetData)
-        //     history.push('/analytics')
-        // }
     }, [iconClicked])
-
-    // useEffect(() => replyCount && history.push('/tweet/compose'), [replyCount])
 
     // when its rendering from tweet thread, reply count if there is any should be visibile as well, and it sdong so by updating found replyCount and setting it as counter value
     useEffect(() => replyCount && elem.id == 'reply' && setCounter(replyCount), [tweetData.ID])
@@ -83,95 +49,59 @@ export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFr
         counter && !undoRetweet && handleDecreaseCount()
     }, [undoRetweet])
 
-    // useEffect(() => {
-    //     // iconClicked == 'reply' && history.push('/tweet/compose')
-    //     // iconClicked && replyCountFlag && updateDataInFirestore(currentUser, tweetData.ID, {replyCount: replyCount})
-    //     // iconClicked && replyCountFlag && history.push('/tweet/compose')
-    // }, [replyCountFlag])
-
-    useEffect(() => {
-        // currentUser && elem.id == 'reply' && loadInitialReplyCount();
-        // currentUser && elem.id == 'retweet' && listOfRetweetedQuotes && setCounter(listOfRetweetedQuotes.length)
-    }, [])
-
     let findWhichIconId = evt => {
         let whichIcon = evt.target.id || evt.target.parentNode.id || evt.target.parentNode.parentNode.id;
         return whichIcon
     }
 
     let mouseHoveredIn = evt => {
-        // console.log('in', evt.target.id, evt.target.parentNode.id)
         let foundElement = findWhichIconId(evt)
-        // console.log(foundElement, 'which?!')
         setHoveredID(foundElement)
     }
+
     let mouseHoveredOut = evt => {
-        // console.log('out', evt.target.id)
         setHoveredID('')
     }
 
     let handleClicked = (evt) => {
-        // console.log(evt.target.parentNode.parentNode.parentNode)
         let iconElement = evt.target.parentNode.id || evt.target.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.parentNode.parentNode.id|| evt.target.parentNode.parentNode.parentNode.parentNode.parentNode.id
         setIconClicked(iconElement)
-        // iconElement.includes('retweet')
+
         if(iconElement == 'retweet' || iconElement == 'retweet-twee') {
             handleShowModal()
-            // !undoRetweet && handleCount()
         } else if(iconElement == 'like' || iconElement == 'like-twee') {
             handleDecreaseCount()
-            // removeFromLikedTweets(tweetData.ID)
             tweetData.liked ? removeFromLikedTweets(tweetData.ID) : handleLikedTweets(tweetData.ID)
-            console.log(tweetData, '?!?!')
         } else if(iconElement == 'reply' || iconElement == 'reply-twee') {
             handleQuoteTweetID(tweetData.ID)
             handleQuoteTweetCount()
             setReplyRouteReady(true)
-            // HandleQuoteTweetProcess({userID: currentUser, docID: tweetData.ID, whichData: 'replyCount'})
-            // updateDataInFirestore(currentUser, tweetData.ID, {replyCount: })
-            // history.push('/tweet/compose')
         }
-        console.log(iconElement, 'iconElement', evt.target)
-    }
-
-    let loadInitialReplyCount = () => {
-        // console.log(fromTweetThread, '<<<<chjecking>>>>')
-        !fromTweetThread && tweetData.ID && getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleInitialReplyCount )
+        // console.log(iconElement, 'iconElement', evt.target)
     }
 
     let handleQuoteTweetCount = () => {
         getDataFromFirestoreSubCollection(currentUser, tweetData.ID, 'replyCount', handleReplyCount )
-        console.log('checkpointy 1', currentUser, tweetData.ID)
+        // console.log('checkpointy 1', currentUser, tweetData.ID)
     }
-
-    // replyCount && console.log(replyCount, 'replyCount!!', counter)
-
-    // console.log((elem.id == 'like' && tweetType != 'een' && tweetData.liked || elem.id == 'like' && tweetType == 'twee'  && tweetData.liked), elem.id == 'like'  && tweetData.liked , elem.id == 'like-twee'  && tweetData.liked, elem.id)
 
     return (
         <div
             key={elem.id}
 
-            // id={extraTwee ? elem.id + '-twee' : extraEen ? elem.id + '-een' : elem.id}
             id={tweetType == 'twee' ? elem.id + '-twee' : tweetType == 'een' ? elem.id + '-een' : elem.id}
 
             className='hoverable-div'
 
             onMouseOver={mouseHoveredIn}
+
             onMouseOut={mouseHoveredOut}
-
-            // style={{position: 'relative'}}
         >
-            {/* <span onClick={handleClicked} style={{fill: undoRetweet && 'greenyellow'}} >{iconClicked == 'like' ? loveIcon() : elem.icon}</span><span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span> */}
-
             <div className='item-wrapper' onClick={handleClicked} style={{display: 'flex', alignItems: 'center'}}>
-                {/* <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{((iconClicked == 'like' && !(elem.id == 'like-een' || elem.id == 'like-twee') && tweetData.liked) || ((elem.id == 'like' || elem.id == 'like-twee') && tweetData.liked)) ? loveIcon() : elem.icon}</div> */}
-                {/* <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{((iconClicked == 'like' || iconClicked == 'like-twee') && tweetData.liked) ? loveIcon() : elem.icon}</div> */}
                 <div style={{ fill: undoRetweet ? 'rgb(29, 155, 240)' : null }} className='item-icon'>{((iconClicked == 'like' || iconClicked == 'like-twee') && tweetData.liked || (elem.id == 'like' && tweetType != 'een' && tweetData.liked || elem.id == 'like' && tweetType == 'twee'  && tweetData.liked)) ? loveIcon() : elem.icon}</div>
                 {(counter > 0) && <div className='item-counter' style={{color: 'silver', fontSize: 'large', marginLeft: '4px', position: 'absolute', 'right': '-15px'}}>{counter}</div>}
-                {/* {(counter > 0 || replyCount > 0) && <div className='item-counter' style={{color: 'silver', fontSize: 'large', marginLeft: '4px', position: 'absolute', 'right': '-15px'}}>{counter || (elem.ID && replyCount)}</div>} */}
             </div>
-            {/* <span style={{ display: hoveredID == elem.id + (extraTwee ? '-twee' : extraEen ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span> */}
+
             <span style={{ display: hoveredID == elem.id + (tweetType == 'twee' ? '-twee' : tweetType == 'een' ? '-een' : '') ? 'flex' : 'none' }} className='hoverable-div-tooltips-text'>{elem.id}</span>
 
             {
@@ -183,18 +113,6 @@ export let RenderTweetBottomIcons = ({ handleLikedTweets, changedCount, removeFr
     )
 
 }
-
-// let HandleQuoteTweetProcess = ({userID, docID, whichData}) => {
-//     let [replyCount, setReplyCount] =  useState(null)
-//     let handleReplyCount = (val) => setReplyCount(val);
-    
-//     useEffect(() => getDataFromFirestoreSubCollection(userID, docID, whichData, handleReplyCount ), [])
-//     useEffect(() => replyCount && updateDataInFirestore(currentUser, tweetData.ID, {replyCount: replyCount ? replyCount + 1 : 1}), [replyCount])
-    
-//     replyCount && history.push('/tweet/compose')
-
-//     return ''
-// }
 
 let ShowRetweetModalUI = ({ handleShowModal, undoRetweet, handleUndoTweet, handleQuoteTweetID, tweetData, handleQuotedFromRetweetModal }) => {
     let ref = useRef()
@@ -214,13 +132,11 @@ let RenderRetweetModalItem = ({ item, handleShowModal, handleUndoTweet, undoRetw
     let history = useHistory(null);
 
     let handleClick = (evt) => {
-        // console.log(evt.target.parentNode.id, '?!?!')
         let nodeID = evt.target.parentNode.id
         if(nodeID == 'Quote') {
             handleQuoteTweetID(tweetData.ID)
             history.push('/tweet/compose')
             handleQuotedFromRetweetModal()
-            // console.log(nodeID, 'nodeID')
         }
         if (evt.target.parentNode.id == 'Retweet') handleUndoTweet()
         handleShowModal()
@@ -241,142 +157,3 @@ let quoteIcon = () => <svg width={'24px'} height={'24px'}><g><path d="M22.132 7.
 let retweetIcon = () => <svg width={'24px'} height={'24px'}><g><path d="M23.77 15.67c-.292-.293-.767-.293-1.06 0l-2.22 2.22V7.65c0-2.068-1.683-3.75-3.75-3.75h-5.85c-.414 0-.75.336-.75.75s.336.75.75.75h5.85c1.24 0 2.25 1.01 2.25 2.25v10.24l-2.22-2.22c-.293-.293-.768-.293-1.06 0s-.294.768 0 1.06l3.5 3.5c.145.147.337.22.53.22s.383-.072.53-.22l3.5-3.5c.294-.292.294-.767 0-1.06zm-10.66 3.28H7.26c-1.24 0-2.25-1.01-2.25-2.25V6.46l2.22 2.22c.148.147.34.22.532.22s.384-.073.53-.22c.293-.293.293-.768 0-1.06l-3.5-3.5c-.293-.294-.768-.294-1.06 0l-3.5 3.5c-.294.292-.294.767 0 1.06s.767.293 1.06 0l2.22-2.22V16.7c0 2.068 1.683 3.75 3.75 3.75h5.85c.414 0 .75-.336.75-.75s-.337-.75-.75-.75z"></path></g></svg>
 
 let retweetModalItems = [{ name: 'Retweet', icon: retweetIcon() }, { name: 'Quote', icon: quoteIcon() }]
-
-/**
- * 
- * 
- let handleClicked = (evt) => {
-        // console.log(evt.target.parentNode.parentNode.parentNode)
-        let iconElement = evt.target.parentNode.parentNode.parentNode.id || evt.target.parentNode.parentNode.id
-        setIconClicked(iconElement)
-        if(iconElement == 'retweet') {
-            handleShowModal()
-            // !undoRetweet && handleCount()
-        } else if(iconElement == 'like') {
-            handleDecreaseCount()
-        } else if(iconElement == 'reply') {
-            handleQuoteTweetID(tweetData.ID)
-            handleQuoteTweetCount()
-            setReplyRouteReady(true)
-            // HandleQuoteTweetProcess({userID: currentUser, docID: tweetData.ID, whichData: 'replyCount'})
-            // updateDataInFirestore(currentUser, tweetData.ID, {replyCount: })
-            // history.push('/tweet/compose')
-        }
-        // console.log(iconElement, 'iconElement')
-    }
- * 
- * 
- let ShowRetweetModalUI = ({handleShow}) => {
-    // let [showModal, setShowModal] = useState(false)
-    // let [undoRetweet, setUndoRetweet] = useState(false)
-
-    let ref = useRef()
-    // clocing modal when clicked outside this wrapper with this custom hook
-    useOnClickOutside(ref, handleShow)
-    // useOnClickOutside(ref, () => setShowModal(false))
-    // useOnClickOutside(ref, () => setIconClicked(''))
-
-    let handleUndoTweet = () => setUndoRetweet(!undoRetweet)
-    
-    // let renderModalItems = retweetModalItems.map(item => <RenderRetweetModalItem key={item.name} item={item} setShowModal={setShowModal} />)
-    // let renderModalItems = retweetModalItems.map(item => <RenderRetweetModalItem key={item.name} item={item} setIconClicked={setIconClicked} />)
-    let renderModalItems = retweetModalItems.map(item => <RenderRetweetModalItem key={item.name} item={item} handleShow={handleShow} undoRetweet={undoRetweet} handleUndoTweet={handleUndoTweet} />)
-
-    return (
-        <div className='retweet-modal-wrapper' ref={ref}>
-            {renderModalItems}
-        </div>
-    )
-}
-
-let RenderRetweetModalItem = ({item, handleShow, handleUndoTweet, undoRetweet}) => {
-    // let [undoRetweet, setUndoRetweet] = useState(false)
-
-    let handleClick = (evt) => {
-        console.log(evt.target.parentNode.id)
-        if(evt.target.parentNode.id == 'Retweet' && !undoRetweet) {
-            handleUndoTweet()
-            // setUndoRetweet(true)
-            // setIconClicked('')
-        } 
-        // else {
-        //     setUndoRetweet(false)
-        // }
-        // if(evt.target.parentNode.id == 'Retweet') setUndoRetweet(!undoRetweet)
-        // setIconClicked('')
-        // setShowModal()
-        // handleShow()
-    }
-
-    console.log(undoRetweet, '?!')
-
-    return (
-        <div className='action-ui-wrapper' id={item.name} onClick={handleClick}>
-            <div className='action-svg'>{item.icon}</div>
-            <div className='action-name'>{(undoRetweet ? 'Undo' : '')  + item.name}</div>
-        </div>
-    )
-}
- * 
- * 
- let ShowRetweetModalUI = () => {
-    let [iconClicked, setIconClicked] = useState(null)
-    let handleClicked = evt => setIconClicked(evt.target.id || evt.target.parentNode.id)
-    console.log(iconClicked)
-    return (
-        <div className='retweet-modal-wrapper'>
-            <div id='retweet' onClick={handleClicked}>
-                <div className='action-svg'>Retweet</div>
-                <div className='action-name'>Retweet</div>
-            </div>
-            <div id='quote' onClick={handleClicked}>Quote</div>
-        </div>
-    )
-}
- * 
- * 
- // iconClicked && console.log(iconClicked, '?!')
-
-    // let shareableData = () => {
-    //     let shareDataObject = {
-    //         title: 'sharing from web app',
-    //         url: window.location.href,
-    //         text: tweetData.tweetText
-    //     }
-    //     // let shareDataObject = navigator.share({
-    //     //     title: document.title,
-    //     //     text: 'Hello World',
-    //     //     url: 'https://developer.mozilla.org',
-    //     //   });
-    //     return shareDataObject
-    // }
-
-    // let checkingIfDataShareable = () => {
-    //     let isShareable = navigator.canShare && navigator.canShare(tweetData.tweetText)
-    //     // let isShareable = navigator.canShare
-    //     return isShareable
-    // }
-
-    // let sharingData = () => {
-    //     if(checkingIfDataShareable()) {
-    //         navigator.share(shareableData)
-    //     } else {
-    //         navigator.share(shareableData)
-    //         .then(()=>console.log('success!!'))
-    //         .catch(console.error)
-    //         // alert('data unshareable')
-    //     }
-
-    // }
-
-    let handleShare = evt => {
-        console.log(iconClicked, 'share!!', tweetData)
-        // sharingData()
-        // if(navigator.share) {
-        //     console.log('supports share')
-        //     navigator.share({text: 'yeah.what'})
-        //     .then(()=>console.log('successfull'))
-        //     .catch(err=>console.log(err.message))
-        // }
-    }
- */

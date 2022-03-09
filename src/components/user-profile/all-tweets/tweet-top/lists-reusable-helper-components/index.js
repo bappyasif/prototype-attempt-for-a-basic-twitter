@@ -24,28 +24,12 @@ export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore,
 
     let [focused, setFocused] = useState(false)
     
-    // let handleFocused = () => setFocused(!focused)
     let handleFocused = () => {
         (fromExplore) && setSearchResultsModalHook(!focused)
-        // (fromTrends) && setSearchResultsModalHook(true)
-        // (fromExplore || fromTrends) && setSearchResultsModalHook(!focused)
-        // (fromExplore || fromTrends) && setSearchResultsModalHook(true)
-        // fromExplore && savingPrevSearchText && handleSearchText(savingPrevSearchText)
         setFocused(!focused)
     }
     
     let handleInputText = evt => setInputText(evt.target.value)
-
-    // let handleInputText = evt => {
-    //     setInputText(evt.target.value)
-    //     fromExplore && handleSearchText(evt.target.value)
-    // }
-
-    // useEffect(() => {
-    //     fromTrends && setInputFocused(focused)
-    // }, [focused])
-
-    // console.log(initialTrendSearchedText, 'initialTrendSearchedTexts')
 
     useEffect(() => focused && fromTrends && setSearchResultsModalHook(true), [focused])
 
@@ -70,9 +54,7 @@ export let SearchComponent = ({searchableMembers, handleMemberName, fromExplore,
 
 export let handleSearchMemberName = (searchingName, existingMembers, showFoundMatchedMembers) => {
     let testMatches = existingMembers.map(name => name.includes(searchingName) && name)
-    // showFoundMatchedMembers(testMatches.map(name => name && name))
     showFoundMatchedMembers(testMatches.filter(name => name && name))
-    // console.log(testMatches, 'ready!!', existingMembers)
 }
 
 export let ModalOptions = ({ membersCount, underlined, history, routeUrl }) => {
@@ -113,15 +95,9 @@ export let RenderMembersList = ({ updateExistingListData, listName, currentList,
     let renderListOfMembers;
 
     if(isMember) {
-        // let selectedList = currentList && currentList.filter(item => item.name == listName && item.membersList)
         let selectedList = currentList && currentList.filter(item => item.name == listName).map(item => item.membersList)[0]
-        // console.log(selectedList, 'selectedList!!')
         renderListOfMembers = selectedList && selectedList.map(name => <RenderMember key={name} name={name} handleCount={handleCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} isMember={isMember} updateExistingListData={updateExistingListData} listName={listName} />)
-
     } else {
-        // renderListOfMembers = membersList.map(name => <RenderMember key={name} name={name} handleCount={handleCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} isMember={isMember} />)
-        // console.log(membersList, 'list!!')
-        // renderListOfMembers = membersList.map(name => <RenderMember key={name} name={name} handleCount={handleCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} />)
         renderListOfMembers = membersList.map(name => <RenderMember key={name} name={name} handleCount={handleCount} handleMembersList={handleMembersList} handleMembersRemoval={handleMembersRemoval} checkMemberExists={checkMemberExists} />)
     }
     
@@ -132,7 +108,6 @@ export let RenderMember = ({ listName, updateExistingListData, name, handleCount
     let [hovered, setHovered] = useState(false);
 
     let previouslyExistsCheck = () => {
-        // let idx = checkMemberExists(name)
         let idx = checkMemberExists(name, listName)
         return idx >= 0 ? true : false
     }
@@ -144,7 +119,6 @@ export let RenderMember = ({ listName, updateExistingListData, name, handleCount
     let handleAdded = () => {
         setAdded(!added)
         setAddedFlag(!addedFlag)
-        // console.log('clicked!!')
     }
 
     let handleHovered = () => setHovered(!hovered)
@@ -179,58 +153,3 @@ export let RenderMember = ({ listName, updateExistingListData, name, handleCount
 let searchIconSvg = () => <svg className='profile-page-svg-icons'><g><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path></g></svg>
 
 let options = ['Members', 'Suggested']
-
-/**
- * 
- * 
- // export let handleSearchMemberName = (searchingName, existingMembers) => {
-//     let testMatches = existingMembers.map(name => name.includes(searchingName) && name)
-
-//     let searchTokens = searchingName && searchingName.split('')
-
-//     let test = searchingName && existingMembers.map(name => {
-//         let tokens = name.split('')
-//         let allMatches = tokens.map(v => searchTokens.includes(v)).filter(v=>v)
-//         // let fragmentMatch = allMatches.every(v => name.includes(v))
-//         // console.log(fragmentMatch, allMatches, 'checks!!', searchTokens)
-//         // return fragmentMatch && name;
-//         return allMatches && name;
-//     })
-    
-//     console.log(test, 'ready!!', existingMembers)
-//     // console.log(searchingName, existingMembers, 'ready data!!', testMatches, anotherTest)
-// }
-
-// export let handleSearchMemberName = (searchingName, existingMembers) => {
-//     let testMatches = existingMembers.map(name => name.includes(searchingName) && name)
-
-//     let searchTokens = searchingName && searchingName.split('')
-
-//     let test = searchingName && existingMembers.map(name => {
-//         let tokens = name.split('')
-//         let allMatches = tokens.map(v => searchTokens.includes(v)).filter(v=>v)
-//         // let fragmentMatch = allMatches.every(v => name.includes(v))
-//         // console.log(fragmentMatch, allMatches, 'checks!!', searchTokens)
-//         // return fragmentMatch && name;
-//         return allMatches && name;
-//     })
-    
-//     console.log(test, 'ready!!', existingMembers)
-//     // console.log(searchingName, existingMembers, 'ready data!!', testMatches, anotherTest)
-// }
-
-// export let handleSearchMemberName = (searchingName, existingMembers) => {
-//     // let [matchedNames, setMatchedNames] = useState([])
-//     let testMatches = existingMembers.map(name => name.includes(searchingName) && name)
-//     // setMatchedNames(testMatches)
-//     let searchTokens = searchingName && searchingName.split('')
-//     let anotherTest = searchTokens && existingMembers.map(name => {
-//         let tokens = name.split('')
-//         // let matches = tokens.some(v => searchTokens.some(val => val == v))
-//         // let matches = tokens.map(v => searchTokens.some(val => val == v))
-//         let matches = tokens.map(v => searchTokens.every(val => val == v))
-//         return matches && name
-//     })
-//     console.log(searchingName, existingMembers, 'ready data!!', testMatches, anotherTest)
-// }
- */

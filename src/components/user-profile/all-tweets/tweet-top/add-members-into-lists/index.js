@@ -1,10 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import useOnClickOutside from '../../../../navigation-panels/right-side/click-outside-utility-hook/useOnClickOutside'
 import { ListModalHeader } from '../lists-reusable-helper-components'
-// import { ListModalHeader, RenderList } from './ui'
 import { RenderList } from './ui'
-import useOnHoverOutside from './useOnHoverOutside'
 
 function AddMemebersIntoLists({ currentList, currentUser, updateExistingListData, handleListName }) {
 
@@ -22,7 +19,6 @@ let AddToExistingList = ({ currentList, currentUser, updateExistingListData, han
     }
 
     let handleSave = () => {
-        // console.log('handle save');
         history.push(`/${currentUser}`)
     }
 
@@ -31,20 +27,12 @@ let AddToExistingList = ({ currentList, currentUser, updateExistingListData, han
             <ListModalHeader icon={removeIconSvg()} action={'Save'} modalTitle={'Pick a list'} history={history} modalAction={handleSave} modalActionFlag={saveFlag} />
             <CreateNewList />
             <ShowAvailableListItems updateExistingListData={updateExistingListData} currentList={currentList} handleSaveFlag={handleSaveFlag} toggleSavedFlag={handleSavedFlagReversal} handleListName={handleListName} />
-            {/* <ShowAvailableListItems currentList={currentList} savedFlagToggler={saveFlagToggler} saveFlag={saveFlag} /> */}
         </div>
     )
 }
 
 export let ShowAvailableListItems = ({ currentList, handleSaveFlag, toggleSavedFlag, updateExistingListData, handleListName }) => {
     let [initialNumbers, setInitialNumbers] = useState([])
-    
-    // useEffect(() => {
-    //     currentList && currentList.forEach(item => item.members ? setInitialNumbers(p=>p.concat(item.members)) : setInitialNumbers(p=>p.concat(0)))
-
-    // }, [currentList])
-    
-    // console.log(currentList, 'currentlist', initialNumbers)
     
     let renderLists = currentList.map((list, _, arr) => <RenderList key={list.name} list={list} arr={arr} handleSaveFlag={handleSaveFlag} toggleSavedFlag={toggleSavedFlag} initialNumbers={initialNumbers} updateExistingListData={updateExistingListData} handleListName={handleListName} />)
     
@@ -58,7 +46,6 @@ let CreateNewList = () => {
     useEffect(() => showModal && history.push('/i/lists/create'))
 
     let handleClick = () => {
-        // console.log('add a new item')
         setShowModal(true)
     }
     return (

@@ -1,33 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { RenderArticle } from "../../../reuseable-components";
 import { RenderUserInModal } from "../../follow-suggested-people-component/show-lengthy-follow-list";
-// import { createClient } from 'pexels';
 
 function ReuseableTrendsNavigationHandler({
     explicitTrendSearchText,
     whichNav,
 }) {
     let [dataset, setDataset] = useState(null);
-    // let [fetchUrl, setFetchUrl] = useState(null);
     let [videoFeeds, setVideoFeeds] = useState(null);
     let [peopleDataset, setPeopleDataset]  = useState(null)
 
-    // let handleDataset = (items) => {
-    //     let newList = items
-    //         .filter((item) => item.author)
-    //         .filter((item) => !item.author.includes("("));
-    //     console.log(newList, items, 'data!!')
-    //     setDataset(newList);
-    // };
-
-    console.log(
-        "fetchUrl",
-        explicitTrendSearchText,
-        whichNav,
-        videoFeeds,
-        dataset,
-        peopleDataset
-    );
+    // console.log(
+    //     "fetchUrl",
+    //     explicitTrendSearchText,
+    //     whichNav,
+    //     videoFeeds,
+    //     dataset,
+    //     peopleDataset
+    // );
 
     let decideWhichFetchRequest = (searchString, whichNav) => {
         let url = 'https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/';
@@ -50,23 +40,16 @@ function ReuseableTrendsNavigationHandler({
         } else {
             console.log('no search string found!!')
         }
-        console.log(url, 'url!!');
+        // console.log(url, 'url!!');
 
         (whichNav != 'Videos' || whichNav != 'People') && fetchDataWebSearch(url, setDataset);
 
-        // whichNav == 'Videos' && fetchBingWebSearch(url, setDataset)
-
-        // whichNav == 'Videos' && fetchVideosPexelApi(url, setDataset)
         whichNav == 'Videos' && fetchVideosPexelApi(url, setVideoFeeds)
-        // whichNav == 'Videos' && console.log('th02')
 
-        // whichNav == 'People' && fetchUsersTwitterApi(url, setDataset)
         whichNav == 'People' && fetchUsersTwitterApi(url, setPeopleDataset)
     }
 
     useEffect(() => explicitTrendSearchText && whichNav && decideWhichFetchRequest(explicitTrendSearchText, whichNav), [explicitTrendSearchText, whichNav])
-
-    // useEffect(() => dataset && setDataset(null), [whichNav])
     
     let renderArticles = () =>
         dataset &&
@@ -80,7 +63,6 @@ function ReuseableTrendsNavigationHandler({
 
     return (
         <div id="reuseable-articles-renderer-wrapper">
-            {/* {whichNav != 'People' && renderArticles()} */}
             {(whichNav != 'People' && whichNav != 'Videos') && renderArticles()}
             {whichNav == 'People' && renderUsers()}
             {whichNav == 'Videos' && renderVideoFeeds()}
@@ -89,7 +71,6 @@ function ReuseableTrendsNavigationHandler({
 }
 
 let fetchUsersTwitterApi = (url, datasetUpdater) => {
-    // https://twitter135.p.rapidapi.com/Search/?q=Dogecoin&count=20
     fetch(url, {
         "method": "GET",
         "headers": {
@@ -97,11 +78,11 @@ let fetchUsersTwitterApi = (url, datasetUpdater) => {
             "x-rapidapi-key": "16ecb1e169msh1f719a2c940b075p117e09jsn47e729518524"
         }
     }).then(response => {
-        console.log(response, 'chk02')
+        // console.log(response, 'chk02')
         return response.json()
     })
         .then(data => {
-            console.log(data, 'data!!')
+            // console.log(data, 'data!!')
             let results = data.globalObjects.users
             if (results) {
                 let allkeys = Object.keys(results)
@@ -119,8 +100,6 @@ let fetchUsersTwitterApi = (url, datasetUpdater) => {
 }
 
 let fetchVideosPexelApi = (url, dataUpdater) => {
-    // https://pexelsdimasv1.p.rapidapi.com/videos/search?query=ukraine&per_page=15&page=1
-    // console.log(url, 'chk01')
     fetch(url, {
         "method": "GET",
         "headers": {
@@ -134,7 +113,7 @@ let fetchVideosPexelApi = (url, dataUpdater) => {
             return response.json()
         })
         .then(data => {
-            console.log(data, 'data!!')
+            // console.log(data, 'data!!')
             let results = data.videos
             if (results) {
                 dataUpdater(results)
@@ -186,12 +165,10 @@ let fetchDataWebSearch = (firstHalfOfUrl, dataUpdater) => {
             return response.json()
         })
         .then(data => {
-            console.log(data, 'data!!')
+            // console.log(data, 'data!!')
             let results = data.value
             if (results.length) {
                 let newList = results.filter(item => item.image.url)
-                // console.log(newList, 'newList!!')
-                // dataUpdater(results)
                 dataUpdater(newList)
             } else {
                 console.log('no data is found!!')

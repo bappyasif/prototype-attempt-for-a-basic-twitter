@@ -52,7 +52,6 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
         arr[idx].members = assignValue
         // making sure after each manipulation saveFlagTest states are gettig updated if there is no memebers added or not
         checkingArrayForMembers()
-        // updateExistingListData(list.name)
     }
 
     let checkingArrayForMembers = () => {
@@ -62,8 +61,6 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
         setSaveFlagTest(test.length ? true : false)
     }
 
-    // let handleModal = () => setShowThumbnail(!showThumbnail)
-
     let handleModal = () => {
         setShowThumbnail(!showThumbnail)
         setCurrentlyHovering(list.name)
@@ -71,7 +68,6 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
 
     let ref = useRef(null);
 
-    // useOnHoverOutside(ref, handleModal)
     useOnHoverOutside(ref, () => setShowThumbnail(false))
     
     return (
@@ -84,7 +80,6 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
                 </div>
             </div>
             {addToList && <div className='tick-mark-svg'>{tickMarkSvg()}</div>}
-            {/* {((list.name == hovered) && showThumbnail) && <ShowListThumbnailCard list={list} handleHovered={handleHovered} />} */}
             {showThumbnail && currentlyHovering == list.name && <ShowListThumbnailCard list={list} handleModal={setShowThumbnail} handleListName={handleListName} />}
         </div>
     )
@@ -92,28 +87,19 @@ export let RenderList = ({ list, addMember, arr, handleSaveFlag, toggleSavedFlag
 
 let ShowListThumbnailCard = ({list, handleModal, handleListName}) => {
     let history = useHistory();
-    
-    // let ref = useRef(null);
-
-    // useOnHoverOutside(ref, handleModal)
-
-    // console.log(list, '?!')
 
     let handleClick = () => {
-        // !!!!DO THIS!!!! now we need to store this selected list name into a variable so that it can be later used by 'showexistingmemebers' route for rendering memebers list from its dataset
         handleListName(list.name)
         history.push('/i/list/members/')
     }
     
     return (
-        // <div className='thumbnail-card-wrapper' onMouseLeave={handleHovered} onClick={() => history.push('/i/list/members/')}>
         <div className='thumbnail-card-wrapper' onClick={handleClick} onMouseLeave={() => handleModal(false)}>
             {list.coverPhoto ? <img className='cover-img' src={handleMediaFileFormats(list.coverPhoto)} /> : <div className='cover-img'></div>}
             <div className='card-info'>
                 <div className='list-name'>{list.name}</div>
                 <div className='list-description'>{list.description}</div>
                 <div className='user-info'>
-                    {/* <img className='profile-pic' src={list.pictureUrl}/> */}
                     <img className='profile-pic' src="https://random.imagecdn.app/500/150" />
                     <div className='user-name'>user name</div>
                     <div className='user-handle'>@user_handle</div>
@@ -126,23 +112,3 @@ let ShowListThumbnailCard = ({list, handleModal, handleListName}) => {
         </div>
     )
 }
-
-// export let ListModalHeader = ({ icon, action, modalTitle, history, modalAction, modalActionFlag }) => {
-
-//     let iconAction = () => history.goBack()
-    
-//     // console.log(saveFlag, 'saveflag', flagTest)
-    
-//     return (
-//         <div id='list-header-wrapper'>
-            
-//             <div id='first-half'>
-//                 <div id='svg-icon' onClick={iconAction}>{icon}</div>
-     
-//                 <div id='action-header'>{modalTitle}</div>
-//             </div>
-
-//             <div id='other-half' onClick={modalAction} style={{backgroundColor: modalActionFlag ? 'darkslategray' : 'silver', pointerEvents: !modalActionFlag && 'none'}}>{action}</div>
-//         </div>
-//     )
-// }

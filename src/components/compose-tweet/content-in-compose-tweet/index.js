@@ -5,14 +5,6 @@ import { Gif } from '@giphy/react-components';
 import TweetPoll from '../../tweet-modal/tweet-poll'
 
 function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, removeGifHandler, isPollIconClicked, handlePollViewToggle, inputTextChoice01, setInputTextChoice01, inputTextChoice02, setInputTextChoice02, inputTextChoice03, setInputTextChoice03, inputTextChoice04, setInputTextChoice04, mediaDescriptionText, setMediaDescriptionText, gifWidth }) {
-    // let handleMediaFileChecks = () => {
-    //     let mediaSrc = selectedFile;
-    //     if (selectedFile instanceof File || selectedFile instanceof Blob || selectedFile instanceof MediaSource) {
-    //         mediaSrc = URL.createObjectURL(selectedFile)
-    //     }
-    //     return mediaSrc;
-    // }
-
     let tweetComposeMediaView = () => <div id='image-view'>
         <span id='remove-image' onClick={selectedFile ? removeImageHandler : removeGifHandler}>{deleteIcon('silver')}</span>
 
@@ -25,10 +17,6 @@ function ContentInComposeTweet({ selectedFile, removeImageHandler, gifFile, remo
     </div>
     
     return (
-        // style={{ marginTop: !selectedFile || !gifFile ? '-20px' : "-44px" }}
-
-        // style={{ marginTop: !selectedFile ? '-20px' : "-44px" }}
-
         (!isPollIconClicked && selectedFile) || (!isPollIconClicked && gifFile)
             ?
             <div id='tweet-compose-container' style={{ marginTop: (!selectedFile || !gifFile) ? '0px' : "-44px" }}>

@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import useOnClickOutside from '../../../right-side/click-outside-utility-hook/useOnClickOutside';
+import React, { useEffect, useState } from 'react';
 import { threeDotsSvgIcon } from '../../../right-side/current-trends';
-
-import { makeGetFetchRequest, makeStringWordCased, RenderArticle, RenderSettingsOption, ShowSettingsModal } from '../../../reuseable-components';
+import { makeGetFetchRequest, makeStringWordCased, RenderArticle, ShowSettingsModal } from '../../../reuseable-components';
 
 
 function RenderNewsFromThisNewsCategory({ categoryName, updateRemoveCategoryList, handleUndoRemovedCategory }) {
@@ -11,24 +9,10 @@ function RenderNewsFromThisNewsCategory({ categoryName, updateRemoveCategoryList
     let [randomIndexes, setRandomIndexes] = useState([])
     let [renderingNews, setRenderingNews] = useState([])
     let [removeThisCategory, setRemoveThisCategory] = useState(false)
-    // let [duplicateOfRenderingNews, setDuplicateOfRenderingNews] = useState(null)
-    // let [undoRemovedCategory, setUndoRemovedCategory] = useState(false)
-
-    // let handleUndoRemovedCategory = () => setUndoRemovedCategory(!undoRemovedCategory)
     
-    // let handleRemoveThisCategory = () => setRemoveThisCategory(true)
     let handleRemoveThisCategory = () => {
-        // setDuplicateOfRenderingNews(renderingNews)
         setRemoveThisCategory(true)
     }
-
-    // useEffect(() => undoRemovedCategory && setDuplicateOfRenderingNews(renderingNews), [undoRemovedCategory])
-
-    // useEffect(() => duplicateOfRenderingNews && setRenderingNews(duplicateOfRenderingNews), [duplicateOfRenderingNews])
-
-    // console.log(duplicateOfRenderingNews, 'duplicate', renderingNews, adjustedDataset)
-
-    // useEffect(() => undoRemovedCategory && setRenderingNews(duplicateOfRenderingNews), [undoRemovedCategory])
 
     let handleAdjustedDataset = items => setAdjustedDataset(items)
 
@@ -53,10 +37,6 @@ function RenderNewsFromThisNewsCategory({ categoryName, updateRemoveCategoryList
     let randomlyGeneratingIndexes = () => {
         let [idx, isDuplicate] = [...renderingReadyRandomIndex()];
 
-        // console.log(isDuplicate, '{}{}', randomIndexes)
-
-        // return isDuplicate != -1 ? renderingReadyRandomIndex() : setRandomIndexes(prevIdxs => prevIdxs.concat(isDuplicate == -1 && idx ))
-
         isDuplicate != -1 ? randomlyGeneratingIndexes() : setRandomIndexes(prevIdxs => prevIdxs.concat(idx))
     }
 
@@ -79,11 +59,6 @@ function RenderNewsFromThisNewsCategory({ categoryName, updateRemoveCategoryList
     }, [])
 
     useEffect(() => removeThisCategory && updateRemoveCategoryList(categoryName), [removeThisCategory])
-    // useEffect(() => removeThisCategory && setTimeout(() => updateRemoveCategoryList(categoryName), 24000), [removeThisCategory])
-
-    // console.log(categoryName, 'categoryName!!', dataset, adjustedDataset, randomIndexes, renderingNews)
-    // console.log(categoryName, 'categoryName!!', adjustedDataset, randomIndexes, renderingNews)
-
 
     let renderingCategoricalNews = () => adjustedDataset && renderingNews && renderingNews.length && renderingNews.map((item, idx) => <RenderArticle key={idx} item={item} fromExplore={true} />)
 
@@ -105,13 +80,8 @@ let CategoryHeader = ({ categoryName, handleRemoveThisCategory }) => {
     let [showModal, setShowModal] = useState(false)
     let [isCustomHooked, setIsCustomHooked] = useState(false)
 
-    // let [handleTest, setHandle] = useState(null)
-
-    // let [text, setText] = useState('abcd')
-
     let handleClick = () => {
         setShowModal(!showModal)
-        // setShowModal(true)
         setIsCustomHooked(true)
     }
     
@@ -124,58 +94,10 @@ let CategoryHeader = ({ categoryName, handleRemoveThisCategory }) => {
                 <div id='category-name'>{makeStringWordCased(categoryName)}</div>
             </div>
             <div id='category-option-svg' onClick={handleClick}>{threeDotsSvgIcon()}</div>
-            {/* { showModal && isCustomHooked && <ShowCategoryOptionModal setIsCustomHooked={setIsCustomHooked} handleRemoveThisCategory={handleRemoveThisCategory} /> } */}
             { showModal && isCustomHooked && <ShowSettingsModal handleCloseModal={setIsCustomHooked} announcementText={'Thank you, we will show you less of this!!'} removedNewsFromList={handleRemoveThisCategory} options={options} fromExplore={true} /> }
         </div>
     )
 }
-
-// let ShowCategoryOptionModal = ({setIsCustomHooked, handleRemoveThisCategory}) => {
-//     let [text, setText] = useState(null)
-//     // let [test, setTest] = useState(false)
-
-//     let handleClicked = () => {
-//         // setAnnouncementText('Thank you, we will show you less of this')
-//         setText(prev=> prev='whatever')
-//         // setTest(true)
-//         console.log('here here!!', text)
-//         let handle = setTimeout(() => {
-//             setText('')
-//             // handleRemoveThisCategory()
-//             console.log('klkl')
-//         }, 20000)
-//         // console.log('klkl')
-//         return () => clearTimeout(handle)
-//     }
-
-//     // useEffect(() => console.log(text, 'announcementText!!', test), [test])
-
-//     useEffect(() => setText(''), [])
-
-//     console.log(text, 'text!!')
-
-//     let ref = useRef(null)
-//     // useOnClickOutside(ref, () => setIsCustomHooked(false))
-
-//     let options = [{option: 'Hide', icon: hideSvgIcon()}, {option: 'Unfollow topic', icon: categorySvgIcon()}]
-//     // let renderOptions = () => options.map(item => <RenderSettingsOption key={item.option} item={item} removedNewsFromList={handleRemoveThisCategory} />)
-//     let renderOptions = () => options.map(item => <RenderSettingsOption key={item.option} item={item} removedNewsFromList={handleClicked} />)
-
-//     // console.log(announcementText, 'announcementText!!')
-    
-//     return (
-//         text
-//         ?
-//         <div id='category-option-modal-wrapper' className='modal-with-announcement'>
-//             <div id='annoucement-text'>{text}</div>
-//             <div id='action-btn'>Undo</div>
-//         </div>
-//         :
-//         <div id='category-option-modal-wrapper' ref={ref}>
-//             {renderOptions()}
-//         </div>
-//     )
-// }
 
 let hideSvgIcon = () => <svg width={'24px'} height={'24px'}><g><path d="M12 1.25C6.072 1.25 1.25 6.072 1.25 12S6.072 22.75 12 22.75 22.75 17.928 22.75 12 17.928 1.25 12 1.25zm0 1.5c2.28 0 4.368.834 5.982 2.207L4.957 17.982C3.584 16.368 2.75 14.282 2.75 12c0-5.1 4.15-9.25 9.25-9.25zm0 18.5c-2.28 0-4.368-.834-5.982-2.207L19.043 6.018c1.373 1.614 2.207 3.7 2.207 5.982 0 5.1-4.15 9.25-9.25 9.25z"></path></g></svg>
 

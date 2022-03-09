@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import LoginPage from '../login-page';
 import LeftSideNavigationPanel from '../navigation-panels/left-side';
-import BeginReset from '../password-reset-page/begin-reset';
-import TopNavigation from '../password-reset-page/top-navigation';
-import VerifyUserInfo from '../password-reset-page/verify-user-info';
 import ComposeTweet from '../compose-tweet';
 import UserProfile from '../user-profile';
 import ProfilePageUpperView from '../user-profile/profile-page';
@@ -15,8 +12,7 @@ import AllMedias from '../user-profile/all-medias';
 import RightSideNavigationPanel from '../navigation-panels/right-side';
 import EditProfile from '../user-profile/profile-page/edit-profile';
 import LandingPageUILogics from '../landing-page/ui-logics';
-import SignupPage from '../signup-page';
-import { getAllDocsOnce, readDataInRealtime } from '../firestore-methods';
+import SignupPage from '../signup-page'
 import TopicsPicker from '../topics-picker';
 import PasswordResetPage from '../password-reset-page';
 import PageUnavailable from '../404-page';
@@ -37,7 +33,6 @@ import ExplicitTrendsOnClick from '../navigation-panels/right-side/explicit-tren
 import LikedTweets from '../user-profile/liked-tweets';
 
 function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hideFirstPollReply, handleExplicitTrendSearchText, explicitTrendSearchText, listOfRandomUsers, listName, handleListName, updateExistingListData, updateSomeDataInUserDocs, handleRepliedTweets, quotesListFromRetweet, handleQuotesListFromRetweet, quotedFromRetweetModal, handleQuotedFromRetweetModal, currentUserProfileInfo, updateRepliedTweetsOnThread, repliedTweetsIDs, handleLoadingTweetsIDs, taggedPlaceInfoInUserProfile, selectedTaggedPlace, handleSelectedTaggedPlace, repliedTweets, threadedTweetData, handleThreadedTweetData, pollVotesCount, handlePollVotesCount, handleQuoteTweetData, checkMemberExists, handleMembersRemoval, membersList, handleMembersList, listMembersCount, handleMembersCount, currentList, handleCurrentList, currentlyPinnedTweetID, showPinnedTweetTag, handlePinnedTweetID, handleReplyCount, replyCount, quoteTweetID, quoteTweetData, handleQuoteTweetID, analysingTweetData, handleAnalysingTweetID, analysingTweetID, updateTweetPrivacy, removeSpeceficArrayItem, currentUser, handleCurrentUser, handleUpdateStatus, updateData, newID, uniqueID, tweetData, newDataStatus, setNewDataStatus, setChangeLayout }) {
-    // let [tweetData, setTweetData] = useState([]);
     let [toggleModality, setToggleModality] = useState(false);
     let [primaryTweetText, setPrimaryTweetText] = useState('');
     let [extraTweetText, setExtraTweetText] = useState('');
@@ -59,7 +54,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
     let [scheduledTimeStamp, setScheduledTimeStamp] = useState('')
     let [isScheduleIconClicked, setIsScheduleIconClicked] = useState(true)
     let [mediaFileDescriptionText, setMediaFileDescriptionText] = useState('Description')
-    // let [newDataStatus, setNewDataStatus] = useState(false)
     let [opacity, setOpacity] = useState(false)
     let [firstTweetHasMedia, setFirstTweetHasMedia] = useState(false)
     let [secondTweetHasMedia, setSecondTweetHasMedia] = useState(false)
@@ -67,47 +61,11 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
     let [secondTweetHasPoll, setSecondTweetHasPoll] = useState(false)
     let [userInterests, setUserInterests] = useState([])
     let [sanitizedInterestsData, setSanitizedInterestsData] = useState([])
-    // let [currentRoute, setCurrentRoute] = useState('')
-    // let [protectedRoute, setProtectedRoute] = useState(false)
-    // let [passwordResetRoute, setPasswordResetRoute] = useState('begin-password-reset')
-
-    // let handlePasswordResetRoute = currentRoute => setPasswordResetRoute(currentRoute)
-
-    // let {url} = useRouteMatch()
-    // let {id} = useParams()
-
-    // let handleScheduleIconClicked = () => setIsScheduleIconClicked(true)
-
-    // useEffect(() => {
-    //     setCurrentRoute(window.location.href)
-    // }, [])
-
-    // useEffect(() => {
-    //     currentRoute && console.log(currentRoute, '?!')
-    //     currentRoute && currentRoute.split('/')[5] == 'compose' && console.log('here!!')
-    // }, [currentRoute])
-
-    // useEffect(() => {
-    //     currentRoute && console.log(currentRoute.split('/'), '<<ccurrent route>>', currentRoute.split('/')[3].length)
-    //     let restrictedRoute = currentRoute.split('/')[3]
-    //     if(!currentUser && restrictedRoute) {
-    //         setTimeout(() => {
-    //             console.log('running....')
-    //             setProtectedRoute(true)
-    //             return <Redirect to={'/login'}/>
-    //         }, 4000)
-    //     }
-    // }, [currentRoute])
-
+    
     useEffect(() => {
         scheduleStamp && console.log(scheduleStamp.props.children[2].props.children)
         scheduleStamp && setScheduledTimeStamp(scheduleStamp.props.children[2].props.children)
     }, [scheduleStamp])
-
-    // useEffect(() => !tweetPublishReady && setScheduledTimeStamp(''), [tweetPublishReady])
-
-    // useEffect(() => isScheduleIconClicked && handleTweetModalityToggle(), [isScheduleIconClicked])
-    // useEffect(() => isScheduleIconClicked && setToggleModality(true), [isScheduleIconClicked])
 
     let handleUserInterestsData = (data, name) => {
         setUserInterests(prevData => prevData.concat(data))
@@ -133,36 +91,16 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
     }, [userInterests])
 
     let handleScheduleIconClicked = () => {
-        // setIsScheduleIconClicked(!isScheduleIconClicked);
         setIsScheduleIconClicked(true);
-        // if (isPollIconClicked) handlePollIconClicked()
     }
-
-    // useEffect(() => {
-    //     !newDataStatus && toggleModality && quoteTweetID && handleQuoteTweetData(null)
-    // }, [toggleModality])
-
-    // let [currentUser, setCurrentUser] = useState('')
-
-    // let handleCurrentUser = (userID) => setCurrentUser(userID)
-
-    // console.log(inputTextChoice01, inputTextChoice02, inputTextChoice03, inputTextChoice04, "showing values from routes")
-
-    // console.log(toggleModality, 'from routes', currentUser)
-
 
     let handleTweetModalityToggle = () => {
         setToggleModality(!toggleModality);
-        // setToggleModality(true);
-        // console.log('its here')
     }
-
-    // console.log(explicitTrendSearchText, 'explicitTrendSearchText?!')
 
     return (
         <Router>
             <Switch>
-                {/* <Route exact path='/' component={LandingPageUILogics} /> */}
                 <Route exact path='/'>
                     <LandingPageUILogics
                         currentUser={currentUser}
@@ -294,23 +232,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                     </div>
                 </Route>
 
-                {/* {
-                protectedRoute && <Redirect to='/login'>
-                    <LoginPage
-                        currentUser={currentUser}
-                        handleCurrentUser={handleCurrentUser}
-                    />
-                    <h4>!!</h4>
-                </Redirect>
-                } */}
-
-                {/* {
-                    protectedRoute && <Redirect to={{pathname: '/login'}}>
-                        <Link to={'/login'}>Login</Link>
-                    </Redirect>
-                } */}
-
-                {/* <Route path='/login' component={LoginPage} /> */}
                 <Route path='/login'>
                     <LoginPage
                         currentUser={currentUser}
@@ -318,7 +239,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                     />
                 </Route>
 
-                {/* <Route path='/i/flow/signup' component={SignupPage} /> */}
                 <Route path='/i/flow/signup'>
                     <SignupPage
                         currentUser={currentUser}
@@ -330,14 +250,10 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
 
                 <Route path='/begin-password-reset'>
                     <PasswordResetPage />
-                    {/* <PasswordResetPage passwordResetRoute={passwordResetRoute} handlePasswordResetRoute={handlePasswordResetRoute} /> */}
                 </Route>
 
                 <Route path='/verify-user-info'>
                     <PasswordResetPage />
-                    {/* <PasswordResetPage passwordResetRoute={passwordResetRoute} handlePasswordResetRoute={handlePasswordResetRoute} /> */}
-                    {/* <TopNavigation />
-                    <VerifyUserInfo /> */}
                 </Route>
 
                 <Route exact path='/i/topics/picker/home'>
@@ -379,7 +295,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                             isScheduleIconClicked={isScheduleIconClicked}
                             handleToggle={handleScheduleIconClicked}
                             setScheduleStamp={setScheduleStamp}
-                        // handleTweetModalityToggle={handleTweetModalityToggle}
                         />
                         <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                     </div>
@@ -403,7 +318,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                     currentUser
                         ?
                         <Route exact path={`/${currentUser}`}>
-                            {/* {setChangeLayout(false)} */}
                             <div className='constant-view-of-backdrop'>
                                 <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                                 <ProfilePageUpperView currentUser={currentUser} />
@@ -440,7 +354,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                             />
                         </Route>
                         :
-                        // <Redirect to='/login' />
                         setTimeout(() => <Redirect to='/login' />, 4000)
                 }
 
@@ -450,9 +363,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                         <Route path={`/${currentUser}/profile`}>
                             <div className='constant-view-of-backdrop'>
                                 <LeftSideNavigationPanel opacity={opacity} setOpacity={setOpacity} toggleModality={toggleModality} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
-                                {/* {currentUser && <EditProfile currentUser={currentUser} setOpacity={setOpacity} />} */}
-                                {/* <EditProfile currentUser={currentUser} setOpacity={setOpacity} /> */}
-                                {/* { currentUserID && <EditProfile currentUser={currentUserID} setOpacity={setOpacity} />} */}
                                 {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
                                 <RightSideNavigationPanel tweetData={tweetData} opacity={opacity} listOfRandomUsers={listOfRandomUsers} handleExplicitTrendSearchText={handleExplicitTrendSearchText} explicitTrendSearchText={explicitTrendSearchText} />
                             </div>
@@ -466,7 +376,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                     currentUser
                         ?
                         <Route path={`/${currentUser}/tweets-and-replies`}>
-                            {/* {tweetPublishReady && setTweetPublishReady(false)} */}
                             <div className='constant-view-of-backdrop'>
                                 <LeftSideNavigationPanel toggleModality={toggleModality} setOpacity={setOpacity} handleTweetModalToggle={handleTweetModalityToggle} currentUser={currentUser} />
                                 {currentUser && <ProfilePageUpperView opacity={opacity} currentUser={currentUser} />}
@@ -476,7 +385,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                         </Route>
                         :
                         setTimeout(() => <Redirect to='/login' />, 4000)
-                    // <Redirect to='/login' />
                 }
 
                 {
@@ -510,10 +418,6 @@ function AllRoutes({ removeFromLikedTweets, likedTweets, handleLikedTweets, hide
                 }
 
                 <Route path={'*'}>
-                    {/* {setTimeout(() => {
-                        console.log('runnig....')
-                        return <PageUnavailable />
-                    }, 4000)} */}
                     {!currentUser && <PageUnavailable />}
                 </Route>
             </Switch>

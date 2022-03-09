@@ -5,26 +5,12 @@ import React, { useEffect, useState } from 'react'
 
 export let RenderPolls = ({ poll, handlePollVotesCount, pollVotesCount, forModal }) => {
     let [maxVotes, setMaxVotes] = useState(100)
-    // let [maxVotes, setMaxVotes] = useState(104)
-    // let [votesCount, setVotesCount] = useState({})
-
-    // let handleVotesCount = (elem, value) => {
-    //     setVotesCount({...votesCount, [elem]: value})
-    //     // setVotesCount(prevData => prevData[elem] ? value : 1)
-    //     // setVotesCount(prevData => prevData.map(item => ({...item, [elem]: value})))
-    // }
-
-    // console.log(pollVotesCount, 'pollVotes')
 
     let handleChange = () => setMaxVotes(maxVotes - 1 >= 0 ? maxVotes - 1 : maxVotes)
-    // let handleChange;
 
     useEffect(() => {
-        // handleChange = () => setMaxVotes(maxVotes-1 >= 0 ? maxVotes-1 : maxVotes)
         maxVotes == 0 && alert('votes limit has reached!!')
     }, [maxVotes])
-
-    // maxVotes <= 0 && alert('votes limit has reached!!')
 
     return poll.map(choice => {
         return Object.values(choice).map((value, idx) => value ? <HandlePollOptionProgress key={value} value={value} handleChange={handleChange} highestValue={maxVotes} handlePollVotesCount={handlePollVotesCount} pollVotesCount={pollVotesCount} forModal={forModal} /> : null)
@@ -69,23 +55,12 @@ export let MakeGifObjectAvailable = ({ gifId, quotedFromRetweetModal }) => {
         setGif(res)
     }).catch(err => console.log(err.message))
 
-    // return (
-    //     gif
-    //     ?
-    //     squotedFromRetweetModal && <div id='gif-wrapper'><Gif gif={gif} height='290px' className='style-gif-border-radius' /></div>
-    //     :
-    //     <Gif gif={gif} height='290px' className='style-gif-border-radius' />
-    // )
-
-    // return gif && <div id='gif-wrapper'><Gif gif={gif} height='290px' className='style-gif-border-radius' /></div>
-
     return gif && <Gif gif={gif} height='290px' className='style-gif-border-radius' />
 }
 
 export let getGiphyGifObject = async (gifId) => {
     try {
         let { data } = await new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh").gif(gifId)
-        // console.log('checkoiint06', gifId)
         return data
     } catch (err) {
         console.log(err)

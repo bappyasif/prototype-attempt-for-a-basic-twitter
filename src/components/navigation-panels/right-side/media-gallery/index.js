@@ -1,11 +1,8 @@
 import React from 'react'
 import { getGiphyGifObject } from '../../../user-profile/all-tweets/reuseable-helper-functions'
-// import {getGiphyGifObject} from '../../../user-profile/all-tweets'
 
 function MediaGallery({ tweetData }) {
-    // let allMediaTweets = tweetData && [...tweetData].filter((elem, idx) => (elem['medias']['picture'] && elem['medias']['picture'] || elem['medias']['gif'] && elem['medias']['gif']) && idx <= 6)
     let allMediaTweets = tweetData && [...tweetData].filter((elem) => (elem['medias']['picture'] && elem['medias']['picture'] || elem['medias']['gif'] && elem['medias']['gif'])).filter((_, idx) => idx < 6)
-    // console.log(allMediaTweets, 'media tweets..', tweetData)
 
     return (
         <div id='media-gallery-container'>
@@ -56,8 +53,6 @@ let handleMediaFileChecks = (mediaFile) => {
     if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
         mediaSrc = URL.createObjectURL(mediaFile)
     }
-    
-    // console.log(mediaSrc, 'here', mediaSrc.type)
 
     return mediaSrc.type == 'gif' ? mediaSrc.images.downsized_still.url : mediaSrc
 }

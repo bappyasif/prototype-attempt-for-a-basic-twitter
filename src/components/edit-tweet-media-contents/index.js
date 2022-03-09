@@ -1,24 +1,20 @@
 import { Gif } from '@giphy/react-components';
-import React, { useEffect, useState } from 'react'
-import { Redirect, Route } from 'react-router';
+import React, { useState } from 'react'
+import { Route } from 'react-router';
 import { Link } from 'react-router-dom';
 import { backIcon } from '../user-profile/profile-page/svg-resources'
 import './styles.css'
 
 function EditTweetMediaContents({ mediaFile, updateMediaFile, gifFile, mediaDescriptionText, setMediaDescriptionText }) {
-    // let [textAreaValue, setTextAreaValue] = useState('');
     let [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
     let [sideIsClicked, setSideIsClicked] = useState('');
     let [height, setHeight] = useState(251);
     let [width, setWidth] = useState(456);
     let [shapedClicked, setShapedClicked] = useState('original')
-    let [goBackTo, setGoBackTo] = useState('')
     let [zoomedWidth, setZoomedWidth] = useState('')
-    let [adjustedImage, setAdjustedImage] = useState('');
 
-    // let handleTextAreaChanges = evt => setTextAreaValue(evt.target.value);
     let handleTextAreaChanges = evt => setMediaDescriptionText(evt.target.value);
-    // let handleFocused = () => setIsTextAreaFocused(!isTextAreaFocused)
+
     let handleFocused = () => setIsTextAreaFocused(true)
 
     let handleClick = evt => setSideIsClicked(evt.target.id);
@@ -33,13 +29,11 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile, gifFile, mediaDesc
                 setHeight={setHeight}
                 shapedClicked={shapedClicked}
                 setShapedClicked={setShapedClicked}
-                // handleImageZoom={handleImageZoom}
                 zoomedWidth={zoomedWidth}
                 setZoomedWidth={setZoomedWidth}
             />
         } else if (sideIsClicked == 'alt-div-tab') {
             elements = <AltTagComponents
-                // textAreaValue={textAreaValue}
                 textAreaValue={mediaDescriptionText}
                 isTextAreaFocused={isTextAreaFocused}
                 setIsTextAreaFocused={setIsTextAreaFocused}
@@ -60,21 +54,9 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile, gifFile, mediaDesc
     }
 
     let handleCropImage = (evt) => {
-        // evt.preventDefault();
-
-        // let canvas = document.getElementById('canvas');
         let canvas = document.createElement('canvas');
         let ctx = canvas.getContext('2d')
         let sourceImg = document.getElementById('media-view');
-
-        // canvas.width = sourceImg.clientWidth
-        // canvas.height = sourceImg.clientHeight
-
-        // canvas.width = sourceImg.naturalWidth
-        // canvas.height = sourceImg.naturalHeight
-
-        // canvas.width = '461'
-        // canvas.height = '290'
 
         ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
 
@@ -90,15 +72,12 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile, gifFile, mediaDesc
     let setCanvasWidth = () => shapedClicked == 'squared' ? 411 : 461;
 
     let setCanvasHeight = () => shapedClicked == 'wide' ? 211 : 249;
-    // let setCanvasHeight = () => shapedClicked == 'wide' ? 411 : 449;
 
     let handleMediaFileChecks = () => {
         let mediaSrc = mediaFile;
         if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
             mediaSrc = URL.createObjectURL(mediaFile)
         }
-        // if(gifFile) return gifFile
-        // else return mediaSrc;
         return mediaSrc;
     }
 
@@ -115,14 +94,10 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile, gifFile, mediaDesc
             <div id='header-section'>
                 <div id='top-portion'>
                     <div id='left-side'>
-                        {/* <div id='svg-icon'><Redirect to='/tweet/compose'>{backIcon()}</Redirect></div> */}
-                        {/* <div id='svg-icon'><Link to={goBackTo?goBackTo:null} onClick={goBack}>{backIcon()}</Link></div> */}
-                        {/* <div id='svg-icon'>{backIcon()}</div> */}
                         <GoBack />
                         <p id='header-text'>Edit Photo</p>
                     </div>
                     <div id='right-side'>
-                        {/* <button id='save-button' onClick={handleCropImage}>Save</button> */}
                         <Link to='/tweet/compose' id='save-button' onClick={handleCropImage}>Save</Link>
                     </div>
                 </div>
@@ -132,13 +107,6 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile, gifFile, mediaDesc
                 </div>
             </div>
             <div id='middle-section' style={{ overflow: gifFile ? 'hidden' : 'auto' }}>
-                {/* <canvas id='canvas'></canvas> */}
-                {/* <img id='media-view' src='https://picsum.photos/200/300' /> */}
-                {/* <img id='media-view' src='https://picsum.photos/200/300' style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 452}`, minWidth: '100%' }} /> */}
-                {/* <img id='media-view' src='https://picsum.photos/200/300' style={{flex: `0 0 ${zoomedWidth}`}} /> */}
-                {/* <img id='media-view' src='https://picsum.photos/200/300' style={{flex: `0 0 ${zoomedWidth}`}} /> */}
-                {/* <img id='media-view' src={mediaFile && URL.createObjectURL(mediaFile)} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 452}`, minWidth: '100%' }}/> */}
-                {/* <img id='media-view' src={handleMediaFileChecks()} style={{ flex: `0 0 ${zoomedWidth ? zoomedWidth : 99}`, minWidth: '100%' }} /> */}
                 {renderWhichMediafile()}
                 <div id='overlay-view' style={{ width: sideIsClicked == 'svg-icon-tab' && width + 'px', height: sideIsClicked == 'svg-icon-tab' && height + 'px' }}></div>
             </div>
@@ -157,27 +125,18 @@ function EditTweetMediaContents({ mediaFile, updateMediaFile, gifFile, mediaDesc
                     setMediaDescriptionText={setMediaDescriptionText}
                 />
             }
-            {/* <canvas id='canvas'></canvas> */}
         </div>
     )
 }
 
 let PhotoEditToolsComponent = ({ width, setWidth, height, setHeight, shapedClicked, setShapedClicked, setZoomedWidth, zoomedWidth }) => {
     let [percentage, setPercentage] = useState(0);
-    // let [checkValue, setCheckValue] = useState()
 
     let handleImageZoom = (checker) => {
         let sourceImg = document.getElementById('media-view');
         let currWidth = sourceImg.clientWidth
 
         checker ? setZoomedWidth((currWidth - Number(percentage)) + 'px') : setZoomedWidth((currWidth + Number(percentage)) + 'px')
-
-        // percentage == 1 ? setZoomedWidth(0) : null
-        // percentage == 0 ? console.log(percentage, zoomedWidth) : null
-        // setZoomedWidth((Number(percentage))+'%')
-        // setZoomedWidth((currWidth + Number(percentage)) + 'px')
-        // console.log(checker)
-        // console.log(currWidth,(currWidth + Number(percentage)))
     }
 
     let clearUpCoords = (evt) => {
@@ -187,9 +146,7 @@ let PhotoEditToolsComponent = ({ width, setWidth, height, setHeight, shapedClick
     }
 
     let handleZoom = (evt) => {
-        // evt.target.value == 0 ? setZoomedWidth(0) : null
         setPercentage(`${evt.target.value}`)
-        // handleImageZoom(evt.target.value < percentage)
         evt.target.value == 0 ? setZoomedWidth(110) : handleImageZoom(evt.target.value < percentage)
     }
 
@@ -203,10 +160,6 @@ let PhotoEditToolsComponent = ({ width, setWidth, height, setHeight, shapedClick
         setHeight(`${211}`);
         setWidth(`${456}`);
         setShapedClicked('wide')
-        // let handle = document.querySelector('#middle-section #media-view');
-        // handle.classList.add('wide-angle-in-view')
-        // let handle = evt.target
-        // handle.classList.add('wide-angle-in-view')
     }
 
     let handleSquaredSize = () => {
@@ -297,192 +250,3 @@ let zoomInIcon = () => <svg width='24px' height='24px' style={style}><g><path d=
 let cropIcon = () => <svg width='24px' height='24px'><g><path d="M3.5 5.25H2c-.414 0-.75.336-.75.75s.336.75.75.75h1.5c.414 0 .75-.336.75-.75s-.336-.75-.75-.75zm18.5 12H7.5c-.414 0-.75-.337-.75-.75V2c0-.414-.336-.75-.75-.75s-.75.336-.75.75v14.5c0 1.24 1.01 2.25 2.25 2.25H22c.414 0 .75-.336.75-.75s-.336-.75-.75-.75zm-4 2.5c-.414 0-.75.336-.75.75V22c0 .414.336.75.75.75s.75-.336.75-.75v-1.5c0-.414-.336-.75-.75-.75z"></path><path d="M8.5 6.75h8c.414 0 .75.337.75.75v8c0 .414.336.75.75.75s.75-.336.75-.75v-8c0-1.24-1.01-2.25-2.25-2.25h-8c-.414 0-.75.336-.75.75s.336.75.75.75z"></path></g></svg>
 
 export default EditTweetMediaContents
-
-
-/**
- *
- *
- let handleCropImage = () => {
-        let canvas = document.getElementById('canvas');
-        let ctx = canvas.getContext('2d')
-        let sourceImg = document.getElementById('media-view');
-
-        canvas.width = sourceImg.clientWidth
-        canvas.height = sourceImg.clientHeight
-
-        // canvas.width = sourceImg.naturalWidth
-        // canvas.height = sourceImg.naturalHeight
-
-        ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
-        // ctx.drawImage(sourceImg, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
-        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
-
-        // ctx.drawImage(sourceImg, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
-        // ctx.drawImage(sourceImg, 0, 0)
-        // ctx.drawImage(sourceImg, 20, 90, 110, 99, 0, 0, 200, 200)
-        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, `${setCanvasWidth()}`, `${setCanvasHeight()}`)
-        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasHeight()}`, `${setCanvasWidth()}`, 0, 0, `${setCanvasHeight()}`, `${setCanvasWidth()}`)
-        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`, `${setCanvasWidth()}`, `${setCanvasHeight()}`, 0, 0, 456, 853)
-        // ctx.drawImage(sourceImg, 0, 0)
-        // ctx.drawImage(sourceImg, `${decideCropShapeTop()}`, `${decideCropShapeLeft()}`)
-        // console.log(canvas.toDataURI(), "??")
-        sourceImg.crossOrigin = 'anonymous'
-        // console.log(canvas && canvas.toDataURL('image/png'), "??")
-        // updateMediaFile(canvas.toDataURL('image/png'))
-        // setAdjustedImage(canvas.toDataURL('image/png'))
-        // console.log(adjustedImage)
-
-        updateMediaFile(mediaFile && canvas.toDataURL('image/png'))
-    }
- *
- *
-     let [showHeader, setShowHeader] = useState(false)
-    let [placeholderText, setPlaceholderText] = useState('Description')
-
-    let handleOnFocused = () => {
-        setShowHeader(true);
-        handleFocused();
-        setPlaceholderText('')
-    }
-
-    let mimicUnfocused = () => {
-        setIsTextAreaFocused(false);
-        setShowHeader(false);
-        setPlaceholderText('Description')
-    }
- <div id='bottom-section'>
-            {/* style={{borderColor: isTextAreaFocused ? 'rgb(29, 155, 240)' : ''}} *}
-            {/* className={isTextAreaFocused ? 'highlight-description-div-border' : ''} *}
-            {/* className={classes} *}
-            <div
-                id='description-div'
-                style={{ borderColor: isTextAreaFocused ? 'rgb(29, 155, 240)' : '' }}
-                onClick={mimicUnfocused}
-                className='div-border-highlight'
-            >
-                <span className='div-headers' id='tag-text' style={{ visibility: showHeader ? 'visible' : 'hidden' }}>Description</span>
-                <span style={{ color: 'silver' }}>{textAreaValue.length}/1,000</span>
-            </div>
-            <textarea
-                rows='4'
-                id='description-area'
-                placeholder={placeholderText}
-                value={textAreaValue}
-                onChange={handleTextAreaChanges}
-                onFocus={handleOnFocused}
-                maxLength='11'
-            // onClick={() => setIsTextAreaFocused(!isTextAreaFocused)}
-            />
-            <a href='#' target='_blank'>What is alt text?</a>
-        </div>
- *
- *
- let PhotoEditToolsComponent = () => {
-    let [percentage, setPercentage] = useState(0);
-
-    let handleZoom = (evt) => {
-        // console.log('here', evt.target.value)
-        setPercentage(`${evt.target.value}`)
-    }
-
-    // let handleMouseUp = () => setCoordsX(0);
-
-
-    return (
-        <div id='photo-edit-bottom-section'>
-            <span id='original-size'>{originalSizeIcon()}</span>
-            <span id='wide-angle'>{wideAngleIcon()}</span>
-            <span id='squared-size'>{sqaureSizeIcon()}</span>
-            <div id='zoom-in-and-out'>
-                <span id='zoom-out'>{zoomOutIcon()}</span>
-                <div id='zoom-slider'>
-                    <SliderFiller value={percentage} handleZoom={handleZoom}/>
-                </div>
-                <span id='zoom-in'>{zoomInIcon()}</span>
-            </div>
-        </div>
-    )
-}
-
-let SliderFiller = ({value, handleZoom}) => {
-    return (
-        <div id='progress-bar'>
-            <input type='range' min='0' max='100' value={value} id='slider-filler' onChange={handleZoom} />
-        </div>
-    )
-}
- *
- *
- let PhotoEditToolsComponent = () => {
-    let [percentage, setPercentage] = useState(0);
-    let [coordsX, setCoordsX] = useState(0)
-    let [coordsX1, setCoordsX1] = useState(0);
-
-    let handleZoom = (evt) => {
-        let sliderNob = evt.target;
-        let posStarted = evt.clientX;
-        setCoordsX1(posStarted)
-        // sliderNob.addEventListener('mousemove', handleMouseMove)
-        console.log(posStarted, "??")
-        sliderNob.addEventListener('mousemove', (evt) => handleMouseMove(evt, posStarted))
-        // sliderNob.addEventListener('mouseup', handleMouseUp)
-    }
-
-    let handleMouseUp = () => setCoordsX(0);
-
-    let handleMouseMove = (evt, x) => {
-        // let posChanged = coordsX <= 0 ? coordsX : x - evt.clientX
-        let posChanged = coordsX1 - evt.clientX
-        setCoordsX(posChanged)
-        setCoordsX1(evt.clientX)
-        setPercentage(`${coordsX/146 * 100}%`)
-        console.log(posChanged, coordsX, x,  evt.clientX, percentage)
-    }
-    return (
-        <div id='photo-edit-bottom-section'>
-            <span id='original-size'>{originalSizeIcon()}</span>
-            <span id='wide-angle'>{wideAngleIcon()}</span>
-            <span id='squared-size'>{sqaureSizeIcon()}</span>
-            <div id='zoom-in-and-out'>
-                <span id='zoom-out'>{zoomOutIcon()}</span>
-                <div id='zoom-slider'>
-                    <SliderFiller percentage={percentage} handleZoom={handleZoom}/>
-                </div>
-                <span id='zoom-in'>{zoomInIcon()}</span>
-            </div>
-        </div>
-    )
-}
-
-let SliderFiller = ({percentage, handleZoom}) => {
-    return (
-        <div id='progress-bar'>
-            <div id='slider-filler' style={{width: percentage}}>
-                <div id='slider-nob' onMouseDown={handleZoom}></div>
-            </div>
-        </div>
-    )
-}
- *
- *
- let [classes, setClasses] = useState('');
- useEffect(() => {
-        // document.body.onclick = () => setIsTextAreaFocused(false)
-        // document.body.addEventListener('click', () => setIsTextAreaFocused(false))
-        document.body.addEventListener('click', handleClicktoFocusout)
-
-        // classes rules doesnt take effect even though className shows up on node!!
-        // if (isTextAreaFocused) {
-        //     setClasses('description-div highlight-description-div-border')
-        // } else {
-        //     setClasses('description-div')
-        // }
-
-        return () => document.body.removeEventListener('click', handleClicktoFocusout)
-
-    }, [])
-
-    let handleClicktoFocusout = () => {
-        if(isTextAreaFocused) setIsTextAreaFocused(false);
-    }
- */

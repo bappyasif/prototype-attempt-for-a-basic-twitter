@@ -55,17 +55,6 @@ function CategorySelections({ handleData, sanitizedData, updateComlpetionStatus,
                 {isTopicsUploadDone && <div id='done-selecting' onClick={updateInterestsInFirestore}>Next</div>}
                 {!isTopicsUploadDone && <h4>Data loading....</h4>}
             </div>
-
-
-        // <div id='container-for-category-selections'>
-        //     <div id='heading-text'>What do you want to see on Twitter?</div>
-        //     <div id='sub-heading-text'>Select at least 3 interest to personalize your Twitter experience. They will be visible on your profile.</div>
-        //     <ShowSelectionPickerCards addCategory={handleCategories} removeCategory={removeCategory} />
-        //     <div id='bottom-div'>
-        //         <div id='selection-count'>{showText()}</div>
-        //         <div id='next-btn'>Next</div>
-        //     </div>
-        // </div>
     )
 }
 

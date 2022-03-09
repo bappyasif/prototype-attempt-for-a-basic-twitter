@@ -74,8 +74,6 @@ let FollowOrFollowerCard = ({ name, fofCount }) => {
 
         let rDen = randNum > .5 && rNum.length <= 2 ? arr01[1] : randNum > .5 && rNum.length <= 3 ? arr01[0] : ''
 
-        // setDenomination(rNum + rDen)
-
         setDenomination(fofCount ? fofCount : rNum + rDen)
     }
 
@@ -93,7 +91,6 @@ let PersonMoodalTopSection = ({ name, handle, profilePicUrl, handleFollowSuggest
     return (
         <div id='top-section-wrapper'>
             <div id='left-side'>
-                {/* <img src='https://picsum.photos/200/200' /> */}
                 <img src={profilePicUrl} />
                 <div id='user-name'>{name}</div>
                 <div id='user-handle'>@{handle}</div>
@@ -104,88 +101,3 @@ let PersonMoodalTopSection = ({ name, handle, profilePicUrl, handleFollowSuggest
 }
 
 export default ShowSuggestedPersonModal
-
-
-// export let makeRequest = (name, listUpdater, uuid, fetchStatus, updateCount ) => {
-//     let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
-//     deepai.setApiKey(apik)
-//     deepai.callStandardApi('text-generator', { text: name })
-//         .then(resp => {
-//             console.log(resp, '!!')
-//             // let textExtracted = (resp.output.split('.')[2])
-//             // listUpdater(uuid, resp.output)
-//             let textExtracted = (resp.output.split('.')[0])
-//             listUpdater(uuid, textExtracted)
-//             fetchStatus(true)
-//             updateCount(count => count + 1)
-//         })
-//     // console.log('chk02')
-// }
-
-// export let makeRequest = (name, listUpdater, uuid, fetchStatus, updateCount, listUpdaterHook, listOfUsers) => {
-//     let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
-//     deepai.setApiKey(apik)
-//     deepai.callStandardApi('text-generator', { text: name })
-//         .then(resp => {
-//             // console.log(resp, '!!')
-//             // let textExtracted = (resp.output.split('.')[2])
-//             // listUpdater(uuid, resp.output)
-//             let textExtracted = (resp.output.split('.')[0])
-//             listUpdater(uuid, textExtracted, listUpdaterHook, listOfUsers)
-//             fetchStatus(true)
-//             updateCount(count => count + 1)
-//         })
-//     // console.log('chk02')
-// }
-
-
-// export let makeRequest = (name, textUpdater) => {
-//     let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
-//     deepai.setApiKey(apik)
-//     deepai.callStandardApi('text-generator', { text: name })
-//         .then(resp => {
-//             // console.log(resp, '!!')
-//             textUpdater(resp.output.split('.')[0])
-//         })
-// }
-
-
-// let makeRequest = () => {
-//     let url = `https://contentai-net-text-generation.p.rapidapi.com/text-generation/api/?category=${name}`;
-
-//     let headers = {
-//         "method": "GET",
-//         "headers": {
-//             "x-rapidapi-host": "contentai-net-text-generation.p.rapidapi.com",
-//             "x-rapidapi-key": "16ecb1e169msh1f719a2c940b075p117e09jsn47e729518524"
-//         }
-//     }
-
-//     fetch(url, headers)
-//     .then(resp => resp.json())
-//     .then(data => console.log(data))
-//     .catch(err=>connectStorageEmulator.log(err.code, err.message))
-// }
-
-//     let makeRequest = () => {
-//         let apik = '19e554d0-1dc4-49b1-9b20-423602876bcf'
-//         deepai.setApiKey(apik)
-//         deepai.callStandardApi('text-generator', { text: name })
-//             .then(resp => console.log(resp, '!!'))
-//     }
-
-//    let providedSnippet = () => {
-//     deepai.setApiKey('19e554d0-1dc4-49b1-9b20-423602876bcf');
-
-//     (async function () {
-//         var resp = await deepai.callStandardApi("text-generator", {
-//             text: "YOUR_TEXT_HERE",
-//         });
-//         console.log(resp);
-//     })()
-//    }
-
-//     useEffect(() => {
-//         makeRequest()
-//         providedSnippet()
-//     }, [])
