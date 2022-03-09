@@ -1,16 +1,16 @@
-intended user experience story:
+<b>intended user experience story:</b>
 
 >> user can begin by signing up with ‘email/mobile/provider(google)’
 
->> user will have to go though with signup process to gain access to their profile
+    >> user will have to go though with signup process to gain access to their profile
 
->> once done, profile setup process will ask for other related signup process to complete user profile
+    >> once done, profile setup process will ask for other related signup process to complete user profile
 
 >> once user logged in:
 
->> user can create tweet with ‘picture / gif / poll / emoji / schedule / tagged place
+    >> user can create tweet with ‘picture / gif / poll / emoji / schedule / tagged place
 
->> user can also manipulate already created tweet, by retweet, reply, retweet with quote, likes, analytics
+    >> user can also manipulate already created tweet, by retweet, reply, retweet with quote, likes, analytics
 
 >> created tweet can be deleted, pinned, add to list, change privacy, analytics, embed from tweet top right options
 
